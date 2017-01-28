@@ -29,7 +29,6 @@
     "alexa-app": "2.4.0"
   },
   "devDependencies": {
-    "alexa-app-server": "2.3.1",
-    "Express": "3.0.1"
+    "alexa-app-server": "2.3.1"
   }
 }
