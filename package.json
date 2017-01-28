@@ -1,0 +1,34 @@
+{
+  "name": "alexa-london-travel",
+  "version": "0.0.1",
+  "private": true,
+  "description": "An Amazon Alexa skill for checking the status for travel in London.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martincostello/alexa-london-travel.git"
+  },
+  "keywords": [
+    "alexa",
+    "london",
+    "travel"
+  ],
+  "author": {
+    "name" : "Martin Costello",
+    "url" : "https://martincostello.com/"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/martincostello/alexa-london-travel/issues"
+  },
+  "homepage": "https://github.com/martincostello/alexa-london-travel#readme",
+  "dependencies": {
+    "alexa-app": "2.4.0"
+  },
+  "devDependencies": {
+    "Express": "3.0.1"
+  }
+}
