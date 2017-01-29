@@ -5,7 +5,7 @@
   "description": "An Amazon Alexa skill for checking the status for travel in London.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "alexa-app": "2.4.0"
   },
   "devDependencies": {
-    "alexa-app-server": "2.3.1"
+    "alexa-app-server": "2.3.1",
+    "mocha": "3.2.0"
   }
 }
