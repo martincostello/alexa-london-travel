@@ -9,10 +9,10 @@ var intent = {
   name: "StatusIntent",
   enabled: true,
   slots: {
-    "LINE": "LITERAL"
+    "LINE": "LINE_NAME"
   },
   utterances: [
-    "what is the status of the {LINE} {line|}"
+    "what is the status of the {LINE_NAMES|LINE}"
   ],
   handler: function (request, response) {
     var line = request.slot("LINE");

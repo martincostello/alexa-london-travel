@@ -9,6 +9,23 @@ var statusIntent = require("./intents/status");
 var testIntent = require("./intents/test");
 
 var skill = {
+  dictionary: {
+    "LINE_NAMES": [
+      "Bakerloo",
+      "Central",
+      "Circle",
+      "District",
+      "DLR",
+      "Hammersmith and City",
+      "Jubilee",
+      "London Overground",
+      "Metropolitan",
+      "Northern",
+      "Piccadilly",
+      "Victoria",
+      "Waterloo and City"
+    ]
+  },
   name: constants.appName,
   onError: function (exception, request, response) {
     console.log("Unhandled exception: ", exception);

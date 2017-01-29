@@ -9,6 +9,9 @@ var skill = require("./src/skill");
 // Create the application for the skill
 var app = new alexa.app(skill.name);
 
+// Set the skill dictionary
+app.dictionary = skill.dictionary;
+
 // Register the generic handlers
 app.error = skill.onError;
 app.pre = skill.preReqest;
