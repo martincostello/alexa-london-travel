@@ -16,7 +16,7 @@ var httpGet = function (path) {
       app_key: process.env.TFL_APP_KEY || ""
     },
     headers: {
-      "User-Agent": constants.appName + constants.version
+      "User-Agent": constants.appName + "/" + constants.version
     },
     json: true
   };
@@ -27,8 +27,8 @@ var api = {
   getDisruption: function (modes) {
     return httpGet("Line/Mode/" + modes.concat() + "/Disruption");
   },
-  getLineStatus: function (lineName) {
-    return httpGet("Line/" + lineName + "/Status");
+  getLineStatus: function (id) {
+    return httpGet("Line/" + id + "/Status");
   }
 };
 
