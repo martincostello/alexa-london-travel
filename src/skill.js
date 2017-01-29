@@ -16,6 +16,9 @@ var skill = {
   onLaunch: function (request, response) {
     response.say(responses.onLaunch);
   },
+  onSessionEnded: function (request, response) {
+    response.say(responses.onSessionEnded);
+  },
   preReqest: function (request, response, type) {
   },
   postResponse: function (request, response, type, exception) {

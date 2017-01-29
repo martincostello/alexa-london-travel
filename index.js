@@ -14,8 +14,9 @@ app.error = skill.onError;
 app.pre = skill.preReqest;
 app.post = skill.postResponse;
 
-// Register the launch handler
+// Register the launch and session end handlers
 app.launch(skill.onLaunch);
+app.sessionEnded(skill.onSessionEnded);
 
 // Register the enabled intents
 for (var i = 0; i < skill.intents.length; i++) {

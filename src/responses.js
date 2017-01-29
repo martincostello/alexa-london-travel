@@ -7,7 +7,8 @@ const responses = {
   noIntent: "Sorry, I don't understand how to do that.",
   onError: "Sorry, an error occurred.",
   onLaunch: "Welcome to the London Travel skill.",
-  onUnknown: "Sorry, I didn't catch that."
+  onUnknown: "Sorry, I didn't catch that.",
+  onSessionEnded: "Goodbye."
 };
 
 module.exports = responses;
