@@ -24,6 +24,9 @@ var httpGet = function (path) {
 };
 
 var api = {
+  getDisruption: function (modes) {
+    return httpGet("Line/Mode/" + modes.concat() + "/Disruption");
+  },
   getLineStatus: function (lineName) {
     return httpGet("Line/" + lineName + "/Status");
   }
