@@ -4,53 +4,35 @@
 "use strict";
 
 var alexa = require("alexa-app");
-var api = require("./src/api");
-var responses = require("./src/responses");
-var skill = require("./src/skill")
+var skill = require("./src/skill");
 
+// Create the application for the skill
 var app = new alexa.app(skill.name);
 
+// Register the generic handlers
 app.error = skill.onError;
 app.pre = skill.preReqest;
 app.post = skill.postResponse;
 
+// Register the launch handler
 app.launch(skill.onLaunch);
 
-app.intent("StatusIntent", {
-  slots: { "LINE": "LITERAL" },
-  utterances: ["what is the status of the {LINE} {line|}"]
-},
-  function (request, response) {
-    var line = request.slot("LINE");
-    if (line) {
-      response
-        .say("I'm sorry, I can't tell you the status of " + line + " at the moment.")
-        .reprompt(responses.onUnknown);
-    } else {
-      response.say(responses.onUnknown);
-    }
+// Register the enabled intents
+for (var i = 0; i < skill.intents.length; i++) {
+  var intent = skill.intents[i];
+  if (intent.enabled === true) {
+    app.intent(
+      intent.name,
+      {
+        slots: intent.slots,
+        utterances: intent.utterances
+      },
+      intent.handler
+    );
   }
-);
+}
 
-app.intent("TestIntent", {
-  slots: [],
-  utterances: ["to test connectivity"]
-},
-  function (request, response) {
-    api.getLineStatus("victoria")
-      .then(function (data) {
-        response
-          .say(data.length && data.length > 0 ? "Test successful." : "Test failed.")
-          .send();
-      })
-      .catch(function (err) {
-        console.log("Failed to test connectivity: ", err);
-        response.say(responses.onError);
-      });
-    return false;
-  }
-);
-
+// Apply any message customizations
 skill.setMessages(app);
 
 module.exports = app;

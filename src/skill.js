@@ -3,13 +3,12 @@
 
 "use strict";
 
+var api = require("./api");
 var constants = require("./constants");
 var responses = require("./responses");
 
 var skill = {
   name: constants.appName,
-  intents: [
-  ],
   onError: function (exception, request, response) {
     console.log("Unhandled exception: ", exception);
     response.say(responses.onError);
@@ -23,7 +22,50 @@ var skill = {
   },
   setMessages: function (app) {
     app.messages.NO_INTENT_FOUND = responses.noIntent;
-  }
+  },
+  intents: [
+    {
+      name: "StatusIntent",
+      enabled: true,
+      slots: {
+        "LINE": "LITERAL"
+      },
+      utterances: [
+        "what is the status of the {LINE} {line|}"
+      ],
+      handler: function (request, response) {
+        var line = request.slot("LINE");
+        if (line) {
+          response
+            .say("I'm sorry, I can't tell you the status of " + line + " at the moment.")
+            .reprompt(responses.onUnknown);
+        } else {
+          response.say(responses.onUnknown);
+        }
+      }
+    },
+    {
+      name: "TestIntent",
+      enabled: true,
+      slots: {},
+      utterances: [
+        "to test connectivity"
+      ],
+      handler: function (request, response) {
+        api.getLineStatus("victoria")
+          .then(function (data) {
+            response
+              .say(data.length && data.length > 0 ? "Test successful." : "Test failed.")
+              .send();
+          })
+          .catch(function (err) {
+            console.log("Failed to test connectivity: ", err);
+            response.say(responses.onError);
+          });
+        return false;
+      }
+    }
+  ]
 };
 
 module.exports = skill;
