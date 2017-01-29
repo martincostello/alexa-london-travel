@@ -24,7 +24,12 @@ var skill = {
   postResponse: function (request, response, type, exception) {
   },
   setMessages: function (app) {
+    app.messages.GENERIC_ERROR = responses.onError;
+    app.messages.INVALID_REQUEST_TYPE = responses.onInvalidRequest;
+    app.messages.NO_AUDIO_PLAYER_EVENT_HANDLER_FOUND = responses.noAudioPlayer;
     app.messages.NO_INTENT_FOUND = responses.noIntent;
+    app.messages.NO_LAUNCH_FUNCTION = responses.noIntent;
+    app.messages.NO_SESSION = responses.noSession;
   },
   intents: [
     {
