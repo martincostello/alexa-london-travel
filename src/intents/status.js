@@ -61,6 +61,7 @@ var intent = {
     "LINE": "LINE_NAME"
   },
   utterances: [
+    "{-|LINE} status",
     "{|what is the} status of the {-|LINE} {|line}"
   ],
   handler: function (request, response) {
