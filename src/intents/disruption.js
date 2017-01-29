@@ -27,7 +27,6 @@ var intent = {
   handler: function (request, response) {
     api.getDisruption(["dlr", "tube"])
       .then(function (data) {
-        console.log(JSON.stringify(data));
         response
           .say(generateResponse(data))
           .send();
