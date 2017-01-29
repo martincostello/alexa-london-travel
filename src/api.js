@@ -1,0 +1,32 @@
+// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
+
+"use strict";
+
+var constants = require("./constants");
+var http = require("request-promise");
+
+const ApiHost = "https://api.tfl.gov.uk/";
+
+var httpGet = function (path) {
+  var options = {
+    uri: ApiHost + path,
+    qs: {
+      app_id: process.env.TFL_APP_ID || "",
+      app_key: process.env.TFL_APP_KEY || ""
+    },
+    headers: {
+      "User-Agent": constants.appName + "/0.0.1"
+    },
+    json: true
+  };
+  return http(options);
+};
+
+var api = {
+  getLineStatus: function (lineName) {
+    return httpGet("Line/" + lineName + "/Status");
+  }
+};
+
+module.exports = api;

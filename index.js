@@ -4,11 +4,14 @@
 "use strict";
 
 var alexa = require("alexa-app");
-var app = new alexa.app("alexa-london-travel");
-var http = require("request-promise");
+var api = require("./src/api");
+var constants = require("./src/constants");
+var responses = require("./src/responses");
+
+var app = new alexa.app(constants.appName);
 
 app.launch(function (request, response) {
-  response.say("Welcome to the London Travel skill.");
+  response.say(responses.onLaunch);
 });
 
 app.intent("StatusIntent", {
@@ -20,30 +23,19 @@ app.intent("StatusIntent", {
     if (line) {
       response
         .say("I'm sorry, I can't tell you the status of " + line + " at the moment.")
-        .reprompt("Sorry, I didn't catch that.");
+        .reprompt(responses.onUnknown);
     } else {
-      response.say("Sorry, I didn't catch that.");
+      response.say(responses.onUnknown);
     }
   }
 );
 
 app.intent("TestIntent", {
-  "slots": [],
-  "utterances": ["to test connectivity"]
+  slots: [],
+  utterances: ["to test connectivity"]
 },
   function (request, response) {
-    var options = {
-      uri: "https://api.tfl.gov.uk/Line/victoria/Status",
-      qs: {
-        app_id: process.env.TFL_APP_ID || "",
-        app_key: process.env.TFL_APP_KEY || ""
-      },
-      headers: {
-        "User-Agent": "alexa-london-travel/0.0.1"
-      },
-      json: true
-    };
-    http(options)
+    api.getLineStatus("victoria")
       .then(function (data) {
         response
           .say(data.length && data.length > 0 ? "Test successful." : "Test failed.")
@@ -51,7 +43,7 @@ app.intent("TestIntent", {
       })
       .catch(function (err) {
         console.log("Failed to test connectivity: ", err);
-        response.say("Sorry, an error occurred.");
+        response.say(responses.onError);
       });
     return false;
   }
@@ -59,7 +51,7 @@ app.intent("TestIntent", {
 
 app.error = function (exception, request, response) {
   console.log("Unhandled exception: ", exception);
-  response.say("Sorry, an error occurred.");
+  response.say(responses.onError);
 };
 
 app.pre = function (request, response, type) {
@@ -68,6 +60,6 @@ app.pre = function (request, response, type) {
 app.post = function (request, response, type, exception) {
 };
 
-app.messages.NO_INTENT_FOUND = "Sorry, I don't understand how to do that.";
+app.messages.NO_INTENT_FOUND = responses.noIntent;
 
 module.exports = app;
