@@ -5,14 +5,16 @@
 
 var alexa = require("alexa-app");
 var api = require("./src/api");
-var constants = require("./src/constants");
 var responses = require("./src/responses");
+var skill = require("./src/skill")
 
-var app = new alexa.app(constants.appName);
+var app = new alexa.app(skill.name);
 
-app.launch(function (request, response) {
-  response.say(responses.onLaunch);
-});
+app.error = skill.onError;
+app.pre = skill.preReqest;
+app.post = skill.postResponse;
+
+app.launch(skill.onLaunch);
 
 app.intent("StatusIntent", {
   slots: { "LINE": "LITERAL" },
@@ -49,17 +51,6 @@ app.intent("TestIntent", {
   }
 );
 
-app.error = function (exception, request, response) {
-  console.log("Unhandled exception: ", exception);
-  response.say(responses.onError);
-};
-
-app.pre = function (request, response, type) {
-};
-
-app.post = function (request, response, type, exception) {
-};
-
-app.messages.NO_INTENT_FOUND = responses.noIntent;
+skill.setMessages(app);
 
 module.exports = app;
