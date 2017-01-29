@@ -26,7 +26,9 @@
   },
   "homepage": "https://github.com/martincostello/alexa-london-travel#readme",
   "dependencies": {
-    "alexa-app": "2.4.0"
+    "alexa-app": "2.4.0",
+    "request": "2.79.0",
+    "request-promise": "4.1.1"
   },
   "devDependencies": {
     "alexa-app-server": "2.3.1",
