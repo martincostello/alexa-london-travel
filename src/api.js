@@ -16,7 +16,7 @@ var httpGet = function (path) {
       app_key: process.env.TFL_APP_KEY || ""
     },
     headers: {
-      "User-Agent": constants.appName + "/0.0.1"
+      "User-Agent": constants.appName + constants.version
     },
     json: true
   };
