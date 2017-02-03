@@ -25,7 +25,7 @@ var intent = {
 intent.generateResponse = function (data) {
 
   if (!data || data.length === 0) {
-    return "There is currently no disruption on the tube or the Docklands Light Railway."
+    return "There is currently no disruption on the tube or the DLR.";
   }
 
   // TODO For now just return the first disruption
