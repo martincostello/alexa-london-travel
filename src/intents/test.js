@@ -16,8 +16,14 @@ var intent = {
   handler: function (request, response) {
     api.getLineStatus("victoria")
       .then(function (data) {
+        var success = data.length && data.length > 0;
         response
-          .say(data.length && data.length > 0 ? "Test successful." : "Test failed.")
+          .say(success ? "Test successful." : "Test failed.")
+          .card({
+            type: "Standard",
+            title: "London Travel Test",
+            text: success ? "The London Travel skill appears to be working correctly." : "The London Travel skill appears to be experiencing problems at the moment."
+          })
           .send();
       })
       .catch(function (err) {
