@@ -46,6 +46,7 @@ intent.handler = function (request, response) {
         .send();
     })
     .catch(function (err) {
+      console.error("Failed to check for disruption:", err);
       response.say(responses.onError);
     });
   return false;

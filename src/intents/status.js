@@ -196,6 +196,10 @@ intent.handler = function (request, response) {
         response
           .say(intent.generateResponse(data))
           .send();
+      })
+      .catch(function (err) {
+        console.error("Failed to get line status: ", line, err);
+        response.say(responses.onError);
       });
     return false;
   } else {
