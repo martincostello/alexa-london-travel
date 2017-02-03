@@ -1,6 +1,6 @@
 # Alexa London Travel
 
-[![Build status](https://img.shields.io/travis/martincostello/alexa-london-travel/master.svg)](https://travis-ci.org/martincostello/alexa-london-travel) [![Dependency status](https://img.shields.io/david/martincostello/alexa-london-travel.svg)](https://david-dm.org/martincostello/alexa-london-travel)
+[![Build status](https://img.shields.io/travis/martincostello/alexa-london-travel/master.svg)](https://travis-ci.org/martincostello/alexa-london-travel)
 
 [![Build history](https://buildstats.info/travisci/chart/martincostello/alexa-london-travel?branch=master&includeBuildsFromPullRequest=false)](https://travis-ci.org/martincostello/alexa-london-travel)
 
