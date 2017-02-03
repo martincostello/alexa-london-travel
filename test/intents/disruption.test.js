@@ -4,7 +4,7 @@
 var assert = require("assert");
 var intent = require("../../src/intents/disruption");
 
-describe("Disruption Intent", function() {
+describe("Disruption Intent", function () {
 
   describe("When disruptions is null", function () {
 
@@ -16,13 +16,13 @@ describe("Disruption Intent", function() {
       actual = null;
     });
 
-    it("Then the response is that there are no disruptions", function() {
+    it("Then the response is that there are no disruptions", function () {
       actual = intent.generateResponse(data);
-      assert.equal(actual, "There is currently no disruption on the tube or the Docklands Light Railway.");
+      assert.equal(actual, "There is currently no disruption on the tube or the DLR.");
     });
   });
 
-  describe("When there are no disuptions", function() {
+  describe("When there are no disuptions", function () {
 
     var data;
     var actual;
@@ -32,13 +32,13 @@ describe("Disruption Intent", function() {
       actual = null;
     });
 
-    it("Then the response is that there are no disruptions", function() {
+    it("Then the response is that there are no disruptions", function () {
       actual = intent.generateResponse(data);
-      assert.equal(actual, "There is currently no disruption on the tube or the Docklands Light Railway.");
+      assert.equal(actual, "There is currently no disruption on the tube or the DLR.");
     });
   });
 
-  describe("When there is one disruption", function() {
+  describe("When there is one disruption", function () {
 
     var data;
     var actual;
@@ -52,13 +52,13 @@ describe("Disruption Intent", function() {
       actual = null;
     });
 
-    it("Then the response is the description of the single disruption", function() {
+    it("Then the response is the description of the single disruption", function () {
       actual = intent.generateResponse(data);
       assert.equal(actual, "There are severe delays on the District Line.");
     });
   });
 
-  describe("When there are multiple disruptions", function() {
+  describe("When there are multiple disruptions", function () {
 
     var data;
     var actual;
@@ -73,7 +73,7 @@ describe("Disruption Intent", function() {
       actual = null;
     });
 
-    it("Then the response is the description of the single disruption", function() {
+    it("Then the response is the description of the single disruption", function () {
       actual = intent.generateResponse(data);
       assert.equal(actual, "There are severe delays on the District Line.");
     });
