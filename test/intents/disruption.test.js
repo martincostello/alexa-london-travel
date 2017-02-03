@@ -18,7 +18,7 @@ describe("Disruption Intent", function () {
 
     it("Then the response is that there are no disruptions", function () {
       actual = intent.generateResponse(data);
-      assert.equal(actual, "There is currently no disruption on the tube or the DLR.");
+      assert.equal(actual, "There is currently no disruption on the tube or the <say-as interpret-as='spell-out'>DLR</say-as>.");
     });
   });
 
@@ -34,7 +34,7 @@ describe("Disruption Intent", function () {
 
     it("Then the response is that there are no disruptions", function () {
       actual = intent.generateResponse(data);
-      assert.equal(actual, "There is currently no disruption on the tube or the DLR.");
+      assert.equal(actual, "There is currently no disruption on the tube or the <say-as interpret-as='spell-out'>DLR</say-as>.");
     });
   });
 
