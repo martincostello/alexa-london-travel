@@ -123,7 +123,7 @@ intent.generateResponse = function (data) {
           spokenName = "D.L.R.";
           suffix = "";
         } else {
-          spokenName = line.name;
+          spokenName = line.name.replace(" & ", " and ");
           suffix = " line";
         }
 

@@ -29,7 +29,7 @@ intent.generateResponse = function (data) {
   }
 
   // TODO For now just return the first disruption
-  return data[0].description;
+  return data[0].description.replace(" & ", " and ");
 };
 
 /**

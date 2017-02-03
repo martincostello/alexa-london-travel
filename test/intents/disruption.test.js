@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 var assert = require("assert");
+var dataDriven = require("data-driven");
 var intent = require("../../src/intents/disruption");
 
 describe("Disruption Intent", function () {
@@ -40,21 +41,21 @@ describe("Disruption Intent", function () {
 
   describe("When there is one disruption", function () {
 
-    var data;
-    var actual;
+    var testCases = [
+      { description: "There are severe delays on the District Line.", expected: "There are severe delays on the District Line." },
+      { description: "There are minor delays on the Hammersmith & City Line.", expected: "There are minor delays on the Hammersmith and City Line." }
+    ];
 
-    beforeEach(function () {
+    dataDriven(testCases, function () {
+      it("Then the response is the description of the single disruption", function (context) {
 
-      data = [
-        { description: "There are severe delays on the District Line." }
-      ];
+        var data = [
+          { description: context.description }
+        ];
 
-      actual = null;
-    });
-
-    it("Then the response is the description of the single disruption", function () {
-      actual = intent.generateResponse(data);
-      assert.equal(actual, "There are severe delays on the District Line.");
+        var actual = intent.generateResponse(data);
+        assert.equal(actual, context.expected);
+      });
     });
   });
 

@@ -64,6 +64,7 @@ describe("Status Intent", function () {
         { severity: 9, expected: "There are minor delays on the District line." },
         { severity: 10, expected: "There is a good service on the District line." },
         { severity: 10, expected: "There is a good service on the D.L.R..", name: "DLR" },
+        { severity: 10, expected: "There is a good service on the Waterloo and City line.", name: "Waterloo & City" },
         { severity: 11, expected: "The District line is partially closed." },
         { severity: 12, expected: "There is currently disruption on the District line." },
         { severity: 13, expected: "There is currently disruption on the District line." },
