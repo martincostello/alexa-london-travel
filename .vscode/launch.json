@@ -13,6 +13,16 @@
       "request": "attach",
       "name": "Attach",
       "port": 5858
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Test",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "cwd": "${workspaceRoot}",
+      "args": [
+        "--recursive"
+      ]
     }
   ]
 }
