@@ -11,8 +11,9 @@ var intent = {
   enabled: true,
   slots: {},
   utterances: [
+    "about {|any} {|line|tube} {closures|disruption} {|today}",
     "are there any {|line|tube} closures {|today}",
-    "if there {are|is} {|any} {closures|disruption} {|today}"
+    "if there {are|is} {|any} {|line|tube} {closures|disruption} {|today}"
   ]
 };
 
