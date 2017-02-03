@@ -67,54 +67,67 @@ intent.generateResponse = function (data) {
 
           case tubeSeverities.goodService:
           case tubeSeverities.noIssues:
-            format = "There is a good service on the %s line.";
+            format = "There is a good service on the %s%s.";
             break;
 
           case tubeSeverities.busService:
-            format = "Some parts of the %s line are currently being served by a replacement bus service.";
+            format = "Some parts of the %s%s are currently being served by a replacement bus service.";
             break;
 
           case tubeSeverities.closed:
           case tubeSeverities.notRunning:
           case tubeSeverities.serviceClosed:
-            format = "The %s line is closed.";
+            format = "The %s%s is closed.";
             break;
 
           case tubeSeverities.minorDelays:
-            format = "There are minor delays on the %s line.";
+            format = "There are minor delays on the %s%s.";
             break;
 
           case tubeSeverities.partClosed:
           case tubeSeverities.partClosure:
-            format = "The %s line is partially closed.";
+            format = "The %s%s is partially closed.";
             break;
 
           case tubeSeverities.partSuspended:
-            format = "The %s line is partially suspended.";
+            format = "The %s%s is partially suspended.";
             break;
 
           case tubeSeverities.plannedClosure:
-            format = "There is a planned closure on the %s line.";
+            format = "There is a planned closure on the %s%s.";
             break;
 
           case tubeSeverities.reducedService:
-            format = "There is a reduced service on the %s line.";
+            format = "There is a reduced service on the %s%s.";
             break;
 
           case tubeSeverities.severeDelays:
-            format = "There are severe delays on the %s line.";
+            format = "There are severe delays on the %s%s.";
             break;
 
           case tubeSeverities.suspended:
-            format = "The %s line is suspended.";
+            format = "The %s%s is suspended.";
             break;
 
           default:
-            format = "There is currently disruption on the %s line.";
+            format = "There is currently disruption on the %s%s.";
             break;
         }
 
-        return sprintf(format, line.name);
+        var isDLR = line.name.toLowerCase() === "dlr";
+
+        var spokenName;
+        var suffix;
+
+        if (isDLR === true) {
+          spokenName = "D.L.R.";
+          suffix = "";
+        } else {
+          spokenName = line.name;
+          suffix = " line";
+        }
+
+        return sprintf(format, spokenName, suffix);
       }
     }
   }
