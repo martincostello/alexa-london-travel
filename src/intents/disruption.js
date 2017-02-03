@@ -25,7 +25,7 @@ var intent = {
 intent.generateResponse = function (data) {
 
   if (!data || data.length === 0) {
-    return "There is currently no disruption on the tube or the <say-as interpret-as='spell-out'>DLR</say-as>.";
+    return "There is currently no disruption on the tube or the D.L.R.";
   }
 
   // TODO For now just return the first disruption
