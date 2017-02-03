@@ -6,7 +6,7 @@ var AlexaAppServer = require("alexa-app-server");
 AlexaAppServer.start({
   server_root: __dirname,
   public_html: "static",
-  app_dir: "apps",
+  app_dir: "./..",
   app_root: "/",
   port: 3001,
   preRequest: function (json, request, response) {
