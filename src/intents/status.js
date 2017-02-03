@@ -117,10 +117,18 @@ intent.mapLineToId = function (line) {
     case "victoria":
       return normalized;
 
+    case "dlr":
+    case "docklands":
+    case "docklands light railway":
+    case "docklands railway":
+      return "dlr";
+
     case "hammersmith and city":
+    case "hammersmith & city":
       return "hammersmith-city";
 
     case "waterloo and city":
+    case "waterloo & city":
       return "waterloo-city";
 
     default:
