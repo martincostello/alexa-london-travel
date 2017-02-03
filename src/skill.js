@@ -29,7 +29,7 @@ var skill = {
   },
   name: constants.appName,
   onError: function (exception, request, response) {
-    console.log("Unhandled exception: ", exception);
+    console.error("Unhandled exception: ", exception);
     response.say(responses.onError);
   },
   onLaunch: function (request, response) {

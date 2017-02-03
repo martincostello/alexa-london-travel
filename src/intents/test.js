@@ -21,7 +21,7 @@ var intent = {
           .send();
       })
       .catch(function (err) {
-        console.log("Failed to test connectivity: ", err);
+        console.error("Failed to test connectivity: ", err);
         response.say(responses.onError);
       });
     return false;
