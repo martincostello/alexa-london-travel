@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "alexa-app-server": "2.3.1",
-    "mocha": "3.2.0"
+    "mocha": "3.2.0",
+    "node-env-file": "0.1.8"
   }
 }

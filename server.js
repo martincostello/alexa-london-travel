@@ -2,6 +2,12 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 var AlexaAppServer = require("alexa-app-server");
+var env = require("node-env-file");
+
+env(__dirname + "/.env");
+
+console.log("TfL App Id :", process.env.TFL_APP_ID);
+console.log("TfL App Key:", process.env.TFL_APP_KEY);
 
 AlexaAppServer.start({
   server_root: __dirname,
