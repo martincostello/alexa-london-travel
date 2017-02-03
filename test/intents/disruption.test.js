@@ -73,7 +73,7 @@ describe("Disruption Intent", function () {
       actual = null;
     });
 
-    it("Then the response is the description of the single disruption", function () {
+    it("Then the response is the description of the first disruption", function () {
       actual = intent.generateResponse(data);
       assert.equal(actual, "There are severe delays on the District Line.");
     });
