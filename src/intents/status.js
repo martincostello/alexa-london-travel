@@ -5,6 +5,7 @@
 
 var api = require("./../api");
 var responses = require("./../responses");
+var sprintf = require("sprintf");
 
 var intent = {
   api: api,
@@ -54,40 +55,66 @@ intent.generateResponse = function (data) {
 
     var line = data[0];
 
-    if (line.lineStatuses.length > 0) {
+    if (line.lineStatuses && line.lineStatuses.length > 0) {
 
       var status = line.lineStatuses[0];
 
-      switch (status.statusSeverity) {
+      if (typeof status.statusSeverity === "number") {
 
-        case tubeSeverities.goodService:
-        case tubeSeverities.noIssues:
-          return "There is a good service on the " + line.name + " line.";
+        var format;
 
-        case tubeSeverities.closed:
-        case tubeSeverities.serviceClosed:
-          return "The " + line.name + " line is closed.";
+        switch (status.statusSeverity) {
 
-        case tubeSeverities.minorDelays:
-          return "There are minor delays on the " + line.name + " line.";
+          case tubeSeverities.goodService:
+          case tubeSeverities.noIssues:
+            format = "There is a good service on the %s line.";
+            break;
 
-        case tubeSeverities.partClosed:
-          return "The " + line.name + " line is partially closed.";
+          case tubeSeverities.busService:
+            format = "Some parts of the %s line are currently being served by a replacement bus service.";
+            break;
 
-        case tubeSeverities.partSuspended:
-          return "The " + line.name + " line is partially suspended.";
+          case tubeSeverities.closed:
+          case tubeSeverities.notRunning:
+          case tubeSeverities.serviceClosed:
+            format = "The %s line is closed.";
+            break;
 
-        case tubeSeverities.reducedService:
-          return "There is a reduced service on the " + line.name + " line.";
+          case tubeSeverities.minorDelays:
+            format = "There are minor delays on the %s line.";
+            break;
 
-        case tubeSeverities.severeDelays:
-          return "There are severe delays on the " + line.name + " line.";
+          case tubeSeverities.partClosed:
+          case tubeSeverities.partClosure:
+            format = "The %s line is partially closed.";
+            break;
 
-        case tubeSeverities.suspended:
-          return "The " + line.name + " line is suspended.";
+          case tubeSeverities.partSuspended:
+            format = "The %s line is partially suspended.";
+            break;
 
-        default:
-          return "There is currently disruption on the " + line.name + " line.";
+          case tubeSeverities.plannedClosure:
+            format = "There is a planned closure on the %s line.";
+            break;
+
+          case tubeSeverities.reducedService:
+            format = "There is a reduced service on the %s line.";
+            break;
+
+          case tubeSeverities.severeDelays:
+            format = "There are severe delays on the %s line.";
+            break;
+
+          case tubeSeverities.suspended:
+            format = "The %s line is suspended.";
+            break;
+
+          default:
+            format = "There is currently disruption on the %s line.";
+            break;
+        }
+
+        return sprintf(format, line.name);
       }
     }
   }
