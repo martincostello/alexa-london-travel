@@ -3,7 +3,9 @@
 
 "use strict";
 
-const responses = {
+var Speech = require("ssml-builder");
+
+var responses = {
   noAudioPlayer: "Sorry, this application does not support audio streams.",
   noIntent: "Sorry, I don't understand how to do that.",
   noSession: "Sorry, the session is not available.",
@@ -11,7 +13,12 @@ const responses = {
   onInvalidRequest: "Sorry, that request is not valid.",
   onLaunch: "Welcome to the London Travel skill.",
   onUnknown: "Sorry, I didn't catch that.",
-  onSessionEnded: "Goodbye."
+  onSessionEnded: "Goodbye.",
+  toSsml: function (text) {
+    var builder = new Speech();
+    builder.say(text);
+    return builder.ssml(true);
+  }
 };
 
 module.exports = responses;

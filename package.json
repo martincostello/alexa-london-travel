@@ -30,7 +30,8 @@
     "alexa-app": "2.4.0",
     "request": "2.79.0",
     "request-promise": "4.1.1",
-    "sprintf": "0.1.5"
+    "sprintf": "0.1.5",
+    "ssml-builder": "0.1.0"
   },
   "devDependencies": {
     "alexa-app-server": "2.3.1",

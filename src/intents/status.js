@@ -123,11 +123,11 @@ intent.generateResponse = function (data) {
           spokenName = "D.L.R.";
           suffix = "";
         } else {
-          spokenName = line.name.replace(" & ", " and ");
+          spokenName = line.name;
           suffix = " line";
         }
 
-        return sprintf(format, spokenName, suffix);
+        return responses.toSsml(sprintf(format, spokenName, suffix));
       }
     }
   }
