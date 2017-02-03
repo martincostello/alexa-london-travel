@@ -5,7 +5,7 @@
   "description": "An Amazon Alexa skill for checking the status for travel in London.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --recursive"
   },
   "repository": {
     "type": "git",

@@ -6,16 +6,6 @@
 var api = require("./../api");
 var responses = require("./../responses");
 
-var generateResponse = function (data) {
-
-  if (data.length === 0) {
-    return "There is currently no disruption on the tube or the Docklands Light Railway."
-  }
-
-  // TODO For now just return the first disruption
-  return data[0].description;
-};
-
 var intent = {
   name: "DisruptionIntent",
   enabled: true,
@@ -23,19 +13,41 @@ var intent = {
   utterances: [
     "are there any {|line|tube} closures {|today}",
     "if there {are|is} {|any} {closures|disruption} {|today}"
-  ],
-  handler: function (request, response) {
-    api.getDisruption(["dlr", "tube"])
-      .then(function (data) {
-        response
-          .say(generateResponse(data))
-          .send();
-      })
-      .catch(function (err) {
-        response.say(responses.onError);
-      });
-    return false;
+  ]
+};
+
+/**
+ * Generates the text to respond to the specified disruption response.
+ * @param {Object[]} data - An array of disruptions.
+ * @returns {String} The text response for the specified disuptions.
+ */
+intent.generateResponse = function (data) {
+
+  if (!data || data.length === 0) {
+    return "There is currently no disruption on the tube or the Docklands Light Railway."
   }
+
+  // TODO For now just return the first disruption
+  return data[0].description;
+};
+
+/**
+ * Handles the intent for disruption.
+ * @param {Object} request - The Alexa skill request.
+ * @param {Object} response - The Alexa skill response.
+ * @returns {Object} The result of the intent handler.
+ */
+intent.handler = function (request, response) {
+  api.getDisruption(["dlr", "tube"])
+    .then(function (data) {
+      response
+        .say(intent.generateResponse(data))
+        .send();
+    })
+    .catch(function (err) {
+      response.say(responses.onError);
+    });
+  return false;
 };
 
 module.exports = intent;
