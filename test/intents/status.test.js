@@ -93,25 +93,25 @@ describe("Status Intent", function () {
           assert.equal(actual, context.expected);
         });
       });
+    });
 
-      describe("Given there is an invalid status response", function () {
+    describe("Given there is an invalid status response", function () {
 
-        var expected = "Sorry, something went wrong.";
+      var expected = "Sorry, something went wrong.";
 
-        var testCases = [
-          { data: null },
-          { data: [] },
-          { data: [{}] },
-          { data: [{ lineStatuses: null }] },
-          { data: [{ lineStatuses: [] }] },
-          { data: [{ lineStatuses: [{ statusSeverity: null }] }] }
-        ];
+      var testCases = [
+        { data: null },
+        { data: [] },
+        { data: [{}] },
+        { data: [{ lineStatuses: null }] },
+        { data: [{ lineStatuses: [] }] },
+        { data: [{ lineStatuses: [{ statusSeverity: null }] }] }
+      ];
 
-        dataDriven(testCases, function () {
-          it("Then the invalid data is handled correctly", function (context) {
-            var actual = intent.generateResponse(context.data);
-            assert.equal(actual, "Sorry, something went wrong.");
-          });
+      dataDriven(testCases, function () {
+        it("Then the invalid data is handled correctly", function (context) {
+          var actual = intent.generateResponse(context.data);
+          assert.equal(actual, "Sorry, something went wrong.");
         });
       });
     });
