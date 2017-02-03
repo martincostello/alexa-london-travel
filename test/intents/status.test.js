@@ -24,13 +24,17 @@ describe("Status Intent", function () {
       { name: "Docklands", expected: "dlr" },
       { name: "Docklands Light Railway", expected: "dlr" },
       { name: "Docklands Railway", expected: "dlr" },
+      { name: "Hammersmith", expected: "hammersmith-city" },
       { name: "Hammersmith & City", expected: "hammersmith-city" },
       { name: "Hammersmith and City", expected: "hammersmith-city" },
       { name: "Jubilee", expected: "jubilee" },
+      { name: "Met", expected: "metropolitan" },
       { name: "Metropolitan", expected: "metropolitan" },
       { name: "Northern", expected: "northern" },
       { name: "Piccadilly", expected: "piccadilly" },
       { name: "Victoria", expected: "victoria" },
+      { name: "City", expected: "waterloo-city" },
+      { name: "Waterloo", expected: "waterloo-city" },
       { name: "Waterloo & City", expected: "waterloo-city" },
       { name: "Waterloo and City", expected: "waterloo-city" }
     ];
