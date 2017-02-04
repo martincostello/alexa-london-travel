@@ -1,6 +1,6 @@
 # Alexa London Travel
 
-![Amazon Alexa](./static/alexa.png "Amazon Alexa") ![Transport for London](./static/tfl.png "Transport for London")
+![London Travel](./static/icon-108x108.png "London Travel")
 
 [![Build status](https://img.shields.io/travis/martincostello/alexa-london-travel/master.svg)](https://travis-ci.org/martincostello/alexa-london-travel)
 
