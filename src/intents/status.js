@@ -88,19 +88,26 @@ intent.generateResponse = function (data) {
 intent.toSpokenLineName = function (name) {
 
   var isDLR = name.toLowerCase() === "dlr";
+  var isOverground = name.toLowerCase().indexOf("overground") > -1;
+
+  var prefix = "";
+  var suffix = "";
 
   var spokenName;
-  var suffix;
 
   if (isDLR === true) {
+    prefix = "the ";
     spokenName = "D.L.R.";
+  } else if (isOverground === true) {
+    spokenName = name;
     suffix = "";
   } else {
+    prefix = "the ";
     spokenName = name;
     suffix = " line";
   }
 
-  return sprintf("%s%s", spokenName, suffix);
+  return sprintf("%s%s%s", prefix, spokenName, suffix);
 };
 
 /**
@@ -210,55 +217,57 @@ intent.generateSummaryResponse = function (name, status) {
 
       case tubeSeverities.goodService:
       case tubeSeverities.noIssues:
-        format = "There is a good service on the %s.";
+        format = "There is a good service on %s.";
         break;
 
       case tubeSeverities.busService:
-        format = "Some parts of the %s are currently being served by a replacement bus service.";
+        format = "Some parts of %s are currently being served by a replacement bus service.";
         break;
 
       case tubeSeverities.closed:
       case tubeSeverities.notRunning:
       case tubeSeverities.serviceClosed:
-        format = "The %s is closed.";
+        format = "%s is closed.";
         break;
 
       case tubeSeverities.minorDelays:
-        format = "There are minor delays on the %s.";
+        format = "There are minor delays on %s.";
         break;
 
       case tubeSeverities.partClosed:
       case tubeSeverities.partClosure:
-        format = "The %s is partially closed.";
+        format = "%s is partially closed.";
         break;
 
       case tubeSeverities.partSuspended:
-        format = "The %s is partially suspended.";
+        format = "%s is partially suspended.";
         break;
 
       case tubeSeverities.plannedClosure:
-        format = "There is a planned closure on the %s.";
+        format = "There is a planned closure on %s.";
         break;
 
       case tubeSeverities.reducedService:
-        format = "There is a reduced service on the %s.";
+        format = "There is a reduced service on %s.";
         break;
 
       case tubeSeverities.severeDelays:
-        format = "There are severe delays on the %s.";
+        format = "There are severe delays on %s.";
         break;
 
       case tubeSeverities.suspended:
-        format = "The %s is suspended.";
+        format = "%s is suspended.";
         break;
 
       default:
-        format = "There is currently disruption on the %s.";
+        format = "There is currently disruption on %s.";
         break;
     }
 
     var spokenName = intent.toSpokenLineName(name);
-    return sprintf(format, spokenName);
+    var statusText = sprintf(format, spokenName);
+
+    return statusText.charAt(0).toUpperCase() + statusText.slice(1);
   }
 
   return "";
@@ -284,6 +293,10 @@ intent.mapLineToId = function (line) {
     case "piccadilly":
     case "victoria":
       return normalized;
+
+    case "london overground":
+    case "overground":
+      return "london-overground";
 
     case "met":
     case "metropolitan":

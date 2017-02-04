@@ -10,14 +10,14 @@
 
 An Amazon Alexa skill for checking the status for travel in London.
 
-The skill integrates with the [TfL API](https://api.tfl.gov.uk/) to query the status of London Underground lines and the Docklands Light Railway (DLR) to tell you their current status, such as whether there are any closures or delays.
+The skill integrates with the [TfL API](https://api.tfl.gov.uk/) to query the status of London Underground lines, London Overground and the Docklands Light Railway (DLR) to tell you their current status, such as whether there are any closures or delays.
 
 ### Example Utterances
 
-_Ask about the status of a specific tube line or for the DLR_:
+_Ask about the status of a specific tube line, for London Overground or for the DLR_:
 > Alexa, ask London Travel about the Victoria line.
 
-_Ask about disruption for on the London Underground or DLR:_
+_Ask about disruption on any of London Underground, London Overground or the DLR:_
 > Alexa, ask London Travel if there is any disruption today.
 
 ## Feedback

@@ -10,18 +10,19 @@ describe("Status Intent", function () {
   describe("When coverting line names to their spoken form", function () {
 
     var testCases = [
-      { name: "Bakerloo", expected: "Bakerloo line" },
-      { name: "Central", expected: "Central line" },
-      { name: "Circle", expected: "Circle line" },
-      { name: "District", expected: "District line" },
-      { name: "DLR", expected: "D.L.R." },
-      { name: "Hammersmith & City", expected: "Hammersmith & City line" },
-      { name: "Jubilee", expected: "Jubilee line" },
-      { name: "Metropolitan", expected: "Metropolitan line" },
-      { name: "Northern", expected: "Northern line" },
-      { name: "Piccadilly", expected: "Piccadilly line" },
-      { name: "Victoria", expected: "Victoria line" },
-      { name: "Waterloo & City", expected: "Waterloo & City line" },
+      { name: "Bakerloo", expected: "the Bakerloo line" },
+      { name: "Central", expected: "the Central line" },
+      { name: "Circle", expected: "the Circle line" },
+      { name: "District", expected: "the District line" },
+      { name: "DLR", expected: "the D.L.R." },
+      { name: "Hammersmith & City", expected: "the Hammersmith & City line" },
+      { name: "Jubilee", expected: "the Jubilee line" },
+      { name: "London Overground", expected: "London Overground" },
+      { name: "Metropolitan", expected: "the Metropolitan line" },
+      { name: "Northern", expected: "the Northern line" },
+      { name: "Piccadilly", expected: "the Piccadilly line" },
+      { name: "Victoria", expected: "the Victoria line" },
+      { name: "Waterloo & City", expected: "the Waterloo & City line" },
     ];
 
     dataDriven(testCases, function () {
@@ -79,6 +80,7 @@ describe("Status Intent", function () {
       var testCases = [
         { severity: 10, expected: "There is a good service on the District line." },
         { severity: 10, expected: "There is a good service on the D.L.R..", name: "DLR" },
+        { severity: 10, expected: "There is a good service on London Overground.", name: "London Overground" },
         { severity: 10, expected: "There is a good service on the Waterloo and City line.", name: "Waterloo & City" },
         { severity: 18, expected: "There is a good service on the District line." },
         { severity: 20, expected: "The District line is closed." },

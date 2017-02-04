@@ -25,7 +25,7 @@ var intent = {
 intent.generateResponse = function (data) {
 
   if (!data || data.length === 0) {
-    return "There is currently no disruption on the tube or the D.L.R.";
+    return "There is currently no disruption on the tube, London Overground or the D.L.R.";
   }
 
   // TODO For now just return the first disruption
@@ -39,7 +39,7 @@ intent.generateResponse = function (data) {
  * @returns {Object} The result of the intent handler.
  */
 intent.handler = function (request, response) {
-  api.getDisruption(["dlr", "tube"])
+  api.getDisruption(["dlr", "overground", "tube"])
     .then(function (data) {
       response
         .say(intent.generateResponse(data))
