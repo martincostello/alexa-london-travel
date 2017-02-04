@@ -60,10 +60,14 @@ intent.generateResponse = function (data) {
 
       if (line.lineStatuses.length === 1) {
 
+        var lineStatus = line.lineStatuses[0];
+
+        var includeDetail = intent.shouldStatusUseCustomResponse(lineStatus.statusSeverity) === false;
+
         text = intent.generateResponseForSingleStatus(
           line.name,
-          line.lineStatuses[0],
-          false);
+          lineStatus,
+          includeDetail);
 
         if (text) {
           return responses.toSsml(text);
@@ -170,6 +174,24 @@ intent.generateDetailedResponse = function (status) {
   }
 
   return response;
+};
+
+/**
+ * Returns whether the specified status severity should use a custom response.
+ * @param {Number} statusSeverity - The status severity value.
+ * @returns {Boolean} true if the status should use a custom response; otherwise false.
+ */
+intent.shouldStatusUseCustomResponse = function (statusSeverity) {
+  switch (statusSeverity) {
+
+    case tubeSeverities.goodService:
+    case tubeSeverities.noIssues:
+    case tubeSeverities.serviceClosed:
+      return true;
+
+    default:
+      return false;
+  }
 };
 
 /**

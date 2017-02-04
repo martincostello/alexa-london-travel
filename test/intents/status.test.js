@@ -77,28 +77,29 @@ describe("Status Intent", function () {
     describe("Given there is a valid status response with only one disruption", function () {
 
       var testCases = [
-        { severity: 0, expected: "There is currently disruption on the District line." },
-        { severity: 1, expected: "The District line is closed." },
-        { severity: 2, expected: "The District line is suspended." },
-        { severity: 3, expected: "The District line is partially suspended." },
-        { severity: 4, expected: "There is a planned closure on the District line." },
-        { severity: 5, expected: "The District line is partially closed." },
-        { severity: 6, expected: "There are severe delays on the District line." },
-        { severity: 7, expected: "There is a reduced service on the District line." },
-        { severity: 8, expected: "Some parts of the District line are currently being served by a replacement bus service." },
-        { severity: 9, expected: "There are minor delays on the District line." },
         { severity: 10, expected: "There is a good service on the District line." },
         { severity: 10, expected: "There is a good service on the D.L.R..", name: "DLR" },
         { severity: 10, expected: "There is a good service on the Waterloo and City line.", name: "Waterloo & City" },
-        { severity: 11, expected: "The District line is partially closed." },
-        { severity: 12, expected: "There is currently disruption on the District line." },
-        { severity: 13, expected: "There is currently disruption on the District line." },
-        { severity: 14, expected: "There is currently disruption on the District line." },
-        { severity: 15, expected: "There is currently disruption on the District line." },
-        { severity: 16, expected: "The District line is closed." },
-        { severity: 17, expected: "There is currently disruption on the District line." },
         { severity: 18, expected: "There is a good service on the District line." },
-        { severity: 19, expected: "There is currently disruption on the District line." },
+        { severity: 20, expected: "The District line is closed." },
+        { severity: 0, expected: "There is a special service." },
+        { severity: 1, expected: "Blackfriars station is closed." },
+        { severity: 2, expected: "The District line is suspended between Earls Court and Edgeware Road." },
+        { severity: 3, expected: "The District line is partially suspended between Wimbledon and Earls Court." },
+        { severity: 4, expected: "There is a planned closure on the District line between Richmond and Embankment." },
+        { severity: 5, expected: "The District line is partially closed between Tower Hill and Barking." },
+        { severity: 6, expected: "There are severe delays on the District line between Ealing Broadway and Turnham Green." },
+        { severity: 7, expected: "There is a reduced service on the District line due to a shortage of train drivers." },
+        { severity: 8, expected: "Some parts of the District line are currently being served by a replacement bus service." },
+        { severity: 9, expected: "There are minor delays on the District line due to late-running engineering works." },
+        { severity: 11, expected: "The District line is partially closed between Wimbledon and Edgware Road." },
+        { severity: 12, expected: "Covent Garden station is exit-only." },
+        { severity: 13, expected: "No step-free access." },
+        { severity: 14, expected: "The frequency of service has been changed." },
+        { severity: 15, expected: "The service has been diverted." },
+        { severity: 16, expected: "The District line is closed." },
+        { severity: 17, expected: "The service is not running." },
+        { severity: 19, expected: "This is some information." },
         { severity: 20, expected: "The District line is closed." },
         { severity: 99, expected: "There is currently disruption on the District line." },
       ];
@@ -110,7 +111,10 @@ describe("Status Intent", function () {
             {
               name: context.name || "District",
               lineStatuses: [
-                { statusSeverity: context.severity }
+                {
+                  statusSeverity: context.severity,
+                  reason: context.reason || context.expected
+                }
               ]
             }
           ];
