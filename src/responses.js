@@ -12,7 +12,7 @@ var responses = {
   onError: "Sorry, something went wrong.",
   onInvalidRequest: "Sorry, that request is not valid.",
   onLaunch: "Welcome to the London Travel skill.",
-  onUnknown: "Sorry, I didn't catch that.",
+  onUnknown: "Sorry, I didn't catch that. You can ask if there is any disruption or about the status of any London Underground line or the D.L.R..",
   onUnknownLine: "Sorry, I am not sure what line you said. You can ask about the status of any London Underground line or the D.L.R..",
   onSessionEnded: "Goodbye.",
   toSsml: function (text) {
