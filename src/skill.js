@@ -39,6 +39,10 @@ var skill = {
     response.say(responses.onSessionEnded);
   },
   preReqest: function (request, response, type) {
+    if (request.applicationId !== (process.env.SKILL_ID || null)) {
+      console.error("Request application Id and configured skill Id mismatch.", request.applicationId, process.env.SKILL_ID);
+      response.fail("Invalid application Id.");
+    }
   },
   postResponse: function (request, response, type, exception) {
   },
