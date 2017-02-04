@@ -25,11 +25,23 @@ var intent = {
 intent.generateResponse = function (data) {
 
   if (!data || data.length === 0) {
-    return "There is currently no disruption on the tube, London Overground or the D.L.R.";
+    return responses.onNoDisruption;
   }
 
-  // TODO For now just return the first disruption
-  return responses.toSsml(data[0].description);
+  var statuses = [];
+
+  // Deduplicate any status descriptions. For example, if a tube
+  // line has a planned closure and severe delays, the message will appear twice.
+  for (var i = 0; i < data.length; i++) {
+    var description = data[i].description;
+    if (statuses.indexOf(description) === -1) {
+      statuses.push(description);
+    }
+  }
+
+  var text = statuses.join("\n");
+
+  return responses.toSsml(text);
 };
 
 /**

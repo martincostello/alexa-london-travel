@@ -68,6 +68,7 @@ describe("Disruption Intent", function () {
 
       data = [
         { description: "There are severe delays on the District Line." },
+        { description: "There are severe delays on the District Line." },
         { description: "There are minor delays on the Circle Line." }
       ];
 
@@ -76,7 +77,7 @@ describe("Disruption Intent", function () {
 
     it("Then the response is the description of the first disruption", function () {
       actual = intent.generateResponse(data);
-      assert.equal(actual, "There are severe delays on the District Line.");
+      assert.equal(actual, "There are severe delays on the District Line.\nThere are minor delays on the Circle Line.");
     });
   });
 });
