@@ -7,6 +7,31 @@ var intent = require("../../src/intents/status");
 
 describe("Status Intent", function () {
 
+  describe("When coverting line names to their spoken form", function () {
+
+    var testCases = [
+      { name: "Bakerloo", expected: "Bakerloo line" },
+      { name: "Central", expected: "Central line" },
+      { name: "Circle", expected: "Circle line" },
+      { name: "District", expected: "District line" },
+      { name: "DLR", expected: "D.L.R." },
+      { name: "Hammersmith & City", expected: "Hammersmith & City line" },
+      { name: "Jubilee", expected: "Jubilee line" },
+      { name: "Metropolitan", expected: "Metropolitan line" },
+      { name: "Northern", expected: "Northern line" },
+      { name: "Piccadilly", expected: "Piccadilly line" },
+      { name: "Victoria", expected: "Victoria line" },
+      { name: "Waterloo & City", expected: "Waterloo & City line" },
+    ];
+
+    dataDriven(testCases, function () {
+      it("Then the spoken form is correct for '{name}'", function (context) {
+        var actual = intent.toSpokenLineName(context.name);
+        assert.equal(actual, context.expected);
+      });
+    });
+  });
+
   describe("When mapping line names", function () {
 
     var testCases = [
@@ -49,7 +74,7 @@ describe("Status Intent", function () {
 
   describe("When generating responses", function () {
 
-    describe("Given there is a valid status response", function () {
+    describe("Given there is a valid status response with only one disruption", function () {
 
       var testCases = [
         { severity: 0, expected: "There is currently disruption on the District line." },
@@ -87,6 +112,41 @@ describe("Status Intent", function () {
               lineStatuses: [
                 { statusSeverity: context.severity }
               ]
+            }
+          ];
+
+          var actual = intent.generateResponse(data);
+          assert.equal(actual, context.expected);
+        });
+      });
+    });
+
+    describe("Given there is a valid status response with multiple disruptions", function () {
+
+      var testCases = [
+        {
+          statuses: [
+            { statusSeverity: 5, reason: "HAMMERSMITH & CITY LINE: Saturday 4 and Sunday 5 February, no service between Liverpool Street and Barking." },
+            { statusSeverity: 6, reason: "Hammersmith and City Line: No service between Liverpool Street and Barking due to planned engineering work. SEVERE DELAYS on the rest of the line." }
+          ],
+          expected: "No service between Liverpool Street and Barking due to planned engineering work. SEVERE DELAYS on the rest of the line."
+        },
+        {
+          statuses: [
+            { statusSeverity: 5, reason: "Part closure." },
+            { statusSeverity: 6, reason: "Minor delays." }
+          ],
+          expected: "Minor delays."
+        }
+      ];
+
+      dataDriven(testCases, function () {
+        it("Then the response is correct", function (context) {
+
+          var data = [
+            {
+              name: "Hammersmith & City",
+              lineStatuses: context.statuses
             }
           ];
 
