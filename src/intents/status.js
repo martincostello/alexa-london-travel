@@ -204,7 +204,7 @@ intent.handler = function (request, response) {
     return false;
   } else {
     response
-      .say(responses.onUnknown)
+      .say(responses.onUnknownLine)
       .reprompt(responses.toSsml(responses.onUnknownLine));
   }
 };
