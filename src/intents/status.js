@@ -203,7 +203,9 @@ intent.handler = function (request, response) {
       });
     return false;
   } else {
-    response.say(responses.onUnknown);
+    response
+      .say(responses.onUnknown)
+      .reprompt(responses.toSsml(responses.onUnknownLine));
   }
 };
 

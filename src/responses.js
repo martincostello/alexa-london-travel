@@ -13,6 +13,7 @@ var responses = {
   onInvalidRequest: "Sorry, that request is not valid.",
   onLaunch: "Welcome to the London Travel skill.",
   onUnknown: "Sorry, I didn't catch that.",
+  onUnknownLine: "Sorry, I am not sure what line you said. You can ask about the status of any London Underground line or the D.L.R..",
   onSessionEnded: "Goodbye.",
   toSsml: function (text) {
     var builder = new Speech();
