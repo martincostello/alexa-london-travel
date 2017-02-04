@@ -8,7 +8,7 @@ var responses = require("./../responses");
 
 var intent = {
   name: "TestIntent",
-  enabled: true,
+  enabled: false,
   slots: {},
   utterances: [
     "to test connectivity"
