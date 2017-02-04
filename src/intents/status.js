@@ -69,30 +69,7 @@ intent.generateResponse = function (data) {
           return responses.toSsml(text);
         }
       } else {
-
-        // The descriptions appear to reference each other, so use the least severe's
-        var sorted = line.lineStatuses.sort(function (a, b) {
-          if (a.statusSeverity > b.statusSeverity) {
-            return -1;
-          } else if (a.statusSeverity < b.statusSeverity) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
-
-        text = intent.generateResponseForSingleStatus(
-          line.name,
-          sorted[0],
-          true);
-
-        if (text) {
-          return responses.toSsml(text);
-        }
-
-        // Fallback response
-        var spokenName = intent.toSpokenLineName(line.name);
-        return responses.toSsml(sprintf("There are %d disruptions on the %s.", line.lineStatuses.length, spokenName));
+        return intent.generateResponseForMultipleStatuses(line.name, line.lineStatuses);
       }
     }
   }
@@ -120,6 +97,39 @@ intent.toSpokenLineName = function (name) {
   }
 
   return sprintf("%s%s", spokenName, suffix);
+};
+
+/**
+ * Generates the text to respond for a multiple line statuses.
+ * @param {String} name - The name of the line.
+ * @param {Object} status - The statuses for the line.
+ * @returns {String} The text response for the specified line statuses.
+ */
+intent.generateResponseForMultipleStatuses = function (name, statuses) {
+
+  // The descriptions appear to reference each other, so use the least severe's
+  var sorted = statuses.sort(function (a, b) {
+    if (a.statusSeverity > b.statusSeverity) {
+      return -1;
+    } else if (a.statusSeverity < b.statusSeverity) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+
+  var text = intent.generateResponseForSingleStatus(
+    name,
+    sorted[0],
+    true);
+
+  if (text) {
+    return responses.toSsml(text);
+  }
+
+  // Fallback response
+  var spokenName = intent.toSpokenLineName(name);
+  return responses.toSsml(sprintf("There are %d disruptions on the %s.", statuses.length, spokenName));
 };
 
 /**
