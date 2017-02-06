@@ -182,5 +182,40 @@ describe("Status Intent", function () {
         });
       });
     });
+
+    describe("When generating a card", function () {
+
+      var testCases = [
+        {
+          name: "DLR",
+          text: "There is a good status on the D.L.R..",
+          expectedTitle: "DLR Status",
+          expectedText: "There is a good status on the DLR."
+        },
+        {
+          name: "London Overground",
+          text: "There is a good status on the London Overground.",
+          expectedTitle: "London Overground Status",
+          expectedText: "There is a good status on the London Overground."
+        },
+        {
+          name: "Waterloo & City",
+          text: "There are minor delays on the Waterloo and City line.",
+          expectedTitle: "Waterloo & City Line Status",
+          expectedText: "There are minor delays on the Waterloo and City line."
+        }
+      ];
+
+      dataDriven(testCases, function () {
+
+        it("Then the card is generated correctly", function (context) {
+          var actual = intent.generateCard(context.name, context.text);
+          assert.notEqual(actual, null);
+          assert.equal(actual.type, "Standard");
+          assert.equal(actual.title, context.expectedTitle);
+          assert.equal(actual.text, context.expectedText);
+        });
+      });
+    });
   });
 });

@@ -84,13 +84,31 @@ intent.generateResponse = function (data) {
 };
 
 /**
+ * Returns whether the specified line name refers to the Docklands Light Railway.
+ * @param {String} name - The name of the line as reported from the TfL API.
+ * @returns {Boolean} Whether the line is the DLR.
+ */
+intent.isDLR = function (name) {
+  return name.toLowerCase() === "dlr";
+};
+
+/**
+ * Returns whether the specified line name refers to the London Overground.
+ * @param {String} name - The name of the line as reported from the TfL API.
+ * @returns {Boolean} Whether the line is the London Overground.
+ */
+intent.isOverground = function (name) {
+  return name.toLowerCase().indexOf("overground") > -1;
+};
+
+/**
  * @param {String} name - The name of the line as reported from the TfL API.
  * @returns {String} The spoken name of the line.
  */
 intent.toSpokenLineName = function (name) {
 
-  var isDLR = name.toLowerCase() === "dlr";
-  var isOverground = name.toLowerCase().indexOf("overground") > -1;
+  var isDLR = intent.isDLR(name);
+  var isOverground = intent.isOverground(name);
 
   var prefix = "";
   var suffix = "";
@@ -110,6 +128,28 @@ intent.toSpokenLineName = function (name) {
   }
 
   return sprintf("%s%s%s", prefix, spokenName, suffix);
+};
+
+/**
+ * Returns the title to use for a card for the specified line name.
+ * @param {String} name - The name of the line as reported from the TfL API.
+ * @returns {String} The title to use for the card.
+ */
+intent.toCardTitle = function (name) {
+
+  var isDLR = intent.isDLR(name);
+  var isOverground = intent.isOverground(name);
+
+  var suffix;
+  var spokenName;
+
+  if (isDLR === true || isOverground === true) {
+    suffix = "";
+  } else {
+    suffix = " Line";
+  }
+
+  return sprintf("%s%s Status", name, suffix);
 };
 
 /**
@@ -276,6 +316,20 @@ intent.generateSummaryResponse = function (name, status) {
 };
 
 /**
+ * Generates the card to respond to the specified disruption text.
+ * @param {String} line - The name of the line.
+ * @param {String} text - The SSML response.
+ * @returns {Object} The card object to use.
+ */
+intent.generateCard = function (line, text) {
+  return {
+    type: "Standard",
+    title: intent.toCardTitle(line),
+    text: text.replace("D.L.R.", "DLR")
+  };
+};
+
+/**
  * Maps the specified line name to a TfL API line Id.
  * @param {String} line - The line name.
  * @returns {String} The id for the specified line, if valid; otherwise null.
@@ -337,8 +391,11 @@ intent.handler = function (request, response) {
   if (line) {
     intent.api.getLineStatus(line)
       .then(function (data) {
+        var text = intent.generateResponse(data);
+        var card = intent.generateCard(data[0].name, text);
         response
-          .say(intent.generateResponse(data))
+          .say(text)
+          .card(card)
           .send();
       })
       .catch(function (err) {
