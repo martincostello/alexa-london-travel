@@ -54,6 +54,8 @@ describe("Status Intent", function () {
       { name: "Hammersmith & City", expected: "hammersmith-city" },
       { name: "Hammersmith and City", expected: "hammersmith-city" },
       { name: "Jubilee", expected: "jubilee" },
+      { name: "London Overground", expected: "london-overground" },
+      { name: "Overground", expected: "london-overground" },
       { name: "Met", expected: "metropolitan" },
       { name: "Metropolitan", expected: "metropolitan" },
       { name: "Northern", expected: "northern" },
