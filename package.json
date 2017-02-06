@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "jshint src test index.js server.js",
-    "test": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive"
+    "test": "istanbul cover node_modules/mocha/bin/_mocha --report html --report lcovonly -- --recursive"
   },
   "repository": {
     "type": "git",
@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "alexa-app-server": "3.0.0",
+    "codecov": "1.0.1",
     "data-driven": "1.3.0",
     "istanbul": "0.4.5",
     "jshint": "2.9.4",
