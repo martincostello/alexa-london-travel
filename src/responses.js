@@ -12,7 +12,7 @@ var responses = {
   onError: "Sorry, something went wrong.",
   onInvalidRequest: "Sorry, that request is not valid.",
   onLaunch: "Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground or the D.L.R..",
-  onNoDisruption: "There is currently no disruption on the tube, London Overground or the D.L.R.",
+  onNoDisruption: "There is currently no disruption on the tube, London Overground or the D.L.R..",
   onUnknown: "Sorry, I didn't catch that. You can ask if there is any disruption or about the status of any tube line, London Overground or the D.L.R..",
   onUnknownLine: "Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground or the D.L.R..",
   onSessionEnded: "Goodbye.",
