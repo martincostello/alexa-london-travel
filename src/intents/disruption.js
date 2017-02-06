@@ -65,20 +65,18 @@ intent.generateCard = function (text) {
  * @returns {Object} The result of the intent handler.
  */
 intent.handler = function (request, response) {
-  intent.api.getDisruption(["dlr", "overground", "tube"])
+  return intent.api.getDisruption(["dlr", "overground", "tube"])
     .then(function (data) {
       var text = intent.generateResponse(data);
       var card = intent.generateCard(text);
       response
         .say(text)
-        .card(card)
-        .send();
+        .card(card);
     })
     .catch(function (err) {
       console.error("Failed to check for disruption:", err);
       response.say(responses.onError);
     });
-  return false;
 };
 
 module.exports = intent;

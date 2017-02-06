@@ -4,6 +4,7 @@
 var assert = require("assert");
 var dataDriven = require("data-driven");
 var intent = require("../../src/intents/disruption");
+var simple = require("simple-mock");
 
 describe("Disruption Intent", function () {
 
@@ -100,6 +101,128 @@ describe("Disruption Intent", function () {
     });
     it("Then the text is correct", function () {
       assert.equal(actual.text, "There are no delays on the London Underground or the DLR.");
+    });
+  });
+
+  describe("When a request is received", function () {
+
+    describe("Given there are no disruptions", function () {
+
+      var request;
+      var response;
+
+      beforeEach(function (done) {
+
+        request = {};
+        response = {};
+
+        simple.mock(response, "card");
+        simple.mock(response, "say");
+
+        response.card.returnWith(response);
+        response.say.returnWith(response);
+
+        simple
+          .mock(intent.api, "getDisruption")
+          .resolveWith([]);
+
+        intent
+          .handler(request, response)
+          .then(done);
+      });
+
+      it("Then the response is correct", function () {
+        assert.equal(response.say.callCount, 1);
+        assert.equal(response.say.lastCall.arg, "There is currently no disruption on the tube, London Overground or the D.L.R..");
+      });
+      it("Then a card is returned", function () {
+        assert.equal(response.card.callCount, 1);
+      });
+
+      afterEach(function () {
+        simple.restore();
+      });
+    });
+
+    describe("Given there is a single disruption", function () {
+
+      var request;
+      var response;
+
+      beforeEach(function (done) {
+
+        request = {};
+        response = {};
+
+        simple.mock(response, "card");
+        simple.mock(response, "say");
+
+        response.card.returnWith(response);
+        response.say.returnWith(response);
+
+        simple
+          .mock(intent.api, "getDisruption")
+          .resolveWith([
+            { description: "Disruption 1" },
+            { description: "Disruption 2" },
+            { description: "Disruption 2" }
+          ]);
+
+        intent
+          .handler(request, response)
+          .then(done);
+      });
+
+      it("Then the response is correct", function () {
+        assert.equal(response.say.callCount, 1);
+        assert.equal(response.say.lastCall.arg, "Disruption 1\nDisruption 2");
+      });
+      it("Then a card is returned", function () {
+        assert.equal(response.card.callCount, 1);
+      });
+
+      afterEach(function () {
+        simple.restore();
+      });
+    });
+
+    describe("Given an error occurs", function () {
+
+      var request;
+      var response;
+
+      beforeEach(function (done) {
+
+        request = {};
+        response = {};
+
+        simple.mock(response, "say");
+        simple.mock(console, "error");
+
+        response.say.returnWith(response);
+
+        simple
+          .mock(intent.api, "getDisruption")
+          .rejectWith("An error");
+
+        intent
+          .handler(request, response)
+          .then(done);
+      });
+
+      it("Then the response is correct", function () {
+        assert.equal(response.say.callCount, 1);
+        assert.equal(response.say.lastCall.arg, "Sorry, something went wrong.");
+      });
+      it("Then the error is logged", function () {
+        assert.equal(console.error.callCount, 1);
+        assert.equal(console.error.lastCall.args[0], "Failed to check for disruption:");
+        assert.equal(console.error.lastCall.args[1], "An error");
+      });
+
+      afterEach(function () {
+        simple.restore();
+      });
     });
   });
 });
