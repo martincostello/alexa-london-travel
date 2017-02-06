@@ -7,6 +7,7 @@ var api = require("./../api");
 var responses = require("./../responses");
 
 var intent = {
+  api: api,
   name: "DisruptionIntent",
   enabled: true,
   slots: {},
@@ -64,7 +65,7 @@ intent.generateCard = function (text) {
  * @returns {Object} The result of the intent handler.
  */
 intent.handler = function (request, response) {
-  api.getDisruption(["dlr", "overground", "tube"])
+  intent.api.getDisruption(["dlr", "overground", "tube"])
     .then(function (data) {
       var text = intent.generateResponse(data);
       var card = intent.generateCard(text);
