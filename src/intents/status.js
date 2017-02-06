@@ -108,20 +108,16 @@ intent.isOverground = function (name) {
  */
 intent.toSpokenLineName = function (name) {
 
-  var isDLR = intent.isDLR(name);
-  var isOverground = intent.isOverground(name);
-
   var prefix = "";
   var suffix = "";
 
   var spokenName;
 
-  if (isDLR === true) {
+  if (intent.isDLR(name) === true) {
     prefix = "the ";
     spokenName = "D.L.R.";
-  } else if (isOverground === true) {
+  } else if (intent.isOverground(name) === true) {
     spokenName = name;
-    suffix = "";
   } else {
     prefix = "the ";
     spokenName = name;
@@ -138,12 +134,9 @@ intent.toSpokenLineName = function (name) {
  */
 intent.toCardTitle = function (name) {
 
-  var isDLR = intent.isDLR(name);
-  var isOverground = intent.isOverground(name);
-
   var suffix;
 
-  if (isDLR === true || isOverground === true) {
+  if (intent.isDLR(name) === true || intent.isOverground(name) === true) {
     suffix = "";
   } else {
     suffix = " Line";
