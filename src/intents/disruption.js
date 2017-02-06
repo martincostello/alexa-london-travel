@@ -59,7 +59,7 @@ intent.handler = function (request, response) {
         .card({
           type: "Standard",
           title: "Disruption Summary",
-          text: text
+          text: text.replace("D.L.R.", "DLR")
         })
         .send();
     })
