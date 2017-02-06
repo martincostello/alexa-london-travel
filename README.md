@@ -2,7 +2,7 @@
 
 ![London Travel](./static/icon-108x108.png "London Travel")
 
-[![Build status](https://img.shields.io/travis/martincostello/alexa-london-travel/master.svg)](https://travis-ci.org/martincostello/alexa-london-travel)
+[![Build status](https://img.shields.io/travis/martincostello/alexa-london-travel/master.svg)](https://travis-ci.org/martincostello/alexa-london-travel) [![codecov](https://codecov.io/gh/martincostello/alexa-london-travel/branch/master/graph/badge.svg)](https://codecov.io/gh/martincostello/alexa-london-travel)
 
 [![Build history](https://buildstats.info/travisci/chart/martincostello/alexa-london-travel?branch=master&includeBuildsFromPullRequest=false)](https://travis-ci.org/martincostello/alexa-london-travel)
 
