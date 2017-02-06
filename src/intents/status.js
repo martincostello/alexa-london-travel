@@ -102,6 +102,7 @@ intent.isOverground = function (name) {
 };
 
 /**
+ * Returns the spoken version of the specified line name.
  * @param {String} name - The name of the line as reported from the TfL API.
  * @returns {String} The spoken name of the line.
  */
