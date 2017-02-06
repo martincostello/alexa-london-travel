@@ -15,8 +15,10 @@ var intent = {
     "LINE": "LINE_NAME"
   },
   utterances: [
-    "{-|LINE} status",
-    "{|what is the} status of the {-|LINE} {|line}"
+    "about the {|status of the} {-|LINE} {|line} {|now|right now|this morning|this afternoon|this evening|today|tonight}",
+    "for the status of the {-|LINE} {|line} {|now|right now|this morning|this afternoon|this evening|today|tonight}",
+    "how the {-|LINE} is {|doing} {|now|right now|this morning|this afternoon|this evening|today|tonight}",
+    "{|what|what is|what's} {|the} status of the {-|LINE} {|line} {|is} {|now|right now|this morning|this afternoon|this evening|today|tonight}"
   ]
 };
 
