@@ -33,7 +33,9 @@ var skill = {
     response.say(responses.onError);
   },
   onLaunch: function (request, response) {
-    response.say(responses.onLaunch);
+    response
+      .say(responses.onLaunch)
+      .shouldEndSession(false);
   },
   onSessionEnded: function (request, response) {
     response.say(responses.onSessionEnded);
