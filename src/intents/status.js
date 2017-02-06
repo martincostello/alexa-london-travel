@@ -142,7 +142,6 @@ intent.toCardTitle = function (name) {
   var isOverground = intent.isOverground(name);
 
   var suffix;
-  var spokenName;
 
   if (isDLR === true || isOverground === true) {
     suffix = "";
