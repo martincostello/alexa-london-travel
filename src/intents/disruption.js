@@ -45,6 +45,19 @@ intent.generateResponse = function (data) {
 };
 
 /**
+ * Generates the card to respond to the specified disruption text.
+ * @param {String} text - The SSML response.
+ * @returns {Object} The card object to use.
+ */
+intent.generateCard = function (text) {
+  return {
+    type: "Standard",
+    title: "Disruption Summary",
+    text: text.replace("D.L.R.", "DLR")
+  };
+};
+
+/**
  * Handles the intent for disruption.
  * @param {Object} request - The Alexa skill request.
  * @param {Object} response - The Alexa skill response.
@@ -54,13 +67,10 @@ intent.handler = function (request, response) {
   api.getDisruption(["dlr", "overground", "tube"])
     .then(function (data) {
       var text = intent.generateResponse(data);
+      var card = intent.generateCard(text);
       response
         .say(text)
-        .card({
-          type: "Standard",
-          title: "Disruption Summary",
-          text: text.replace("D.L.R.", "DLR")
-        })
+        .card(card)
         .send();
     })
     .catch(function (err) {

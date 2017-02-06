@@ -80,4 +80,26 @@ describe("Disruption Intent", function () {
       assert.equal(actual, "There are severe delays on the District Line.\nThere are minor delays on the Circle Line.");
     });
   });
+
+  describe("When generating a card", function () {
+
+    var actual;
+
+    beforeEach(function () {
+      actual = intent.generateCard("There are no delays on the London Underground or the D.L.R..");
+    });
+
+    it("Then a card is returned", function () {
+      assert.notEqual(actual, null);
+    });
+    it("Then the type is correct", function () {
+      assert.equal(actual.type, "Standard");
+    });
+    it("Then the title is correct", function () {
+      assert.equal(actual.title, "Disruption Summary");
+    });
+    it("Then the text is correct", function () {
+      assert.equal(actual.text, "There are no delays on the London Underground or the DLR.");
+    });
+  });
 });
