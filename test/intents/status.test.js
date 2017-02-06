@@ -4,6 +4,7 @@
 var assert = require("assert");
 var dataDriven = require("data-driven");
 var intent = require("../../src/intents/status");
+var simple = require("simple-mock");
 
 describe("Status Intent", function () {
 
@@ -217,6 +218,186 @@ describe("Status Intent", function () {
           assert.equal(actual.title, context.expectedTitle);
           assert.equal(actual.text, context.expectedText);
         });
+      });
+    });
+  });
+
+  describe("When a request is received", function () {
+
+    describe("Given there is no slot value", function () {
+
+      var request;
+      var response;
+
+      beforeEach(function () {
+
+        request = {};
+        response = {};
+
+        simple.mock(request, "slot");
+
+        simple.mock(response, "card");
+        simple.mock(response, "reprompt");
+        simple.mock(response, "say");
+
+        request.slot.returnWith(null);
+        response.card.returnWith(response);
+        response.say.returnWith(response);
+
+        intent.handler(request, response);
+      });
+
+      it("Then the response is correct", function () {
+        assert.equal(response.say.callCount, 1);
+        assert.equal(response.say.lastCall.arg, "Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground or the D.L.R..");
+      });
+      it("Then the reprompt is correct", function () {
+        assert.equal(response.reprompt.callCount, 1);
+        assert.equal(response.reprompt.lastCall.arg, "Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground or the D.L.R..");
+      });
+
+      afterEach(function () {
+        simple.restore();
+      });
+    });
+
+    describe("Given there is an invalid slot value", function () {
+
+      var request;
+      var response;
+
+      beforeEach(function () {
+
+        request = {};
+        response = {};
+
+        simple.mock(request, "slot");
+
+        simple.mock(response, "card");
+        simple.mock(response, "reprompt");
+        simple.mock(response, "say");
+
+        request.slot.returnWith("unknown");
+        response.card.returnWith(response);
+        response.say.returnWith(response);
+
+        intent.handler(request, response);
+      });
+
+      it("Then the response is correct", function () {
+        assert.equal(response.say.callCount, 1);
+        assert.equal(response.say.lastCall.arg, "Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground or the D.L.R..");
+      });
+      it("Then the reprompt is correct", function () {
+        assert.equal(response.reprompt.callCount, 1);
+        assert.equal(response.reprompt.lastCall.arg, "Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground or the D.L.R..");
+      });
+
+      afterEach(function () {
+        simple.restore();
+      });
+    });
+
+    describe("Given there is an valid slot value", function () {
+
+      var request;
+      var response;
+
+      beforeEach(function (done) {
+
+        request = {};
+        response = {};
+
+        simple.mock(request, "slot");
+
+        simple.mock(response, "card");
+        simple.mock(response, "say");
+
+        request.slot.returnWith("Waterloo & City");
+        response.card.returnWith(response);
+        response.say.returnWith(response);
+
+        simple
+          .mock(intent.api, "getLineStatus")
+          .resolveWith([
+            {
+              name: "Waterloo & City",
+              lineStatuses: [
+                {
+                  statusSeverity: 10
+                }
+              ]
+            }
+          ]);
+
+        intent
+          .handler(request, response)
+          .then(done);
+      });
+
+      it("Then the correct line is requested", function () {
+        assert.equal(intent.api.getLineStatus.callCount, 1);
+        assert.equal(intent.api.getLineStatus.lastCall.arg, "waterloo-city");
+      });
+      it("Then the response is correct", function () {
+        assert.equal(response.say.callCount, 1);
+        assert.equal(response.say.lastCall.arg, "There is a good service on the Waterloo and City line.");
+      });
+      it("Then a card is returned", function () {
+        assert.equal(response.card.callCount, 1);
+      });
+
+      afterEach(function () {
+        simple.restore();
+      });
+    });
+
+    describe("Given an error occurs", function () {
+
+      var request;
+      var response;
+
+      beforeEach(function (done) {
+
+        request = {
+          slot: function (name) {
+            return name === "LINE" ? "Waterloo & City" : null;
+          }
+        };
+
+        response = {};
+
+        simple.mock(response, "say");
+        simple.mock(console, "error");
+
+        response.say.returnWith(response);
+
+        simple
+          .mock(intent.api, "getLineStatus")
+          .rejectWith("An error");
+
+        intent
+          .handler(request, response)
+          .then(done);
+      });
+
+      it("Then the correct line is requested", function () {
+        assert.equal(intent.api.getLineStatus.callCount, 1);
+        assert.equal(intent.api.getLineStatus.lastCall.arg, "waterloo-city");
+      });
+      it("Then the response is correct", function () {
+        assert.equal(response.say.callCount, 1);
+        assert.equal(response.say.lastCall.arg, "Sorry, something went wrong.");
+      });
+      it("Then the error is logged", function () {
+        assert.equal(console.error.callCount, 1);
+        assert.equal(console.error.lastCall.args[0], "Failed to get line status:");
+        assert.equal(console.error.lastCall.args[1], "waterloo-city");
+        assert.equal(console.error.lastCall.args[2], "An error");
+      });
+
+      afterEach(function () {
+        simple.restore();
       });
     });
   });

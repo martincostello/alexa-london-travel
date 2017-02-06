@@ -382,24 +382,23 @@ intent.mapLineToId = function (line) {
 intent.handler = function (request, response) {
   var line = intent.mapLineToId(request.slot("LINE"));
   if (line) {
-    intent.api.getLineStatus(line)
+    return intent.api.getLineStatus(line)
       .then(function (data) {
         var text = intent.generateResponse(data);
         var card = intent.generateCard(data[0].name, text);
         response
           .say(text)
-          .card(card)
-          .send();
+          .card(card);
       })
       .catch(function (err) {
-        console.error("Failed to get line status: ", line, err);
+        console.error("Failed to get line status:", line, err);
         response.say(responses.onError);
       });
-    return false;
   } else {
+    var text = responses.toSsml(responses.onUnknownLine);
     response
-      .say(responses.onUnknownLine)
-      .reprompt(responses.toSsml(responses.onUnknownLine));
+      .say(text)
+      .reprompt(text);
   }
 };
 
