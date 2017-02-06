@@ -53,8 +53,14 @@ intent.generateResponse = function (data) {
 intent.handler = function (request, response) {
   api.getDisruption(["dlr", "overground", "tube"])
     .then(function (data) {
+      var text = intent.generateResponse(data);
       response
-        .say(intent.generateResponse(data))
+        .say(text)
+        .card({
+          type: "Standard",
+          title: "Disruption Summary",
+          text: text
+        })
         .send();
     })
     .catch(function (err) {
