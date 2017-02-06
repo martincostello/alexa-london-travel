@@ -20,7 +20,7 @@ var intent = {
 /**
  * Generates the text to respond to the specified disruption response.
  * @param {Object[]} data - An array of disruptions.
- * @returns {String} The text response for the specified disuptions.
+ * @returns {String} The text response for the specified disruptions.
  */
 intent.generateResponse = function (data) {
 

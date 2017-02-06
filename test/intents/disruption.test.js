@@ -23,7 +23,7 @@ describe("Disruption Intent", function () {
     });
   });
 
-  describe("When there are no disuptions", function () {
+  describe("When there are no disruptions", function () {
 
     var data;
     var actual;
