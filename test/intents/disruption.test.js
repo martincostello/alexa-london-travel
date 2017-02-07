@@ -44,7 +44,7 @@ describe("Disruption Intent", function () {
 
     var testCases = [
       { description: "There are severe delays on the District Line.", expected: "There are severe delays on the District Line." },
-      { description: "There are minor delays on the Hammersmith & City Line.", expected: "There are minor delays on the Hammersmith and City Line." }
+      { description: "There are minor delays on the Hammersmith & City Line.", expected: "There are minor delays on the Hammersmith & City Line." }
     ];
 
     dataDriven(testCases, function () {

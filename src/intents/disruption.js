@@ -42,7 +42,7 @@ intent.generateResponse = function (data) {
 
   var text = statuses.join("\n");
 
-  return responses.toSsml(text);
+  return text.replace("DLR", "D.L.R.");
 };
 
 /**
@@ -70,7 +70,7 @@ intent.handler = function (request, response) {
       var text = intent.generateResponse(data);
       var card = intent.generateCard(text);
       response
-        .say(text)
+        .say(responses.toSsml(text))
         .card(card);
     })
     .catch(function (err) {
