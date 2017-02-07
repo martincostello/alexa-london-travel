@@ -24,16 +24,14 @@ app.sessionEnded(skill.onSessionEnded);
 // Register the enabled intents
 for (var i = 0; i < skill.intents.length; i++) {
   var intent = skill.intents[i];
-  if (intent.enabled === true) {
-    app.intent(
-      intent.name,
-      {
-        slots: intent.slots,
-        utterances: intent.utterances
-      },
-      intent.handler
-    );
-  }
+  app.intent(
+    intent.name,
+    {
+      slots: intent.slots,
+      utterances: intent.utterances
+    },
+    intent.handler
+  );
 }
 
 // Apply any message customizations
