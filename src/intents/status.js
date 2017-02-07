@@ -169,13 +169,7 @@ intent.generateResponseForMultipleStatuses = function (name, statuses) {
     sorted[0],
     true);
 
-  if (text) {
-    return responses.toSsml(text);
-  }
-
-  // Fallback response
-  var spokenName = intent.toSpokenLineName(name);
-  return responses.toSsml(sprintf("There are %d disruptions on the %s.", statuses.length, spokenName));
+  return responses.toSsml(text);
 };
 
 /**
@@ -244,68 +238,63 @@ intent.shouldStatusUseCustomResponse = function (statusSeverity) {
  */
 intent.generateSummaryResponse = function (name, status) {
 
-  if (typeof status.statusSeverity === "number") {
+  var format;
 
-    var format;
+  switch (status.statusSeverity) {
 
-    switch (status.statusSeverity) {
+    case tubeSeverities.goodService:
+    case tubeSeverities.noIssues:
+      format = "There is a good service on %s.";
+      break;
 
-      case tubeSeverities.goodService:
-      case tubeSeverities.noIssues:
-        format = "There is a good service on %s.";
-        break;
+    case tubeSeverities.busService:
+      format = "Some parts of %s are currently being served by a replacement bus service.";
+      break;
 
-      case tubeSeverities.busService:
-        format = "Some parts of %s are currently being served by a replacement bus service.";
-        break;
+    case tubeSeverities.closed:
+    case tubeSeverities.notRunning:
+    case tubeSeverities.serviceClosed:
+      format = "%s is closed.";
+      break;
 
-      case tubeSeverities.closed:
-      case tubeSeverities.notRunning:
-      case tubeSeverities.serviceClosed:
-        format = "%s is closed.";
-        break;
+    case tubeSeverities.minorDelays:
+      format = "There are minor delays on %s.";
+      break;
 
-      case tubeSeverities.minorDelays:
-        format = "There are minor delays on %s.";
-        break;
+    case tubeSeverities.partClosed:
+    case tubeSeverities.partClosure:
+      format = "%s is partially closed.";
+      break;
 
-      case tubeSeverities.partClosed:
-      case tubeSeverities.partClosure:
-        format = "%s is partially closed.";
-        break;
+    case tubeSeverities.partSuspended:
+      format = "%s is partially suspended.";
+      break;
 
-      case tubeSeverities.partSuspended:
-        format = "%s is partially suspended.";
-        break;
+    case tubeSeverities.plannedClosure:
+      format = "There is a planned closure on %s.";
+      break;
 
-      case tubeSeverities.plannedClosure:
-        format = "There is a planned closure on %s.";
-        break;
+    case tubeSeverities.reducedService:
+      format = "There is a reduced service on %s.";
+      break;
 
-      case tubeSeverities.reducedService:
-        format = "There is a reduced service on %s.";
-        break;
+    case tubeSeverities.severeDelays:
+      format = "There are severe delays on %s.";
+      break;
 
-      case tubeSeverities.severeDelays:
-        format = "There are severe delays on %s.";
-        break;
+    case tubeSeverities.suspended:
+      format = "%s is suspended.";
+      break;
 
-      case tubeSeverities.suspended:
-        format = "%s is suspended.";
-        break;
-
-      default:
-        format = "There is currently disruption on %s.";
-        break;
-    }
-
-    var spokenName = intent.toSpokenLineName(name);
-    var statusText = sprintf(format, spokenName);
-
-    return statusText.charAt(0).toUpperCase() + statusText.slice(1);
+    default:
+      format = "There is currently disruption on %s.";
+      break;
   }
 
-  return "";
+  var spokenName = intent.toSpokenLineName(name);
+  var statusText = sprintf(format, spokenName);
+
+  return statusText.charAt(0).toUpperCase() + statusText.slice(1);
 };
 
 /**
