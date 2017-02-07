@@ -143,9 +143,12 @@ describe("Status Intent", function () {
         {
           statuses: [
             { statusSeverity: 5, reason: "Part closure." },
-            { statusSeverity: 6, reason: "Minor delays." }
+            { statusSeverity: 7, reason: "More minor delays." },
+            { statusSeverity: 6, reason: "Minor delays." },
+            { statusSeverity: 6, reason: "Minor delays." },
+            { statusSeverity: 8, reason: "Severe delays." },
           ],
-          expected: "Minor delays."
+          expected: "Severe delays."
         }
       ];
 
