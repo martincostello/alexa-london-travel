@@ -132,6 +132,37 @@ describe("Integration", function () {
         assert.equal(actual.response.card.text, "DLR: Minor delays.\nWaterloo & City line: Severe delays.");
       });
     });
+
+    describe("Given an error occurs", function () {
+
+      var actual;
+
+      beforeEach(function (done) {
+
+        nock("https://api.tfl.gov.uk")
+          .get("/Line/Mode/dlr,overground,tube/Disruption")
+          .query({ app_id: "MyApplicationId", app_key: "MyApplicationKey" })
+          .reply(500);
+
+        app.request(json).then(function (response) {
+          actual = response;
+          done();
+        });
+      });
+
+      it("Then there is a response", function () {
+        assert.notEqual(actual, null);
+        assert.notEqual(actual.response, null);
+      });
+      it("Then the session ends", function () {
+        assert.equal(actual.response.shouldEndSession, true);
+      });
+      it("Then the speech is correct", function () {
+        assert.notEqual(actual.response.outputSpeech, null);
+        assert.equal(actual.response.outputSpeech.type, "SSML");
+        assert.equal(actual.response.outputSpeech.ssml, "<speak>Sorry, something went wrong.</speak>");
+      });
+    });
   });
 
   describe("When the status intent is requested", function () {
@@ -246,6 +277,37 @@ describe("Integration", function () {
         assert.equal(actual.response.card.type, "Standard");
         assert.equal(actual.response.card.title, "Waterloo & City Line Status");
         assert.equal(actual.response.card.text, "SEVERE DELAYS due to a person ill on a train earlier at Waterloo.");
+      });
+    });
+
+    describe("Given an error occurs", function () {
+
+      var actual;
+
+      beforeEach(function (done) {
+
+        nock("https://api.tfl.gov.uk")
+          .get("/Line/waterloo-city/Status")
+          .query({ app_id: "MyApplicationId", app_key: "MyApplicationKey" })
+          .reply(500);
+
+        app.request(json).then(function (response) {
+          actual = response;
+          done();
+        });
+      });
+
+      it("Then there is a response", function () {
+        assert.notEqual(actual, null);
+        assert.notEqual(actual.response, null);
+      });
+      it("Then the session ends", function () {
+        assert.equal(actual.response.shouldEndSession, true);
+      });
+      it("Then the speech is correct", function () {
+        assert.notEqual(actual.response.outputSpeech, null);
+        assert.equal(actual.response.outputSpeech.type, "SSML");
+        assert.equal(actual.response.outputSpeech.ssml, "<speak>Sorry, something went wrong.</speak>");
       });
     });
   });
