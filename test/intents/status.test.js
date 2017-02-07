@@ -223,6 +223,47 @@ describe("Status Intent", function () {
         });
       });
     });
+
+    describe("Given a status response", function () {
+
+      var testCases = [
+        { severity: 1, expected: "The District line is closed." },
+        { severity: 2, expected: "The District line is suspended." },
+        { severity: 3, expected: "The District line is partially suspended." },
+        { severity: 4, expected: "There is a planned closure on the District line." },
+        { severity: 5, expected: "The District line is partially closed." },
+        { severity: 6, expected: "There are severe delays on the District line." },
+        { severity: 7, expected: "There is a reduced service on the District line." },
+        { severity: 8, expected: "Some parts of the District line are currently being served by a replacement bus service." },
+        { severity: 9, expected: "There are minor delays on the District line." },
+        { severity: 10, expected: "There is a good service on the District line." },
+        { severity: 11, expected: "The District line is partially closed." },
+        { severity: 16, expected: "The District line is closed." },
+        { severity: 18, expected: "There is a good service on the District line." },
+        { severity: 20, expected: "The District line is closed." },
+        { severity: 0 },
+        { severity: 12 },
+        { severity: 13 },
+        { severity: 14 },
+        { severity: 15 },
+        { severity: 17 },
+        { severity: 19 },
+        { severity: 99 },
+      ];
+
+      dataDriven(testCases, function () {
+        it("Then the summary response is correct for severity {severity}", function (context) {
+
+          var name = "District";
+          var status = {
+            statusSeverity: context.severity
+          };
+
+          var actual = intent.generateSummaryResponse(name, status);
+          assert.equal(actual, context.expected || "There is currently disruption on the District line.");
+        });
+      });
+    });
   });
 
   describe("When a request is received", function () {
