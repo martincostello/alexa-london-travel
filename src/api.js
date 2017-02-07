@@ -8,12 +8,17 @@ var http = require("request-promise");
 
 const ApiHost = "https://api.tfl.gov.uk/";
 
-var httpGet = function (path) {
+var api = {
+  appId: process.env.TFL_APP_ID || "",
+  appKey: process.env.TFL_APP_KEY || ""
+};
+
+api.httpGet = function (path) {
   var options = {
     uri: ApiHost + path,
     qs: {
-      app_id: process.env.TFL_APP_ID || "",
-      app_key: process.env.TFL_APP_KEY || ""
+      app_id: api.appId,
+      app_key: api.appKey
     },
     headers: {
       "User-Agent": constants.appName + "/" + constants.version
@@ -23,13 +28,12 @@ var httpGet = function (path) {
   return http(options);
 };
 
-var api = {
-  getDisruption: function (modes) {
-    return httpGet("Line/Mode/" + modes.concat() + "/Disruption");
-  },
-  getLineStatus: function (id) {
-    return httpGet("Line/" + id + "/Status");
-  }
+api.getDisruption = function (modes) {
+  return api.httpGet("Line/Mode/" + modes.concat() + "/Disruption");
+};
+
+api.getLineStatus = function (id) {
+  return api.httpGet("Line/" + id + "/Status");
 };
 
 module.exports = api;
