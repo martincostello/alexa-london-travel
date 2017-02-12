@@ -127,7 +127,7 @@ describe("Integration", function () {
       it("Then the speech is correct", function () {
         assert.notEqual(actual.response.outputSpeech, null);
         assert.equal(actual.response.outputSpeech.type, "SSML");
-        assert.equal(actual.response.outputSpeech.ssml, "<speak>D.L.R.: Minor delays.\nWaterloo and City line: Severe delays.</speak>");
+        assert.equal(actual.response.outputSpeech.ssml, "<speak><p>D.L.R.: Minor delays.</p> <p>Waterloo and City line: Severe delays.</p></speak>");
       });
       it("Then the card is correct", function () {
         assert.notEqual(actual.response.card, null);

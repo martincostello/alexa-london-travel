@@ -54,8 +54,8 @@ describe("Disruption Intent", function () {
           { description: context.description }
         ];
 
-        var actual = intent.generateResponse(data);
-        assert.equal(actual, context.expected);
+        var actual = intent.generateRawResponse(data);
+        assert.deepEqual(actual, [context.expected]);
       });
     });
   });
@@ -77,8 +77,8 @@ describe("Disruption Intent", function () {
     });
 
     it("Then the response is the description of the first disruption", function () {
-      actual = intent.generateResponse(data);
-      assert.equal(actual, "There are severe delays on the District Line.\nThere are minor delays on the Circle Line.");
+      actual = intent.generateRawResponse(data);
+      assert.deepEqual(actual, ["There are severe delays on the District Line.", "There are minor delays on the Circle Line."]);
     });
   });
 
@@ -87,7 +87,8 @@ describe("Disruption Intent", function () {
     var actual;
 
     beforeEach(function () {
-      actual = intent.generateCard("There are no delays on the London Underground or the D.L.R..");
+      var statuses = [];
+      actual = intent.generateCard(statuses);
     });
 
     it("Then a card is returned", function () {
@@ -100,7 +101,7 @@ describe("Disruption Intent", function () {
       assert.equal(actual.title, "Disruption Summary");
     });
     it("Then the text is correct", function () {
-      assert.equal(actual.text, "There are no delays on the London Underground or the DLR.");
+      assert.equal(actual.text, "There is currently no disruption on the tube, London Overground or the DLR.");
     });
   });
 
@@ -175,7 +176,7 @@ describe("Disruption Intent", function () {
 
       it("Then the response is correct", function () {
         assert.equal(response.say.callCount, 1);
-        assert.equal(response.say.lastCall.arg, "Disruption 1\nDisruption 2");
+        assert.equal(response.say.lastCall.arg, "<p>Disruption 1</p> <p>Disruption 2</p>");
       });
       it("Then a card is returned", function () {
         assert.equal(response.card.callCount, 1);

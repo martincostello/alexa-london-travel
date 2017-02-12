@@ -5,6 +5,7 @@
 
 var api = require("./../api");
 var responses = require("./../responses");
+var Speech = require("ssml-builder");
 
 var intent = {
   api: api,
@@ -19,42 +20,67 @@ var intent = {
 };
 
 /**
- * Generates the text to respond to the specified disruption response.
+ * Generates the raw status text to respond to the specified disruption response.
  * @param {Object[]} data - An array of disruptions.
- * @returns {String} The text response for the specified disruptions.
+ * @returns {String[]} An array containing the raw text response for the specified disruptions, if any.
  */
-intent.generateResponse = function (data) {
-
-  if (!data || data.length === 0) {
-    return responses.onNoDisruption;
-  }
+intent.generateRawResponse = function (data) {
 
   var statuses = [];
 
-  // Deduplicate any status descriptions. For example, if a tube
-  // line has a planned closure and severe delays, the message will appear twice.
-  for (var i = 0; i < data.length; i++) {
-    var description = data[i].description;
-    if (statuses.indexOf(description) === -1) {
-      statuses.push(description);
+  if (data && data.length > 0) {
+    // Deduplicate any status descriptions. For example, if a tube
+    // line has a planned closure and severe delays, the message will appear twice.
+    for (var i = 0; i < data.length; i++) {
+      var description = data[i].description;
+      if (statuses.indexOf(description) === -1) {
+        statuses.push(description);
+      }
     }
   }
 
-  var text = statuses.join("\n");
-
-  return text.replace("DLR", "D.L.R.");
+  return statuses;
 };
 
 /**
- * Generates the card to respond to the specified disruption text.
- * @param {String} text - The SSML response.
+ * Generates the text to respond to the specified disruption status(es).
+ * @param {String[]} statuses - An array of disruption descriptions.
+ * @returns {String} The SSML response for the specified status(es).
+ */
+intent.generateResponse = function (statuses) {
+
+  var builder = new Speech();
+
+  if (!statuses || statuses.length === 0) {
+    builder.say(responses.onNoDisruption);
+  } else {
+    for (var i = 0; i < statuses.length; i++) {
+      builder.paragraph(statuses[i].replace("DLR", "D.L.R."));
+    }
+  }
+
+  return builder.ssml(true);
+};
+
+/**
+ * Generates the card to respond to the specified disruption status(es).
+ * @param {String[]} statuses - An array of disruption descriptions.
  * @returns {Object} The card object to use.
  */
-intent.generateCard = function (text) {
+intent.generateCard = function (statuses) {
+
+  var text;
+
+  if (statuses.length === 0) {
+    text = responses.onNoDisruption.replace("D.L.R.", "DLR");
+  } else {
+    text = statuses.join("\n");
+  }
+
   return {
     type: "Standard",
     title: "Disruption Summary",
-    text: text.replace("D.L.R.", "DLR")
+    text: text
   };
 };
 
@@ -67,10 +93,13 @@ intent.generateCard = function (text) {
 intent.handler = function (request, response) {
   return intent.api.getDisruption(["dlr", "overground", "tube"])
     .then(function (data) {
-      var text = intent.generateResponse(data);
-      var card = intent.generateCard(text);
+
+      var statuses = intent.generateRawResponse(data);
+      var ssml = intent.generateResponse(statuses);
+      var card = intent.generateCard(statuses);
+
       response
-        .say(responses.toSsml(text))
+        .say(ssml)
         .card(card);
     })
     .catch(function (err) {
