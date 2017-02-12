@@ -42,7 +42,7 @@ var skill = {
     response.say(responses.onSessionEnded);
   },
   preReqest: function (request, response, type) {
-    if (request.applicationId !== (process.env.SKILL_ID || null)) {
+    if (process.env.VERIFY_SKILL_ID && request.applicationId !== (process.env.SKILL_ID || null)) {
       console.error("Request application Id and configured skill Id mismatch.", request.applicationId, process.env.SKILL_ID);
       response.fail("Invalid application Id.");
     }

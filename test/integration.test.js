@@ -9,6 +9,10 @@ var nock = require("nock");
 
 describe("Integration", function () {
 
+  beforeEach(function () {
+    process.env.VERIFY_SKILL_ID = "true";
+  });
+
   describe("When the skill is launched", function () {
 
     var actual;
