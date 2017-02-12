@@ -3,8 +3,6 @@
 
 "use strict";
 
-var responses = require("./../responses");
-
 var intent = {
   name: "AMAZON.CancelIntent",
   enabled: true
