@@ -312,6 +312,60 @@ describe("Integration", function () {
     });
   });
 
+  describe("When help is requested", function () {
+
+    var actual;
+
+    beforeEach(function (done) {
+
+      var json = helpers.intentRequest("AMAZON.HelpIntent");
+
+      app.request(json).then(function (response) {
+        actual = response;
+        done();
+      });
+    });
+
+    it("Then there is a response", function () {
+      assert.notEqual(actual, null);
+      assert.notEqual(actual.response, null);
+    });
+    it("Then the session does not end", function () {
+      assert.equal(actual.response.shouldEndSession, false);
+    });
+    it("Then the speech is correct", function () {
+      assert.notEqual(actual.response.outputSpeech, null);
+      assert.equal(actual.response.outputSpeech.type, "SSML");
+      assert.equal(actual.response.outputSpeech.ssml, "<speak>You asked me for help.</speak>");
+    });
+  });
+
+  describe("When cancel/stop is requested", function () {
+
+    var actual;
+
+    beforeEach(function (done) {
+
+      var json = helpers.intentRequest("AMAZON.StopIntent");
+
+      app.request(json).then(function (response) {
+        actual = response;
+        done();
+      });
+    });
+
+    it("Then there is a response", function () {
+      assert.notEqual(actual, null);
+      assert.notEqual(actual.response, null);
+    });
+    it("Then the session ends", function () {
+      assert.equal(actual.response.shouldEndSession, true);
+    });
+    it("Then there is no speech response", function () {
+      assert.equal(actual.response.outputSpeech, null);
+    });
+  });
+
   describe("When the session is ended", function () {
 
     var actual;

@@ -6,7 +6,9 @@
 var constants = require("./constants");
 var responses = require("./responses");
 var disruptionIntent = require("./intents/disruption");
+var helpIntent = require("./intents/help");
 var statusIntent = require("./intents/status");
+var stopIntent = require("./intents/stop");
 
 var skill = {
   dictionary: {
@@ -57,7 +59,9 @@ var skill = {
   },
   intents: [
     disruptionIntent,
-    statusIntent
+    helpIntent,
+    statusIntent,
+    stopIntent
   ]
 };
 

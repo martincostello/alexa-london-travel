@@ -10,6 +10,7 @@ var responses = {
   noIntent: "Sorry, I don't understand how to do that.",
   noSession: "Sorry, the session is not available.",
   onError: "Sorry, something went wrong.",
+  onHelp: "You asked me for help.",
   onInvalidRequest: "Sorry, that request is not valid.",
   onLaunch: "Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground or the D.L.R..",
   onNoDisruption: "There is currently no disruption on the tube, London Overground or the D.L.R..",
