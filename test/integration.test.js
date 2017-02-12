@@ -344,7 +344,33 @@ describe("Integration", function () {
     });
   });
 
-  describe("When cancel/stop is requested", function () {
+  describe("When cancellation is requested", function () {
+
+    var actual;
+
+    beforeEach(function (done) {
+
+      var json = helpers.intentRequest("AMAZON.CancelIntent");
+
+      app.request(json).then(function (response) {
+        actual = response;
+        done();
+      });
+    });
+
+    it("Then there is a response", function () {
+      assert.notEqual(actual, null);
+      assert.notEqual(actual.response, null);
+    });
+    it("Then the session ends", function () {
+      assert.equal(actual.response.shouldEndSession, true);
+    });
+    it("Then there is no speech response", function () {
+      assert.equal(actual.response.outputSpeech, null);
+    });
+  });
+
+  describe("When stop is requested", function () {
 
     var actual;
 

@@ -5,6 +5,7 @@
 
 var constants = require("./constants");
 var responses = require("./responses");
+var cancelIntent = require("./intents/cancel");
 var disruptionIntent = require("./intents/disruption");
 var helpIntent = require("./intents/help");
 var statusIntent = require("./intents/status");
@@ -58,6 +59,7 @@ var skill = {
     app.messages.NO_SESSION = responses.noSession;
   },
   intents: [
+    cancelIntent,
     disruptionIntent,
     helpIntent,
     statusIntent,
