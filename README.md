@@ -1,6 +1,6 @@
 # Alexa London Travel
 
-![London Travel](./static/icon-108x108.png "London Travel")
+[![London Travel](./static/icon-108x108.png "London Travel")](https://www.amazon.co.uk/dp/B01NB0T86R)
 
 [![Build status](https://travis-ci.org/martincostello/alexa-london-travel.svg?branch=master)](https://travis-ci.org/martincostello/alexa-london-travel) [![Code coverage](https://codecov.io/gh/martincostello/alexa-london-travel/branch/master/graph/badge.svg)](https://codecov.io/gh/martincostello/alexa-london-travel)
 
@@ -8,7 +8,7 @@
 
 ## Overview
 
-An Amazon Alexa skill for checking the status for travel in London.
+An [Amazon Alexa skill](https://www.amazon.co.uk/dp/B01NB0T86R) for checking the status for travel in London.
 
 The skill integrates with the [TfL API](https://api.tfl.gov.uk/) to query the status of London Underground lines, London Overground and the Docklands Light Railway (DLR) to tell you their current status, such as whether there are any closures or delays.
 
