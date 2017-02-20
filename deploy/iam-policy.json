@@ -1,0 +1,41 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ListExistingRolesAndPolicies",
+      "Effect": "Allow",
+      "Action": [
+        "iam:ListRolePolicies",
+        "iam:ListRoles"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CreateAndListFunctions",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:CreateFunction",
+        "lambda:ListFunctions"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "DeployCode",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:UploadFunction",
+        "lambda:UpdateFunctionCode",
+        "lambda:UpdateFunctionConfiguration"
+      ],
+      "Resource": "arn:aws:lambda:eu-west-1:492538393790:function:alexa-london-travel"
+    },
+    {
+      "Sid": "SetRole",
+      "Effect": "Allow",
+      "Action": [
+        "iam:PassRole"
+      ],
+      "Resource": "arn:aws:iam::492538393790:role/lambda_basic_execution"
+    }
+  ]
+}
