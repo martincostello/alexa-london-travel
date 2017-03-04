@@ -8,32 +8,6 @@ var simple = require("simple-mock");
 
 describe("Status Intent", function () {
 
-  describe("When coverting line names to their spoken form", function () {
-
-    var testCases = [
-      { name: "Bakerloo", expected: "the Bakerloo line" },
-      { name: "Central", expected: "the Central line" },
-      { name: "Circle", expected: "the Circle line" },
-      { name: "District", expected: "the District line" },
-      { name: "DLR", expected: "the D.L.R." },
-      { name: "Hammersmith & City", expected: "the Hammersmith & City line" },
-      { name: "Jubilee", expected: "the Jubilee line" },
-      { name: "London Overground", expected: "London Overground" },
-      { name: "Metropolitan", expected: "the Metropolitan line" },
-      { name: "Northern", expected: "the Northern line" },
-      { name: "Piccadilly", expected: "the Piccadilly line" },
-      { name: "Victoria", expected: "the Victoria line" },
-      { name: "Waterloo & City", expected: "the Waterloo & City line" },
-    ];
-
-    dataDriven(testCases, function () {
-      it("Then the spoken form is correct for '{name}'", function (context) {
-        var actual = intent.toSpokenLineName(context.name);
-        assert.equal(actual, context.expected);
-      });
-    });
-  });
-
   describe("When mapping line names", function () {
 
     var testCases = [

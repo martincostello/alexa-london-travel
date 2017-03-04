@@ -4,6 +4,7 @@
 "use strict";
 
 var api = require("./../api");
+var lines = require("./../lines");
 var responses = require("./../responses");
 var sprintf = require("sprintf");
 
@@ -84,50 +85,6 @@ intent.generateResponse = function (data) {
 };
 
 /**
- * Returns whether the specified line name refers to the Docklands Light Railway.
- * @param {String} name - The name of the line as reported from the TfL API.
- * @returns {Boolean} Whether the line is the DLR.
- */
-intent.isDLR = function (name) {
-  return name.toLowerCase() === "dlr";
-};
-
-/**
- * Returns whether the specified line name refers to the London Overground.
- * @param {String} name - The name of the line as reported from the TfL API.
- * @returns {Boolean} Whether the line is the London Overground.
- */
-intent.isOverground = function (name) {
-  return name.toLowerCase().indexOf("overground") > -1;
-};
-
-/**
- * Returns the spoken version of the specified line name.
- * @param {String} name - The name of the line as reported from the TfL API.
- * @returns {String} The spoken name of the line.
- */
-intent.toSpokenLineName = function (name) {
-
-  var prefix = "";
-  var suffix = "";
-
-  var spokenName;
-
-  if (intent.isDLR(name) === true) {
-    prefix = "the ";
-    spokenName = "D.L.R.";
-  } else if (intent.isOverground(name) === true) {
-    spokenName = name;
-  } else {
-    prefix = "the ";
-    spokenName = name;
-    suffix = " line";
-  }
-
-  return sprintf("%s%s%s", prefix, spokenName, suffix);
-};
-
-/**
  * Returns the title to use for a card for the specified line name.
  * @param {String} name - The name of the line as reported from the TfL API.
  * @returns {String} The title to use for the card.
@@ -136,7 +93,7 @@ intent.toCardTitle = function (name) {
 
   var suffix;
 
-  if (intent.isDLR(name) === true || intent.isOverground(name) === true) {
+  if (lines.isDLR(name) === true || lines.isOverground(name) === true) {
     suffix = "";
   } else {
     suffix = " Line";
@@ -291,7 +248,7 @@ intent.generateSummaryResponse = function (name, status) {
       break;
   }
 
-  var spokenName = intent.toSpokenLineName(name);
+  var spokenName = lines.toSpokenName(name);
   var statusText = sprintf(format, spokenName);
 
   return statusText.charAt(0).toUpperCase() + statusText.slice(1);
