@@ -3,7 +3,6 @@
 
 "use strict";
 
-var responses = require("./../responses");
 var Speech = require("ssml-builder");
 
 var intent = {
