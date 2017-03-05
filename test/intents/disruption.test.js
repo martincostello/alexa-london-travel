@@ -147,7 +147,7 @@ describe("Disruption Intent", function () {
       });
     });
 
-    describe("Given there is a single disruption", function () {
+    describe("Given there are multiple disruptions", function () {
 
       var request;
       var response;
