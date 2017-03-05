@@ -40,7 +40,7 @@ intent.generateRawResponse = function (data) {
     }
   }
 
-  return statuses;
+  return statuses.sort();
 };
 
 /**

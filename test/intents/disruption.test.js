@@ -70,9 +70,9 @@ describe("Disruption Intent", function () {
     beforeEach(function () {
 
       data = [
-        { description: "There are severe delays on the District Line." },
-        { description: "There are severe delays on the District Line." },
-        { description: "There are minor delays on the Circle Line." }
+        { description: "District Line: There are severe delays on the District Line." },
+        { description: "District Line: There are severe delays on the District Line." },
+        { description: "Circle Line: There are minor delays on the Circle Line." }
       ];
 
       actual = null;
@@ -80,7 +80,7 @@ describe("Disruption Intent", function () {
 
     it("Then the response is the description of the first disruption", function () {
       actual = intent.generateRawResponse(data);
-      assert.deepEqual(actual, ["There are severe delays on the District Line.", "There are minor delays on the Circle Line."]);
+      assert.deepEqual(actual, ["Circle Line: There are minor delays on the Circle Line.", "District Line: There are severe delays on the District Line."]);
     });
   });
 
@@ -167,6 +167,7 @@ describe("Disruption Intent", function () {
           .mock(intent.api, "getDisruption")
           .resolveWith([
             { description: "Disruption 1" },
+            { description: "Disruption 3" },
             { description: "Disruption 2" },
             { description: "Disruption 2" }
           ]);
@@ -178,7 +179,7 @@ describe("Disruption Intent", function () {
 
       it("Then the response is correct", function () {
         assert.equal(response.say.callCount, 1);
-        assert.equal(response.say.lastCall.arg, "<p>Disruption 1</p> <p>Disruption 2</p> <p>There is a good service on all other lines.</p>");
+        assert.equal(response.say.lastCall.arg, "<p>Disruption 1</p> <p>Disruption 2</p> <p>Disruption 3</p> <p>There is a good service on all other lines.</p>");
       });
       it("Then a card is returned", function () {
         assert.equal(response.card.callCount, 1);
