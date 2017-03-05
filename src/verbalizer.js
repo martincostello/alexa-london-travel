@@ -14,6 +14,10 @@ var verbalizer = {
 verbalizer.verbalize = function (text) {
   return text
     .replace("DLR", "D.L.R.")
+    .replace("e/b", "eastbound")
+    .replace("n/b", "northbound")
+    .replace("s/b", "southbound")
+    .replace("w/b", "westbound")
     .replace("SWT", "South West Trains");
 };
 
