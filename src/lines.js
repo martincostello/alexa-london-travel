@@ -4,6 +4,7 @@
 "use strict";
 
 var sprintf = require("sprintf");
+var verbalizer = require("./verbalizer");
 
 var lines = {
 };
@@ -40,7 +41,7 @@ lines.toSpokenName = function (name) {
 
   if (lines.isDLR(name) === true) {
     prefix = "the ";
-    spokenName = "D.L.R.";
+    spokenName = verbalizer.verbalize("DLR");
   } else if (lines.isOverground(name) === true) {
     spokenName = name;
   } else {

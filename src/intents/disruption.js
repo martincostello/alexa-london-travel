@@ -5,7 +5,8 @@
 
 var api = require("./../api");
 var responses = require("./../responses");
-var Speech = require("ssml-builder");
+var SsmlBuilder = require("ssml-builder");
+var verbalizer = require("./../verbalizer");
 
 var intent = {
   api: api,
@@ -49,7 +50,7 @@ intent.generateRawResponse = function (data) {
  */
 intent.generateResponse = function (statuses) {
 
-  var builder = new Speech();
+  var builder = new SsmlBuilder();
 
   if (!statuses || statuses.length === 0) {
     builder.say(responses.onNoDisruption);
@@ -57,7 +58,7 @@ intent.generateResponse = function (statuses) {
   else {
 
     for (var i = 0; i < statuses.length; i++) {
-      builder.paragraph(statuses[i].replace("DLR", "D.L.R."));
+      builder.paragraph(verbalizer.verbalize(statuses[i]));
     }
 
     builder.paragraph("There is a good service on all other lines.");
