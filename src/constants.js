@@ -5,7 +5,7 @@
 
 const constants = {
   appName: "alexa-london-travel",
-  version: "1.0.3"
+  version: "1.0.4"
 };
 
 module.exports = constants;
