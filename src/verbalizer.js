@@ -13,7 +13,8 @@ var verbalizer = {
  */
 verbalizer.verbalize = function (text) {
   return text
-    .replace("DLR", "D.L.R.");
+    .replace("DLR", "D.L.R.")
+    .replace("SWT", "South West Trains");
 };
 
 module.exports = verbalizer;

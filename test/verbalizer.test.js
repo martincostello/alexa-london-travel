@@ -13,7 +13,8 @@ describe("Verbalizer", function () {
 
     var testCases = [
       { text: "This is a potato.", expected: "This is a potato." },
-      { text: "There are delays on the DLR today.", expected: "There are delays on the D.L.R. today." }
+      { text: "There are delays on the DLR today.", expected: "There are delays on the D.L.R. today." },
+      { text: "Tickets will be accepted on SWT.", expected: "Tickets will be accepted on South West Trains." }
     ];
 
     dataDriven(testCases, function () {
