@@ -4,7 +4,6 @@
 var assert = require("assert");
 var dataDriven = require("data-driven");
 var lines = require("../src/lines");
-var simple = require("simple-mock");
 
 describe("Lines", function () {
 
