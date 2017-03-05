@@ -3,11 +3,11 @@
 
 "use strict";
 
-var api = require("../src/api.js");
-var app = require("../index.js");
+var api = require("../src/api");
+var app = require("../index");
 var assert = require("assert");
-var helpers = require("./helpers.js");
-var nock = require("nock");
+var helpers = require("./helpers");
+var mock = require("./mock");
 
 describe("Integration", function () {
 
@@ -61,10 +61,7 @@ describe("Integration", function () {
 
       beforeEach(function (done) {
 
-        nock("https://api.tfl.gov.uk")
-          .get("/Line/Mode/dlr,overground,tube/Disruption")
-          .query({ app_id: "MyApplicationId", app_key: "MyApplicationKey" })
-          .reply(200, []);
+        mock.success("/Line/Mode/dlr,overground,tube/Disruption", []);
 
         app.request(json).then(function (response) {
           actual = response;
@@ -98,10 +95,9 @@ describe("Integration", function () {
 
       beforeEach(function (done) {
 
-        nock("https://api.tfl.gov.uk")
-          .get("/Line/Mode/dlr,overground,tube/Disruption")
-          .query({ app_id: "MyApplicationId", app_key: "MyApplicationKey" })
-          .reply(200, [
+        mock.success(
+          "/Line/Mode/dlr,overground,tube/Disruption",
+          [
             {
               description: "DLR: Minor delays."
             },
@@ -145,10 +141,7 @@ describe("Integration", function () {
 
       beforeEach(function (done) {
 
-        nock("https://api.tfl.gov.uk")
-          .get("/Line/Mode/dlr,overground,tube/Disruption")
-          .query({ app_id: "MyApplicationId", app_key: "MyApplicationKey" })
-          .reply(500);
+        mock.failure("/Line/Mode/dlr,overground,tube/Disruption");
 
         app.request(json).then(function (response) {
           actual = response;
@@ -194,10 +187,9 @@ describe("Integration", function () {
 
       beforeEach(function (done) {
 
-        nock("https://api.tfl.gov.uk")
-          .get("/Line/waterloo-city/Status")
-          .query({ app_id: "MyApplicationId", app_key: "MyApplicationKey" })
-          .reply(200, [
+        mock.success(
+          "/Line/waterloo-city/Status",
+          [
             {
               "id": "waterloo-city",
               "name": "Waterloo & City",
@@ -241,10 +233,9 @@ describe("Integration", function () {
 
       beforeEach(function (done) {
 
-        nock("https://api.tfl.gov.uk")
-          .get("/Line/waterloo-city/Status")
-          .query({ app_id: "MyApplicationId", app_key: "MyApplicationKey" })
-          .reply(200, [
+        mock.success(
+          "/Line/waterloo-city/Status",
+          [
             {
               "id": "waterloo-city",
               "name": "Waterloo & City",
@@ -292,10 +283,7 @@ describe("Integration", function () {
 
       beforeEach(function (done) {
 
-        nock("https://api.tfl.gov.uk")
-          .get("/Line/waterloo-city/Status")
-          .query({ app_id: "MyApplicationId", app_key: "MyApplicationKey" })
-          .reply(500);
+        mock.failure("/Line/waterloo-city/Status");
 
         app.request(json).then(function (response) {
           actual = response;
