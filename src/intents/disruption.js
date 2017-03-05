@@ -53,10 +53,14 @@ intent.generateResponse = function (statuses) {
 
   if (!statuses || statuses.length === 0) {
     builder.say(responses.onNoDisruption);
-  } else {
+  }
+  else {
+
     for (var i = 0; i < statuses.length; i++) {
       builder.paragraph(statuses[i].replace("DLR", "D.L.R."));
     }
+
+    builder.paragraph("There is a good service on all other lines.");
   }
 
   return builder.ssml(true);

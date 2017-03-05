@@ -176,7 +176,7 @@ describe("Disruption Intent", function () {
 
       it("Then the response is correct", function () {
         assert.equal(response.say.callCount, 1);
-        assert.equal(response.say.lastCall.arg, "<p>Disruption 1</p> <p>Disruption 2</p>");
+        assert.equal(response.say.lastCall.arg, "<p>Disruption 1</p> <p>Disruption 2</p> <p>There is a good service on all other lines.</p>");
       });
       it("Then a card is returned", function () {
         assert.equal(response.card.callCount, 1);
