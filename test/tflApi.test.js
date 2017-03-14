@@ -3,15 +3,15 @@
 
 "use strict";
 
-var api = require("../src/api.js");
 var assert = require("assert");
 var nock = require("nock");
+var tflApi = require("../src/tflApi");
 
 describe("TfL API", function () {
 
   beforeEach(function () {
-    api.appId = "MyApplicationId";
-    api.appKey = "MyApplicationKey";
+    tflApi.appId = "MyApplicationId";
+    tflApi.appKey = "MyApplicationKey";
   });
 
   describe("When requesting disruption", function () {
@@ -25,7 +25,7 @@ describe("TfL API", function () {
         .query({ app_id: "MyApplicationId", app_key: "MyApplicationKey" })
         .reply(200, []);
 
-      api.getDisruption(["tube"])
+      tflApi.getDisruption(["tube"])
         .then(function (response) {
           actual = response;
           done();
@@ -48,7 +48,7 @@ describe("TfL API", function () {
         .query({ app_id: "MyApplicationId", app_key: "MyApplicationKey" })
         .reply(200, []);
 
-      api.getLineStatus("victoria")
+      tflApi.getLineStatus("victoria")
         .then(function (response) {
           actual = response;
           done();

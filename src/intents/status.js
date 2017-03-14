@@ -3,13 +3,13 @@
 
 "use strict";
 
-var api = require("./../api");
 var lines = require("./../lines");
 var responses = require("./../responses");
 var sprintf = require("sprintf");
+var tflApi = require("./../tflApi");
 
 var intent = {
-  api: api,
+  api: tflApi,
   name: "StatusIntent",
   enabled: true,
   slots: {

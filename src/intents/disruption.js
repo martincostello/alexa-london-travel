@@ -3,13 +3,13 @@
 
 "use strict";
 
-var api = require("./../api");
 var responses = require("./../responses");
 var SsmlBuilder = require("ssml-builder");
+var tflApi = require("./../tflApi");
 var verbalizer = require("./../verbalizer");
 
 var intent = {
-  api: api,
+  api: tflApi,
   name: "DisruptionIntent",
   enabled: true,
   slots: {},

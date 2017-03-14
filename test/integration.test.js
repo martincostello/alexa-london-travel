@@ -3,11 +3,11 @@
 
 "use strict";
 
-var api = require("../src/api");
 var app = require("../index");
 var assert = require("assert");
 var helpers = require("./helpers");
 var mock = require("./mock");
+var tflApi = require("../src/tflApi");
 
 describe("Integration", function () {
 
@@ -49,8 +49,8 @@ describe("Integration", function () {
 
     beforeEach(function () {
 
-      api.appId = "MyApplicationId";
-      api.appKey = "MyApplicationKey";
+      tflApi.appId = "MyApplicationId";
+      tflApi.appKey = "MyApplicationKey";
 
       json = helpers.intentRequest("DisruptionIntent");
     });
@@ -170,8 +170,8 @@ describe("Integration", function () {
 
     beforeEach(function () {
 
-      api.appId = "MyApplicationId";
-      api.appKey = "MyApplicationKey";
+      tflApi.appId = "MyApplicationId";
+      tflApi.appKey = "MyApplicationKey";
 
       json = helpers.intentRequest("StatusIntent", {
         "LINE": {
