@@ -12,8 +12,8 @@ var intent = {
   enabled: true,
   slots: {},
   utterances: [
-    "my commute {|now|right now|this morning|today}",
-    "what {|is} my commute {|is} like {|now|today}"
+    "{|about} my commute {|now|right now|this afternoon|this evening|this morning|today|tonight}",
+    "what {|is} my commute {|is} like {|now|today|tonight}"
   ]
 };
 
@@ -32,7 +32,7 @@ intent.generateCard = function (text) {
 
 intent.getLocale = function (request) {
 
-  var locale = "en-GB"; // request.locale
+  var locale = "en-GB";
 
   if ("locale" in request.data.request) {
     locale = request.data.request.locale;
@@ -58,9 +58,9 @@ intent.favoritesResponse = function (favoriteLines, locale) {
  */
 intent.handler = function (request, response) {
 
-  var accessToken = null;
+  var accessToken = process.env.SKILL_API_ACCESS_TOKEN || "";
 
-  if (request.hasSession() === true) {
+  if (!accessToken && request.hasSession() === true) {
     var session = request.getSession();
     accessToken = session.details.accessToken;
   }
