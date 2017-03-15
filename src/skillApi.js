@@ -11,15 +11,14 @@ var skillApi = {
   hostname: process.env.SKILL_API_HOSTNAME || "https://londontravel.martincostello.com/"
 };
 
-skillApi.httpGet = function (path, accessToken, transform) {
+skillApi.httpGet = function (path, accessToken) {
   var options = {
     uri: skillApi.hostname + path,
     headers: {
       "Authorization": "Bearer " + accessToken,
       "User-Agent": constants.appName + "/" + constants.version
     },
-    json: true,
-    transform: transform
+    json: true
   };
   return http(options);
 };
