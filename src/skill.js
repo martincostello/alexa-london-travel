@@ -6,6 +6,7 @@
 var constants = require("./constants");
 var responses = require("./responses");
 var cancelIntent = require("./intents/cancel");
+var commuteIntent = require("./intents/commute");
 var disruptionIntent = require("./intents/disruption");
 var helpIntent = require("./intents/help");
 var statusIntent = require("./intents/status");
@@ -60,6 +61,7 @@ var skill = {
   },
   intents: [
     cancelIntent,
+    commuteIntent,
     disruptionIntent,
     helpIntent,
     statusIntent,

@@ -6,7 +6,44 @@
 var nock = require("nock");
 
 var mock = {
+  skill: {
+    preferences: function (accessToken) {
+      return nock("https://londontravel.martincostello.com")
+        .matchHeader("authorization", "Bearer " + accessToken)
+        .matchHeader("user-agent", /alexa-london-travel\/.*/)
+        .get("/api/preferences");
+    }
+  },
+  tfl: {
+  }
+};
 
+/**
+ * Sets up a successful mock response for the skill API.
+ * @param {String} accessToken - The access token to use.
+ * @param {Object} response - The response content to return.
+ */
+mock.skill.success = function (accessToken, response) {
+   mock.skill.preferences(accessToken)
+     .reply(200, response);
+};
+
+/**
+ * Sets up an unauthorized mock response for the skill API.
+ * @param {String} accessToken - The access token to use.
+ */
+mock.skill.unauthorized = function (accessToken) {
+   mock.skill.preferences(accessToken)
+     .reply(401, {});
+};
+
+/**
+ * Sets up a failed mock response for the skill API.
+ * @param {String} accessToken - The access token to use.
+ */
+mock.skill.failure = function (accessToken) {
+   mock.skill.preferences(accessToken)
+     .reply(500, {});
 };
 
 /**
@@ -14,7 +51,7 @@ var mock = {
  * @param {String} path - The path to setup the response for.
  * @param {Object} [response=""] - The optional response content to return.
  */
-mock.success = function (path, response) {
+mock.tfl.success = function (path, response) {
   nock("https://api.tfl.gov.uk")
     .get(path)
     .query({ app_id: "MyApplicationId", app_key: "MyApplicationKey" })
@@ -26,24 +63,11 @@ mock.success = function (path, response) {
  * @param {String} path - The path to setup the response for.
  * @param {Object} [response=""] - The optional response content to return.
  */
-mock.failure = function (path, response) {
+mock.tfl.failure = function (path, response) {
   nock("https://api.tfl.gov.uk")
     .get(path)
     .query({ app_id: "MyApplicationId", app_key: "MyApplicationKey" })
     .reply(500, response || "");
-};
-
-/**
- * Sets up a mock response for the TfL API.
- * @param {String} path - The path to setup the response for.
- * @param {Number} statusCode - The HTTP status code to return.
- * @param {Object} [response=""] - The optional response content to return.
- */
-mock.setupApi = function (path, statusCode, response) {
-  nock("https://api.tfl.gov.uk")
-    .get(path)
-    .query({ app_id: "MyApplicationId", app_key: "MyApplicationKey" })
-    .reply(statusCode, response || "");
 };
 
 module.exports = mock;

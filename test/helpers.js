@@ -48,20 +48,28 @@ var helpers = {
   launchRequest: function () {
     return buildRequest("LaunchRequest");
   },
-  intentRequest: function (intent, slots) {
+  intentRequest: function (intent, slots, accessToken) {
 
     var json = buildRequest("IntentRequest");
 
     json.request.intent = {
-      "name": intent,
-      "slots": slots || {}
+      name: intent,
+      slots: slots || {}
     };
+
+    if (accessToken !== null) {
+      json.session.user.accessToken = accessToken;
+    }
 
     return json;
   },
   sessionEndRequest: function () {
     return buildRequest("SessionEndedRequest");
   }
+};
+
+helpers.commuteRequest = function (accessToken) {
+  return helpers.intentRequest("CommuteIntent", {}, accessToken);
 };
 
 module.exports = helpers;

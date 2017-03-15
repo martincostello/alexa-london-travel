@@ -43,6 +43,349 @@ describe("Integration", function () {
     });
   });
 
+  describe("When the commute intent is requested", function () {
+
+    describe("Given there is no session", function () {
+
+      var json;
+      var actual;
+
+      beforeEach(function (done) {
+        json = helpers.commuteRequest();
+        delete json.session;
+        app.request(json).then(function (response) {
+          actual = response;
+          done();
+        });
+      });
+
+      it("Then there is a response", function () {
+        assert.notEqual(actual, null);
+        assert.notEqual(actual.response, null);
+      });
+      it("Then the session ends", function () {
+        assert.equal(actual.response.shouldEndSession, true);
+      });
+      it("Then the speech is correct", function () {
+        assert.notEqual(actual.response.outputSpeech, null);
+        assert.equal(actual.response.outputSpeech.type, "SSML");
+        assert.equal(actual.response.outputSpeech.ssml, "<speak>You need to link your account to be able to ask me about your commute.</speak>");
+      });
+      it("Then the card is correct", function () {
+        assert.notEqual(actual.response.card, null);
+        assert.equal(actual.response.card.type, "LinkAccount");
+      });
+    });
+
+    describe("Given there is no access token", function () {
+
+      var json;
+      var actual;
+
+      beforeEach(function (done) {
+        json = helpers.commuteRequest();
+        app.request(json).then(function (response) {
+          actual = response;
+          done();
+        });
+      });
+
+      it("Then there is a response", function () {
+        assert.notEqual(actual, null);
+        assert.notEqual(actual.response, null);
+      });
+      it("Then the session ends", function () {
+        assert.equal(actual.response.shouldEndSession, true);
+      });
+      it("Then the speech is correct", function () {
+        assert.notEqual(actual.response.outputSpeech, null);
+        assert.equal(actual.response.outputSpeech.type, "SSML");
+        assert.equal(actual.response.outputSpeech.ssml, "<speak>You need to link your account to be able to ask me about your commute.</speak>");
+      });
+      it("Then the card is correct", function () {
+        assert.notEqual(actual.response.card, null);
+        assert.equal(actual.response.card.type, "LinkAccount");
+      });
+    });
+
+    describe("Given there is an access token", function () {
+
+      var accessToken;
+
+      describe("Given the access token is invalid", function () {
+
+        var json;
+        var actual;
+
+        beforeEach(function (done) {
+
+          accessToken = "NotAValidToken";
+          json = helpers.commuteRequest(accessToken);
+
+          mock.skill.unauthorized(accessToken);
+
+          app.request(json).then(function (response) {
+            actual = response;
+            done();
+          });
+        });
+
+        it("Then there is a response", function () {
+          assert.notEqual(actual, null);
+          assert.notEqual(actual.response, null);
+        });
+        it("Then the session ends", function () {
+          assert.equal(actual.response.shouldEndSession, true);
+        });
+        it("Then the speech is correct", function () {
+          assert.notEqual(actual.response.outputSpeech, null);
+          assert.equal(actual.response.outputSpeech.type, "SSML");
+          assert.equal(actual.response.outputSpeech.ssml, "<speak>It looks like you've disabled account linking. You need to re-link your account to be able to ask me about your commute.</speak>");
+        });
+        it("Then the card is correct", function () {
+          assert.notEqual(actual.response.card, null);
+          assert.equal(actual.response.card.type, "LinkAccount");
+        });
+      });
+
+      describe("Given the access token is valid", function () {
+
+        var json;
+
+        beforeEach(function () {
+          accessToken = "AValidToken";
+          json = helpers.commuteRequest(accessToken);
+        });
+
+        describe("Given the user has set no preferences (no locale)", function () {
+
+          var actual;
+
+          beforeEach(function (done) {
+
+            mock.skill.success(accessToken, {
+              favoriteLines: []
+            });
+
+            delete json.request.locale;
+
+            app.request(json).then(function (response) {
+              actual = response;
+              done();
+            });
+          });
+
+          it("Then there is a response", function () {
+            assert.notEqual(actual, null);
+            assert.notEqual(actual.response, null);
+          });
+          it("Then the session ends", function () {
+            assert.equal(actual.response.shouldEndSession, true);
+          });
+          it("Then the speech is correct", function () {
+            assert.notEqual(actual.response.outputSpeech, null);
+            assert.equal(actual.response.outputSpeech.type, "SSML");
+            assert.equal(actual.response.outputSpeech.ssml, "<speak>You have not selected any favourite lines yet.</speak>");
+          });
+          it("Then the card is correct", function () {
+            assert.notEqual(actual.response.card, null);
+            assert.equal(actual.response.card.type, "Standard");
+            assert.equal(actual.response.card.title, "My Commute");
+            assert.equal(actual.response.card.text, "You have not selected any favourite lines yet.");
+          });
+        });
+
+        describe("Given the user has set no preferences (en-GB)", function () {
+
+          var actual;
+
+          beforeEach(function (done) {
+
+            mock.skill.success(accessToken, {
+              favoriteLines: []
+            });
+
+            json.request.locale = "en-GB";
+
+            app.request(json).then(function (response) {
+              actual = response;
+              done();
+            });
+          });
+
+          it("Then there is a response", function () {
+            assert.notEqual(actual, null);
+            assert.notEqual(actual.response, null);
+          });
+          it("Then the session ends", function () {
+            assert.equal(actual.response.shouldEndSession, true);
+          });
+          it("Then the speech is correct", function () {
+            assert.notEqual(actual.response.outputSpeech, null);
+            assert.equal(actual.response.outputSpeech.type, "SSML");
+            assert.equal(actual.response.outputSpeech.ssml, "<speak>You have not selected any favourite lines yet.</speak>");
+          });
+          it("Then the card is correct", function () {
+            assert.notEqual(actual.response.card, null);
+            assert.equal(actual.response.card.type, "Standard");
+            assert.equal(actual.response.card.title, "My Commute");
+            assert.equal(actual.response.card.text, "You have not selected any favourite lines yet.");
+          });
+        });
+
+        describe("Given the user has set no preferences (en-US)", function () {
+
+          var actual;
+
+          beforeEach(function (done) {
+
+            mock.skill.success(accessToken, { });
+
+            json.request.locale = "en-US";
+
+            app.request(json).then(function (response) {
+              actual = response;
+              done();
+            });
+          });
+
+          it("Then there is a response", function () {
+            assert.notEqual(actual, null);
+            assert.notEqual(actual.response, null);
+          });
+          it("Then the session ends", function () {
+            assert.equal(actual.response.shouldEndSession, true);
+          });
+          it("Then the speech is correct", function () {
+            assert.notEqual(actual.response.outputSpeech, null);
+            assert.equal(actual.response.outputSpeech.type, "SSML");
+            assert.equal(actual.response.outputSpeech.ssml, "<speak>You have not selected any favorite lines yet.</speak>");
+          });
+          it("Then the card is correct", function () {
+            assert.notEqual(actual.response.card, null);
+            assert.equal(actual.response.card.type, "Standard");
+            assert.equal(actual.response.card.title, "My Commute");
+            assert.equal(actual.response.card.text, "You have not selected any favorite lines yet.");
+          });
+        });
+
+        describe("Given the user has set preferences (en-GB)", function () {
+
+          var actual;
+
+          beforeEach(function (done) {
+
+            mock.skill.success(accessToken, {
+              favoriteLines: [
+                "district",
+                "waterloo-city"
+                ]
+            });
+
+            json.request.locale = "en-GB";
+
+            app.request(json).then(function (response) {
+              actual = response;
+              done();
+            });
+          });
+
+          it("Then there is a response", function () {
+            assert.notEqual(actual, null);
+            assert.notEqual(actual.response, null);
+          });
+          it("Then the session ends", function () {
+            assert.equal(actual.response.shouldEndSession, true);
+          });
+          it("Then the speech is correct", function () {
+            assert.notEqual(actual.response.outputSpeech, null);
+            assert.equal(actual.response.outputSpeech.type, "SSML");
+            assert.equal(actual.response.outputSpeech.ssml, "<speak>Your favourite lines are: district,waterloo-city</speak>");
+          });
+          it("Then the card is correct", function () {
+            assert.notEqual(actual.response.card, null);
+            assert.equal(actual.response.card.type, "Standard");
+            assert.equal(actual.response.card.title, "My Commute");
+            assert.equal(actual.response.card.text, "Your favourite lines are: district,waterloo-city");
+          });
+        });
+
+        describe("Given the user has set preferences (en-US)", function () {
+
+          var actual;
+
+          beforeEach(function (done) {
+
+            mock.skill.success(accessToken, {
+              favoriteLines: [
+                "district",
+                "waterloo-city"
+                ]
+            });
+
+            json.request.locale = "en-US";
+
+            app.request(json).then(function (response) {
+              actual = response;
+              done();
+            });
+          });
+
+          it("Then there is a response", function () {
+            assert.notEqual(actual, null);
+            assert.notEqual(actual.response, null);
+          });
+          it("Then the session ends", function () {
+            assert.equal(actual.response.shouldEndSession, true);
+          });
+          it("Then the speech is correct", function () {
+            assert.notEqual(actual.response.outputSpeech, null);
+            assert.equal(actual.response.outputSpeech.type, "SSML");
+            assert.equal(actual.response.outputSpeech.ssml, "<speak>Your favorite lines are: district,waterloo-city</speak>");
+          });
+          it("Then the card is correct", function () {
+            assert.notEqual(actual.response.card, null);
+            assert.equal(actual.response.card.type, "Standard");
+            assert.equal(actual.response.card.title, "My Commute");
+            assert.equal(actual.response.card.text, "Your favorite lines are: district,waterloo-city");
+          });
+        });
+      });
+
+      describe("Given an error occurs", function () {
+
+        var json;
+        var actual;
+
+        beforeEach(function (done) {
+
+          accessToken = "AValidToken";
+          json = helpers.commuteRequest(accessToken);
+
+          mock.skill.failure(accessToken);
+
+          app.request(json).then(function (response) {
+            actual = response;
+            done();
+          });
+        });
+
+        it("Then there is a response", function () {
+          assert.notEqual(actual, null);
+          assert.notEqual(actual.response, null);
+        });
+        it("Then the session ends", function () {
+          assert.equal(actual.response.shouldEndSession, true);
+        });
+        it("Then the speech is correct", function () {
+          assert.notEqual(actual.response.outputSpeech, null);
+          assert.equal(actual.response.outputSpeech.type, "SSML");
+          assert.equal(actual.response.outputSpeech.ssml, "<speak>Sorry, something went wrong.</speak>");
+        });
+      });
+    });
+  });
+
   describe("When the disruption intent is requested", function () {
 
     var json;
@@ -61,7 +404,7 @@ describe("Integration", function () {
 
       beforeEach(function (done) {
 
-        mock.success("/Line/Mode/dlr,overground,tube/Disruption", []);
+        mock.tfl.success("/Line/Mode/dlr,overground,tube/Disruption", []);
 
         app.request(json).then(function (response) {
           actual = response;
@@ -95,7 +438,7 @@ describe("Integration", function () {
 
       beforeEach(function (done) {
 
-        mock.success(
+        mock.tfl.success(
           "/Line/Mode/dlr,overground,tube/Disruption",
           [
             {
@@ -141,7 +484,7 @@ describe("Integration", function () {
 
       beforeEach(function (done) {
 
-        mock.failure("/Line/Mode/dlr,overground,tube/Disruption");
+        mock.tfl.failure("/Line/Mode/dlr,overground,tube/Disruption");
 
         app.request(json).then(function (response) {
           actual = response;
@@ -187,7 +530,7 @@ describe("Integration", function () {
 
       beforeEach(function (done) {
 
-        mock.success(
+        mock.tfl.success(
           "/Line/waterloo-city/Status",
           [
             {
@@ -233,7 +576,7 @@ describe("Integration", function () {
 
       beforeEach(function (done) {
 
-        mock.success(
+        mock.tfl.success(
           "/Line/waterloo-city/Status",
           [
             {
@@ -283,7 +626,7 @@ describe("Integration", function () {
 
       beforeEach(function (done) {
 
-        mock.failure("/Line/waterloo-city/Status");
+        mock.tfl.failure("/Line/waterloo-city/Status");
 
         app.request(json).then(function (response) {
           actual = response;
