@@ -255,6 +255,15 @@ intent.generateSummaryResponse = function (name, status) {
 };
 
 /**
+ * Normalizes the specified text for use in a card.
+ * @param {String} text - The SSML response.
+ * @returns {Object} The normalized text for a card object to use.
+ */
+intent.normalizeTextForCard = function (text) {
+  return text.replace("D.L.R.", "DLR");
+};
+
+/**
  * Generates the card to respond to the specified disruption text.
  * @param {String} line - The name of the line.
  * @param {String} text - The SSML response.
@@ -264,7 +273,7 @@ intent.generateCard = function (line, text) {
   return {
     type: "Standard",
     title: intent.toCardTitle(line),
-    text: text.replace("D.L.R.", "DLR")
+    text: intent.normalizeTextForCard(text)
   };
 };
 
@@ -323,6 +332,22 @@ intent.mapLineToId = function (line) {
 };
 
 /**
+ * Gets the name and status of the specified line.
+ * @param {String} line - The Id of the line to get the status for.
+ * @returns {Object} A promise that returns an object containing the name of the line and the status text as SSML.
+ */
+intent.getLineStatus = function (line) {
+  return intent.api.getLineStatus(line)
+    .then(function (data) {
+      var rawName = data[0].name;
+      return {
+        name: rawName,
+        text: intent.generateResponse(data)
+      };
+    });
+};
+
+/**
  * Handles the intent for disruption.
  * @param {Object} request - The Alexa skill request.
  * @param {Object} response - The Alexa skill response.
@@ -331,10 +356,10 @@ intent.mapLineToId = function (line) {
 intent.handler = function (request, response) {
   var line = intent.mapLineToId(request.slot("LINE"));
   if (line) {
-    return intent.api.getLineStatus(line)
-      .then(function (data) {
-        var text = intent.generateResponse(data);
-        var card = intent.generateCard(data[0].name, text);
+    return intent.getLineStatus(line)
+      .then(function (result) {
+        var text = result.text;
+        var card = intent.generateCard(result.name, text);
         response
           .say(text)
           .card(card);
