@@ -19,6 +19,12 @@ var generateResponse = function () {
     .paragraph("Asking about disruption in general provides information about any lines that are currently experiencing issues, such as any delays or planned closures.")
     .paragraph("Asking for the status for a specific line provides a summary of the current service, such as whether there is a good service or if there are any delays.");
 
+  /* TODO Enable once ready for certification
+  if (false) {
+    builder.paragraph("If you link your account and setup your preferences in the London Travel website, you can ask about your commute to quickly find out the status of the lines you frequently use.");
+  }
+  */
+
   return builder.ssml(true);
 };
 
