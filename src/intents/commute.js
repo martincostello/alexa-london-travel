@@ -110,12 +110,20 @@ intent.handler = function (request, response) {
             return Promise.all(statuses).then(function (statuses) {
 
               var builder = new SsmlBuilder();
+              var hasMultipleStatuses = statuses.length > 1;
 
               for (var i = 0; i < statuses.length; i++) {
+
                 var status = statuses[i];
-                var rawText = verbalizer.verbalize(status.text);
-                var displayName = lines.toSpokenName(status.name, true);
-                builder.paragraph(sprintf("%s: %s", displayName, verbalizer.verbalize(rawText)));
+                var spokenText = verbalizer.verbalize(status.text);
+
+                if (hasMultipleStatuses === true) {
+                  var displayName = lines.toSpokenName(status.name, true);
+                  builder.paragraph(sprintf("%s: %s", displayName, spokenText));
+                }
+                else {
+                  builder.say(spokenText);
+                }
               }
 
               var text = statusIntent.normalizeTextForCard(builder.ssml(true));
