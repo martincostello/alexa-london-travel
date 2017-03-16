@@ -39,18 +39,6 @@ cards.forCommute = function (statuses) {
   return card;
 };
 
-cards.forNoCommutePreferences = function (locale) {
-
-  var text =
-    locale == "en-US" ?
-      "You have not selected any favorite lines for your commute yet.\nVisit the London Travel website to set your preferences." :
-      "You have not selected any favourite lines for your commute yet.\nVisit the London Travel website to set your preferences.";
-
-  return cards.standard(
-    cards.commuteIntentCardTitle,
-    text);
-};
-
 /**
  * Generates the card to respond to the specified disruption status(es).
  * @param {String[]} statuses - An array of disruption descriptions.

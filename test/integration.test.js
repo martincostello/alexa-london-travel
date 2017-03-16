@@ -185,13 +185,13 @@ describe("Integration", function () {
           it("Then the speech is correct", function () {
             assert.notEqual(actual.response.outputSpeech, null);
             assert.equal(actual.response.outputSpeech.type, "SSML");
-            assert.equal(actual.response.outputSpeech.ssml, "<speak>You have not selected any favourite lines yet.</speak>");
+            assert.equal(actual.response.outputSpeech.ssml, "<speak>You have not selected any favourite lines yet. Visit the London Travel website to set your preferences.</speak>");
           });
           it("Then the card is correct", function () {
             assert.notEqual(actual.response.card, null);
             assert.equal(actual.response.card.type, "Standard");
             assert.equal(actual.response.card.title, "Your Commute");
-            assert.equal(actual.response.card.text, "You have not selected any favourite lines for your commute yet.\nVisit the London Travel website to set your preferences.");
+            assert.equal(actual.response.card.text, "You have not selected any favourite lines yet. Visit the London Travel website to set your preferences.");
           });
         });
 
@@ -223,13 +223,13 @@ describe("Integration", function () {
           it("Then the speech is correct", function () {
             assert.notEqual(actual.response.outputSpeech, null);
             assert.equal(actual.response.outputSpeech.type, "SSML");
-            assert.equal(actual.response.outputSpeech.ssml, "<speak>You have not selected any favourite lines yet.</speak>");
+            assert.equal(actual.response.outputSpeech.ssml, "<speak>You have not selected any favourite lines yet. Visit the London Travel website to set your preferences.</speak>");
           });
           it("Then the card is correct", function () {
             assert.notEqual(actual.response.card, null);
             assert.equal(actual.response.card.type, "Standard");
             assert.equal(actual.response.card.title, "Your Commute");
-            assert.equal(actual.response.card.text, "You have not selected any favourite lines for your commute yet.\nVisit the London Travel website to set your preferences.");
+            assert.equal(actual.response.card.text, "You have not selected any favourite lines yet. Visit the London Travel website to set your preferences.");
           });
         });
 
@@ -259,13 +259,13 @@ describe("Integration", function () {
           it("Then the speech is correct", function () {
             assert.notEqual(actual.response.outputSpeech, null);
             assert.equal(actual.response.outputSpeech.type, "SSML");
-            assert.equal(actual.response.outputSpeech.ssml, "<speak>You have not selected any favorite lines yet.</speak>");
+            assert.equal(actual.response.outputSpeech.ssml, "<speak>You have not selected any favorite lines yet. Visit the London Travel website to set your preferences.</speak>");
           });
           it("Then the card is correct", function () {
             assert.notEqual(actual.response.card, null);
             assert.equal(actual.response.card.type, "Standard");
             assert.equal(actual.response.card.title, "Your Commute");
-            assert.equal(actual.response.card.text, "You have not selected any favorite lines for your commute yet.\nVisit the London Travel website to set your preferences.");
+            assert.equal(actual.response.card.text, "You have not selected any favorite lines yet. Visit the London Travel website to set your preferences.");
           });
         });
 

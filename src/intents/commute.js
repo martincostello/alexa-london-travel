@@ -85,7 +85,7 @@ intent.handler = function (request, response) {
             text = intent.noFavoritesResponse(locale);
             response
               .say(text)
-              .card(cards.forNoCommutePreferences(locale));
+              .card(cards.standard(cards.commuteIntentCardTitle, text));
           }
           else {
 
