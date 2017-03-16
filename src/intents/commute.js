@@ -30,6 +30,11 @@ intent.generateCard = function (text) {
   };
 };
 
+/**
+ * Gets the locale associated with the specified request.
+ * @param {Object} request - The Alexa skill request.
+ * @returns {String} - The ISO 3166-1 associated with the request, e.g. 'en-GB'.
+ */
 intent.getLocale = function (request) {
 
   var locale = "en-GB";
@@ -39,7 +44,6 @@ intent.getLocale = function (request) {
   }
 
   return locale;
-
 };
 
 intent.noFavoritesResponse = function (locale) {
