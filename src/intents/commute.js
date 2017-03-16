@@ -102,30 +102,35 @@ intent.handler = function (request, response) {
             return Promise.all(promises).then(function (statuses) {
 
               var builder = new SsmlBuilder();
-              var cardText = [];
+              var textForCards = [];
 
               var hasMultipleStatuses = statuses.length > 1;
 
               for (var i = 0; i < statuses.length; i++) {
 
                 var status = statuses[i];
+
+                var cardText = status.text;
                 var spokenText = verbalizer.verbalize(status.text);
 
                 if (hasMultipleStatuses === true) {
+
                   var displayName = lines.toSpokenName(status.name, true);
-                  var formattedForCard = sprintf("%s: %s", displayName, status.text);
-                  var formattedForSpeech = sprintf("%s: %s", displayName, spokenText);
-                  builder.paragraph(formattedForSpeech);
-                  cardText.push(formattedForCard);
+
+                  cardText = sprintf("%s: %s", displayName, cardText);
+                  spokenText = sprintf("%s: %s", displayName, spokenText);
+
+                  builder.paragraph(spokenText);
                 }
                 else {
                   builder.say(spokenText);
-                  cardText.push(status.text);
                 }
+
+                textForCards.push(cardText);
               }
 
               var speech = builder.ssml(true);
-              var card = cards.forCommute(cardText);
+              var card = cards.forCommute(textForCards);
 
               response
                 .say(speech)
