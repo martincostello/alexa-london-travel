@@ -283,10 +283,15 @@ intent.mapLineToId = function (line) {
     case "central":
     case "circle":
     case "district":
+    case "dlr":
+    case "hammersmith-city":
     case "jubilee":
+    case "london-overground":
+    case "metropolitan":
     case "northern":
     case "piccadilly":
     case "victoria":
+    case "waterloo-city":
       return normalized;
 
     case "london overground":
@@ -294,10 +299,8 @@ intent.mapLineToId = function (line) {
       return "london-overground";
 
     case "met":
-    case "metropolitan":
       return "metropolitan";
 
-    case "dlr":
     case "docklands":
     case "docklands light railway":
     case "docklands railway":
