@@ -84,29 +84,6 @@ describe("Disruption Intent", function () {
     });
   });
 
-  describe("When generating a card", function () {
-
-    var actual;
-
-    beforeEach(function () {
-      var statuses = [];
-      actual = intent.generateCard(statuses);
-    });
-
-    it("Then a card is returned", function () {
-      assert.notEqual(actual, null);
-    });
-    it("Then the type is correct", function () {
-      assert.equal(actual.type, "Standard");
-    });
-    it("Then the title is correct", function () {
-      assert.equal(actual.title, "Disruption Summary");
-    });
-    it("Then the text is correct", function () {
-      assert.equal(actual.text, "There is currently no disruption on the tube, London Overground or the DLR.");
-    });
-  });
-
   describe("When a request is received", function () {
 
     describe("Given there are no disruptions", function () {

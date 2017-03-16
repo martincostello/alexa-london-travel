@@ -3,6 +3,7 @@
 
 "use strict";
 
+var cards = require("./../cards");
 var lines = require("./../lines");
 var responses = require("./../responses");
 var sprintf = require("sprintf");
@@ -82,24 +83,6 @@ intent.generateResponse = function (data) {
   }
 
   return responses.onError;
-};
-
-/**
- * Returns the title to use for a card for the specified line name.
- * @param {String} name - The name of the line as reported from the TfL API.
- * @returns {String} The title to use for the card.
- */
-intent.toCardTitle = function (name) {
-
-  var suffix;
-
-  if (lines.isDLR(name) === true || lines.isOverground(name) === true) {
-    suffix = "";
-  } else {
-    suffix = " Line";
-  }
-
-  return sprintf("%s%s Status", name, suffix);
 };
 
 /**
@@ -255,29 +238,6 @@ intent.generateSummaryResponse = function (name, status) {
 };
 
 /**
- * Normalizes the specified text for use in a card.
- * @param {String} text - The SSML response.
- * @returns {Object} The normalized text for a card object to use.
- */
-intent.normalizeTextForCard = function (text) {
-  return text.replace("D.L.R.", "DLR");
-};
-
-/**
- * Generates the card to respond to the specified disruption text.
- * @param {String} line - The name of the line.
- * @param {String} text - The SSML response.
- * @returns {Object} The card object to use.
- */
-intent.generateCard = function (line, text) {
-  return {
-    type: "Standard",
-    title: intent.toCardTitle(line),
-    text: intent.normalizeTextForCard(text)
-  };
-};
-
-/**
  * Maps the specified line name to a TfL API line Id.
  * @param {String} line - The line name.
  * @returns {String} The id for the specified line, if valid; otherwise null.
@@ -359,7 +319,7 @@ intent.handler = function (request, response) {
     return intent.getLineStatus(line)
       .then(function (result) {
         var text = result.text;
-        var card = intent.generateCard(result.name, text);
+        var card = cards.forStatus(result.name, text);
         response
           .say(text)
           .card(card);

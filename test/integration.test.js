@@ -190,8 +190,8 @@ describe("Integration", function () {
           it("Then the card is correct", function () {
             assert.notEqual(actual.response.card, null);
             assert.equal(actual.response.card.type, "Standard");
-            assert.equal(actual.response.card.title, "My Commute");
-            assert.equal(actual.response.card.text, "You have not selected any favourite lines yet.");
+            assert.equal(actual.response.card.title, "Your Commute");
+            assert.equal(actual.response.card.text, "You have not selected any favourite lines for your commute yet.\nVisit the London Travel website to set your preferences.");
           });
         });
 
@@ -228,8 +228,8 @@ describe("Integration", function () {
           it("Then the card is correct", function () {
             assert.notEqual(actual.response.card, null);
             assert.equal(actual.response.card.type, "Standard");
-            assert.equal(actual.response.card.title, "My Commute");
-            assert.equal(actual.response.card.text, "You have not selected any favourite lines yet.");
+            assert.equal(actual.response.card.title, "Your Commute");
+            assert.equal(actual.response.card.text, "You have not selected any favourite lines for your commute yet.\nVisit the London Travel website to set your preferences.");
           });
         });
 
@@ -239,7 +239,7 @@ describe("Integration", function () {
 
           beforeEach(function (done) {
 
-            mock.skill.success(accessToken, { });
+            mock.skill.success(accessToken, {});
 
             json.request.locale = "en-US";
 
@@ -264,8 +264,8 @@ describe("Integration", function () {
           it("Then the card is correct", function () {
             assert.notEqual(actual.response.card, null);
             assert.equal(actual.response.card.type, "Standard");
-            assert.equal(actual.response.card.title, "My Commute");
-            assert.equal(actual.response.card.text, "You have not selected any favorite lines yet.");
+            assert.equal(actual.response.card.title, "Your Commute");
+            assert.equal(actual.response.card.text, "You have not selected any favorite lines for your commute yet.\nVisit the London Travel website to set your preferences.");
           });
         });
 
@@ -278,7 +278,7 @@ describe("Integration", function () {
             mock.skill.success(accessToken, {
               favoriteLines: [
                 "district"
-                ]
+              ]
             });
 
             tflApi.appId = "MyApplicationId";
@@ -319,7 +319,7 @@ describe("Integration", function () {
           it("Then the card is correct", function () {
             assert.notEqual(actual.response.card, null);
             assert.equal(actual.response.card.type, "Standard");
-            assert.equal(actual.response.card.title, "My Commute");
+            assert.equal(actual.response.card.title, "Your Commute");
             assert.equal(actual.response.card.text, "There is a good service on the District line.");
           });
         });
@@ -334,7 +334,7 @@ describe("Integration", function () {
               favoriteLines: [
                 "district",
                 "waterloo-city"
-                ]
+              ]
             });
 
             tflApi.appId = "MyApplicationId";
@@ -393,8 +393,8 @@ describe("Integration", function () {
           it("Then the card is correct", function () {
             assert.notEqual(actual.response.card, null);
             assert.equal(actual.response.card.type, "Standard");
-            assert.equal(actual.response.card.title, "My Commute");
-            assert.equal(actual.response.card.text, "<p>District Line: There is a good service on the District line.</p> <p>Waterloo and City Line: SEVERE DELAYS due to a person ill on a train earlier at Waterloo.</p>");
+            assert.equal(actual.response.card.title, "Your Commute");
+            assert.equal(actual.response.card.text, "District Line: There is a good service on the District line.\nWaterloo & City Line: SEVERE DELAYS due to a person ill on a train earlier at Waterloo.");
           });
         });
       });
@@ -433,59 +433,59 @@ describe("Integration", function () {
 
       describe("Given an error occurs when calling the TFL API", function () {
 
-          var json;
-          var actual;
+        var json;
+        var actual;
 
-          beforeEach(function (done) {
+        beforeEach(function (done) {
 
-            accessToken = "AValidToken";
-            json = helpers.commuteRequest(accessToken);
+          accessToken = "AValidToken";
+          json = helpers.commuteRequest(accessToken);
 
-            mock.skill.success(accessToken, {
-              favoriteLines: [
-                "district",
-                "waterloo-city"
+          mock.skill.success(accessToken, {
+            favoriteLines: [
+              "district",
+              "waterloo-city"
+            ]
+          });
+
+          tflApi.appId = "MyApplicationId";
+          tflApi.appKey = "MyApplicationKey";
+
+          mock.tfl.success(
+            "/Line/district/Status",
+            [
+              {
+                "id": "district",
+                "name": "District",
+                "lineStatuses": [
+                  {
+                    "statusSeverity": 10
+                  }
                 ]
-            });
+              }
+            ]);
 
-            tflApi.appId = "MyApplicationId";
-            tflApi.appKey = "MyApplicationKey";
+          mock.tfl.failure("/Line/waterloo-city/Status");
 
-            mock.tfl.success(
-              "/Line/district/Status",
-              [
-                {
-                  "id": "district",
-                  "name": "District",
-                  "lineStatuses": [
-                    {
-                      "statusSeverity": 10
-                    }
-                  ]
-                }
-              ]);
-
-            mock.tfl.failure("/Line/waterloo-city/Status");
-
-            app.request(json).then(function (response) {
-              actual = response;
-              done();
-            });
-          });
-
-          it("Then there is a response", function () {
-            assert.notEqual(actual, null);
-            assert.notEqual(actual.response, null);
-          });
-          it("Then the session ends", function () {
-            assert.equal(actual.response.shouldEndSession, true);
-          });
-          it("Then the speech is correct", function () {
-            assert.notEqual(actual.response.outputSpeech, null);
-            assert.equal(actual.response.outputSpeech.type, "SSML");
-            assert.equal(actual.response.outputSpeech.ssml, "<speak>Sorry, something went wrong.</speak>");
+          app.request(json).then(function (response) {
+            actual = response;
+            done();
           });
         });
+
+        it("Then there is a response", function () {
+          assert.notEqual(actual, null);
+          assert.notEqual(actual.response, null);
+        });
+        it("Then the session ends", function () {
+          assert.equal(actual.response.shouldEndSession, true);
+        });
+        it("Then the speech is correct", function () {
+          assert.notEqual(actual.response.outputSpeech, null);
+          assert.equal(actual.response.outputSpeech.type, "SSML");
+          assert.equal(actual.response.outputSpeech.ssml, "<speak>Sorry, something went wrong.</speak>");
+        });
+      });
     });
   });
 

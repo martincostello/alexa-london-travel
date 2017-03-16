@@ -3,6 +3,7 @@
 
 "use strict";
 
+var cards = require("./../cards");
 var lines = require("./../lines");
 var responses = require("./../responses");
 var skillApi = require("./../skillApi");
@@ -20,19 +21,6 @@ var intent = {
     "{|about} my commute {|now|right now|this afternoon|this evening|this morning|today|tonight}",
     "what {|is} my commute {|is} like {|now|today|tonight}"
   ]
-};
-
-/**
- * Generates the card to respond to the intent.
- * @param {String} text - The text to include in the card.
- * @returns {Object} The card object to use.
- */
-intent.generateCard = function (text) {
-  return {
-    type: "Standard",
-    title: "Your Commute",
-    text: text
-  };
 };
 
 /**
@@ -97,23 +85,25 @@ intent.handler = function (request, response) {
             text = intent.noFavoritesResponse(locale);
             response
               .say(text)
-              .card(intent.generateCard(text));
+              .card(cards.forNoCommutePreferences(locale));
           }
           else {
 
-            var statuses = [];
+            var promises = [];
 
             for (var i = 0; i < data.favoriteLines.length; i++) {
 
               var line = data.favoriteLines[i];
               var promise = statusIntent.getLineStatus(line);
 
-              statuses.push(promise);
+              promises.push(promise);
             }
 
-            return Promise.all(statuses).then(function (statuses) {
+            return Promise.all(promises).then(function (statuses) {
 
               var builder = new SsmlBuilder();
+              var cardText = [];
+
               var hasMultipleStatuses = statuses.length > 1;
 
               for (var i = 0; i < statuses.length; i++) {
@@ -123,18 +113,23 @@ intent.handler = function (request, response) {
 
                 if (hasMultipleStatuses === true) {
                   var displayName = lines.toSpokenName(status.name, true);
-                  builder.paragraph(sprintf("%s: %s", displayName, spokenText));
+                  var formattedForCard = sprintf("%s: %s", displayName, status.text);
+                  var formattedForSpeech = sprintf("%s: %s", displayName, spokenText);
+                  builder.paragraph(formattedForSpeech);
+                  cardText.push(formattedForCard);
                 }
                 else {
                   builder.say(spokenText);
+                  cardText.push(status.text);
                 }
               }
 
-              var text = statusIntent.normalizeTextForCard(builder.ssml(true));
+              var speech = builder.ssml(true);
+              var card = cards.forCommute(cardText);
 
               response
-                .say(text)
-                .card(intent.generateCard(text));
+                .say(speech)
+                .card(card);
             })
               .catch(function (err) {
                 console.error("Failed to get commute:", err);

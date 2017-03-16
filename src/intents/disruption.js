@@ -3,6 +3,7 @@
 
 "use strict";
 
+var cards = require("./../cards");
 var responses = require("./../responses");
 var SsmlBuilder = require("ssml-builder");
 var tflApi = require("./../tflApi");
@@ -68,28 +69,6 @@ intent.generateResponse = function (statuses) {
 };
 
 /**
- * Generates the card to respond to the specified disruption status(es).
- * @param {String[]} statuses - An array of disruption descriptions.
- * @returns {Object} The card object to use.
- */
-intent.generateCard = function (statuses) {
-
-  var text;
-
-  if (statuses.length === 0) {
-    text = responses.onNoDisruption.replace("D.L.R.", "DLR");
-  } else {
-    text = statuses.join("\n");
-  }
-
-  return {
-    type: "Standard",
-    title: "Disruption Summary",
-    text: text
-  };
-};
-
-/**
  * Handles the intent for disruption.
  * @param {Object} request - The Alexa skill request.
  * @param {Object} response - The Alexa skill response.
@@ -101,7 +80,7 @@ intent.handler = function (request, response) {
 
       var statuses = intent.generateRawResponse(data);
       var ssml = intent.generateResponse(statuses);
-      var card = intent.generateCard(statuses);
+      var card = cards.forDisruption(statuses);
 
       response
         .say(ssml)
