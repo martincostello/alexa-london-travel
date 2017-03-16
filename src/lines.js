@@ -30,9 +30,10 @@ lines.isOverground = function (name) {
 /**
  * Returns the spoken version of the specified line name.
  * @param {String} name - The name of the line as reported from the TfL API.
+ * @param {Boolean} [asTitle=false] - Whether to format as a title.
  * @returns {String} The spoken name of the line.
  */
-lines.toSpokenName = function (name) {
+lines.toSpokenName = function (name, asTitle) {
 
   var prefix = "";
   var suffix = "";
@@ -47,10 +48,15 @@ lines.toSpokenName = function (name) {
   } else {
     prefix = "the ";
     spokenName = name;
-    suffix = " line";
+    suffix = asTitle ? " Line" : " line";
   }
 
-  return sprintf("%s%s%s", prefix, spokenName, suffix);
+  if (asTitle === true) {
+    return sprintf("%s%s", spokenName, suffix);
+  }
+  else {
+    return sprintf("%s%s%s", prefix, spokenName, suffix);
+  }
 };
 
 module.exports = lines;

@@ -3,8 +3,13 @@
 
 "use strict";
 
+var lines = require("./../lines");
 var responses = require("./../responses");
 var skillApi = require("./../skillApi");
+var SsmlBuilder = require("ssml-builder");
+var sprintf = require("sprintf");
+var statusIntent = require("./status");
+var verbalizer = require("./../verbalizer");
 
 var intent = {
   api: skillApi,
@@ -47,11 +52,7 @@ intent.getLocale = function (request) {
 };
 
 intent.noFavoritesResponse = function (locale) {
-  return "You have not selected any " + (locale === "en-US" ? "favorite" : "favourite") + " lines yet.";
-};
-
-intent.favoritesResponse = function (favoriteLines, locale) {
-  return "Your " + (locale === "en-US" ? "favorite" : "favourite") + " lines are: " + favoriteLines.join();
+  return locale === "en-US" ? responses.onNoFavoriteLinesUS : responses.onNoFavoriteLinesUK;
 };
 
 /**
@@ -71,7 +72,7 @@ intent.handler = function (request, response) {
 
   if (!accessToken) {
     response
-      .say("You need to link your account to be able to ask me about your commute.")
+      .say(responses.onAccountNotLinked)
       .linkAccount();
   }
   else {
@@ -80,26 +81,54 @@ intent.handler = function (request, response) {
 
         if (data === null) {
           response
-            .say("It looks like you've disabled account linking. You need to re-link your account to be able to ask me about your commute.")
+            .say(responses.onAccountLinkInvalid)
             .linkAccount();
         }
         else {
 
-          var text;
           var locale = intent.getLocale(request);
+          var text;
 
           if (!data.favoriteLines || data.favoriteLines.length === 0) {
             text = intent.noFavoritesResponse(locale);
+            response
+              .say(text)
+              .card(intent.generateCard(text));
           }
           else {
-            text = intent.favoritesResponse(data.favoriteLines, locale);
+
+            var statuses = [];
+
+            for (var i = 0; i < data.favoriteLines.length; i++) {
+
+              var line = data.favoriteLines[i];
+              var promise = statusIntent.getLineStatus(line);
+
+              statuses.push(promise);
+            }
+
+            return Promise.all(statuses).then(function (statuses) {
+
+              var builder = new SsmlBuilder();
+
+              for (var i = 0; i < statuses.length; i++) {
+                var status = statuses[i];
+                var rawText = verbalizer.verbalize(status.text);
+                var displayName = lines.toSpokenName(status.name, true);
+                builder.paragraph(sprintf("%s: %s", displayName, verbalizer.verbalize(rawText)));
+              }
+
+              var text = statusIntent.normalizeTextForCard(builder.ssml(true));
+
+              response
+                .say(text)
+                .card(intent.generateCard(text));
+            })
+            .catch(function (err) {
+              console.error("Failed to get commute:", err);
+              response.say(responses.onError);
+            });
           }
-
-          var card = intent.generateCard(text);
-
-          response
-            .say(text)
-            .card(card);
         }
       })
       .catch(function (err) {

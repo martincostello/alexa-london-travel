@@ -269,7 +269,7 @@ describe("Integration", function () {
           });
         });
 
-        describe("Given the user has set preferences (en-GB)", function () {
+        describe("Given the user has set preferences", function () {
 
           var actual;
 
@@ -282,7 +282,40 @@ describe("Integration", function () {
                 ]
             });
 
-            json.request.locale = "en-GB";
+            tflApi.appId = "MyApplicationId";
+            tflApi.appKey = "MyApplicationKey";
+
+            mock.tfl.success(
+              "/Line/district/Status",
+              [
+                {
+                  "id": "district",
+                  "name": "District",
+                  "lineStatuses": [
+                    {
+                      "statusSeverity": 10
+                    }
+                  ]
+                }
+              ]);
+
+            mock.tfl.success(
+              "/Line/waterloo-city/Status",
+              [
+                {
+                  "id": "waterloo-city",
+                  "name": "Waterloo & City",
+                  "lineStatuses": [
+                    {
+                      "statusSeverity": 6,
+                      "reason": "Waterloo & City Line: SEVERE DELAYS due to a person ill on a train earlier at Waterloo.",
+                      "disruption": {
+                        "description": "Waterloo & City Line: SEVERE DELAYS due to a person ill on a train earlier at Waterloo."
+                      }
+                    }
+                  ]
+                }
+              ]);
 
             app.request(json).then(function (response) {
               actual = response;
@@ -300,59 +333,18 @@ describe("Integration", function () {
           it("Then the speech is correct", function () {
             assert.notEqual(actual.response.outputSpeech, null);
             assert.equal(actual.response.outputSpeech.type, "SSML");
-            assert.equal(actual.response.outputSpeech.ssml, "<speak>Your favourite lines are: district,waterloo-city</speak>");
+            assert.equal(actual.response.outputSpeech.ssml, "<speak><p>District Line: There is a good service on the District line.</p> <p>Waterloo and City Line: SEVERE DELAYS due to a person ill on a train earlier at Waterloo.</p></speak>");
           });
           it("Then the card is correct", function () {
             assert.notEqual(actual.response.card, null);
             assert.equal(actual.response.card.type, "Standard");
             assert.equal(actual.response.card.title, "My Commute");
-            assert.equal(actual.response.card.text, "Your favourite lines are: district,waterloo-city");
-          });
-        });
-
-        describe("Given the user has set preferences (en-US)", function () {
-
-          var actual;
-
-          beforeEach(function (done) {
-
-            mock.skill.success(accessToken, {
-              favoriteLines: [
-                "district",
-                "waterloo-city"
-                ]
-            });
-
-            json.request.locale = "en-US";
-
-            app.request(json).then(function (response) {
-              actual = response;
-              done();
-            });
-          });
-
-          it("Then there is a response", function () {
-            assert.notEqual(actual, null);
-            assert.notEqual(actual.response, null);
-          });
-          it("Then the session ends", function () {
-            assert.equal(actual.response.shouldEndSession, true);
-          });
-          it("Then the speech is correct", function () {
-            assert.notEqual(actual.response.outputSpeech, null);
-            assert.equal(actual.response.outputSpeech.type, "SSML");
-            assert.equal(actual.response.outputSpeech.ssml, "<speak>Your favorite lines are: district,waterloo-city</speak>");
-          });
-          it("Then the card is correct", function () {
-            assert.notEqual(actual.response.card, null);
-            assert.equal(actual.response.card.type, "Standard");
-            assert.equal(actual.response.card.title, "My Commute");
-            assert.equal(actual.response.card.text, "Your favorite lines are: district,waterloo-city");
+            assert.equal(actual.response.card.text, "<p>District Line: There is a good service on the District line.</p> <p>Waterloo and City Line: SEVERE DELAYS due to a person ill on a train earlier at Waterloo.</p>");
           });
         });
       });
 
-      describe("Given an error occurs", function () {
+      describe("Given an error occurs when calling the skill's API", function () {
 
         var json;
         var actual;
@@ -383,6 +375,62 @@ describe("Integration", function () {
           assert.equal(actual.response.outputSpeech.ssml, "<speak>Sorry, something went wrong.</speak>");
         });
       });
+
+      describe("Given an error occurs when calling the TFL API", function () {
+
+          var json;
+          var actual;
+
+          beforeEach(function (done) {
+
+            accessToken = "AValidToken";
+            json = helpers.commuteRequest(accessToken);
+
+            mock.skill.success(accessToken, {
+              favoriteLines: [
+                "district",
+                "waterloo-city"
+                ]
+            });
+
+            tflApi.appId = "MyApplicationId";
+            tflApi.appKey = "MyApplicationKey";
+
+            mock.tfl.success(
+              "/Line/district/Status",
+              [
+                {
+                  "id": "district",
+                  "name": "District",
+                  "lineStatuses": [
+                    {
+                      "statusSeverity": 10
+                    }
+                  ]
+                }
+              ]);
+
+            mock.tfl.failure("/Line/waterloo-city/Status");
+
+            app.request(json).then(function (response) {
+              actual = response;
+              done();
+            });
+          });
+
+          it("Then there is a response", function () {
+            assert.notEqual(actual, null);
+            assert.notEqual(actual.response, null);
+          });
+          it("Then the session ends", function () {
+            assert.equal(actual.response.shouldEndSession, true);
+          });
+          it("Then the speech is correct", function () {
+            assert.notEqual(actual.response.outputSpeech, null);
+            assert.equal(actual.response.outputSpeech.type, "SSML");
+            assert.equal(actual.response.outputSpeech.ssml, "<speak>Sorry, something went wrong.</speak>");
+          });
+        });
     });
   });
 
