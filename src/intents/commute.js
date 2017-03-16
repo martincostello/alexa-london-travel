@@ -30,7 +30,7 @@ var intent = {
 intent.generateCard = function (text) {
   return {
     type: "Standard",
-    title: "My Commute",
+    title: "Your Commute",
     text: text
   };
 };
@@ -51,6 +51,10 @@ intent.getLocale = function (request) {
   return locale;
 };
 
+/**
+ * Returns the response text for if the user has not set any preferences.
+ * @returns {String} The text to use for the response.
+ */
 intent.noFavoritesResponse = function (locale) {
   return locale === "en-US" ? responses.onNoFavoriteLinesUS : responses.onNoFavoriteLinesUK;
 };
@@ -132,10 +136,10 @@ intent.handler = function (request, response) {
                 .say(text)
                 .card(intent.generateCard(text));
             })
-            .catch(function (err) {
-              console.error("Failed to get commute:", err);
-              response.say(responses.onError);
-            });
+              .catch(function (err) {
+                console.error("Failed to get commute:", err);
+                response.say(responses.onError);
+              });
           }
         }
       })
