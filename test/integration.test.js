@@ -776,7 +776,7 @@ describe("Integration", function () {
     it("Then the speech is correct", function () {
       assert.notEqual(actual.response.outputSpeech, null);
       assert.equal(actual.response.outputSpeech.type, "SSML");
-      assert.equal(actual.response.outputSpeech.ssml, "<speak><p>This skill allows you to check for the status of a specific line, or for disruption in general. You can ask about any London Underground line, London Overground or the Docklands Light Railway.</p> <p>Asking about disruption in general provides information about any lines that are currently experiencing issues, such as any delays or planned closures.</p> <p>Asking for the status for a specific line provides a summary of the current service, such as whether there is a good service or if there are any delays.</p></speak>");
+      assert.equal(actual.response.outputSpeech.ssml, "<speak><p>This skill allows you to check for the status of a specific line, or for disruption in general. You can ask about any London Underground line, London Overground or the Docklands Light Railway.</p> <p>Asking about disruption in general provides information about any lines that are currently experiencing issues, such as any delays or planned closures.</p> <p>Asking for the status for a specific line provides a summary of the current service, such as whether there is a good service or if there are any delays.</p> <p>If you link your account and setup your preferences in the London Travel website, you can ask about your commute to quickly find out the status of the lines you frequently use.</p></speak>");
     });
   });
 
