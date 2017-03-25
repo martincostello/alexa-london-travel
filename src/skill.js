@@ -44,12 +44,25 @@ var skill = {
     response.say(responses.onSessionEnded);
   },
   preReqest: function (request, response, type) {
+
+    console.info("Handling request.", JSON.stringify({
+      request: request.data.request,
+      sessionId: request.sessionId,
+      userId: request.userId
+    }));
+
     if (process.env.VERIFY_SKILL_ID && request.applicationId !== (process.env.SKILL_ID || null)) {
       console.error("Request application Id and configured skill Id mismatch.", request.applicationId, process.env.SKILL_ID);
       response.fail("Invalid application Id.");
     }
   },
   postResponse: function (request, response, type, exception) {
+    console.info("Handled request.", JSON.stringify({
+      request: request.data.request,
+      sessionId: request.sessionId,
+      userId: request.userId,
+      exception: exception
+    }));
   },
   setMessages: function (app) {
     app.messages.GENERIC_ERROR = responses.onError;
