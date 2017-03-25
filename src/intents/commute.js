@@ -63,6 +63,12 @@ intent.handler = function (request, response) {
   }
 
   if (!accessToken) {
+
+    console.info("User has not linked account.", JSON.stringify({
+      sessionId: request.sessionId,
+      userId: request.userId
+    }));
+
     response
       .say(responses.onAccountNotLinked)
       .linkAccount();
@@ -72,6 +78,12 @@ intent.handler = function (request, response) {
       .then(function (data) {
 
         if (data === null) {
+
+          console.info("Access token is invalid.", JSON.stringify({
+            sessionId: request.sessionId,
+            userId: request.userId
+          }));
+
           response
             .say(responses.onAccountLinkInvalid)
             .linkAccount();
@@ -82,12 +94,24 @@ intent.handler = function (request, response) {
           var text;
 
           if (!data.favoriteLines || data.favoriteLines.length === 0) {
+
+            console.info("User has set no line preferences.", JSON.stringify({
+              sessionId: request.sessionId,
+              userId: request.userId
+            }));
+
             text = intent.noFavoritesResponse(locale);
             response
               .say(text)
               .card(cards.standard(cards.commuteIntentCardTitle, text));
           }
           else {
+
+            console.info("Getting statuses for user's preferences.", JSON.stringify({
+              preferences: data,
+              sessionId: request.sessionId,
+              userId: request.userId
+            }));
 
             var promises = [];
 
