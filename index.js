@@ -4,7 +4,12 @@
 "use strict";
 
 var alexa = require("alexa-app");
+var appInsights = require("applicationinsights");
 var skill = require("./src/skill");
+
+if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
+  appInsights.setup().start();
+}
 
 // Create the application for the skill
 var app = new alexa.app(skill.name);

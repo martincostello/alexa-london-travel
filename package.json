@@ -1,6 +1,6 @@
 {
   "name": "alexa-london-travel",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "private": true,
   "description": "An Amazon Alexa skill for checking the status for travel in London.",
   "main": "index.js",
@@ -28,6 +28,7 @@
   "homepage": "https://github.com/martincostello/alexa-london-travel#readme",
   "dependencies": {
     "alexa-app": "3.0.0",
+    "applicationinsights": "0.19.0",
     "request": "2.79.0",
     "request-promise": "4.1.1",
     "sprintf": "0.1.5",
