@@ -11,6 +11,7 @@ var disruptionIntent = require("./intents/disruption");
 var helpIntent = require("./intents/help");
 var statusIntent = require("./intents/status");
 var stopIntent = require("./intents/stop");
+var telemetry = require("./telemetry");
 
 var skill = {
   dictionary: {
@@ -32,15 +33,34 @@ var skill = {
   },
   name: constants.appName,
   onError: function (exception, request, response) {
+
     console.error("Unhandled exception: ", exception);
+
+    telemetry.trackException(exception, {
+      sessionId: request.sessionId,
+      userId: request.userId
+    });
+
     response.say(responses.onError);
   },
   onLaunch: function (request, response) {
+
+    telemetry.trackEvent("LaunchRequest", {
+      sessionId: request.sessionId,
+      userId: request.userId
+    });
+
     response
       .say(responses.onLaunch)
       .shouldEndSession(false);
   },
   onSessionEnded: function (request, response) {
+
+    telemetry.trackEvent("SessionEndedRequest", {
+      sessionId: request.sessionId,
+      userId: request.userId
+    });
+
     response.say(responses.onSessionEnded);
   },
   preReqest: function (request, response, type) {

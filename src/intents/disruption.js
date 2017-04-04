@@ -6,6 +6,7 @@
 var cards = require("./../cards");
 var responses = require("./../responses");
 var SsmlBuilder = require("ssml-builder");
+var telemetry = require("../telemetry");
 var tflApi = require("./../tflApi");
 var verbalizer = require("./../verbalizer");
 
@@ -75,6 +76,12 @@ intent.generateResponse = function (statuses) {
  * @returns {Object} The result of the intent handler.
  */
 intent.handler = function (request, response) {
+
+  telemetry.trackEvent(intent.name, {
+    sessionId: request.sessionId,
+    userId: request.userId
+  });
+
   return intent.api.getDisruption(["dlr", "overground", "tube"])
     .then(function (data) {
 

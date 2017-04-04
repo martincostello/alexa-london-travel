@@ -5,6 +5,10 @@
 
 var alexa = require("alexa-app");
 var skill = require("./src/skill");
+var telemetry = require("./src/telemetry");
+
+// Setup the telemetry client
+telemetry.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY);
 
 // Create the application for the skill
 var app = new alexa.app(skill.name);

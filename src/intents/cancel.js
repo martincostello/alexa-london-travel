@@ -3,6 +3,8 @@
 
 "use strict";
 
+var telemetry = require("../telemetry");
+
 var intent = {
   name: "AMAZON.CancelIntent",
   enabled: true
@@ -14,6 +16,12 @@ var intent = {
  * @param {Object} response - The Alexa skill response.
  */
 intent.handler = function (request, response) {
+
+  telemetry.trackEvent(intent.name, {
+    sessionId: request.sessionId,
+    userId: request.userId
+  });
+
   response.shouldEndSession(true);
 };
 
