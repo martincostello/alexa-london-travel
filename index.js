@@ -4,12 +4,11 @@
 "use strict";
 
 var alexa = require("alexa-app");
-var appInsights = require("applicationinsights");
 var skill = require("./src/skill");
+var telemetry = require("./src/telemetry");
 
-if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
-  appInsights.setup().start();
-}
+// Setup the telemetry client
+telemetry.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY);
 
 // Create the application for the skill
 var app = new alexa.app(skill.name);

@@ -7,6 +7,7 @@ var cards = require("./../cards");
 var lines = require("./../lines");
 var responses = require("./../responses");
 var sprintf = require("sprintf");
+var telemetry = require("../telemetry");
 var tflApi = require("./../tflApi");
 
 var intent = {
@@ -314,7 +315,17 @@ intent.getLineStatus = function (line) {
  * @returns {Object} The result of the intent handler.
  */
 intent.handler = function (request, response) {
-  var line = intent.mapLineToId(request.slot("LINE"));
+
+  var rawLineName = request.slot("LINE");
+
+  telemetry.trackEvent(intent.name, {
+    line: rawLineName,
+    sessionId: request.sessionId,
+    userId: request.userId
+  });
+
+  var line = intent.mapLineToId(rawLineName);
+
   if (line) {
     return intent.getLineStatus(line)
       .then(function (result) {

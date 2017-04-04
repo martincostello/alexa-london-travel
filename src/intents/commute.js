@@ -10,6 +10,7 @@ var skillApi = require("./../skillApi");
 var SsmlBuilder = require("ssml-builder");
 var sprintf = require("sprintf");
 var statusIntent = require("./status");
+var telemetry = require("../telemetry");
 var verbalizer = require("./../verbalizer");
 
 var intent = {
@@ -61,6 +62,12 @@ intent.handler = function (request, response) {
     var session = request.getSession();
     accessToken = session.details.accessToken;
   }
+
+  telemetry.trackEvent(intent.name, {
+    hasAccessToken: !(!accessToken),
+    sessionId: request.sessionId,
+    userId: request.userId
+  });
 
   if (!accessToken) {
 

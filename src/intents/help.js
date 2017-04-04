@@ -4,6 +4,7 @@
 "use strict";
 
 var Speech = require("ssml-builder");
+var telemetry = require("../telemetry");
 
 var intent = {
   name: "AMAZON.HelpIntent",
@@ -29,6 +30,12 @@ var generateResponse = function () {
  * @param {Object} response - The Alexa skill response.
  */
 intent.handler = function (request, response) {
+
+  telemetry.trackEvent(intent.name, {
+    sessionId: request.sessionId,
+    userId: request.userId
+  });
+
   var text = generateResponse();
   response
     .say(text)
