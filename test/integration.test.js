@@ -871,14 +871,21 @@ describe("Integration", function () {
       json.context.System.application.applicationId = "not my application id";
       json.session.application.applicationId = "not my application id";
 
-      app.request(json).catch(function (error) {
-        actual = error;
+      app.request(json).then(function (response) {
+        actual = response;
         done();
       });
     });
 
-    it("Then the request fails", function () {
-      assert.equal(actual, "Invalid application Id.");
+    it("Then there is a response", function () {
+      assert.notEqual(actual, null);
+      assert.notEqual(actual.response, null);
+    });
+    it("Then the session ends", function () {
+      assert.equal(actual.response.shouldEndSession, true);
+    });
+    it("Then there is no speech response", function () {
+      assert.equal(actual.response.outputSpeech, null);
     });
   });
 });
