@@ -3,6 +3,10 @@
 
 "use strict";
 
+process.env.SKILL_ID = "MySkillId";
+process.env.VERIFY_SKILL_ID = "true";
+
+delete require.cache[require.resolve("../index")];
 var app = require("../index");
 var assert = require("assert");
 var helpers = require("./helpers");
@@ -11,8 +15,8 @@ var tflApi = require("../src/tflApi");
 
 describe("Integration", function () {
 
-  beforeEach(function () {
-    process.env.VERIFY_SKILL_ID = "true";
+  it("Then the application Id is set", function () {
+    assert.equal(app.id, "MySkillId");
   });
 
   describe("When the skill is launched", function () {
@@ -870,6 +874,37 @@ describe("Integration", function () {
 
       json.context.System.application.applicationId = "not my application id";
       json.session.application.applicationId = "not my application id";
+
+      app.request(json).then(function (response) {
+        actual = response;
+        done();
+      });
+    });
+
+    it("Then there is a response", function () {
+      assert.notEqual(actual, null);
+      assert.notEqual(actual.response, null);
+    });
+    it("Then the session ends", function () {
+      assert.equal(actual.response.shouldEndSession, true);
+    });
+    it("Then there is no speech response", function () {
+      assert.equal(actual.response.outputSpeech, null);
+    });
+  });
+
+  describe("When the application Id is not set.", function () {
+
+    var actual;
+
+    beforeEach(function (done) {
+
+      var json = helpers.sessionEndRequest();
+
+      json.context.System.application.applicationId = "not my application id";
+      json.session.application.applicationId = "not my application id";
+
+      delete process.env.SKILL_ID;
 
       app.request(json).then(function (response) {
         actual = response;

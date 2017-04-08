@@ -10,7 +10,7 @@ var buildRequest = function (requestType) {
       "new": true,
       "sessionId": "amzn1.echo-api.session.abeee1a7-aee0-41e6-8192-e6faaed9f5ef",
       "application": {
-        "applicationId": null
+        "applicationId": "MySkillId"
       },
       "attributes": {},
       "user": {
@@ -20,7 +20,7 @@ var buildRequest = function (requestType) {
     "context": {
       "System": {
         "application": {
-          "applicationId": null
+          "applicationId": "MySkillId"
         },
         "user": {
           "userId": "amzn1.account.AM3B227HF3FAM1B261HK7FFM3A2"

@@ -13,6 +13,11 @@ telemetry.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY);
 // Create the application for the skill
 var app = new alexa.app(skill.name);
 
+// Set the skill Id if present
+if (process.env.SKILL_ID) {
+  app.id = process.env.SKILL_ID;
+}
+
 // Set the skill dictionary
 app.dictionary = skill.dictionary;
 
