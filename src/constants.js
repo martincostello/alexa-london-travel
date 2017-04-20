@@ -3,9 +3,11 @@
 
 "use strict";
 
+var project = require("../package.json");
+
 const constants = {
   appName: "alexa-london-travel",
-  version: "1.0.5"
+  version: project.version
 };
 
 module.exports = constants;
