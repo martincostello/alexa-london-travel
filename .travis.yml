@@ -2,6 +2,7 @@ language: node_js
 node_js: "node"
 
 install:
+  - npm install -g npm@4.6.1
   - npm install -g codecov
   - npm install
 
