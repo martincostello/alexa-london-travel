@@ -22,7 +22,7 @@ describe("Disruption Intent", function () {
 
     it("Then the response is that there are no disruptions", function () {
       actual = intent.generateResponse(data);
-      assert.equal(actual, "There is currently no disruption on the tube, London Overground or the D.L.R..");
+      assert.equal(actual, "There is currently no disruption on the tube, London Overground, the D.L.R. or T.F.L. Rail.");
     });
   });
 
@@ -38,7 +38,7 @@ describe("Disruption Intent", function () {
 
     it("Then the response is that there are no disruptions", function () {
       actual = intent.generateResponse(data);
-      assert.equal(actual, "There is currently no disruption on the tube, London Overground or the D.L.R..");
+      assert.equal(actual, "There is currently no disruption on the tube, London Overground, the D.L.R. or T.F.L. Rail.");
     });
   });
 
@@ -113,7 +113,7 @@ describe("Disruption Intent", function () {
 
       it("Then the response is correct", function () {
         assert.equal(response.say.callCount, 1);
-        assert.equal(response.say.lastCall.arg, "There is currently no disruption on the tube, London Overground or the D.L.R..");
+        assert.equal(response.say.lastCall.arg, "There is currently no disruption on the tube, London Overground, the D.L.R. or T.F.L. Rail.");
       });
       it("Then a card is returned", function () {
         assert.equal(response.card.callCount, 1);

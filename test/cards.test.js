@@ -28,7 +28,7 @@ describe("When generating cards", function () {
       assert.equal(actual.title, "Disruption Summary");
     });
     it("Then the text is correct", function () {
-      assert.equal(actual.text, "There is currently no disruption on the tube, London Overground or the DLR.");
+      assert.equal(actual.text, "There is currently no disruption on the tube, London Overground, the DLR or TfL Rail.");
     });
   });
 
@@ -52,6 +52,12 @@ describe("When generating cards", function () {
         text: "There are minor delays on the Waterloo and City line.",
         expectedTitle: "Waterloo & City Line Status",
         expectedText: "There are minor delays on the Waterloo and City line."
+      },
+      {
+        name: "TfL Rail",
+        text: "There are minor delays on T.F.L. Rail.",
+        expectedTitle: "TfL Rail Status",
+        expectedText: "There are minor delays on TfL Rail."
       }
     ];
 

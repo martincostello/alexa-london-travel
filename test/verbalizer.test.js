@@ -18,7 +18,8 @@ describe("Verbalizer", function () {
       { text: "There are delays n/b on the DLR.", expected: "There are delays northbound on the D.L.R.." },
       { text: "There are delays s/b on the DLR.", expected: "There are delays southbound on the D.L.R.." },
       { text: "There are delays w/b on the DLR.", expected: "There are delays westbound on the D.L.R.." },
-      { text: "Tickets will be accepted on SWT.", expected: "Tickets will be accepted on South West Trains." }
+      { text: "Tickets will be accepted on SWT.", expected: "Tickets will be accepted on South West Trains." },
+      { text: "Tickets will be accepted on TfL Rail.", expected: "Tickets will be accepted on T.F.L. Rail." }
     ];
 
     dataDriven(testCases, function () {

@@ -18,7 +18,10 @@ verbalizer.verbalize = function (text) {
     .replace("n/b", "northbound")
     .replace("s/b", "southbound")
     .replace("w/b", "westbound")
-    .replace("SWT", "South West Trains");
+    .replace("SWT", "South West Trains")
+    .replace("tfl", "T.F.L.")
+    .replace("TFL", "T.F.L.")
+    .replace("TfL", "T.F.L.");
 };
 
 module.exports = verbalizer;

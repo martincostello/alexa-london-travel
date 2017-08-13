@@ -43,7 +43,7 @@ describe("Integration", function () {
     it("Then the speech is correct", function () {
       assert.notEqual(actual.response.outputSpeech, null);
       assert.equal(actual.response.outputSpeech.type, "SSML");
-      assert.equal(actual.response.outputSpeech.ssml, "<speak>Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground or the D.L.R..</speak>");
+      assert.equal(actual.response.outputSpeech.ssml, "<speak>Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground, the D.L.R. or T.F.L. Rail.</speak>");
     });
   });
 
@@ -511,7 +511,7 @@ describe("Integration", function () {
 
       beforeEach(function (done) {
 
-        mock.tfl.success("/Line/Mode/dlr,overground,tube/Disruption", []);
+        mock.tfl.success("/Line/Mode/dlr,overground,tube,tflrail/Disruption", []);
 
         app.request(json).then(function (response) {
           actual = response;
@@ -529,13 +529,13 @@ describe("Integration", function () {
       it("Then the speech is correct", function () {
         assert.notEqual(actual.response.outputSpeech, null);
         assert.equal(actual.response.outputSpeech.type, "SSML");
-        assert.equal(actual.response.outputSpeech.ssml, "<speak>There is currently no disruption on the tube, London Overground or the D.L.R..</speak>");
+        assert.equal(actual.response.outputSpeech.ssml, "<speak>There is currently no disruption on the tube, London Overground, the D.L.R. or T.F.L. Rail.</speak>");
       });
       it("Then the card is correct", function () {
         assert.notEqual(actual.response.card, null);
         assert.equal(actual.response.card.type, "Standard");
         assert.equal(actual.response.card.title, "Disruption Summary");
-        assert.equal(actual.response.card.text, "There is currently no disruption on the tube, London Overground or the DLR.");
+        assert.equal(actual.response.card.text, "There is currently no disruption on the tube, London Overground, the DLR or TfL Rail.");
       });
     });
 
@@ -546,7 +546,7 @@ describe("Integration", function () {
       beforeEach(function (done) {
 
         mock.tfl.success(
-          "/Line/Mode/dlr,overground,tube/Disruption",
+          "/Line/Mode/dlr,overground,tube,tflrail/Disruption",
           [
             {
               description: "DLR: Minor delays."
@@ -591,7 +591,7 @@ describe("Integration", function () {
 
       beforeEach(function (done) {
 
-        mock.tfl.failure("/Line/Mode/dlr,overground,tube/Disruption");
+        mock.tfl.failure("/Line/Mode/dlr,overground,tube,tflrail/Disruption");
 
         app.request(json).then(function (response) {
           actual = response;
@@ -780,7 +780,7 @@ describe("Integration", function () {
     it("Then the speech is correct", function () {
       assert.notEqual(actual.response.outputSpeech, null);
       assert.equal(actual.response.outputSpeech.type, "SSML");
-      assert.equal(actual.response.outputSpeech.ssml, "<speak><p>This skill allows you to check for the status of a specific line, or for disruption in general. You can ask about any London Underground line, London Overground or the Docklands Light Railway.</p> <p>Asking about disruption in general provides information about any lines that are currently experiencing issues, such as any delays or planned closures.</p> <p>Asking for the status for a specific line provides a summary of the current service, such as whether there is a good service or if there are any delays.</p> <p>If you link your account and setup your preferences in the London Travel website, you can ask about your commute to quickly find out the status of the lines you frequently use.</p></speak>");
+      assert.equal(actual.response.outputSpeech.ssml, "<speak><p>This skill allows you to check for the status of a specific line, or for disruption in general. You can ask about any London Underground line, London Overground, the Docklands Light Railway or TfL Rail.</p> <p>Asking about disruption in general provides information about any lines that are currently experiencing issues, such as any delays or planned closures.</p> <p>Asking for the status for a specific line provides a summary of the current service, such as whether there is a good service or if there are any delays.</p> <p>If you link your account and setup your preferences in the London Travel website, you can ask about your commute to quickly find out the status of the lines you frequently use.</p></speak>");
     });
   });
 
