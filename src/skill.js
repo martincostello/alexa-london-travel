@@ -27,6 +27,7 @@ var skill = {
       "Metropolitan",
       "Northern",
       "Piccadilly",
+      "TfL Rail",
       "Victoria",
       "Waterloo and City"
     ]
