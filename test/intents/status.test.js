@@ -37,6 +37,7 @@ describe("Status Intent", function () {
       { name: "Metropolitan", expected: "metropolitan" },
       { name: "Northern", expected: "northern" },
       { name: "Piccadilly", expected: "piccadilly" },
+      { name: "TfL Rail", expected: "tfl-rail" },
       { name: "Victoria", expected: "victoria" },
       { name: "City", expected: "waterloo-city" },
       { name: "Waterloo", expected: "waterloo-city" },
@@ -61,6 +62,7 @@ describe("Status Intent", function () {
         { severity: 10, expected: "There is a good service on the D.L.R..", name: "DLR" },
         { severity: 10, expected: "There is a good service on London Overground.", name: "London Overground" },
         { severity: 10, expected: "There is a good service on the Waterloo and City line.", name: "Waterloo & City" },
+        { severity: 10, expected: "There is a good service on T.F.L. Rail.", name: "TfL Rail" },
         { severity: 18, expected: "There is a good service on the District line." },
         { severity: 20, expected: "The District line is closed." },
         { severity: 0, expected: "There is a special service." },
@@ -234,11 +236,11 @@ describe("Status Intent", function () {
 
       it("Then the response is correct", function () {
         assert.equal(response.say.callCount, 1);
-        assert.equal(response.say.lastCall.arg, "Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground or the D.L.R..");
+        assert.equal(response.say.lastCall.arg, "Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground, the D.L.R. or T.F.L. Rail.");
       });
       it("Then the reprompt is correct", function () {
         assert.equal(response.reprompt.callCount, 1);
-        assert.equal(response.reprompt.lastCall.arg, "Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground or the D.L.R..");
+        assert.equal(response.reprompt.lastCall.arg, "Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground, the D.L.R. or T.F.L. Rail.");
       });
 
       afterEach(function () {
@@ -271,11 +273,11 @@ describe("Status Intent", function () {
 
       it("Then the response is correct", function () {
         assert.equal(response.say.callCount, 1);
-        assert.equal(response.say.lastCall.arg, "Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground or the D.L.R..");
+        assert.equal(response.say.lastCall.arg, "Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground, the D.L.R. or T.F.L. Rail.");
       });
       it("Then the reprompt is correct", function () {
         assert.equal(response.reprompt.callCount, 1);
-        assert.equal(response.reprompt.lastCall.arg, "Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground or the D.L.R..");
+        assert.equal(response.reprompt.lastCall.arg, "Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground, the D.L.R. or T.F.L. Rail.");
       });
 
       afterEach(function () {

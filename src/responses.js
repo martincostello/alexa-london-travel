@@ -14,11 +14,11 @@ var responses = {
   onInvalidRequest: "Sorry, that request is not valid.",
   onAccountNotLinked: "You need to link your account to be able to ask me about your commute.",
   onAccountLinkInvalid: "It looks like you've disabled account linking. You need to re-link your account to be able to ask me about your commute.",
-  onLaunch: verbalizer.verbalize("Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground or the DLR."),
-  onNoDisruption: verbalizer.verbalize("There is currently no disruption on the tube, London Overground or the DLR."),
+  onLaunch: verbalizer.verbalize("Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground, the DLR or TfL Rail."),
+  onNoDisruption: verbalizer.verbalize("There is currently no disruption on the tube, London Overground, the DLR or TfL Rail."),
   onNoFavoriteLinesUK: "You have not selected any favourite lines yet. Visit the London Travel website to set your preferences.",
   onNoFavoriteLinesUS: "You have not selected any favorite lines yet. Visit the London Travel website to set your preferences.",
-  onUnknownLine: verbalizer.verbalize("Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground or the DLR."),
+  onUnknownLine: verbalizer.verbalize("Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground, the DLR or TfL Rail."),
   onSessionEnded: "Goodbye.",
   toSsml: function (text) {
     var builder = new SsmlBuilder();

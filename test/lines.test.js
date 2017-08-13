@@ -23,6 +23,7 @@ describe("Lines", function () {
       { name: "Metropolitan", expected: "the Metropolitan line" },
       { name: "Northern", expected: "the Northern line" },
       { name: "Piccadilly", expected: "the Piccadilly line" },
+      { name: "TfL Rail", expected: "T.F.L. Rail" },
       { name: "Victoria", expected: "the Victoria line" },
       { name: "Waterloo & City", expected: "the Waterloo & City line" },
     ];
@@ -50,6 +51,7 @@ describe("Lines", function () {
       { name: "metropolitan", expected: false },
       { name: "northern", expected: false },
       { name: "piccadilly", expected: false },
+      { name: "tfl-rail", expected: false },
       { name: "victoria", expected: false },
       { name: "waterloo-city", expected: false },
     ];
@@ -77,6 +79,7 @@ describe("Lines", function () {
       { name: "metropolitan", expected: false },
       { name: "northern", expected: false },
       { name: "piccadilly", expected: false },
+      { name: "tfl-rail", expected: false },
       { name: "victoria", expected: false },
       { name: "waterloo-city", expected: false },
     ];
@@ -84,6 +87,35 @@ describe("Lines", function () {
     dataDriven(testCases, function () {
       it("Then result is correct for '{name}'", function (context) {
         var actual = lines.isOverground(context.name);
+        assert.equal(actual, context.expected);
+      });
+    });
+  });
+
+  describe("When testing for TfL Rail", function () {
+
+    var testCases = [
+      { name: "bakerloo", expected: false },
+      { name: "central", expected: false },
+      { name: "circle", expected: false },
+      { name: "district", expected: false },
+      { name: "dlr", expected: false },
+      { name: "hammersmith-city", expected: false },
+      { name: "jubilee", expected: false },
+      { name: "london-overground", expected: false },
+      { name: "London Overground", expected: false },
+      { name: "metropolitan", expected: false },
+      { name: "northern", expected: false },
+      { name: "piccadilly", expected: false },
+      { name: "tfl", expected: true },
+      { name: "tfl-rail", expected: true },
+      { name: "victoria", expected: false },
+      { name: "waterloo-city", expected: false },
+    ];
+
+    dataDriven(testCases, function () {
+      it("Then result is correct for '{name}'", function (context) {
+        var actual = lines.isTfLRail(context.name);
         assert.equal(actual, context.expected);
       });
     });

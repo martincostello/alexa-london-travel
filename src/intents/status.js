@@ -18,10 +18,10 @@ var intent = {
     "LINE": "LINE_NAME"
   },
   utterances: [
-    "about the {|status of the} {-|LINE} {|line} {|now|right now|this morning|this afternoon|this evening|today|tonight}",
-    "for the status of the {-|LINE} {|line} {|now|right now|this morning|this afternoon|this evening|today|tonight}",
-    "how the {-|LINE} is {|doing} {|now|right now|this morning|this afternoon|this evening|today|tonight}",
-    "{|what|what is|what's} {|the} status of the {-|LINE} {|line} {|is} {|now|right now|this morning|this afternoon|this evening|today|tonight}"
+    "about {|the} {|status of the} {-|LINE} {|line} {|now|right now|this morning|this afternoon|this evening|today|tonight}",
+    "for the status of {|the} {-|LINE} {|line} {|now|right now|this morning|this afternoon|this evening|today|tonight}",
+    "how {|the} {-|LINE} is {|doing} {|now|right now|this morning|this afternoon|this evening|today|tonight}",
+    "{|what|what is|what's} {|the} status of {|the} {-|LINE} {|line} {|is} {|now|right now|this morning|this afternoon|this evening|today|tonight}"
   ]
 };
 
@@ -260,6 +260,7 @@ intent.mapLineToId = function (line) {
     case "metropolitan":
     case "northern":
     case "piccadilly":
+    case "tfl-rail":
     case "victoria":
     case "waterloo-city":
       return normalized;
@@ -286,6 +287,9 @@ intent.mapLineToId = function (line) {
     case "waterloo and city":
     case "waterloo & city":
       return "waterloo-city";
+
+    case "tfl rail":
+      return "tfl-rail";
 
     default:
       return null;

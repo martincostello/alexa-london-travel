@@ -79,7 +79,9 @@ cards.forStatus = function (line, text) {
  * @returns {Object} The normalized text for a card object to use.
  */
 cards.normalizeText = function (text) {
-  return text.replace("D.L.R.", "DLR");
+  return text
+    .replace("D.L.R.", "DLR")
+    .replace("T.F.L. Rail", "TfL Rail");
 };
 
 /**
@@ -91,7 +93,7 @@ cards.toStatusCardTitle = function (name) {
 
   var suffix;
 
-  if (lines.isDLR(name) === true || lines.isOverground(name) === true) {
+  if (lines.isDLR(name) === true || lines.isOverground(name) === true || lines.isTfLRail(name)) {
     suffix = "";
   } else {
     suffix = " Line";

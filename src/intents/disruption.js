@@ -82,7 +82,7 @@ intent.handler = function (request, response) {
     userId: request.userId
   });
 
-  return intent.api.getDisruption(["dlr", "overground", "tube"])
+  return intent.api.getDisruption(["dlr", "overground", "tube", "tflrail"])
     .then(function (data) {
 
       var statuses = intent.generateRawResponse(data);

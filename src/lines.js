@@ -28,6 +28,15 @@ lines.isOverground = function (name) {
 };
 
 /**
+ * Returns whether the specified line name refers to TfL Rail.
+ * @param {String} name - The name of the line as reported from the TfL API.
+ * @returns {Boolean} Whether the line is TfL Rail.
+ */
+lines.isTfLRail = function (name) {
+  return name.toLowerCase().indexOf("tfl") > -1;
+};
+
+/**
  * Returns the spoken version of the specified line name.
  * @param {String} name - The name of the line as reported from the TfL API.
  * @param {Boolean} [asTitle=false] - Whether to format as a title.
@@ -45,6 +54,8 @@ lines.toSpokenName = function (name, asTitle) {
     spokenName = verbalizer.verbalize("DLR");
   } else if (lines.isOverground(name) === true) {
     spokenName = name;
+  } else if (lines.isTfLRail(name) === true) {
+    spokenName = verbalizer.verbalize("TfL Rail");
   } else {
     prefix = "the ";
     spokenName = name;
