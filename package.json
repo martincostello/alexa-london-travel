@@ -1,6 +1,6 @@
 {
   "name": "alexa-london-travel",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "private": true,
   "description": "An Amazon Alexa skill for checking the status for travel in London.",
   "main": "index.js",
