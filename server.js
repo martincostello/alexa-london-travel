@@ -3,8 +3,9 @@
 
 var AlexaAppServer = require("alexa-app-server");
 var env = require("node-env-file");
+var path = require("path");
 
-env(__dirname + "/.env");
+env(path.join(__dirname, ".env"));
 
 console.log("TfL App Id :", process.env.TFL_APP_ID);
 console.log("TfL App Key:", process.env.TFL_APP_KEY);
