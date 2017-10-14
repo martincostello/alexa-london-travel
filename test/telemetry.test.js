@@ -50,6 +50,10 @@ describe("Telemetry", function () {
       config = {
       };
 
+      config.setUseDiskRetryCaching = function () {
+        return config;
+      };
+
       config.start = function () {
         return config;
       };
