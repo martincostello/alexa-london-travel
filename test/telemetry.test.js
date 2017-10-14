@@ -50,14 +50,6 @@ describe("Telemetry", function () {
       config = {
       };
 
-      config.setAutoCollectRequests = function () {
-        return config;
-      };
-
-      config.setInternalLogging = function () {
-        return config;
-      };
-
       config.start = function () {
         return config;
       };

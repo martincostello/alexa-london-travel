@@ -30,10 +30,7 @@ telemetry.setup = function (instrumentationKey) {
 
     telemetry.instrumentationKey = instrumentationKey;
 
-    telemetry.appInsights.setup(instrumentationKey)
-      .setAutoCollectRequests(false)
-      .setInternalLogging(true, true)
-      .start();
+    telemetry.appInsights.setup(instrumentationKey).start();
 
     telemetry.trackEvent = function (name, properties) {
       telemetry.createClient().trackEvent({
