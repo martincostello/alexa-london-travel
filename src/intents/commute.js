@@ -102,10 +102,10 @@ intent.handler = function (request, response) {
 
           var favoriteLines = [];
 
-          if (!!data.favoriteLines) {
+          if (data.favoriteLines && data.favoriteLines.length) {
             favoriteLines = data.favoriteLines;
 
-            // TODO Remove once supported by the TfL API (see https://github.com/martincostello/alexa-london-travel/issues/54)
+            // Remove once supported by the TfL API (see https://github.com/martincostello/alexa-london-travel/issues/54)
             var indexOfElzabeth = favoriteLines.indexOf("elizabeth");
 
             if (indexOfElzabeth > -1) {

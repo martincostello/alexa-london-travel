@@ -336,8 +336,8 @@ intent.handler = function (request, response) {
 
   if (line) {
 
-    // TODO Remove once supported by the TfL API (see https://github.com/martincostello/alexa-london-travel/issues/54)
-    if (line == "elizabeth") {
+    // Remove once supported by the TfL API (see https://github.com/martincostello/alexa-london-travel/issues/54)
+    if (line === "elizabeth") {
       var notSupported = responses.toSsml(responses.onElizabethLine);
       response
         .say(notSupported)
