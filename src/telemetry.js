@@ -30,16 +30,14 @@ telemetry.setup = function (instrumentationKey) {
     telemetry.appInsights.setup(instrumentationKey).start();
 
     telemetry.trackEvent = function (name, properties) {
-      var client = telemetry.createClient();
-      client.trackEvent({
+      telemetry.createClient().trackEvent({
         name: name,
         properties: properties
       });
     };
 
     telemetry.trackException = function (exception, properties) {
-      var client = telemetry.createClient();
-      client.trackException({
+      telemetry.createClient().trackException({
         exception: exception,
         properties: properties
       });
