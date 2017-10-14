@@ -95,6 +95,8 @@ describe("Telemetry", function () {
       beforeEach(function () {
 
         client = {
+          config: {
+          },
           trackEvent: function () {
           },
           trackException: function () {
