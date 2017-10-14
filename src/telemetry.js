@@ -13,6 +13,12 @@ const telemetry = {
   }
 };
 
+telemetry.instrumentationKey = "";
+
+telemetry.createClient = function () {
+  return new appInsights.TelemetryClient(telemetry.instrumentationKey);
+};
+
 /**
  * Sets up collection of telemetry.
  * @param {String} [instrumentationKey=null] - The optional instrumentation key to use.
@@ -20,16 +26,23 @@ const telemetry = {
 telemetry.setup = function (instrumentationKey) {
   if (instrumentationKey) {
 
+    telemetry.instrumentationKey = instrumentationKey;
     telemetry.appInsights.setup(instrumentationKey).start();
 
     telemetry.trackEvent = function (name, properties) {
-      var client = telemetry.appInsights.getClient();
-      client.trackEvent(name, properties);
+      var client = telemetry.createClient();
+      client.trackEvent({
+        name: name,
+        properties: properties
+      });
     };
 
     telemetry.trackException = function (exception, properties) {
-      var client = telemetry.appInsights.getClient();
-      client.trackException(exception, properties);
+      var client = telemetry.createClient();
+      client.trackException({
+        exception: exception,
+        properties: properties
+      });
     };
   }
 };

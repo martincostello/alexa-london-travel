@@ -16,7 +16,7 @@ describe("Telemetry", function () {
 
     beforeEach(function () {
 
-      sinon.spy(telemetry.appInsights, "getClient");
+      sinon.spy(telemetry, "createClient");
       sinon.spy(telemetry.appInsights, "setup");
       sinon.spy(telemetry.appInsights, "start");
 
@@ -24,41 +24,27 @@ describe("Telemetry", function () {
     });
 
     afterEach(function () {
-      telemetry.appInsights.getClient.restore();
+      telemetry.createClient.restore();
       telemetry.appInsights.setup.restore();
       telemetry.appInsights.start.restore();
     });
 
     it("Then tracking an event does nothing", function () {
       telemetry.trackEvent("MyEvent", { foo: "bar" });
-      assert.equal(telemetry.appInsights.getClient.notCalled, true);
+      assert.equal(telemetry.createClient.notCalled, true);
     });
 
     it("Then tracking an exception does nothing", function () {
       telemetry.trackException(new Error("My error"), { foo: "bar" });
-      assert.equal(telemetry.appInsights.getClient.notCalled, true);
+      assert.equal(telemetry.createClient.notCalled, true);
     });
   });
 
   describe("When application insights is configured", function () {
 
-    var response;
-    var client;
     var instrumentationKey;
 
     beforeEach(function () {
-
-      client = {
-        trackEvent: function () {
-        },
-        trackException: function () {
-        }
-      };
-
-      sinon.spy(client, "trackEvent");
-      sinon.spy(client, "trackException");
-
-      sinon.stub(telemetry.appInsights, "getClient").returns(client);
       sinon.stub(telemetry.appInsights, "setup").returns(telemetry.appInsights);
       sinon.stub(telemetry.appInsights, "start").returns(telemetry.appInsights);
 
@@ -68,7 +54,6 @@ describe("Telemetry", function () {
     });
 
     afterEach(function () {
-      telemetry.appInsights.getClient.restore();
       telemetry.appInsights.setup.restore();
       telemetry.appInsights.start.restore();
     });
@@ -81,24 +66,53 @@ describe("Telemetry", function () {
       assert.equal(telemetry.appInsights.start.calledOnce, true);
     });
 
-    it("Then an event is tracked", function () {
-
-      var name = "My event";
-      var properties = { foo: "bar" };
-
-      telemetry.trackEvent(name, properties);
-
-      assert.equal(client.trackEvent.calledWith(name, properties), true);
+    it("Then a client can be created", function () {
+      var client = telemetry.createClient();
+      assert.notEqual(telemetry.appInsights.start.calledOnce, client);
     });
 
-    it("Then an exception is tracked", function () {
+    describe("When telemetry is tracked", function () {
 
-      var exception = new Error("My error");
-      var properties = { foo: "bar" };
+      var client;
 
-      telemetry.trackException(exception, properties);
+      beforeEach(function () {
 
-      assert.equal(client.trackException.calledWith(exception, properties), true);
+        client = {
+          trackEvent: function () {
+          },
+          trackException: function () {
+          }
+        };
+
+        sinon.spy(client, "trackEvent");
+        sinon.spy(client, "trackException");
+
+        sinon.stub(telemetry, "createClient").returns(client);
+      });
+
+      afterEach(function () {
+        telemetry.createClient.restore();
+      });
+
+      it("Then an event is tracked", function () {
+
+        var name = "My event";
+        var properties = { foo: "bar" };
+
+        telemetry.trackEvent(name, properties);
+
+        assert.equal(client.trackEvent.calledWith({ name, properties }), true);
+      });
+
+      it("Then an exception is tracked", function () {
+
+        var exception = new Error("My error");
+        var properties = { foo: "bar" };
+
+        telemetry.trackException(exception, properties);
+
+        assert.equal(client.trackException.calledWith({ exception, properties }), true);
+      });
     });
   });
 });
