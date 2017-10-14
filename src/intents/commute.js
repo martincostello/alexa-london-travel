@@ -100,7 +100,20 @@ intent.handler = function (request, response) {
           var locale = intent.getLocale(request);
           var text;
 
-          if (!data.favoriteLines || data.favoriteLines.length === 0) {
+          var favoriteLines = [];
+
+          if (!!data.favoriteLines) {
+            favoriteLines = data.favoriteLines;
+
+            // TODO Remove once supported by the TfL API (see https://github.com/martincostello/alexa-london-travel/issues/54)
+            var indexOfElzabeth = favoriteLines.indexOf("elizabeth");
+
+            if (indexOfElzabeth > -1) {
+              favoriteLines.splice(indexOfElzabeth, 1);
+            }
+          }
+
+          if (favoriteLines.length === 0) {
 
             console.info("User has set no line preferences.", JSON.stringify({
               sessionId: request.sessionId,
@@ -122,9 +135,9 @@ intent.handler = function (request, response) {
 
             var promises = [];
 
-            for (var i = 0; i < data.favoriteLines.length; i++) {
+            for (var i = 0; i < favoriteLines.length; i++) {
 
-              var line = data.favoriteLines[i];
+              var line = favoriteLines[i];
               var promise = statusIntent.getLineStatus(line);
 
               promises.push(promise);
@@ -166,11 +179,10 @@ intent.handler = function (request, response) {
               response
                 .say(speech)
                 .card(card);
-            })
-              .catch(function (err) {
-                console.error("Failed to get commute:", err);
-                response.say(responses.onError);
-              });
+            }).catch(function (err) {
+              console.error("Failed to get commute:", err);
+              response.say(responses.onError);
+            });
           }
         }
       })

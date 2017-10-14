@@ -273,6 +273,44 @@ describe("Integration", function () {
           });
         });
 
+        describe("Given the user has set one preferred line but it is the Elizabeth line", function () {
+
+          var actual;
+
+          beforeEach(function (done) {
+
+            mock.skill.success(accessToken, {
+              favoriteLines: ["elizabeth"]
+            });
+
+            delete json.request.locale;
+
+            app.request(json).then(function (response) {
+              actual = response;
+              done();
+            });
+          });
+
+          it("Then there is a response", function () {
+            assert.notEqual(actual, null);
+            assert.notEqual(actual.response, null);
+          });
+          it("Then the session ends", function () {
+            assert.equal(actual.response.shouldEndSession, true);
+          });
+          it("Then the speech is correct", function () {
+            assert.notEqual(actual.response.outputSpeech, null);
+            assert.equal(actual.response.outputSpeech.type, "SSML");
+            assert.equal(actual.response.outputSpeech.ssml, "<speak>You have not selected any favourite lines yet. Visit the London Travel website to set your preferences.</speak>");
+          });
+          it("Then the card is correct", function () {
+            assert.notEqual(actual.response.card, null);
+            assert.equal(actual.response.card.type, "Standard");
+            assert.equal(actual.response.card.title, "Your Commute");
+            assert.equal(actual.response.card.text, "You have not selected any favourite lines yet. Visit the London Travel website to set your preferences.");
+          });
+        });
+
         describe("Given the user has set one preferred line", function () {
 
           var actual;
@@ -399,6 +437,62 @@ describe("Integration", function () {
             assert.equal(actual.response.card.type, "Standard");
             assert.equal(actual.response.card.title, "Your Commute");
             assert.equal(actual.response.card.text, "District Line: There is a good service on the District line.\nWaterloo & City Line: SEVERE DELAYS due to a person ill on a train earlier at Waterloo.");
+          });
+        });
+
+        describe("Given the user has set multiple preferences but one is the Elizabeth line", function () {
+
+          var actual;
+
+          beforeEach(function (done) {
+
+            mock.skill.success(accessToken, {
+              favoriteLines: [
+                "district",
+                "elizabeth"
+              ]
+            });
+
+            tflApi.appId = "MyApplicationId";
+            tflApi.appKey = "MyApplicationKey";
+
+            mock.tfl.success(
+              "/Line/district/Status",
+              [
+                {
+                  "id": "district",
+                  "name": "District",
+                  "lineStatuses": [
+                    {
+                      "statusSeverity": 10
+                    }
+                  ]
+                }
+              ]);
+
+            app.request(json).then(function (response) {
+              actual = response;
+              done();
+            });
+          });
+
+          it("Then there is a response", function () {
+            assert.notEqual(actual, null);
+            assert.notEqual(actual.response, null);
+          });
+          it("Then the session ends", function () {
+            assert.equal(actual.response.shouldEndSession, true);
+          });
+          it("Then the speech is correct", function () {
+            assert.notEqual(actual.response.outputSpeech, null);
+            assert.equal(actual.response.outputSpeech.type, "SSML");
+            assert.equal(actual.response.outputSpeech.ssml, "<speak>There is a good service on the District line.</speak>");
+          });
+          it("Then the card is correct", function () {
+            assert.notEqual(actual.response.card, null);
+            assert.equal(actual.response.card.type, "Standard");
+            assert.equal(actual.response.card.title, "Your Commute");
+            assert.equal(actual.response.card.text, "There is a good service on the District line.");
           });
         });
       });

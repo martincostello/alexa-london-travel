@@ -265,6 +265,10 @@ intent.mapLineToId = function (line) {
     case "waterloo-city":
       return normalized;
 
+    case "crossrail":
+    case "elizabeth":
+      return "elizabeth";
+
     case "london overground":
     case "overground":
       return "london-overground";
@@ -331,18 +335,27 @@ intent.handler = function (request, response) {
   var line = intent.mapLineToId(rawLineName);
 
   if (line) {
-    return intent.getLineStatus(line)
-      .then(function (result) {
-        var text = result.text;
-        var card = cards.forStatus(result.name, text);
-        response
-          .say(text)
-          .card(card);
-      })
-      .catch(function (err) {
-        console.error("Failed to get line status:", line, err);
-        response.say(responses.onError);
-      });
+
+    // TODO Remove once supported by the TfL API (see https://github.com/martincostello/alexa-london-travel/issues/54)
+    if (line == "elizabeth") {
+      var notSupported = responses.toSsml(responses.onElizabethLine);
+      response
+        .say(notSupported)
+        .reprompt(notSupported);
+    } else {
+      return intent.getLineStatus(line)
+        .then(function (result) {
+          var text = result.text;
+          var card = cards.forStatus(result.name, text);
+          response
+            .say(text)
+            .card(card);
+        })
+        .catch(function (err) {
+          console.error("Failed to get line status:", line, err);
+          response.say(responses.onError);
+        });
+    }
   } else {
     var text = responses.toSsml(responses.onUnknownLine);
     response

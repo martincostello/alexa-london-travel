@@ -21,6 +21,7 @@ var skill = {
       "Circle",
       "District",
       "DLR",
+      "Elizabeth",
       "Hammersmith and City",
       "Jubilee",
       "London Overground",
