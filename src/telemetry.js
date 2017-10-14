@@ -16,7 +16,9 @@ const telemetry = {
 telemetry.instrumentationKey = "";
 
 telemetry.createClient = function () {
-  return new appInsights.TelemetryClient(telemetry.instrumentationKey);
+  var client = new appInsights.TelemetryClient(telemetry.instrumentationKey);
+  client.config.maxBatchIntervalMs = 0;
+  return client;
 };
 
 /**
