@@ -43,10 +43,28 @@ describe("Telemetry", function () {
   describe("When application insights is configured", function () {
 
     var instrumentationKey;
+    var config;
 
     beforeEach(function () {
-      sinon.stub(telemetry.appInsights, "setup").returns(telemetry.appInsights);
-      sinon.stub(telemetry.appInsights, "start").returns(telemetry.appInsights);
+
+      config = {
+      };
+
+      config.setAutoCollectRequests = function () {
+        return config;
+      };
+
+      config.setInternalLogging = function () {
+        return config;
+      };
+
+      config.start = function () {
+        return config;
+      };
+
+      sinon.spy(config, "start");
+
+      sinon.stub(telemetry.appInsights, "setup").returns(config);
 
       instrumentationKey = "my key";
 
@@ -55,7 +73,6 @@ describe("Telemetry", function () {
 
     afterEach(function () {
       telemetry.appInsights.setup.restore();
-      telemetry.appInsights.start.restore();
     });
 
     it("Then tracking is set up", function () {
@@ -63,7 +80,7 @@ describe("Telemetry", function () {
     });
 
     it("Then tracking is started", function () {
-      assert.equal(telemetry.appInsights.start.calledOnce, true);
+      assert.equal(config.start.calledOnce, true);
     });
 
     it("Then a client can be created", function () {
