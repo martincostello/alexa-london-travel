@@ -17,7 +17,12 @@ telemetry.instrumentationKey = "";
 
 telemetry.createClient = function () {
   var client = new appInsights.TelemetryClient(telemetry.instrumentationKey);
+
+  // Prevent Lambda function from hanging and timing out.
+  // See https://github.com/martincostello/alexa-london-travel/issues/45.
   client.config.maxBatchIntervalMs = 0;
+  client.config.maxBatchSize = 1;
+
   return client;
 };
 
