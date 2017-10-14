@@ -27,6 +27,8 @@ describe("Status Intent", function () {
       { name: "Docklands", expected: "dlr" },
       { name: "Docklands Light Railway", expected: "dlr" },
       { name: "Docklands Railway", expected: "dlr" },
+      { name: "crossrail", expected: "elizabeth" },
+      { name: "Elizabeth", expected: "elizabeth" },
       { name: "Hammersmith", expected: "hammersmith-city" },
       { name: "Hammersmith & City", expected: "hammersmith-city" },
       { name: "Hammersmith and City", expected: "hammersmith-city" },
@@ -332,6 +334,43 @@ describe("Status Intent", function () {
       });
       it("Then a card is returned", function () {
         assert.equal(response.card.callCount, 1);
+      });
+
+      afterEach(function () {
+        simple.restore();
+      });
+    });
+
+    describe("Given the slot value is for the Elizabeth Line", function () {
+
+      var request;
+      var response;
+
+      beforeEach(function () {
+
+        request = {};
+        response = {};
+
+        simple.mock(request, "slot");
+
+        simple.mock(response, "card");
+        simple.mock(response, "reprompt");
+        simple.mock(response, "say");
+
+        request.slot.returnWith("crossrail");
+        response.card.returnWith(response);
+        response.say.returnWith(response);
+
+        intent.handler(request, response);
+      });
+
+      it("Then the response is correct", function () {
+        assert.equal(response.say.callCount, 1);
+        assert.equal(response.say.lastCall.arg, "Sorry, I cannot tell you about the status of the Elizabeth Line yet.");
+      });
+      it("Then the reprompt is correct", function () {
+        assert.equal(response.reprompt.callCount, 1);
+        assert.equal(response.reprompt.lastCall.arg, "Sorry, I cannot tell you about the status of the Elizabeth Line yet.");
       });
 
       afterEach(function () {

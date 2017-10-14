@@ -19,6 +19,7 @@ var responses = {
   onNoFavoriteLinesUK: "You have not selected any favourite lines yet. Visit the London Travel website to set your preferences.",
   onNoFavoriteLinesUS: "You have not selected any favorite lines yet. Visit the London Travel website to set your preferences.",
   onUnknownLine: verbalizer.verbalize("Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground, the DLR or TfL Rail."),
+  onElizabethLine: "Sorry, I cannot tell you about the status of the Elizabeth Line yet.",
   onSessionEnded: "Goodbye.",
   toSsml: function (text) {
     var builder = new SsmlBuilder();
