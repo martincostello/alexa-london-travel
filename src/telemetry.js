@@ -35,7 +35,9 @@ telemetry.setup = function (instrumentationKey) {
 
     telemetry.instrumentationKey = instrumentationKey;
 
-    telemetry.appInsights.setup(instrumentationKey).start();
+    telemetry.appInsights.setup(instrumentationKey)
+      .setUseDiskRetryCaching(false)
+      .start();
 
     telemetry.trackEvent = function (name, properties) {
       telemetry.createClient().trackEvent({
