@@ -36,6 +36,12 @@ telemetry.setup = function (instrumentationKey) {
     telemetry.instrumentationKey = instrumentationKey;
 
     telemetry.appInsights.setup(instrumentationKey)
+      .setAutoCollectConsole(false)
+      .setAutoCollectDependencies(false)
+      .setAutoCollectExceptions(false)
+      .setAutoCollectPerformance(false)
+      .setAutoCollectRequests(false)
+      .setAutoDependencyCorrelation(false)
       .setUseDiskRetryCaching(false)
       .start();
 
