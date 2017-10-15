@@ -50,6 +50,30 @@ describe("Telemetry", function () {
       config = {
       };
 
+      config.setAutoCollectConsole = function () {
+        return config;
+      };
+
+      config.setAutoCollectDependencies = function () {
+        return config;
+      };
+
+      config.setAutoCollectExceptions = function () {
+        return config;
+      };
+
+      config.setAutoCollectPerformance = function () {
+        return config;
+      };
+
+      config.setAutoCollectRequests = function () {
+        return config;
+      };
+
+      config.setAutoDependencyCorrelation = function () {
+        return config;
+      };
+
       config.setUseDiskRetryCaching = function () {
         return config;
       };
