@@ -277,7 +277,9 @@ intent.mapLineToId = function (line) {
       return "metropolitan";
 
     case "docklands":
+    case "docklands light rail":
     case "docklands light railway":
+    case "docklands rail":
     case "docklands railway":
       return "dlr";
 
