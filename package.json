@@ -29,7 +29,9 @@
   "dependencies": {
     "alexa-app": "^4.2.0",
     "applicationinsights": "^1.0.0",
+    "fresh": "^0.5.2",
     "hoek": "^4.2.1",
+    "mime": "^1.4.1",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "sinon": "^4.0.1",
