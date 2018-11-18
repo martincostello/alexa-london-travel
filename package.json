@@ -43,6 +43,7 @@
   "devDependencies": {
     "alexa-app-server": "3.0.1",
     "codecov": "2.3.1",
+    "cryptiles": ">=4.1.2",
     "data-driven": "1.4.0",
     "istanbul": "0.4.5",
     "jshint": "2.9.5",
