@@ -29,9 +29,11 @@
   "dependencies": {
     "alexa-app": "^4.2.0",
     "applicationinsights": "^1.0.0",
+    "extend": ">=3.0.2",
     "fresh": "^0.5.2",
     "hoek": "^4.2.1",
-    "lodash": "^4.17.10",
+    "just-extend": ">=4.0.0",
+    "lodash": "^4.17.11",
     "mime": "^1.4.1",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
@@ -41,12 +43,12 @@
     "ssml-builder": "^0.4.0"
   },
   "devDependencies": {
-    "alexa-app-server": "3.0.1",
+    "alexa-app-server": "^3.0.2",
     "codecov": "2.3.1",
     "cryptiles": ">=4.1.2",
     "data-driven": "1.4.0",
     "istanbul": "0.4.5",
-    "jshint": "2.9.5",
+    "jshint": "^2.10.1",
     "mocha": "4.0.1",
     "nock": "9.0.22",
     "node-env-file": "0.1.8",
