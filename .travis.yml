@@ -21,7 +21,7 @@ deploy:
     function_name: "alexa-london-travel-dev"
     region: "eu-west-1"
     role: "arn:aws:iam::492538393790:role/lambda_basic_execution"
-    runtime: "nodejs6.10"
+    runtime: "nodejs8.10"
     timeout: 10,
     handler_name: "handler"
     access_key_id:
@@ -34,7 +34,7 @@ deploy:
     function_name: "alexa-london-travel"
     region: "eu-west-1"
     role: "arn:aws:iam::492538393790:role/lambda_basic_execution"
-    runtime: "nodejs6.10"
+    runtime: "nodejs8.10"
     timeout: 10,
     handler_name: "handler"
     access_key_id:
