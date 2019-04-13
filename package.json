@@ -29,12 +29,14 @@
   "dependencies": {
     "alexa-app": "^4.2.3",
     "applicationinsights": "^1.0.0",
+    "diff": "^4.0.1",
     "extend": ">=3.0.2",
     "fresh": "^0.5.2",
     "hoek": "^4.2.1",
     "just-extend": ">=4.0.0",
     "lodash": "^4.17.11",
     "mime": "^1.4.1",
+    "node-forge": "0.8.2",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "sinon": "^7.3.1",
@@ -44,7 +46,7 @@
   },
   "devDependencies": {
     "alexa-app-server": "^3.0.2",
-    "codecov": "2.3.1",
+    "codecov": "^3.3.0",
     "cryptiles": ">=4.1.2",
     "data-driven": "1.4.0",
     "istanbul": "0.4.5",
