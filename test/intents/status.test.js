@@ -65,7 +65,7 @@ describe("Status Intent", function () {
         { severity: 10, expected: "There is a good service on the District line." },
         { severity: 10, expected: "There is a good service on the D.L.R..", name: "DLR" },
         { severity: 10, expected: "There is a good service on London Overground.", name: "London Overground" },
-        { severity: 10, expected: "There is a good service on the Waterloo and City line.", name: "Waterloo & City" },
+        { severity: 10, expected: "There is a good service on the Waterloo &amp; City line.", name: "Waterloo & City" },
         { severity: 10, expected: "There is a good service on T.F.L. Rail.", name: "TfL Rail" },
         { severity: 18, expected: "There is a good service on the District line." },
         { severity: 20, expected: "The District line is closed." },
@@ -332,7 +332,7 @@ describe("Status Intent", function () {
       });
       it("Then the response is correct", function () {
         assert.equal(response.say.callCount, 1);
-        assert.equal(response.say.lastCall.arg, "There is a good service on the Waterloo and City line.");
+        assert.equal(response.say.lastCall.arg, "There is a good service on the Waterloo &amp; City line.");
       });
       it("Then a card is returned", function () {
         assert.equal(response.card.callCount, 1);

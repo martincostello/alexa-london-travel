@@ -430,7 +430,7 @@ describe("Integration", function () {
           it("Then the speech is correct", function () {
             assert.notEqual(actual.response.outputSpeech, null);
             assert.equal(actual.response.outputSpeech.type, "SSML");
-            assert.equal(actual.response.outputSpeech.ssml, "<speak><p>District Line: There is a good service on the District line.</p> <p>Waterloo and City Line: SEVERE DELAYS due to a person ill on a train earlier at Waterloo.</p></speak>");
+            assert.equal(actual.response.outputSpeech.ssml, "<speak><p>District Line: There is a good service on the District line.</p> <p>Waterloo &amp; City Line: SEVERE DELAYS due to a person ill on a train earlier at Waterloo.</p></speak>");
           });
           it("Then the card is correct", function () {
             assert.notEqual(actual.response.card, null);
@@ -761,13 +761,13 @@ describe("Integration", function () {
       it("Then the speech is correct", function () {
         assert.notEqual(actual.response.outputSpeech, null);
         assert.equal(actual.response.outputSpeech.type, "SSML");
-        assert.equal(actual.response.outputSpeech.ssml, "<speak>There is a good service on the Waterloo and City line.</speak>");
+        assert.equal(actual.response.outputSpeech.ssml, "<speak>There is a good service on the Waterloo &amp; City line.</speak>");
       });
       it("Then the card is correct", function () {
         assert.notEqual(actual.response.card, null);
         assert.equal(actual.response.card.type, "Standard");
         assert.equal(actual.response.card.title, "Waterloo & City Line Status");
-        assert.equal(actual.response.card.text, "There is a good service on the Waterloo and City line.");
+        assert.equal(actual.response.card.text, "There is a good service on the Waterloo &amp; City line.");
       });
     });
 

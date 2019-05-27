@@ -21,7 +21,8 @@ verbalizer.verbalize = function (text) {
     .replace("SWT", "South West Trains")
     .replace("tfl", "T.F.L.")
     .replace("TFL", "T.F.L.")
-    .replace("TfL", "T.F.L.");
+    .replace("TfL", "T.F.L.")
+    .replace(" & ", " and ");
 };
 
 module.exports = verbalizer;
