@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "alexa-app-server": "^3.0.2",
-    "codecov": "^3.3.0",
+    "codecov": "^3.5.0",
     "cryptiles": ">=4.1.2",
     "data-driven": "1.4.0",
     "istanbul": "0.4.5",
