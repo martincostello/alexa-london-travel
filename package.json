@@ -50,7 +50,7 @@
     "cryptiles": ">=4.1.2",
     "data-driven": "1.4.0",
     "istanbul": "0.4.5",
-    "jshint": "^2.10.1",
+    "jshint": "^2.10.2",
     "mocha": "4.0.1",
     "nock": "9.0.22",
     "node-env-file": "0.1.8",
