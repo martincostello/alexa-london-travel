@@ -6,7 +6,9 @@
   "main": "index.js",
   "scripts": {
     "lint": "jshint src test index.js server.js",
-    "test": "istanbul cover node_modules/mocha/bin/_mocha --report html --report lcovonly -- --recursive"
+    "test": "istanbul cover node_modules/mocha/bin/_mocha --report html --report lcovonly -- --recursive",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -42,7 +44,8 @@
     "sinon": "^7.3.2",
     "sprintf": "0.1.5",
     "sshpk": "^1.16.1",
-    "ssml-builder": "^0.4.3"
+    "ssml-builder": "^0.4.3",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "alexa-app-server": "^3.0.2",
@@ -60,5 +63,6 @@
     "esversion": 6,
     "mocha": true,
     "node": true
-  }
+  },
+  "snyk": true
 }
