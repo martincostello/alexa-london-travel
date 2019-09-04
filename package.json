@@ -52,7 +52,7 @@
     "istanbul": "0.4.5",
     "jshint": "^2.10.2",
     "mocha": "6.2.0",
-    "nock": "10.0.6",
+    "nock": "11.3.2",
     "node-env-file": "0.1.8",
     "simple-mock": "0.8.0"
   },
