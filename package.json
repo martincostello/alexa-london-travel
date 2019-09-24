@@ -39,7 +39,7 @@
     "node-forge": "0.9.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "sinon": "^7.4.2",
+    "sinon": "^7.5.0",
     "sprintf": "0.1.5",
     "sshpk": "^1.16.1",
     "ssml-builder": "^0.4.3"
