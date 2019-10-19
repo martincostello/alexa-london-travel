@@ -4,6 +4,7 @@
 using System;
 using System.Threading.Tasks;
 using Alexa.NET.Request;
+using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
 using Amazon.Lambda.Core;
 
@@ -18,23 +19,23 @@ namespace MartinCostello.LondonTravel.Skill
         /// Initializes a new instance of the <see cref="AlexaFunction"/> class.
         /// </summary>
         public AlexaFunction()
-            : this(Environment.GetEnvironmentVariable("SKILL_API_HOSTNAME"))
+            : this(SkillConfiguration.CreateDefaultConfiguration())
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AlexaFunction"/> class with the specified configuration.
         /// </summary>
-        /// <param name="skillApiHostName">The URL of the skill's API.</param>
-        internal AlexaFunction(string skillApiHostName)
+        /// <param name="config">The <see cref="SkillConfiguration"/> to use.</param>
+        public AlexaFunction(SkillConfiguration config)
         {
-            SkillApiUrl = skillApiHostName ?? "https://londontravel.martincostello.com/";
+            Config = config;
         }
 
         /// <summary>
-        /// Gets the URL of the skill's API.
+        /// Gets the skill configuration.
         /// </summary>
-        private string SkillApiUrl { get; }
+        private SkillConfiguration Config { get; }
 
         /// <summary>
         /// Handles a request to the skill as an asynchronous operation.
@@ -47,15 +48,57 @@ namespace MartinCostello.LondonTravel.Skill
         public async Task<SkillResponse> HandlerAsync(SkillRequest input, ILambdaContext context)
         {
             context.Logger.LogLine($"Invoking skill request of type {input.GetType().Name}.");
-            context.Logger.LogLine($"Skill API URL: {SkillApiUrl}");
 
-            var response = new SkillResponse()
+            VerifySkillId(input);
+
+            var skill = new AlexaSkill(context, Config);
+
+            SkillResponse response;
+
+            try
             {
-                Response = new ResponseBody(),
-                Version = "1.0",
-            };
+                if (input.Request is LaunchRequest launch)
+                {
+                    response = skill.OnLaunch(input.Session);
+                }
+                else if (input.Request is IntentRequest intent)
+                {
+                    response = await skill.OnIntentAsync(intent.Intent, input.Session);
+                }
+                else if (input.Request is SessionEndedRequest)
+                {
+                    response = skill.OnSessionEnded(input.Session);
+                }
+                else
+                {
+                    response = skill.OnError(null, input.Session);
+                }
+            }
+#pragma warning disable CA1031
+            catch (Exception ex)
+#pragma warning restore CA1031
+            {
+                response = skill.OnError(ex, input.Session);
+            }
 
-            return await Task.FromResult(response);
+            return response;
+        }
+
+        /// <summary>
+        /// Verifies the skill Id.
+        /// </summary>
+        /// <param name="input">The function input.</param>
+        private void VerifySkillId(SkillRequest input)
+        {
+            if (Config.VerifySkillId)
+            {
+                string applicationId = input.Session.Application.ApplicationId;
+
+                if (!string.Equals(applicationId, Config.SkillId, StringComparison.Ordinal))
+                {
+                    throw new InvalidOperationException($"Request application Id '{applicationId}' and configured skill Id '{Config.SkillId}' mismatch.");
+                }
+            }
         }
     }
 }
