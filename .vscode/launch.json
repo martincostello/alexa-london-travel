@@ -2,27 +2,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
+      "name": "Run tests",
+      "type": "coreclr",
       "request": "launch",
-      "name": "Launch",
-      "program": "${workspaceRoot}\\server.js",
-      "cwd": "${workspaceRoot}"
-    },
-    {
-      "type": "node",
-      "request": "attach",
-      "name": "Attach",
-      "port": 5858
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Test",
-      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
-      "cwd": "${workspaceRoot}",
+      "preLaunchTask": "build",
+      "program": "dotnet",
       "args": [
-        "--recursive"
-      ]
+        "test"
+      ],
+      "cwd": "${workspaceRoot}/test/LondonTravel.Skill.Tests",
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "openOnSessionStart"
     }
   ]
 }
