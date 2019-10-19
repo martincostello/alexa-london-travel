@@ -48,15 +48,23 @@ namespace MartinCostello.LondonTravel.Skill
         /// </returns>
         public static SkillConfiguration CreateDefaultConfiguration()
         {
+            if (!bool.TryParse(GetEnvironmentVariable("VERIFY_SKILL_ID"), out bool verifySkillId))
+            {
+                verifySkillId = false;
+            }
+
             return new SkillConfiguration()
             {
-                ApplicationInsightsKey = Environment.GetEnvironmentVariable("APPINSIGHTS_INSTRUMENTATIONKEY"),
-                SkillApiUrl = Environment.GetEnvironmentVariable("SKILL_API_HOSTNAME"),
-                SkillId = Environment.GetEnvironmentVariable("SKILL_ID"),
-                TflApplicationId = Environment.GetEnvironmentVariable("TFL_APP_ID"),
-                TflApplicationKey = Environment.GetEnvironmentVariable("TFL_APP_KEY"),
-                VerifySkillId = bool.Parse(Environment.GetEnvironmentVariable("VERIFY_SKILL_ID")),
+                ApplicationInsightsKey = GetEnvironmentVariable("APPINSIGHTS_INSTRUMENTATIONKEY"),
+                SkillApiUrl = GetEnvironmentVariable("SKILL_API_HOSTNAME"),
+                SkillId = GetEnvironmentVariable("SKILL_ID"),
+                TflApplicationId = GetEnvironmentVariable("TFL_APP_ID"),
+                TflApplicationKey = GetEnvironmentVariable("TFL_APP_KEY"),
+                VerifySkillId = verifySkillId,
             };
         }
+
+        private static string GetEnvironmentVariable(string name)
+            => Environment.GetEnvironmentVariable(name) ?? string.Empty;
     }
 }

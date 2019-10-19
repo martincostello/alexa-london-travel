@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Alexa.NET;
 using Alexa.NET.Request;
 using Alexa.NET.Response;
+using Alexa.NET.Response.Ssml;
 using Amazon.Lambda.Core;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -105,7 +106,14 @@ namespace MartinCostello.LondonTravel.Skill
             string text = Verbalizer.Verbalize(
                 "Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground, the DLR or TfL Rail.");
 
-            return ResponseBuilder.Ask(text, new Reprompt());
+            var plaintext = new PlainText(text);
+            var speech = new Speech(plaintext);
+
+            var result = ResponseBuilder.Tell(speech);
+
+            result.Response.ShouldEndSession = false;
+
+            return result;
         }
 
         /// <summary>
@@ -119,7 +127,10 @@ namespace MartinCostello.LondonTravel.Skill
         {
             TrackEvent("SessionEndedRequest", session);
 
-            return ResponseBuilder.Tell("Goodbye.");
+            var plaintext = new PlainText("Goodbye.");
+            var speech = new Speech(plaintext);
+
+            return ResponseBuilder.Tell(speech);
         }
 
         private IDictionary<string, string> ToTelemetryProperties(Session session)

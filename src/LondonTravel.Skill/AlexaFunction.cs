@@ -40,16 +40,16 @@ namespace MartinCostello.LondonTravel.Skill
         /// <summary>
         /// Handles a request to the skill as an asynchronous operation.
         /// </summary>
-        /// <param name="input">The skill request.</param>
+        /// <param name="request">The skill request.</param>
         /// <param name="context">The AWS Lambda execution context.</param>
         /// <returns>
         /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the skill's response.
         /// </returns>
-        public async Task<SkillResponse> HandlerAsync(SkillRequest input, ILambdaContext context)
+        public async Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
         {
-            context.Logger.LogLine($"Invoking skill request of type {input.GetType().Name}.");
+            context.Logger.LogLine($"Invoking skill request of type {request.Request.GetType().Name}.");
 
-            VerifySkillId(input);
+            VerifySkillId(request);
 
             var skill = new AlexaSkill(context, Config);
 
@@ -57,28 +57,28 @@ namespace MartinCostello.LondonTravel.Skill
 
             try
             {
-                if (input.Request is LaunchRequest launch)
+                if (request.Request is LaunchRequest launch)
                 {
-                    response = skill.OnLaunch(input.Session);
+                    response = skill.OnLaunch(request.Session);
                 }
-                else if (input.Request is IntentRequest intent)
+                else if (request.Request is IntentRequest intent)
                 {
-                    response = await skill.OnIntentAsync(intent.Intent, input.Session);
+                    response = await skill.OnIntentAsync(intent.Intent, request.Session);
                 }
-                else if (input.Request is SessionEndedRequest)
+                else if (request.Request is SessionEndedRequest)
                 {
-                    response = skill.OnSessionEnded(input.Session);
+                    response = skill.OnSessionEnded(request.Session);
                 }
                 else
                 {
-                    response = skill.OnError(null, input.Session);
+                    response = skill.OnError(null, request.Session);
                 }
             }
 #pragma warning disable CA1031
             catch (Exception ex)
 #pragma warning restore CA1031
             {
-                response = skill.OnError(ex, input.Session);
+                response = skill.OnError(ex, request.Session);
             }
 
             return response;

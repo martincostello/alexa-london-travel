@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Alexa.NET;
 using Alexa.NET.Request;
 using Alexa.NET.Response;
+using Alexa.NET.Response.Ssml;
 
 namespace MartinCostello.LondonTravel.Skill.Intents
 {
@@ -16,7 +17,10 @@ namespace MartinCostello.LondonTravel.Skill.Intents
         /// <inheritdoc />
         public Task<SkillResponse> RespondAsync(Intent intent, Session session)
         {
-            return Task.FromResult(ResponseBuilder.Tell("Sorry, I don't understand how to do that."));
+            var plaintext = new PlainText("Sorry, I don't understand how to do that.");
+            var speech = new Speech(plaintext);
+
+            return Task.FromResult(ResponseBuilder.Tell(speech));
         }
     }
 }

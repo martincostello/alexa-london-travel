@@ -20,7 +20,7 @@ namespace MartinCostello.LondonTravel.Skill
         /// </returns>
         internal static IIntent Create(Intent intent)
         {
-            switch (intent.Name.ToUpperInvariant())
+            switch (intent.Name)
             {
                 case "AMAZON.CancelIntent":
                 case "AMAZON.StopIntent":

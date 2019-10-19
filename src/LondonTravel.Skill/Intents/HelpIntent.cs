@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Alexa.NET;
 using Alexa.NET.Request;
@@ -17,16 +18,26 @@ namespace MartinCostello.LondonTravel.Skill.Intents
         /// <inheritdoc />
         public Task<SkillResponse> RespondAsync(Intent intent, Session session)
         {
-            var paragraph = new Paragraph();
+            string[] lines = new[]
+            {
+                "This skill allows you to check for the status of a specific line, or for disruption in general. You can ask about any London Underground line, London Overground, the Docklands Light Railway or TfL Rail.",
+                "Asking about disruption in general provides information about any lines that are currently experiencing issues, such as any delays or planned closures.",
+                "Asking for the status for a specific line provides a summary of the current service, such as whether there is a good service or if there are any delays.",
+                "If you link your account and setup your preferences in the London Travel website, you can ask about your commute to quickly find out the status of the lines you frequently use.",
+            };
 
-            paragraph.Elements.Add(new Sentence("This skill allows you to check for the status of a specific line, or for disruption in general. You can ask about any London Underground line, London Overground, the Docklands Light Railway or TfL Rail."));
-            paragraph.Elements.Add(new Sentence("Asking about disruption in general provides information about any lines that are currently experiencing issues, such as any delays or planned closures."));
-            paragraph.Elements.Add(new Sentence("Asking for the status for a specific line provides a summary of the current service, such as whether there is a good service or if there are any delays."));
-            paragraph.Elements.Add(new Sentence("If you link your account and setup your preferences in the London Travel website, you can ask about your commute to quickly find out the status of the lines you frequently use."));
+            var elements = new List<ISsml>();
 
-            var speech = new Speech(paragraph);
+            foreach (var sentence in lines)
+            {
+                elements.Add(new Paragraph(new PlainText(sentence)));
+            }
 
-            var result = ResponseBuilder.Ask(speech, new Reprompt());
+            var speech = new Speech(elements.ToArray());
+
+            var result = ResponseBuilder.Tell(speech);
+
+            result.Response.ShouldEndSession = false;
 
             return Task.FromResult(result);
         }
