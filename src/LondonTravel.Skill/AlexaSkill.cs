@@ -46,8 +46,8 @@ namespace MartinCostello.LondonTravel.Skill
         /// </returns>
         public async Task<SkillResponse> HandlerAsync(SkillRequest input, ILambdaContext context)
         {
-            context.Logger.Log($"Invoking skill request of type {input.GetType().Name}.");
-            context.Logger.Log($"Skill API URL: {SkillApiUrl}");
+            context.Logger.LogLine($"Invoking skill request of type {input.GetType().Name}.");
+            context.Logger.LogLine($"Skill API URL: {SkillApiUrl}");
 
             return await Task.FromResult(new SkillResponse());
         }
