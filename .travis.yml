@@ -36,7 +36,7 @@ deploy:
     region: "eu-west-1"
     role: "arn:aws:iam::492538393790:role/lambda_basic_execution"
     runtime: "dotnetcore2.1"
-    timeout: 10,
+    timeout: 10
     zip: "./artifacts/publish"
     module_name: "LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaSkill"
     handler_name: "HandlerAsync"
@@ -51,7 +51,7 @@ deploy:
     region: "eu-west-1"
     role: "arn:aws:iam::492538393790:role/lambda_basic_execution"
     runtime: "dotnetcore2.1"
-    timeout: 10,
+    timeout: 10
     zip: "./artifacts/publish"
     module_name: "LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaSkill"
     handler_name: "HandlerAsync"
