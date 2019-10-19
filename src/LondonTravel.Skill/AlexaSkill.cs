@@ -49,7 +49,13 @@ namespace MartinCostello.LondonTravel.Skill
             context.Logger.LogLine($"Invoking skill request of type {input.GetType().Name}.");
             context.Logger.LogLine($"Skill API URL: {SkillApiUrl}");
 
-            return await Task.FromResult(new SkillResponse());
+            var response = new SkillResponse()
+            {
+                Response = new ResponseBody(),
+                Version = "1.0",
+            };
+
+            return await Task.FromResult(response);
         }
     }
 }
