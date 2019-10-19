@@ -1,6 +1,6 @@
 dist: xenial
 language: node_js
-node_js: "node"
+node_js: 10
 
 install:
   - npm install -g codecov
@@ -21,7 +21,7 @@ deploy:
     function_name: "alexa-london-travel-dev"
     region: "eu-west-1"
     role: "arn:aws:iam::492538393790:role/lambda_basic_execution"
-    runtime: "nodejs8.10"
+    runtime: "nodejs10.x"
     timeout: 10,
     handler_name: "handler"
     access_key_id:
@@ -34,7 +34,7 @@ deploy:
     function_name: "alexa-london-travel"
     region: "eu-west-1"
     role: "arn:aws:iam::492538393790:role/lambda_basic_execution"
-    runtime: "nodejs8.10"
+    runtime: "nodejs10.x"
     timeout: 10,
     handler_name: "handler"
     access_key_id:
