@@ -10,7 +10,7 @@ using Amazon.Lambda.Core;
 namespace MartinCostello.LondonTravel.Skill
 {
     /// <summary>
-    /// A class representing the AWS Lambda handler for the London Travel Amazon Alexa skill.
+    /// A class representing the AWS Lambda function for the London Travel Amazon Alexa skill.
     /// </summary>
     public class AlexaFunction
     {
