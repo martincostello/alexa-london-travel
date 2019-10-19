@@ -12,21 +12,21 @@ namespace MartinCostello.LondonTravel.Skill
     /// <summary>
     /// A class representing the AWS Lambda handler for the London Travel Amazon Alexa skill.
     /// </summary>
-    public class AlexaSkill
+    public class AlexaFunction
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AlexaSkill"/> class.
+        /// Initializes a new instance of the <see cref="AlexaFunction"/> class.
         /// </summary>
-        public AlexaSkill()
+        public AlexaFunction()
             : this(Environment.GetEnvironmentVariable("SKILL_API_HOSTNAME"))
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AlexaSkill"/> class with the specified configuration.
+        /// Initializes a new instance of the <see cref="AlexaFunction"/> class with the specified configuration.
         /// </summary>
         /// <param name="skillApiHostName">The URL of the skill's API.</param>
-        internal AlexaSkill(string skillApiHostName)
+        internal AlexaFunction(string skillApiHostName)
         {
             SkillApiUrl = skillApiHostName ?? "https://londontravel.martincostello.com/";
         }

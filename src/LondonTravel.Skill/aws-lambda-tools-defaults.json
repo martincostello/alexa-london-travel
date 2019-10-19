@@ -6,5 +6,5 @@
   "function-runtime": "dotnetcore2.1",
   "function-memory-size": 128,
   "function-timeout": 10,
-  "function-handler": "LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaSkill::HandlerAsync"
+  "function-handler": "LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunction::HandlerAsync"
 }

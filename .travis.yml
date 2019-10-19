@@ -40,7 +40,7 @@ deploy:
     timeout: 10
     zip: "./artifacts/publish"
     module_name: "LondonTravel.Skill::MartinCostello.LondonTravel.Skill"
-    handler_name: "AlexaSkill::HandlerAsync"
+    handler_name: "AlexaFunction::HandlerAsync"
     access_key_id:
       secure: "aJjugFDE24Z5UB/3PEGJEOlmpLFTUEQvtrczJiRRVBd1cG535MVmSm2GlVzVk1J96yqoVc8VqSEgWcdqlMcU4jupd6BxxFYDZE8k8hEQ9KmIFqG+VdBqn6SskadDVi/sihDakMvGVLi9koVOPfbYPoxQn+YOh3Ohu9RFbGKlUaX1/7s29VoBsX/e2iWvJQDVGqMWMg1hMtf91diOuxLbiUgsZWHQppm34UiM2oJBFHLuCjvSbtJMWJxEEULou9dgip1bCj5IxrpIM68E3Mn9ttK4ZotyL3LsgJYHp9P6KapzytKSa5eBoSXhJZx1FWMBSBW258uOtByARQyKBKrPg+csS7H8kFLNnaWLQhJqQGjU9eex6eVRDdeTcp4z5yfeGG803CrvWGcyHXANI/s1H0ktdzNK4T/SWEDh4oTgZzjaJdF15Upgw2GczO5TeO+9kbqc8cBHPHZmWp6q+bb6svvlX+EU3brBCcCIHDkwAp4Yv4rT/41ZKh0aZJ61/1Ulkb/xDcZh30kV8gc3dqnF6L8fhDXIfL1wMvw88lItiHiADcaqVV2Bb4OT4vP+cuSx7Ys7e7eyJn2y4qMqeCiFaGKqqYTbPG1gXJCLIhlqwLYJsf3yweTar8qqnrMhSJ5D6lRp9Eh2xoAk60jIBJgCH/oRjp0aErxJ4/iwxZcNx0Q="
     secret_access_key:
@@ -55,7 +55,7 @@ deploy:
     timeout: 10
     zip: "./artifacts/publish"
     module_name: "LondonTravel.Skill::MartinCostello.LondonTravel.Skill"
-    handler_name: "AlexaSkill::HandlerAsync"
+    handler_name: "AlexaFunction::HandlerAsync"
     access_key_id:
       secure: "aJjugFDE24Z5UB/3PEGJEOlmpLFTUEQvtrczJiRRVBd1cG535MVmSm2GlVzVk1J96yqoVc8VqSEgWcdqlMcU4jupd6BxxFYDZE8k8hEQ9KmIFqG+VdBqn6SskadDVi/sihDakMvGVLi9koVOPfbYPoxQn+YOh3Ohu9RFbGKlUaX1/7s29VoBsX/e2iWvJQDVGqMWMg1hMtf91diOuxLbiUgsZWHQppm34UiM2oJBFHLuCjvSbtJMWJxEEULou9dgip1bCj5IxrpIM68E3Mn9ttK4ZotyL3LsgJYHp9P6KapzytKSa5eBoSXhJZx1FWMBSBW258uOtByARQyKBKrPg+csS7H8kFLNnaWLQhJqQGjU9eex6eVRDdeTcp4z5yfeGG803CrvWGcyHXANI/s1H0ktdzNK4T/SWEDh4oTgZzjaJdF15Upgw2GczO5TeO+9kbqc8cBHPHZmWp6q+bb6svvlX+EU3brBCcCIHDkwAp4Yv4rT/41ZKh0aZJ61/1Ulkb/xDcZh30kV8gc3dqnF6L8fhDXIfL1wMvw88lItiHiADcaqVV2Bb4OT4vP+cuSx7Ys7e7eyJn2y4qMqeCiFaGKqqYTbPG1gXJCLIhlqwLYJsf3yweTar8qqnrMhSJ5D6lRp9Eh2xoAk60jIBJgCH/oRjp0aErxJ4/iwxZcNx0Q="
     secret_access_key:
@@ -70,7 +70,7 @@ deploy:
     timeout: 10
     zip: "./artifacts/publish"
     module_name: "LondonTravel.Skill::MartinCostello.LondonTravel.Skill"
-    handler_name: "AlexaSkill::HandlerAsync"
+    handler_name: "AlexaFunction::HandlerAsync"
     access_key_id:
       secure: "aJjugFDE24Z5UB/3PEGJEOlmpLFTUEQvtrczJiRRVBd1cG535MVmSm2GlVzVk1J96yqoVc8VqSEgWcdqlMcU4jupd6BxxFYDZE8k8hEQ9KmIFqG+VdBqn6SskadDVi/sihDakMvGVLi9koVOPfbYPoxQn+YOh3Ohu9RFbGKlUaX1/7s29VoBsX/e2iWvJQDVGqMWMg1hMtf91diOuxLbiUgsZWHQppm34UiM2oJBFHLuCjvSbtJMWJxEEULou9dgip1bCj5IxrpIM68E3Mn9ttK4ZotyL3LsgJYHp9P6KapzytKSa5eBoSXhJZx1FWMBSBW258uOtByARQyKBKrPg+csS7H8kFLNnaWLQhJqQGjU9eex6eVRDdeTcp4z5yfeGG803CrvWGcyHXANI/s1H0ktdzNK4T/SWEDh4oTgZzjaJdF15Upgw2GczO5TeO+9kbqc8cBHPHZmWp6q+bb6svvlX+EU3brBCcCIHDkwAp4Yv4rT/41ZKh0aZJ61/1Ulkb/xDcZh30kV8gc3dqnF6L8fhDXIfL1wMvw88lItiHiADcaqVV2Bb4OT4vP+cuSx7Ys7e7eyJn2y4qMqeCiFaGKqqYTbPG1gXJCLIhlqwLYJsf3yweTar8qqnrMhSJ5D6lRp9Eh2xoAk60jIBJgCH/oRjp0aErxJ4/iwxZcNx0Q="
     secret_access_key:

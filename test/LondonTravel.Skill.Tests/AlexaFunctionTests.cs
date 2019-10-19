@@ -10,13 +10,13 @@ using Xunit;
 
 namespace MartinCostello.LondonTravel.Skill
 {
-    public static class AlexaSkillTests
+    public static class AlexaFunctionTests
     {
         [Fact]
         public static async Task Can_Invoke_Function()
         {
             // Arrange
-            var function = new AlexaSkill();
+            var function = new AlexaFunction();
 
             var input = new SkillRequest();
             var context = new TestLambdaContext();
