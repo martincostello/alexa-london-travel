@@ -56,6 +56,9 @@
     "node-env-file": "0.1.8",
     "simple-mock": "0.8.0"
   },
+  "engines": {
+    "node": ">=10.0"
+  },
   "jshintConfig": {
     "esversion": 6,
     "mocha": true,
