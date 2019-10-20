@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Alexa.NET.Request;
 using Alexa.NET.Response;
@@ -118,8 +119,11 @@ namespace MartinCostello.LondonTravel.Skill
 
         private IDictionary<string, string> ToTelemetryProperties(Session session)
         {
+            bool hasAccessToken = !string.IsNullOrEmpty(session.User?.AccessToken);
+
             return new Dictionary<string, string>()
             {
+                ["hasAccessToken"] = hasAccessToken.ToString(CultureInfo.InvariantCulture),
                 ["sessionId"] = session.SessionId,
                 ["userId"] = session.User?.UserId,
             };
