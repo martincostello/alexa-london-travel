@@ -4,9 +4,6 @@
 using System;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.Mime;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Refit;
@@ -19,12 +16,6 @@ namespace MartinCostello.LondonTravel.Skill.Clients
     /// </summary>
     public sealed class SystemTextJsonContentSerializer : IContentSerializer
     {
-        /// <summary>
-        /// The media type header to use for <c>application/json</c>. This field is read-only.
-        /// </summary>
-        private static readonly MediaTypeHeaderValue _jsonMediaType =
-            new MediaTypeHeaderValue(MediaTypeNames.Application.Json) { CharSet = Encoding.UTF8.WebName };
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SystemTextJsonContentSerializer"/> class.
         /// </summary>
@@ -49,27 +40,9 @@ namespace MartinCostello.LondonTravel.Skill.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<HttpContent> SerializeAsync<T>(T item)
+        public Task<HttpContent> SerializeAsync<T>(T item)
         {
-            var stream = new MemoryStream();
-
-            try
-            {
-                await JsonSerializer.SerializeAsync(stream, item, SerializerOptions);
-                await stream.FlushAsync();
-                stream.Seek(0, SeekOrigin.Begin);
-
-                var content = new StreamContent(stream);
-
-                content.Headers.ContentType = _jsonMediaType;
-
-                return content;
-            }
-            catch (Exception)
-            {
-                stream.Dispose();
-                throw;
-            }
+            throw new NotImplementedException();
         }
     }
 }
