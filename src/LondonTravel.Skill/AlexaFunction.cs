@@ -28,7 +28,8 @@ namespace MartinCostello.LondonTravel.Skill
         /// </returns>
         public async Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
         {
-            context.Logger.LogLine($"Invoking skill request of type {request.Request.GetType().Name}.");
+            context.Logger.LogLine(
+                $"Invoking skill request of type {request.Request.GetType().Name} for locale '{request.Request.Locale}'.");
 
             IServiceProvider serviceProvider = CreateServiceProvider();
 
