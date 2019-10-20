@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace MartinCostello.LondonTravel.Skill.Clients
         /// disruption for the modes specified by <paramref name="modes"/>.
         /// </returns>
         [Get("/Line/Mode/{modes}/Disruption")]
-        Task<HttpResponseMessage> GetDisruptionAsync(
+        Task<ICollection<ServiceDisruption>> GetDisruptionAsync(
             string modes,
             [AliasAs("app_id")] string applicationId,
             [AliasAs("app_key")] string applicationKey,

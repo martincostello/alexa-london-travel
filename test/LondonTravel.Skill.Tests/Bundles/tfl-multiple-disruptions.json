@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/justeat/httpclient-interception/master/src/HttpClientInterception/Bundles/http-request-bundle-schema.json",
+  "id": "tfl",
+  "version": 1,
+  "comment": "HTTP bundle for when there are multiple disruptions.",
+  "items": [
+    {
+      "uri": "https://api.tfl.gov.uk/Line/Mode/dlr%2Coverground%2Ctube%2Ctflrail/Disruption?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
+      "contentFormat": "json",
+      "contentJson": [
+        {
+          "description": "Hammersmith & City Line: There are minor delays on the Hammersmith & City Line."
+        },
+        {
+          "description": "District Line: There are severe delays on the District Line."
+        },
+        {
+          "description": "District Line: There are severe delays on the District Line."
+        },
+        {
+          "description": "Circle Line: There are minor delays on the Circle Line."
+        }
+      ]
+    }
+  ]
+}

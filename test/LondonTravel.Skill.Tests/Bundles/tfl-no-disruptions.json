@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/justeat/httpclient-interception/master/src/HttpClientInterception/Bundles/http-request-bundle-schema.json",
+  "id": "tfl",
+  "version": 1,
+  "comment": "HTTP bundle for when there is no disruption.",
+  "items": [
+    {
+      "uri": "https://api.tfl.gov.uk/Line/Mode/dlr%2Coverground%2Ctube%2Ctflrail/Disruption?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
+      "contentFormat": "json",
+      "contentJson": []
+    }
+  ]
+}

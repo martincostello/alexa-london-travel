@@ -36,15 +36,7 @@ namespace MartinCostello.LondonTravel.Skill
             return actual.Response;
         }
 
-        protected virtual ILambdaContext CreateContext()
-        {
-            return new TestLambdaContext()
-            {
-                Logger = Logger,
-            };
-        }
-
-        protected virtual AlexaFunction CreateFunction()
+        protected virtual SkillConfiguration CreateConfiguration()
         {
             var config = SkillConfiguration.CreateDefaultConfiguration();
 
@@ -55,6 +47,20 @@ namespace MartinCostello.LondonTravel.Skill
             config.TflApplicationKey = "my-tfl-app-key";
             config.VerifySkillId = true;
 
+            return config;
+        }
+
+        protected virtual ILambdaContext CreateContext()
+        {
+            return new TestLambdaContext()
+            {
+                Logger = Logger,
+            };
+        }
+
+        protected virtual AlexaFunction CreateFunction()
+        {
+            SkillConfiguration config = CreateConfiguration();
             return new TestAlexaFunction(config, Interceptor);
         }
 
