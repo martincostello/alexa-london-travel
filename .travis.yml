@@ -34,6 +34,7 @@ cache:
 deploy:
   - provider: lambda
     function_name: "alexa-london-travel-dev"
+    memory_size: 256
     region: "eu-west-1"
     role: "arn:aws:iam::492538393790:role/lambda_basic_execution"
     runtime: "dotnetcore2.1"
@@ -49,6 +50,7 @@ deploy:
       branch: master
   - provider: lambda
     function_name: "alexa-london-travel"
+    memory_size: 256
     region: "eu-west-1"
     role: "arn:aws:iam::492538393790:role/lambda_basic_execution"
     runtime: "dotnetcore2.1"
@@ -64,6 +66,7 @@ deploy:
       branch: deploy
   - provider: lambda
     function_name: "alexa-london-travel-dotnet"
+    memory_size: 256
     region: "eu-west-1"
     role: "arn:aws:iam::492538393790:role/lambda_basic_execution"
     runtime: "dotnetcore2.1"
