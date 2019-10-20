@@ -53,7 +53,7 @@ namespace MartinCostello.LondonTravel.Skill
                     intentType = typeof(CommuteIntent);
                     break;
 
-                case "DistruptionIntent":
+                case "DisruptionIntent":
                     intentType = typeof(DisruptionIntent);
                     break;
 
