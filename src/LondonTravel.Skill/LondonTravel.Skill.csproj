@@ -21,5 +21,6 @@
   <ItemGroup>
     <Compile Update="Strings.Designer.cs" AutoGen="True" DependentUpon="Strings.resx" DesignTime="True" />
     <EmbeddedResource Update="Strings.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings.Designer.cs" />
+    <EmbeddedResource Update="Strings.*.resx" DependentUpon="Strings.resx" />
   </ItemGroup>
 </Project>
