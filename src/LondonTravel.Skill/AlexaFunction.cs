@@ -73,15 +73,26 @@ namespace MartinCostello.LondonTravel.Skill
         }
 
         /// <summary>
+        /// Configures the <see cref="IServiceCollection"/> to use.
+        /// </summary>
+        /// <param name="services">The service collection to configure.</param>
+        protected virtual void ConfigureServices(IServiceCollection services)
+        {
+            // No-op
+        }
+
+        /// <summary>
         /// Creates the <see cref="IServiceProvider"/> to use.
         /// </summary>
         /// <param name="context">The AWS Lambda context to create the service provider with.</param>
         /// <returns>
         /// The <see cref="IServiceProvider"/> to use.
         /// </returns>
-        protected virtual IServiceProvider CreateServiceProvider(ILambdaContext context)
+        private IServiceProvider CreateServiceProvider(ILambdaContext context)
         {
-            return ServiceResolver.GetServiceCollection(context).BuildServiceProvider();
+            IServiceCollection services = ServiceResolver.GetServiceCollection(context, ConfigureServices);
+
+            return services.BuildServiceProvider();
         }
 
         /// <summary>

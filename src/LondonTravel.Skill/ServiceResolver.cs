@@ -8,6 +8,7 @@ using MartinCostello.LondonTravel.Skill.Intents;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace MartinCostello.LondonTravel.Skill
 {
@@ -20,18 +21,23 @@ namespace MartinCostello.LondonTravel.Skill
         /// Gets the service provider to use for the current AWS Lambda context.
         /// </summary>
         /// <param name="context">The current AWS Lambda context.</param>
+        /// <param name="configure">A delegate to a method to use to apply any customizations.</param>
         /// <returns>
         /// The <see cref="IServiceCollection"/> to use.
         /// </returns>
-        public static IServiceCollection GetServiceCollection(ILambdaContext context)
+        public static IServiceCollection GetServiceCollection(
+            ILambdaContext context,
+            Action<IServiceCollection> configure)
         {
             var services = new ServiceCollection();
+
+            configure(services);
 
             services.AddHttpClients();
             services.AddPolly();
 
             services.AddSingleton(context);
-            services.AddSingleton((_) => SkillConfiguration.CreateDefaultConfiguration());
+            services.TryAddSingleton((_) => SkillConfiguration.CreateDefaultConfiguration());
 
             services.AddSingleton<AlexaSkill>();
             services.AddSingleton<IntentFactory>();
