@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -45,7 +44,7 @@ namespace MartinCostello.LondonTravel.Skill.Extensions
         private static void ApplyDefaultConfiguration(HttpClient client)
         {
             client.DefaultRequestHeaders.UserAgent.Add(_userAgent.Value);
-            client.Timeout = Debugger.IsAttached ? TimeSpan.FromMinutes(1) : TimeSpan.FromSeconds(20);
+            client.Timeout = TimeSpan.FromSeconds(5);
         }
 
         /// <summary>
@@ -87,7 +86,7 @@ namespace MartinCostello.LondonTravel.Skill.Extensions
         {
             string productVersion = typeof(AlexaFunction)
                 .Assembly
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
                 .InformationalVersion;
 
             // Truncate the Git commit SHA to 7 characters, if present

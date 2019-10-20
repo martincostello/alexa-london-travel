@@ -2,10 +2,8 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Threading.Tasks;
-using Alexa.NET;
 using Alexa.NET.Request;
 using Alexa.NET.Response;
-using Alexa.NET.Response.Ssml;
 using Amazon.Lambda.Core;
 
 namespace MartinCostello.LondonTravel.Skill.Intents
@@ -34,10 +32,11 @@ namespace MartinCostello.LondonTravel.Skill.Intents
         {
             Context.Logger.LogLine($"Unknown intent '{intent.Name}' cannot be handled.");
 
-            var plaintext = new PlainText("Sorry, I don't understand how to do that.");
-            var speech = new Speech(plaintext);
+            var response = SkillResponseBuilder
+                .Tell("Sorry, I don't understand how to do that.")
+                .Build();
 
-            return Task.FromResult(ResponseBuilder.Tell(speech));
+            return Task.FromResult(response);
         }
     }
 }

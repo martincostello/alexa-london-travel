@@ -5,10 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Alexa.NET;
 using Alexa.NET.Request;
 using Alexa.NET.Response;
-using Alexa.NET.Response.Ssml;
 using MartinCostello.LondonTravel.Skill.Clients;
 
 namespace MartinCostello.LondonTravel.Skill.Intents
@@ -47,46 +45,26 @@ namespace MartinCostello.LondonTravel.Skill.Intents
         /// <inheritdoc />
         public async Task<SkillResponse> RespondAsync(Intent intent, Session session)
         {
-            ICollection<string> disruptions = await GetRawDisruptionsAsync();
-
-            var elements = new List<ISsml>();
+            ICollection<string> sentences = await GetRawDisruptionsAsync();
             string cardContent;
 
-            if (disruptions.Count > 0)
+            if (sentences.Count > 0)
             {
-                foreach (var disruption in disruptions)
-                {
-                    string text = Verbalizer.Verbalize(disruption);
-                    elements.Add(new Paragraph(new PlainText(text)));
-                }
-
-                elements.Add(new Paragraph(new PlainText("There is a good service on all other lines.")));
-                cardContent = string.Join("\n", disruptions);
+                cardContent = string.Join("\n", sentences);
+                sentences.Add("There is a good service on all other lines.");
             }
             else
             {
                 string text = "There is currently no disruption on the tube, London Overground, the DLR or TfL Rail.";
-                string verbalized = Verbalizer.Verbalize(text);
 
-                elements.Add(new PlainText(verbalized));
+                sentences.Add(text);
                 cardContent = text;
             }
 
-            cardContent = cardContent
-                .Replace("D.L.R.", "DLR", StringComparison.Ordinal)
-                .Replace("T.F.L. Rail", "TfL Rail", StringComparison.Ordinal);
-
-            var speech = new Speech(elements.ToArray());
-
-            var response = ResponseBuilder.Tell(speech);
-
-            response.Response.Card = new StandardCard()
-            {
-                Title = "Disruption Summary",
-                Content = cardContent,
-            };
-
-            return response;
+            return SkillResponseBuilder
+                .Tell(sentences)
+                .WithCard("Disruption Summary", cardContent)
+                .Build();
         }
 
         private async Task<ICollection<ServiceDisruption>> GetDisruptionAsync()

@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
 using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
@@ -64,13 +65,24 @@ namespace MartinCostello.LondonTravel.Skill
             return new TestAlexaFunction(config, Interceptor);
         }
 
-        protected virtual SkillRequest CreateIntentRequest(string name)
+        protected virtual SkillRequest CreateIntentRequest(string name, params Slot[] slots)
         {
+            var intentSlots = new Dictionary<string, Slot>();
+
+            if (slots?.Length > 0)
+            {
+                foreach (var slot in slots)
+                {
+                    intentSlots[slot.Name] = slot;
+                }
+            }
+
             var request = new IntentRequest()
             {
                 Intent = new Intent()
                 {
                     Name = name,
+                    Slots = intentSlots,
                 },
             };
 

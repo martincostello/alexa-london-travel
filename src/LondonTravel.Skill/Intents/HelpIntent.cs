@@ -1,12 +1,9 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Alexa.NET;
 using Alexa.NET.Request;
 using Alexa.NET.Response;
-using Alexa.NET.Response.Ssml;
 
 namespace MartinCostello.LondonTravel.Skill.Intents
 {
@@ -18,7 +15,7 @@ namespace MartinCostello.LondonTravel.Skill.Intents
         /// <inheritdoc />
         public Task<SkillResponse> RespondAsync(Intent intent, Session session)
         {
-            string[] lines = new[]
+            string[] paragraphs = new[]
             {
                 "This skill allows you to check for the status of a specific line, or for disruption in general. You can ask about any London Underground line, London Overground, the Docklands Light Railway or TfL Rail.",
                 "Asking about disruption in general provides information about any lines that are currently experiencing issues, such as any delays or planned closures.",
@@ -26,18 +23,10 @@ namespace MartinCostello.LondonTravel.Skill.Intents
                 "If you link your account and setup your preferences in the London Travel website, you can ask about your commute to quickly find out the status of the lines you frequently use.",
             };
 
-            var elements = new List<ISsml>();
-
-            foreach (var sentence in lines)
-            {
-                elements.Add(new Paragraph(new PlainText(sentence)));
-            }
-
-            var speech = new Speech(elements.ToArray());
-
-            var result = ResponseBuilder.Tell(speech);
-
-            result.Response.ShouldEndSession = false;
+            var result = SkillResponseBuilder
+                .Tell(paragraphs)
+                .ShouldNotEndSession()
+                .Build();
 
             return Task.FromResult(result);
         }

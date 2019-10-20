@@ -98,10 +98,10 @@ namespace MartinCostello.LondonTravel.Skill
             response.Reprompt.ShouldBeNull();
 
             response.OutputSpeech.ShouldNotBeNull();
-            response.OutputSpeech.Type.ShouldBe("PlainText");
+            response.OutputSpeech.Type.ShouldBe("SSML");
 
-            var plaintext = response.OutputSpeech.ShouldBeOfType<PlainTextOutputSpeech>();
-            plaintext.Text.ShouldBe("Sorry, something went wrong.");
+            var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
+            ssml.Ssml.ShouldBe("<speak>Sorry, something went wrong.</speak>");
         }
 
         private void AssertResponse(SkillResponse actual, string expectedSsml, string expectedCardContent)

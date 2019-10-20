@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System;
+using System.Globalization;
 
 namespace MartinCostello.LondonTravel.Skill
 {
@@ -10,6 +11,53 @@ namespace MartinCostello.LondonTravel.Skill
     /// </summary>
     internal static class Verbalizer
     {
+        /// <summary>
+        /// Returns the spoken version of the specified line name.
+        /// </summary>
+        /// <param name="name">The name of the line as reported from the TfL API.</param>
+        /// <param name="asTitleCase">Whether to format in title case.</param>
+        /// <returns>
+        /// The spoken name of the line.
+        /// </returns>
+        internal static string LineName(string name, bool asTitleCase = false)
+        {
+            string prefix = string.Empty;
+            string suffix = string.Empty;
+
+            string spokenName;
+
+            if (Lines.IsDlr(name))
+            {
+                prefix = "the ";
+                spokenName = Verbalize("DLR");
+            }
+            else if (Lines.IsOverground(name))
+            {
+                spokenName = name;
+            }
+            else if (Lines.IsTfLRail(name))
+            {
+                spokenName = Verbalize("TfL Rail");
+            }
+            else
+            {
+                prefix = "the ";
+                spokenName = name;
+                suffix = asTitleCase ? " Line" : " line";
+            }
+
+            var culture = CultureInfo.CurrentUICulture;
+
+            if (asTitleCase)
+            {
+                return string.Format(culture, "{0}{1}", spokenName, suffix);
+            }
+            else
+            {
+                return string.Format(culture, "{0}{1}{2}", prefix, spokenName, suffix);
+            }
+        }
+
         /// <summary>
         /// Returns a string which better represents the specified text when spoken.
         /// </summary>

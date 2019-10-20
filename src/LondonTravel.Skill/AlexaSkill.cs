@@ -4,10 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Alexa.NET;
 using Alexa.NET.Request;
 using Alexa.NET.Response;
-using Alexa.NET.Response.Ssml;
 using Amazon.Lambda.Core;
 using Microsoft.ApplicationInsights;
 
@@ -63,7 +61,9 @@ namespace MartinCostello.LondonTravel.Skill
 
             TrackException(exception, session);
 
-            return ResponseBuilder.Tell("Sorry, something went wrong.");
+            return SkillResponseBuilder
+                .Tell("Sorry, something went wrong.")
+                .Build();
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace MartinCostello.LondonTravel.Skill
         /// </returns>
         public async Task<SkillResponse> OnIntentAsync(Intent intent, Session session)
         {
-            TrackEvent(intent.Name, session);
+            TrackEvent(intent.Name, session, intent);
 
             IIntent userIntent = IntentFactory.Create(intent);
 
@@ -95,17 +95,10 @@ namespace MartinCostello.LondonTravel.Skill
         {
             TrackEvent("LaunchRequest", session);
 
-            string text = Verbalizer.Verbalize(
-                "Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground, the DLR or TfL Rail.");
-
-            var plaintext = new PlainText(text);
-            var speech = new Speech(plaintext);
-
-            var result = ResponseBuilder.Tell(speech);
-
-            result.Response.ShouldEndSession = false;
-
-            return result;
+            return SkillResponseBuilder
+                .Tell("Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground, the DLR or TfL Rail.")
+                .ShouldNotEndSession()
+                .Build();
         }
 
         /// <summary>
@@ -119,10 +112,9 @@ namespace MartinCostello.LondonTravel.Skill
         {
             TrackEvent("SessionEndedRequest", session);
 
-            var plaintext = new PlainText("Goodbye.");
-            var speech = new Speech(plaintext);
-
-            return ResponseBuilder.Tell(speech);
+            return SkillResponseBuilder
+                .Tell("Goodbye.")
+                .Build();
         }
 
         private IDictionary<string, string> ToTelemetryProperties(Session session)
@@ -134,9 +126,18 @@ namespace MartinCostello.LondonTravel.Skill
             };
         }
 
-        private void TrackEvent(string eventName, Session session)
+        private void TrackEvent(string eventName, Session session, Intent intent = null)
         {
             IDictionary<string, string> properties = ToTelemetryProperties(session);
+
+            if (intent != null)
+            {
+                foreach (var slot in intent.Slots.Values)
+                {
+                    properties[$"slot:{slot.Name}"] = slot.Value;
+                }
+            }
+
             Telemetry.TrackEvent(eventName, properties);
         }
 
