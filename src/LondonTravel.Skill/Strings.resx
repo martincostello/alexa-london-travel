@@ -127,7 +127,7 @@
     <value>It looks like you've disabled account linking. You need to re-link your account to be able to ask me about your commute.</value>
   </data>
   <data name="CommuteIntentNoFavorites" xml:space="preserve">
-    <value>You have not selected any favorite lines yet. Visit the London Travel website to set your preferences.</value>
+    <value>You have not selected any favourite lines yet. Visit the London Travel website to set your preferences.</value>
   </data>
   <data name="CommuteIntentPrefixFormat" xml:space="preserve">
     <value>{0}: {1}</value>

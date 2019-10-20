@@ -88,7 +88,7 @@ namespace MartinCostello.LondonTravel.Skill {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not selected any favorite lines yet. Visit the London Travel website to set your preferences..
+        ///   Looks up a localized string similar to You have not selected any favourite lines yet. Visit the London Travel website to set your preferences..
         /// </summary>
         internal static string CommuteIntentNoFavorites {
             get {
