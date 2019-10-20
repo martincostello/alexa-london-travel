@@ -3,7 +3,6 @@
 
 using System;
 using System.Globalization;
-using System.Threading;
 using System.Threading.Tasks;
 using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
@@ -75,7 +74,7 @@ namespace MartinCostello.LondonTravel.Skill
             finally
             {
                 contextAccessor.LambdaContext = null;
-                Thread.CurrentThread.CurrentCulture = previousCulture;
+                CultureInfo.CurrentCulture = previousCulture;
             }
 
             return response;
@@ -112,11 +111,11 @@ namespace MartinCostello.LondonTravel.Skill
         /// </returns>
         private CultureInfo SetLocale(SkillRequest request)
         {
-            var previousCulture = Thread.CurrentThread.CurrentCulture;
+            var previousCulture = CultureInfo.CurrentCulture;
 
             try
             {
-                Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo(request.Request.Locale ?? "en-GB");
+                CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(request.Request.Locale ?? "en-GB");
             }
 #pragma warning disable CA1031
             catch (ArgumentException)
