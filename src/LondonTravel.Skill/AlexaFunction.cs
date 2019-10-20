@@ -57,7 +57,7 @@ namespace MartinCostello.LondonTravel.Skill
 
             try
             {
-                if (request.Request is LaunchRequest launch)
+                if (request.Request is LaunchRequest)
                 {
                     response = skill.OnLaunch(request.Session);
                 }
