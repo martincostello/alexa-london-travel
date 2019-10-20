@@ -30,45 +30,7 @@ The repository is hosted in [GitHub](https://github.com/martincostello/alexa-lon
 
 ## Building and Testing
 
-To build the skill just run [NPM](https://www.npmjs.com/) to install the packages:
-
-```sh
-> npm install
-```
-
-To run the [Mocha](https://mochajs.org/) unit tests:
-
-```sh
-> npm test
-```
-
-## Debugging
-
-To run the skill locally using [Alexa App Server](https://github.com/alexa-js/alexa-app-server), first clone the repository into directory that is otherwise empty.
-
-```sh
-> mkdir alexa-london-travel && cd alexa-london-travel
-> git clone https://github.com/martincostello/alexa-london-travel repo
-> cd repo
-```
-
-Then add a ```.env``` file and populate it with your TfL API application Id and key. If you do not have TfL application Id, you can register for one [here](https://api-portal.tfl.gov.uk/docs).
-
-```txt
-TFL_APP_ID=MyAppId
-TFL_APP_KEY=MyAppKey
-```
-
-Now the skill is configured, install the packages and start the test server:
-
-```sh
-> npm install
-> node server
-```
-
-You can now debug the skill in a browser using the built-in test server by browsing to ```http://localhost:3001/alexa-london-travel```.
-
-Launch files are also included in the repository to debug the skill using [Visual Studio Code](https://code.visualstudio.com/).
+To build and test the skill, run `build.sh` or `Build.ps1`.
 
 ## License
 
