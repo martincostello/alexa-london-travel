@@ -3,6 +3,7 @@
 
 using System;
 using System.Net.Http;
+using System.Text.Json;
 using MartinCostello.LondonTravel.Skill.Clients;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -38,6 +39,7 @@ namespace MartinCostello.LondonTravel.Skill.Extensions
                 .AddTypedClient(AddTfl)
                 .ApplyDefaultConfiguration();
 
+            services.AddSingleton(CreateJsonSerializerOptions);
             services.AddSingleton<IContentSerializer, SystemTextJsonContentSerializer>();
             services.AddTransient(CreateRefitSettings);
 
@@ -77,6 +79,21 @@ namespace MartinCostello.LondonTravel.Skill.Extensions
             client.BaseAddress = new Uri("https://api.tfl.gov.uk/", UriKind.Absolute);
 
             return RestService.For<ITflClient>(client, settings);
+        }
+
+        /// <summary>
+        /// Creates an instance of <see cref="JsonSerializerOptions"/>.
+        /// </summary>
+        /// <param name="provider">The <see cref="IServiceProvider"/> to use.</param>
+        /// <returns>
+        /// The created instance of <see cref="JsonSerializerOptions"/>.
+        /// </returns>
+        private static JsonSerializerOptions CreateJsonSerializerOptions(IServiceProvider provider)
+        {
+            return new JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
         }
 
         /// <summary>
