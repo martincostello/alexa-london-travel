@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/justeat/httpclient-interception/master/src/HttpClientInterception/Bundles/http-request-bundle-schema.json",
-  "id": "tfl",
+  "id": "tfl-multiple-disruptions",
   "version": 1,
   "comment": "HTTP bundle for when there are multiple disruptions.",
   "items": [
