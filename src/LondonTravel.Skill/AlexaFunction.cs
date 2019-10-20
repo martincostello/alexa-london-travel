@@ -39,45 +39,15 @@ namespace MartinCostello.LondonTravel.Skill
 
             CultureInfo previousCulture = SetLocale(request);
 
-            SkillResponse response;
-
             try
             {
-                var skill = serviceProvider.GetRequiredService<AlexaSkill>();
-
-                try
-                {
-                    if (request.Request is LaunchRequest)
-                    {
-                        response = skill.OnLaunch(request.Session);
-                    }
-                    else if (request.Request is IntentRequest intent)
-                    {
-                        response = await skill.OnIntentAsync(intent.Intent, request.Session);
-                    }
-                    else if (request.Request is SessionEndedRequest)
-                    {
-                        response = skill.OnSessionEnded(request.Session);
-                    }
-                    else
-                    {
-                        response = skill.OnError(null, request.Session);
-                    }
-                }
-#pragma warning disable CA1031
-                catch (Exception ex)
-#pragma warning restore CA1031
-                {
-                    response = skill.OnError(ex, request.Session);
-                }
+                return await HandleRequestAsync(request, serviceProvider);
             }
             finally
             {
                 contextAccessor.LambdaContext = null;
                 CultureInfo.CurrentCulture = previousCulture;
             }
-
-            return response;
         }
 
         /// <summary>
@@ -87,6 +57,45 @@ namespace MartinCostello.LondonTravel.Skill
         protected virtual void ConfigureServices(IServiceCollection services)
         {
             // No-op
+        }
+
+        /// <summary>
+        /// Handles the specified request as an asynchronous operation.
+        /// </summary>
+        /// <param name="request">The request to handle.</param>
+        /// <param name="serviceProvider">The service provider to use.</param>
+        /// <returns>
+        /// A <see cref="Task{TResult}"/> representing the asynchronous operation to handle the request.
+        /// </returns>
+        private static async Task<SkillResponse> HandleRequestAsync(SkillRequest request, IServiceProvider serviceProvider)
+        {
+            var skill = serviceProvider.GetRequiredService<AlexaSkill>();
+
+            try
+            {
+                if (request.Request is LaunchRequest)
+                {
+                    return skill.OnLaunch(request.Session);
+                }
+                else if (request.Request is IntentRequest intent)
+                {
+                    return await skill.OnIntentAsync(intent.Intent, request.Session);
+                }
+                else if (request.Request is SessionEndedRequest)
+                {
+                    return skill.OnSessionEnded(request.Session);
+                }
+                else
+                {
+                    return skill.OnError(null, request.Session);
+                }
+            }
+#pragma warning disable CA1031
+            catch (Exception ex)
+#pragma warning restore CA1031
+            {
+                return skill.OnError(ex, request.Session);
+            }
         }
 
         /// <summary>

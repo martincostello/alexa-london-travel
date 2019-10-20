@@ -50,30 +50,33 @@ namespace MartinCostello.LondonTravel.Skill.Intents
             }
 
             string id = Lines.MapNameToId(rawLineName);
+            SkillResponseBuilder builder;
 
             if (string.IsNullOrEmpty(id))
             {
-                return SkillResponseBuilder
+                builder = SkillResponseBuilder
                     .Tell(Strings.StatusIntentUnknownLine)
-                    .WithReprompt()
-                    .Build();
+                    .WithReprompt();
             }
             else if (string.Equals(id, "elizabeth", StringComparison.Ordinal))
             {
-                return SkillResponseBuilder
+                builder = SkillResponseBuilder
                     .Tell(Strings.StatusIntentElizabethLineNotImplemented)
-                    .WithReprompt()
-                    .Build();
+                    .WithReprompt();
+            }
+            else
+            {
+                IList<Line> statuses = await GetStatusesAsync(id);
+
+                string cardTitle = Lines.ToCardTitle(statuses[0]?.Name ?? string.Empty);
+                string text = GenerateResponse(statuses);
+
+                builder = SkillResponseBuilder
+                    .Tell(text)
+                    .WithCard(cardTitle, text);
             }
 
-            IList<Line> statuses = await GetStatusesAsync(id);
-
-            string cardTitle = Lines.ToCardTitle(statuses[0]?.Name ?? string.Empty);
-            string text = GenerateResponse(statuses);
-
-            return SkillResponseBuilder.Tell(text)
-                .WithCard(cardTitle, text)
-                .Build();
+            return builder.Build();
         }
 
         /// <summary>

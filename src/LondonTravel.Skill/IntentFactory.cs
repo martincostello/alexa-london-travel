@@ -36,37 +36,27 @@ namespace MartinCostello.LondonTravel.Skill
         /// </returns>
         public IIntent Create(Intent intent)
         {
-            Type intentType;
-
             switch (intent.Name)
             {
                 case "AMAZON.CancelIntent":
                 case "AMAZON.StopIntent":
-                    intentType = typeof(EmptyIntent);
-                    break;
+                    return ServiceProvider.GetRequiredService<EmptyIntent>();
 
                 case "AMAZON.HelpIntent":
-                    intentType = typeof(HelpIntent);
-                    break;
+                    return ServiceProvider.GetRequiredService<HelpIntent>();
 
                 case "CommuteIntent":
-                    intentType = typeof(CommuteIntent);
-                    break;
+                    return ServiceProvider.GetRequiredService<CommuteIntent>();
 
                 case "DisruptionIntent":
-                    intentType = typeof(DisruptionIntent);
-                    break;
+                    return ServiceProvider.GetRequiredService<DisruptionIntent>();
 
                 case "StatusIntent":
-                    intentType = typeof(StatusIntent);
-                    break;
+                    return ServiceProvider.GetRequiredService<StatusIntent>();
 
                 default:
-                    intentType = typeof(UnknownIntent);
-                    break;
+                    return ServiceProvider.GetRequiredService<UnknownIntent>();
             }
-
-            return (IIntent)ServiceProvider.GetRequiredService(intentType);
         }
     }
 }

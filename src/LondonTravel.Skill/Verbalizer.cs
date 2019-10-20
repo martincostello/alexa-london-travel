@@ -23,7 +23,6 @@ namespace MartinCostello.LondonTravel.Skill
         {
             string prefix = string.Empty;
             string suffix = string.Empty;
-
             string spokenName;
 
             if (Lines.IsDlr(name))
@@ -46,14 +45,10 @@ namespace MartinCostello.LondonTravel.Skill
                 suffix = asTitleCase ? Strings.LineSuffixUpper : Strings.LineSuffixLower;
             }
 
-            if (asTitleCase)
-            {
-                return string.Format(CultureInfo.CurrentCulture, Strings.LineNameWithoutPrefixFormat, spokenName, suffix);
-            }
-            else
-            {
-                return string.Format(CultureInfo.CurrentCulture, Strings.LineNameWithPrefixFormat, prefix, spokenName, suffix);
-            }
+            return
+                asTitleCase ?
+                string.Format(CultureInfo.CurrentCulture, Strings.LineNameWithoutPrefixFormat, spokenName, suffix) :
+                string.Format(CultureInfo.CurrentCulture, Strings.LineNameWithPrefixFormat, prefix, spokenName, suffix);
         }
 
         /// <summary>
