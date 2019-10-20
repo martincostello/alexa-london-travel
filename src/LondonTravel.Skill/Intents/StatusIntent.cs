@@ -53,14 +53,14 @@ namespace MartinCostello.LondonTravel.Skill.Intents
             if (string.IsNullOrEmpty(id))
             {
                 return SkillResponseBuilder
-                    .Tell("Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground, the DLR or TfL Rail.")
+                    .Tell(Strings.StatusIntentUnknownLine)
                     .WithReprompt()
                     .Build();
             }
             else if (string.Equals(id, "elizabeth", StringComparison.Ordinal))
             {
                 return SkillResponseBuilder
-                    .Tell("Sorry, I cannot tell you about the status of the Elizabeth Line yet.")
+                    .Tell(Strings.StatusIntentElizabethLineNotImplemented)
                     .WithReprompt()
                     .Build();
             }
@@ -86,7 +86,7 @@ namespace MartinCostello.LondonTravel.Skill.Intents
         {
             if (lines.Count < 1 || lines[0].LineStatuses.Count < 1)
             {
-                return "Sorry, something went wrong.";
+                return Strings.InternalError;
             }
 
             Line line = lines[0];
@@ -236,8 +236,7 @@ namespace MartinCostello.LondonTravel.Skill.Intents
                     break;
             }
 
-            var culture = CultureInfo.CurrentUICulture;
-
+            var culture = CultureInfo.CurrentCulture;
             string spokenName = Verbalizer.LineName(name);
             string statusText = string.Format(culture, format, spokenName);
 

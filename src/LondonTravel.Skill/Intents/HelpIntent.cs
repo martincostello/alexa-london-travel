@@ -17,10 +17,10 @@ namespace MartinCostello.LondonTravel.Skill.Intents
         {
             string[] paragraphs = new[]
             {
-                "This skill allows you to check for the status of a specific line, or for disruption in general. You can ask about any London Underground line, London Overground, the Docklands Light Railway or TfL Rail.",
-                "Asking about disruption in general provides information about any lines that are currently experiencing issues, such as any delays or planned closures.",
-                "Asking for the status for a specific line provides a summary of the current service, such as whether there is a good service or if there are any delays.",
-                "If you link your account and setup your preferences in the London Travel website, you can ask about your commute to quickly find out the status of the lines you frequently use.",
+                Strings.HelpIntentParagraph1,
+                Strings.HelpIntentParagraph2,
+                Strings.HelpIntentParagraph3,
+                Strings.HelpIntentParagraph4,
             };
 
             var result = SkillResponseBuilder

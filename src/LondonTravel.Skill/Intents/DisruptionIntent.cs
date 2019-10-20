@@ -51,11 +51,11 @@ namespace MartinCostello.LondonTravel.Skill.Intents
             if (sentences.Count > 0)
             {
                 cardContent = string.Join("\n", sentences);
-                sentences.Add("There is a good service on all other lines.");
+                sentences.Add(Strings.DisruptionIntentGoodServiceOnOtherLines);
             }
             else
             {
-                string text = "There is currently no disruption on the tube, London Overground, the DLR or TfL Rail.";
+                string text = Strings.DisruptionIntentNoDisruption;
 
                 sentences.Add(text);
                 cardContent = text;
@@ -63,7 +63,7 @@ namespace MartinCostello.LondonTravel.Skill.Intents
 
             return SkillResponseBuilder
                 .Tell(sentences)
-                .WithCard("Disruption Summary", cardContent)
+                .WithCard(Strings.DisruptionIntentCardTitle, cardContent)
                 .Build();
         }
 

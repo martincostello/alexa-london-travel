@@ -2,6 +2,8 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System;
+using System.Globalization;
+using System.Threading;
 using System.Threading.Tasks;
 using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
@@ -16,13 +18,6 @@ namespace MartinCostello.LondonTravel.Skill
     /// </summary>
     public class AlexaFunction
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AlexaFunction"/> class.
-        /// </summary>
-        public AlexaFunction()
-        {
-        }
-
         /// <summary>
         /// Handles a request to the skill as an asynchronous operation.
         /// </summary>
@@ -41,6 +36,9 @@ namespace MartinCostello.LondonTravel.Skill
 
             LambdaContextAccessor contextAccessor = serviceProvider.GetRequiredService<LambdaContextAccessor>();
             contextAccessor.LambdaContext = context;
+
+            var previousCulture = Thread.CurrentThread.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo(request.Request.Locale ?? "en-GB");
 
             SkillResponse response;
 
@@ -77,6 +75,7 @@ namespace MartinCostello.LondonTravel.Skill
             finally
             {
                 contextAccessor.LambdaContext = null;
+                Thread.CurrentThread.CurrentCulture = previousCulture;
             }
 
             return response;

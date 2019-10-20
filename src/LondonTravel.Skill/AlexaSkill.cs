@@ -61,7 +61,7 @@ namespace MartinCostello.LondonTravel.Skill
             TrackException(exception, session);
 
             return SkillResponseBuilder
-                .Tell("Sorry, something went wrong.")
+                .Tell(Strings.InternalError)
                 .Build();
         }
 
@@ -95,7 +95,7 @@ namespace MartinCostello.LondonTravel.Skill
             TrackEvent("LaunchRequest", session);
 
             return SkillResponseBuilder
-                .Tell("Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground, the DLR or TfL Rail.")
+                .Tell(Strings.LaunchResponse)
                 .ShouldNotEndSession()
                 .Build();
         }
@@ -112,7 +112,7 @@ namespace MartinCostello.LondonTravel.Skill
             TrackEvent("SessionEndedRequest", session);
 
             return SkillResponseBuilder
-                .Tell("Goodbye.")
+                .Tell(Strings.SessionEndResponse)
                 .Build();
         }
 

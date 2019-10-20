@@ -132,10 +132,10 @@ namespace MartinCostello.LondonTravel.Skill
             }
             else
             {
-                suffix = " Line";
+                suffix = Strings.LineSuffixUpper;
             }
 
-            return string.Format(CultureInfo.InvariantCulture, "{0}{1} Status", name, suffix);
+            return string.Format(CultureInfo.CurrentCulture, Strings.StatusIntentCardTitleFormat, name, suffix);
         }
     }
 }

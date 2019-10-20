@@ -32,7 +32,7 @@ namespace MartinCostello.LondonTravel.Skill.Intents
             ContextAccessor.LambdaContext.Logger.LogLine($"Unknown intent '{intent.Name}' cannot be handled.");
 
             var response = SkillResponseBuilder
-                .Tell("Sorry, I don't understand how to do that.")
+                .Tell(Strings.UnknownCommand)
                 .Build();
 
             return Task.FromResult(response);

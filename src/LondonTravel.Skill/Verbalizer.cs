@@ -28,7 +28,7 @@ namespace MartinCostello.LondonTravel.Skill
 
             if (Lines.IsDlr(name))
             {
-                prefix = "the ";
+                prefix = Strings.ThePrefix;
                 spokenName = Verbalize("DLR");
             }
             else if (Lines.IsOverground(name))
@@ -41,20 +41,18 @@ namespace MartinCostello.LondonTravel.Skill
             }
             else
             {
-                prefix = "the ";
+                prefix = Strings.ThePrefix;
                 spokenName = name;
-                suffix = asTitleCase ? " Line" : " line";
+                suffix = asTitleCase ? Strings.LineSuffixUpper : Strings.LineSuffixLower;
             }
-
-            var culture = CultureInfo.CurrentUICulture;
 
             if (asTitleCase)
             {
-                return string.Format(culture, "{0}{1}", spokenName, suffix);
+                return string.Format(CultureInfo.CurrentCulture, Strings.LineNameWithoutPrefixFormat, spokenName, suffix);
             }
             else
             {
-                return string.Format(culture, "{0}{1}{2}", prefix, spokenName, suffix);
+                return string.Format(CultureInfo.CurrentCulture, Strings.LineNameWithPrefixFormat, prefix, spokenName, suffix);
             }
         }
 

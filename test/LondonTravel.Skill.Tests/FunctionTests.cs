@@ -92,7 +92,7 @@ namespace MartinCostello.LondonTravel.Skill
         protected virtual SkillRequest CreateRequest<T>(T request = null)
             where T : Request, new()
         {
-            return new SkillRequest()
+            var result = new SkillRequest()
             {
                 Request = request ?? new T(),
                 Session = new Session()
@@ -103,6 +103,10 @@ namespace MartinCostello.LondonTravel.Skill
                     },
                 },
             };
+
+            result.Request.Locale = "en-GB";
+
+            return result;
         }
 
         private sealed class TestAlexaFunction : AlexaFunction
