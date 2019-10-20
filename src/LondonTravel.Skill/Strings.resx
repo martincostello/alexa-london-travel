@@ -159,11 +159,44 @@
   <data name="SessionEndResponse" xml:space="preserve">
     <value>Goodbye.</value>
   </data>
+  <data name="StatusIntentBusServiceFormat" xml:space="preserve">
+    <value>Some parts of {0} are currently being served by a replacement bus service.</value>
+  </data>
   <data name="StatusIntentCardTitleFormat" xml:space="preserve">
     <value>{0}{1} Status</value>
   </data>
+  <data name="StatusIntentClosedFormat" xml:space="preserve">
+    <value>{0} is closed.</value>
+  </data>
   <data name="StatusIntentElizabethLineNotImplemented" xml:space="preserve">
     <value>Sorry, I cannot tell you about the status of the Elizabeth Line yet.</value>
+  </data>
+  <data name="StatusIntentGenericDisruptionFormat" xml:space="preserve">
+    <value>There is currently disruption on {0}.</value>
+  </data>
+  <data name="StatusIntentGoodServiceFormat" xml:space="preserve">
+    <value>There is a good service on {0}.</value>
+  </data>
+  <data name="StatusIntentMinorDelaysFormat" xml:space="preserve">
+    <value>There are minor delays on {0}.</value>
+  </data>
+  <data name="StatusIntentPartiallyClosedFormat" xml:space="preserve">
+    <value>{0} is partially closed.</value>
+  </data>
+  <data name="StatusIntentPartiallySuspendedFormat" xml:space="preserve">
+    <value>{0} is partially suspended.</value>
+  </data>
+  <data name="StatusIntentPlannedClosureFormat" xml:space="preserve">
+    <value>There is a planned closure on {0}.</value>
+  </data>
+  <data name="StatusIntentReducedServiceFormat" xml:space="preserve">
+    <value>There is a reduced service on {0}.</value>
+  </data>
+  <data name="StatusIntentSevereDelaysFormat" xml:space="preserve">
+    <value>There are severe delays on {0}.</value>
+  </data>
+  <data name="StatusIntentSuspendedFormat" xml:space="preserve">
+    <value>{0} is suspended.</value>
   </data>
   <data name="StatusIntentUnknownLine" xml:space="preserve">
     <value>Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground, the DLR or TfL Rail.</value>

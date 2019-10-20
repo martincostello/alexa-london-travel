@@ -189,50 +189,50 @@ namespace MartinCostello.LondonTravel.Skill.Intents
             {
                 case LineStatusSeverity.GoodService:
                 case LineStatusSeverity.NoIssues:
-                    format = "There is a good service on {0}.";
+                    format = Strings.StatusIntentGoodServiceFormat;
                     break;
 
                 case LineStatusSeverity.BusService:
-                    format = "Some parts of {0} are currently being served by a replacement bus service.";
+                    format = Strings.StatusIntentBusServiceFormat;
                     break;
 
                 case LineStatusSeverity.Closed:
                 case LineStatusSeverity.NotRunning:
                 case LineStatusSeverity.ServiceClosed:
-                    format = "{0} is closed.";
+                    format = Strings.StatusIntentClosedFormat;
                     break;
 
                 case LineStatusSeverity.MinorDelays:
-                    format = "There are minor delays on {0}.";
+                    format = Strings.StatusIntentMinorDelaysFormat;
                     break;
 
                 case LineStatusSeverity.PartClosed:
                 case LineStatusSeverity.PartClosure:
-                    format = "{0} is partially closed.";
+                    format = Strings.StatusIntentPartiallyClosedFormat;
                     break;
 
                 case LineStatusSeverity.PartSuspended:
-                    format = "{0} is partially suspended.";
+                    format = Strings.StatusIntentPartiallySuspendedFormat;
                     break;
 
                 case LineStatusSeverity.PlannedClosure:
-                    format = "There is a planned closure on {0}.";
+                    format = Strings.StatusIntentPlannedClosureFormat;
                     break;
 
                 case LineStatusSeverity.ReducedService:
-                    format = "There is a reduced service on {0}.";
+                    format = Strings.StatusIntentReducedServiceFormat;
                     break;
 
                 case LineStatusSeverity.SevereDelays:
-                    format = "There are severe delays on {0}.";
+                    format = Strings.StatusIntentSevereDelaysFormat;
                     break;
 
                 case LineStatusSeverity.Suspended:
-                    format = "{0} is suspended.";
+                    format = Strings.StatusIntentSuspendedFormat;
                     break;
 
                 default:
-                    format = "There is currently disruption on {0}.";
+                    format = Strings.StatusIntentGenericDisruptionFormat;
                     break;
             }
 
