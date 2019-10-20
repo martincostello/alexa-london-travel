@@ -80,6 +80,30 @@ namespace MartinCostello.LondonTravel.Skill
                 "Circle Line: There are minor delays on the Circle Line.\nDistrict Line: There are severe delays on the District Line.\nHammersmith & City Line: There are minor delays on the Hammersmith & City Line.");
         }
 
+        [Fact]
+        public async Task Can_Invoke_Function_When_The_Api_Fails()
+        {
+            // Arrange
+            AlexaFunction function = CreateFunction();
+            SkillRequest request = CreateIntentRequest();
+            ILambdaContext context = CreateContext();
+
+            // Act
+            SkillResponse actual = await function.HandlerAsync(request, context);
+
+            // Assert
+            ResponseBody response = AssertResponse(actual);
+
+            response.Card.ShouldBeNull();
+            response.Reprompt.ShouldBeNull();
+
+            response.OutputSpeech.ShouldNotBeNull();
+            response.OutputSpeech.Type.ShouldBe("PlainText");
+
+            var plaintext = response.OutputSpeech.ShouldBeOfType<PlainTextOutputSpeech>();
+            plaintext.Text.ShouldBe("Sorry, something went wrong.");
+        }
+
         private void AssertResponse(SkillResponse actual, string expectedSsml, string expectedCardContent)
         {
             ResponseBody response = AssertResponse(actual);
