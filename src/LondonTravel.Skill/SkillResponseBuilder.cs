@@ -16,7 +16,7 @@ namespace MartinCostello.LondonTravel.Skill
             Response = ResponseBuilder.Tell(Speech);
         }
 
-        private StandardCard Card { get; set; }
+        private ICard Card { get; set; }
 
         private SkillResponse Response { get; }
 
@@ -64,6 +64,12 @@ namespace MartinCostello.LondonTravel.Skill
             Response.Response.ShouldEndSession = ShouldEndSession;
 
             return Response;
+        }
+
+        public SkillResponseBuilder LinkAccount()
+        {
+            Card = new LinkAccountCard();
+            return this;
         }
 
         public SkillResponseBuilder ShouldNotEndSession()
