@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Alexa.NET.Request;
 using Alexa.NET.Response;
-using Amazon.Lambda.Core;
 using Microsoft.ApplicationInsights;
 
 namespace MartinCostello.LondonTravel.Skill
@@ -20,14 +19,14 @@ namespace MartinCostello.LondonTravel.Skill
         /// Initializes a new instance of the <see cref="AlexaSkill"/> class.
         /// </summary>
         /// <param name="intentFactory">The factory to use for the skill intents.</param>
-        /// <param name="context">The AWS Lambda execution context.</param>
+        /// <param name="contextAccessor">The AWS Lambda execution context accessor.</param>
         /// <param name="telemetry">The telemetry client to use.</param>
         public AlexaSkill(
             IntentFactory intentFactory,
-            ILambdaContext context,
+            LambdaContextAccessor contextAccessor,
             TelemetryClient telemetry)
         {
-            Context = context;
+            ContextAccessor = contextAccessor;
             IntentFactory = intentFactory;
             Telemetry = telemetry;
         }
@@ -35,12 +34,12 @@ namespace MartinCostello.LondonTravel.Skill
         /// <summary>
         /// Gets the AWS Lambda execution context.
         /// </summary>
-        private ILambdaContext Context { get; }
+        private IntentFactory IntentFactory { get; }
 
         /// <summary>
-        /// Gets the AWS Lambda execution context.
+        /// Gets the AWS Lambda execution context accessor.
         /// </summary>
-        private IntentFactory IntentFactory { get; }
+        private LambdaContextAccessor ContextAccessor { get; }
 
         /// <summary>
         /// Gets the telemetery client to use.
@@ -57,7 +56,7 @@ namespace MartinCostello.LondonTravel.Skill
         /// </returns>
         public SkillResponse OnError(Exception exception, Session session)
         {
-            Context.Logger.LogLine($"Failed to handle request: {exception}");
+            ContextAccessor.LambdaContext.Logger.LogLine($"Failed to handle request: {exception}");
 
             TrackException(exception, session);
 

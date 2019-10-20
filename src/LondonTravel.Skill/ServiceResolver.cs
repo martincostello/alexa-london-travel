@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System;
-using Amazon.Lambda.Core;
 using MartinCostello.LondonTravel.Skill.Extensions;
 using MartinCostello.LondonTravel.Skill.Intents;
 using Microsoft.ApplicationInsights;
@@ -18,16 +17,13 @@ namespace MartinCostello.LondonTravel.Skill
     internal static class ServiceResolver
     {
         /// <summary>
-        /// Gets the service provider to use for the current AWS Lambda context.
+        /// Gets the service provider to use.
         /// </summary>
-        /// <param name="context">The current AWS Lambda context.</param>
         /// <param name="configure">A delegate to a method to use to apply any customizations.</param>
         /// <returns>
         /// The <see cref="IServiceCollection"/> to use.
         /// </returns>
-        public static IServiceCollection GetServiceCollection(
-            ILambdaContext context,
-            Action<IServiceCollection> configure)
+        public static IServiceCollection GetServiceCollection(Action<IServiceCollection> configure)
         {
             var services = new ServiceCollection();
 
@@ -36,21 +32,21 @@ namespace MartinCostello.LondonTravel.Skill
             services.AddHttpClients();
             services.AddPolly();
 
-            services.AddSingleton(context);
             services.TryAddSingleton((_) => SkillConfiguration.CreateDefaultConfiguration());
 
             services.AddSingleton<AlexaSkill>();
             services.AddSingleton<IntentFactory>();
+            services.AddSingleton<LambdaContextAccessor>();
             services.AddSingleton((_) => TelemetryConfiguration.CreateDefault());
             services.AddSingleton(CreateTelemetryClient);
 
             services.AddSingleton<EmptyIntent>();
             services.AddSingleton<HelpIntent>();
+            services.AddSingleton<UnknownIntent>();
 
             services.AddTransient<CommuteIntent>();
             services.AddTransient<DisruptionIntent>();
             services.AddTransient<StatusIntent>();
-            services.AddTransient<UnknownIntent>();
 
             return services;
         }

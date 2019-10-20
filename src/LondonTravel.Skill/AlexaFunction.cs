@@ -35,38 +35,48 @@ namespace MartinCostello.LondonTravel.Skill
         {
             context.Logger.LogLine($"Invoking skill request of type {request.Request.GetType().Name}.");
 
-            IServiceProvider serviceProvider = CreateServiceProvider(context);
+            IServiceProvider serviceProvider = CreateServiceProvider();
 
             VerifySkillId(request, serviceProvider.GetRequiredService<SkillConfiguration>());
 
-            var skill = serviceProvider.GetRequiredService<AlexaSkill>();
+            LambdaContextAccessor contextAccessor = serviceProvider.GetRequiredService<LambdaContextAccessor>();
+            contextAccessor.LambdaContext = context;
 
             SkillResponse response;
 
             try
             {
-                if (request.Request is LaunchRequest)
+                var skill = serviceProvider.GetRequiredService<AlexaSkill>();
+
+                try
                 {
-                    response = skill.OnLaunch(request.Session);
+                    if (request.Request is LaunchRequest)
+                    {
+                        response = skill.OnLaunch(request.Session);
+                    }
+                    else if (request.Request is IntentRequest intent)
+                    {
+                        response = await skill.OnIntentAsync(intent.Intent, request.Session);
+                    }
+                    else if (request.Request is SessionEndedRequest)
+                    {
+                        response = skill.OnSessionEnded(request.Session);
+                    }
+                    else
+                    {
+                        response = skill.OnError(null, request.Session);
+                    }
                 }
-                else if (request.Request is IntentRequest intent)
+#pragma warning disable CA1031
+                catch (Exception ex)
+#pragma warning restore CA1031
                 {
-                    response = await skill.OnIntentAsync(intent.Intent, request.Session);
-                }
-                else if (request.Request is SessionEndedRequest)
-                {
-                    response = skill.OnSessionEnded(request.Session);
-                }
-                else
-                {
-                    response = skill.OnError(null, request.Session);
+                    response = skill.OnError(ex, request.Session);
                 }
             }
-#pragma warning disable CA1031
-            catch (Exception ex)
-#pragma warning restore CA1031
+            finally
             {
-                response = skill.OnError(ex, request.Session);
+                contextAccessor.LambdaContext = null;
             }
 
             return response;
@@ -84,13 +94,12 @@ namespace MartinCostello.LondonTravel.Skill
         /// <summary>
         /// Creates the <see cref="IServiceProvider"/> to use.
         /// </summary>
-        /// <param name="context">The AWS Lambda context to create the service provider with.</param>
         /// <returns>
         /// The <see cref="IServiceProvider"/> to use.
         /// </returns>
-        private IServiceProvider CreateServiceProvider(ILambdaContext context)
+        private IServiceProvider CreateServiceProvider()
         {
-            IServiceCollection services = ServiceResolver.GetServiceCollection(context, ConfigureServices);
+            IServiceCollection services = ServiceResolver.GetServiceCollection(ConfigureServices);
 
             return services.BuildServiceProvider();
         }

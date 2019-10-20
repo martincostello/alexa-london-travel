@@ -4,7 +4,6 @@
 using System.Threading.Tasks;
 using Alexa.NET.Request;
 using Alexa.NET.Response;
-using Amazon.Lambda.Core;
 
 namespace MartinCostello.LondonTravel.Skill.Intents
 {
@@ -16,21 +15,21 @@ namespace MartinCostello.LondonTravel.Skill.Intents
         /// <summary>
         /// Initializes a new instance of the <see cref="UnknownIntent"/> class.
         /// </summary>
-        /// <param name="context">The <see cref="ILambdaContext"/> to use.</param>
-        public UnknownIntent(ILambdaContext context)
+        /// <param name="contextAccessor">The <see cref="LambdaContextAccessor"/> to use.</param>
+        public UnknownIntent(LambdaContextAccessor contextAccessor)
         {
-            Context = context;
+            ContextAccessor = contextAccessor;
         }
 
         /// <summary>
-        /// Gets the current AWS Lambda request context.
+        /// Gets the AWS Lambda request context accessor.
         /// </summary>
-        private ILambdaContext Context { get; }
+        private LambdaContextAccessor ContextAccessor { get; }
 
         /// <inheritdoc />
         public Task<SkillResponse> RespondAsync(Intent intent, Session session)
         {
-            Context.Logger.LogLine($"Unknown intent '{intent.Name}' cannot be handled.");
+            ContextAccessor.LambdaContext.Logger.LogLine($"Unknown intent '{intent.Name}' cannot be handled.");
 
             var response = SkillResponseBuilder
                 .Tell("Sorry, I don't understand how to do that.")
