@@ -232,15 +232,6 @@ namespace MartinCostello.LondonTravel.Skill {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Some parts of {0} are currently being served by a replacement bus service..
-        /// </summary>
-        internal static string StatusIntentBusServiceFormat {
-            get {
-                return ResourceManager.GetString("StatusIntentBusServiceFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0}{1} Status.
         /// </summary>
         internal static string StatusIntentCardTitleFormat {
@@ -268,83 +259,11 @@ namespace MartinCostello.LondonTravel.Skill {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is currently disruption on {0}..
-        /// </summary>
-        internal static string StatusIntentGenericDisruptionFormat {
-            get {
-                return ResourceManager.GetString("StatusIntentGenericDisruptionFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to There is a good service on {0}..
         /// </summary>
         internal static string StatusIntentGoodServiceFormat {
             get {
                 return ResourceManager.GetString("StatusIntentGoodServiceFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to There are minor delays on {0}..
-        /// </summary>
-        internal static string StatusIntentMinorDelaysFormat {
-            get {
-                return ResourceManager.GetString("StatusIntentMinorDelaysFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} is partially closed..
-        /// </summary>
-        internal static string StatusIntentPartiallyClosedFormat {
-            get {
-                return ResourceManager.GetString("StatusIntentPartiallyClosedFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} is partially suspended..
-        /// </summary>
-        internal static string StatusIntentPartiallySuspendedFormat {
-            get {
-                return ResourceManager.GetString("StatusIntentPartiallySuspendedFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to There is a planned closure on {0}..
-        /// </summary>
-        internal static string StatusIntentPlannedClosureFormat {
-            get {
-                return ResourceManager.GetString("StatusIntentPlannedClosureFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to There is a reduced service on {0}..
-        /// </summary>
-        internal static string StatusIntentReducedServiceFormat {
-            get {
-                return ResourceManager.GetString("StatusIntentReducedServiceFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to There are severe delays on {0}..
-        /// </summary>
-        internal static string StatusIntentSevereDelaysFormat {
-            get {
-                return ResourceManager.GetString("StatusIntentSevereDelaysFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} is suspended..
-        /// </summary>
-        internal static string StatusIntentSuspendedFormat {
-            get {
-                return ResourceManager.GetString("StatusIntentSuspendedFormat", resourceCulture);
             }
         }
         

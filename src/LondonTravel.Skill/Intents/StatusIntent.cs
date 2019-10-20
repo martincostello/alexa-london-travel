@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -84,11 +85,6 @@ namespace MartinCostello.LondonTravel.Skill.Intents
         /// </returns>
         internal static string GenerateResponse(IList<Line> lines)
         {
-            if (lines.Count < 1 || lines[0].LineStatuses.Count < 1)
-            {
-                return Strings.InternalError;
-            }
-
             Line line = lines[0];
 
             if (line.LineStatuses.Count == 1)
@@ -159,7 +155,7 @@ namespace MartinCostello.LondonTravel.Skill.Intents
         /// </returns>
         private static string GenerateDetailedResponse(LineStatus status)
         {
-            string response = status.Reason ?? string.Empty;
+            string response = status.Reason;
 
             // Trim off the line name prefix, if present
             string delimiter = ": ";
@@ -185,55 +181,17 @@ namespace MartinCostello.LondonTravel.Skill.Intents
         {
             string format;
 
-            switch (status.StatusSeverity)
+            if (status.StatusSeverity == LineStatusSeverity.ServiceClosed)
             {
-                case LineStatusSeverity.GoodService:
-                case LineStatusSeverity.NoIssues:
-                    format = Strings.StatusIntentGoodServiceFormat;
-                    break;
+                format = Strings.StatusIntentClosedFormat;
+            }
+            else
+            {
+                Debug.Assert(
+                    status.StatusSeverity == LineStatusSeverity.GoodService || status.StatusSeverity == LineStatusSeverity.NoIssues,
+                    $"'{status.StatusSeverity}' is not supported for a summary response.");
 
-                case LineStatusSeverity.BusService:
-                    format = Strings.StatusIntentBusServiceFormat;
-                    break;
-
-                case LineStatusSeverity.Closed:
-                case LineStatusSeverity.NotRunning:
-                case LineStatusSeverity.ServiceClosed:
-                    format = Strings.StatusIntentClosedFormat;
-                    break;
-
-                case LineStatusSeverity.MinorDelays:
-                    format = Strings.StatusIntentMinorDelaysFormat;
-                    break;
-
-                case LineStatusSeverity.PartClosed:
-                case LineStatusSeverity.PartClosure:
-                    format = Strings.StatusIntentPartiallyClosedFormat;
-                    break;
-
-                case LineStatusSeverity.PartSuspended:
-                    format = Strings.StatusIntentPartiallySuspendedFormat;
-                    break;
-
-                case LineStatusSeverity.PlannedClosure:
-                    format = Strings.StatusIntentPlannedClosureFormat;
-                    break;
-
-                case LineStatusSeverity.ReducedService:
-                    format = Strings.StatusIntentReducedServiceFormat;
-                    break;
-
-                case LineStatusSeverity.SevereDelays:
-                    format = Strings.StatusIntentSevereDelaysFormat;
-                    break;
-
-                case LineStatusSeverity.Suspended:
-                    format = Strings.StatusIntentSuspendedFormat;
-                    break;
-
-                default:
-                    format = Strings.StatusIntentGenericDisruptionFormat;
-                    break;
+                format = Strings.StatusIntentGoodServiceFormat;
             }
 
             var culture = CultureInfo.CurrentCulture;

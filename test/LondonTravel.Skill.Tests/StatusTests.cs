@@ -153,6 +153,39 @@ namespace MartinCostello.LondonTravel.Skill
             ssml.Ssml.ShouldBe("<speak>Sorry, something went wrong.</speak>");
         }
 
+        [Theory]
+        [InlineData("Bakerloo", "The Bakerloo line is closed.")]
+        [InlineData("Central", "There is a good service on the Central line.")]
+        [InlineData("Circle", "Saturday 19 and Sunday 20 October, no service between Edgware Road and Aldgate (via Victoria).")]
+        [InlineData("District", "There is a good service on the District line.")]
+        [InlineData("DLR", "There is a good service on the D.L.R..")]
+        [InlineData("Hammersmith & City", "There is a good service on the Hammersmith and City line.")]
+        [InlineData("Jubilee", "There is a good service on the Jubilee line.")]
+        [InlineData("London Overground", "There is a good service on London Overground.")]
+        [InlineData("Metropolitan", "There is a good service on the Metropolitan line.")]
+        [InlineData("Northern", "There is a good service on the Northern line.")]
+        [InlineData("Piccadilly", "There is a good service on the Piccadilly line.")]
+        [InlineData("TfL Rail", "There is a good service on T.F.L. Rail.")]
+        [InlineData("Victoria", "There is a good service on the Victoria line.")]
+        [InlineData("Waterloo & City", "There is a good service on the Waterloo and City line.")]
+        public async Task Can_Invoke_Function_For_Different_Severities(
+            string id,
+            string expected)
+        {
+            // Arrange
+            Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-line-severities.json"));
+
+            AlexaFunction function = CreateFunction();
+            SkillRequest request = CreateIntentForLine(id);
+            ILambdaContext context = CreateContext();
+
+            // Act
+            SkillResponse actual = await function.HandlerAsync(request, context);
+
+            // Assert
+            AssertLineResponse(actual, expectedSsml: "<speak>" + expected + "</speak>");
+        }
+
         private void AssertLineResponse(
             SkillResponse actual,
             string expectedSsml = null,
