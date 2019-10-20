@@ -10,31 +10,28 @@ using Alexa.NET.Response;
 using Alexa.NET.Response.Ssml;
 using Amazon.Lambda.Core;
 using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.Extensibility;
 
 namespace MartinCostello.LondonTravel.Skill
 {
     /// <summary>
-    /// A class representing the implementation of the London Travel Alexa skill.
+    /// A class representing the implementation of the London Travel Alexa skill. This class cannot be inherited.
     /// </summary>
-    public class AlexaSkill
+    internal sealed class AlexaSkill
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AlexaSkill"/> class.
         /// </summary>
+        /// <param name="intentFactory">The factory to use for the skill intents.</param>
         /// <param name="context">The AWS Lambda execution context.</param>
-        /// <param name="config">The skill configuration to use.</param>
-        public AlexaSkill(ILambdaContext context, SkillConfiguration config)
+        /// <param name="telemetry">The telemetry client to use.</param>
+        public AlexaSkill(
+            IntentFactory intentFactory,
+            ILambdaContext context,
+            TelemetryClient telemetry)
         {
             Context = context;
-            Config = config;
-
-#pragma warning disable CA2000
-            Telemetry = new TelemetryClient(TelemetryConfiguration.CreateDefault())
-            {
-                InstrumentationKey = config.ApplicationInsightsKey,
-            };
-#pragma warning restore CA2000
+            IntentFactory = intentFactory;
+            Telemetry = telemetry;
         }
 
         /// <summary>
@@ -43,9 +40,9 @@ namespace MartinCostello.LondonTravel.Skill
         private ILambdaContext Context { get; }
 
         /// <summary>
-        /// Gets the skill configuration.
+        /// Gets the AWS Lambda execution context.
         /// </summary>
-        private SkillConfiguration Config { get; }
+        private IntentFactory IntentFactory { get; }
 
         /// <summary>
         /// Gets the telemetery client to use.
@@ -83,11 +80,6 @@ namespace MartinCostello.LondonTravel.Skill
             TrackEvent(intent.Name, session);
 
             IIntent userIntent = IntentFactory.Create(intent);
-
-            if (userIntent is Intents.UnknownIntent)
-            {
-                Context.Logger.LogLine($"Unknown intent '{intent.Name}' cannot be handled.");
-            }
 
             return await userIntent.RespondAsync(intent, session);
         }

@@ -1,16 +1,32 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
 using Alexa.NET.Request;
 using MartinCostello.LondonTravel.Skill.Intents;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MartinCostello.LondonTravel.Skill
 {
     /// <summary>
     /// A class representing a factory for <see cref="IIntent"/> instances. This class cannot be inherited.
     /// </summary>
-    internal static class IntentFactory
+    internal sealed class IntentFactory
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntentFactory"/> class.
+        /// </summary>
+        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to use.</param>
+        public IntentFactory(IServiceProvider serviceProvider)
+        {
+            ServiceProvider = serviceProvider;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IServiceProvider"/> to use.
+        /// </summary>
+        private IServiceProvider ServiceProvider { get; }
+
         /// <summary>
         /// Creates an intent responder for the specified intent.
         /// </summary>
@@ -18,29 +34,39 @@ namespace MartinCostello.LondonTravel.Skill
         /// <returns>
         /// The <see cref="IIntent"/> to use to generate a response for the intent.
         /// </returns>
-        internal static IIntent Create(Intent intent)
+        public IIntent Create(Intent intent)
         {
+            Type intentType;
+
             switch (intent.Name)
             {
                 case "AMAZON.CancelIntent":
                 case "AMAZON.StopIntent":
-                    return new EmptyIntent();
+                    intentType = typeof(EmptyIntent);
+                    break;
 
                 case "AMAZON.HelpIntent":
-                    return new HelpIntent();
+                    intentType = typeof(HelpIntent);
+                    break;
 
                 case "CommuteIntent":
-                    return new CommuteIntent();
+                    intentType = typeof(CommuteIntent);
+                    break;
 
                 case "DistruptionIntent":
-                    return new DisruptionIntent();
+                    intentType = typeof(DisruptionIntent);
+                    break;
 
                 case "StatusIntent":
-                    return new StatusIntent();
+                    intentType = typeof(StatusIntent);
+                    break;
 
                 default:
-                    return new UnknownIntent();
+                    intentType = typeof(UnknownIntent);
+                    break;
             }
+
+            return (IIntent)ServiceProvider.GetRequiredService(intentType);
         }
     }
 }

@@ -7,6 +7,7 @@ using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
 using Amazon.Lambda.Core;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MartinCostello.LondonTravel.Skill
 {
@@ -19,23 +20,8 @@ namespace MartinCostello.LondonTravel.Skill
         /// Initializes a new instance of the <see cref="AlexaFunction"/> class.
         /// </summary>
         public AlexaFunction()
-            : this(SkillConfiguration.CreateDefaultConfiguration())
         {
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AlexaFunction"/> class with the specified configuration.
-        /// </summary>
-        /// <param name="config">The <see cref="SkillConfiguration"/> to use.</param>
-        public AlexaFunction(SkillConfiguration config)
-        {
-            Config = config;
-        }
-
-        /// <summary>
-        /// Gets the skill configuration.
-        /// </summary>
-        private SkillConfiguration Config { get; }
 
         /// <summary>
         /// Handles a request to the skill as an asynchronous operation.
@@ -49,9 +35,11 @@ namespace MartinCostello.LondonTravel.Skill
         {
             context.Logger.LogLine($"Invoking skill request of type {request.Request.GetType().Name}.");
 
-            VerifySkillId(request);
+            IServiceProvider serviceProvider = CreateServiceProvider(context);
 
-            var skill = new AlexaSkill(context, Config);
+            VerifySkillId(request, serviceProvider.GetRequiredService<SkillConfiguration>());
+
+            var skill = serviceProvider.GetRequiredService<AlexaSkill>();
 
             SkillResponse response;
 
@@ -85,18 +73,31 @@ namespace MartinCostello.LondonTravel.Skill
         }
 
         /// <summary>
+        /// Creates the <see cref="IServiceProvider"/> to use.
+        /// </summary>
+        /// <param name="context">The AWS Lambda context to create the service provider with.</param>
+        /// <returns>
+        /// The <see cref="IServiceProvider"/> to use.
+        /// </returns>
+        protected virtual IServiceProvider CreateServiceProvider(ILambdaContext context)
+        {
+            return ServiceResolver.GetServiceCollection(context).BuildServiceProvider();
+        }
+
+        /// <summary>
         /// Verifies the skill Id.
         /// </summary>
-        /// <param name="input">The function input.</param>
-        private void VerifySkillId(SkillRequest input)
+        /// <param name="request">The function request.</param>
+        /// <param name="config">The skill configuration.</param>
+        private void VerifySkillId(SkillRequest request, SkillConfiguration config)
         {
-            if (Config.VerifySkillId)
+            if (config.VerifySkillId)
             {
-                string applicationId = input.Session.Application.ApplicationId;
+                string applicationId = request.Session.Application.ApplicationId;
 
-                if (!string.Equals(applicationId, Config.SkillId, StringComparison.Ordinal))
+                if (!string.Equals(applicationId, config.SkillId, StringComparison.Ordinal))
                 {
-                    throw new InvalidOperationException($"Request application Id '{applicationId}' and configured skill Id '{Config.SkillId}' mismatch.");
+                    throw new InvalidOperationException($"Request application Id '{applicationId}' and configured skill Id '{config.SkillId}' mismatch.");
                 }
             }
         }

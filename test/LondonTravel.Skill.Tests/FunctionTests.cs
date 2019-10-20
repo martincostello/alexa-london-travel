@@ -40,8 +40,7 @@ namespace MartinCostello.LondonTravel.Skill
 
         protected virtual AlexaFunction CreateFunction()
         {
-            var config = new SkillConfiguration();
-            return new AlexaFunction(config);
+            return new AlexaFunction();
         }
 
         protected virtual SkillRequest CreateIntentRequest(string name)
