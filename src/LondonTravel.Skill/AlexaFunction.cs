@@ -37,8 +37,7 @@ namespace MartinCostello.LondonTravel.Skill
             LambdaContextAccessor contextAccessor = serviceProvider.GetRequiredService<LambdaContextAccessor>();
             contextAccessor.LambdaContext = context;
 
-            var previousCulture = Thread.CurrentThread.CurrentCulture;
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo(request.Request.Locale ?? "en-GB");
+            CultureInfo previousCulture = SetLocale(request);
 
             SkillResponse response;
 
@@ -101,6 +100,31 @@ namespace MartinCostello.LondonTravel.Skill
             IServiceCollection services = ServiceResolver.GetServiceCollection(ConfigureServices);
 
             return services.BuildServiceProvider();
+        }
+
+        /// <summary>
+        /// Sets the locale to use for resources for the current request.
+        /// </summary>
+        /// <param name="request">The skill request to use to set the locale.</param>
+        /// <returns>
+        /// The previous locale.
+        /// </returns>
+        private CultureInfo SetLocale(SkillRequest request)
+        {
+            var previousCulture = Thread.CurrentThread.CurrentCulture;
+
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo(request.Request.Locale ?? "en-GB");
+            }
+#pragma warning disable CA1031
+            catch (ArgumentException)
+#pragma warning restore CA1031
+            {
+                // Ignore invalid/unknown cultures
+            }
+
+            return previousCulture;
         }
 
         /// <summary>
