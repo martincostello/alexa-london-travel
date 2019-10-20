@@ -40,6 +40,7 @@ namespace MartinCostello.LondonTravel.Skill.Clients
         }
 
         /// <inheritdoc/>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public Task<HttpContent> SerializeAsync<T>(T item)
         {
             throw new NotImplementedException();
