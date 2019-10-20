@@ -61,6 +61,51 @@ namespace MartinCostello.LondonTravel.Skill {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You need to link your account to be able to ask me about your commute..
+        /// </summary>
+        internal static string CommuteIntentAccountNotLinked {
+            get {
+                return ResourceManager.GetString("CommuteIntentAccountNotLinked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your Commute.
+        /// </summary>
+        internal static string CommuteIntentCardTitle {
+            get {
+                return ResourceManager.GetString("CommuteIntentCardTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It looks like you&apos;ve disabled account linking. You need to re-link your account to be able to ask me about your commute..
+        /// </summary>
+        internal static string CommuteIntentInvalidToken {
+            get {
+                return ResourceManager.GetString("CommuteIntentInvalidToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have not selected any favorite lines yet. Visit the London Travel website to set your preferences..
+        /// </summary>
+        internal static string CommuteIntentNoFavorites {
+            get {
+                return ResourceManager.GetString("CommuteIntentNoFavorites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: {1}.
+        /// </summary>
+        internal static string CommuteIntentPrefixFormat {
+            get {
+                return ResourceManager.GetString("CommuteIntentPrefixFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disruption Summary.
         /// </summary>
         internal static string DisruptionIntentCardTitle {

@@ -687,6 +687,82 @@
           }
         }
       ]
+    },
+    {
+      "uri": "https://api.tfl.gov.uk/Line/northern%2Cvictoria/Status?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
+      "contentFormat": "json",
+      "contentJson": [
+        {
+          "$type": "Tfl.Api.Presentation.Entities.Line, Tfl.Api.Presentation.Entities",
+          "id": "northern",
+          "name": "Northern",
+          "modeName": "tube",
+          "disruptions": [],
+          "created": "2019-10-17T12:58:58.117Z",
+          "modified": "2019-10-17T12:58:58.117Z",
+          "lineStatuses": [
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineStatus, Tfl.Api.Presentation.Entities",
+              "id": 0,
+              "statusSeverity": 10,
+              "statusSeverityDescription": "Good Service",
+              "created": "0001-01-01T00:00:00",
+              "validityPeriods": []
+            }
+          ],
+          "routeSections": [],
+          "serviceTypes": [
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
+              "name": "Regular",
+              "uri": "/Line/Route?ids=Northern&serviceTypes=Regular"
+            },
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
+              "name": "Night",
+              "uri": "/Line/Route?ids=Northern&serviceTypes=Night"
+            }
+          ],
+          "crowding": {
+            "$type": "Tfl.Api.Presentation.Entities.Crowding, Tfl.Api.Presentation.Entities"
+          }
+        },
+        {
+          "$type": "Tfl.Api.Presentation.Entities.Line, Tfl.Api.Presentation.Entities",
+          "id": "victoria",
+          "name": "Victoria",
+          "modeName": "tube",
+          "disruptions": [],
+          "created": "2019-10-17T12:58:58.11Z",
+          "modified": "2019-10-17T12:58:58.11Z",
+          "lineStatuses": [
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineStatus, Tfl.Api.Presentation.Entities",
+              "id": 0,
+              "statusSeverity": 10,
+              "statusSeverityDescription": "Good Service",
+              "created": "0001-01-01T00:00:00",
+              "validityPeriods": []
+            }
+          ],
+          "routeSections": [],
+          "serviceTypes": [
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
+              "name": "Regular",
+              "uri": "/Line/Route?ids=Victoria&serviceTypes=Regular"
+            },
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
+              "name": "Night",
+              "uri": "/Line/Route?ids=Victoria&serviceTypes=Night"
+            }
+          ],
+          "crowding": {
+            "$type": "Tfl.Api.Presentation.Entities.Crowding, Tfl.Api.Presentation.Entities"
+          }
+        }
+      ]
     }
   ]
 }

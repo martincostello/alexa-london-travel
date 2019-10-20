@@ -82,7 +82,7 @@ namespace MartinCostello.LondonTravel.Skill.Intents
         /// <returns>
         /// The response for the specified lines' statuses.
         /// </returns>
-        private static string GenerateResponse(IList<Line> lines)
+        internal static string GenerateResponse(IList<Line> lines)
         {
             if (lines.Count < 1 || lines[0].LineStatuses.Count < 1)
             {
