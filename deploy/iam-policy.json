@@ -15,6 +15,7 @@
       "Effect": "Allow",
       "Action": [
         "lambda:CreateFunction",
+        "lambda:GetFunction",
         "lambda:ListFunctions"
       ],
       "Resource": "*"
@@ -23,7 +24,6 @@
       "Sid": "DeployCode",
       "Effect": "Allow",
       "Action": [
-        "lambda:UploadFunction",
         "lambda:UpdateFunctionCode",
         "lambda:UpdateFunctionConfiguration"
       ],

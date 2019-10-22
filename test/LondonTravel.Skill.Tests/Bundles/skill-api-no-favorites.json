@@ -1,0 +1,22 @@
+{
+  "$schema": "https://raw.githubusercontent.com/justeat/httpclient-interception/master/src/HttpClientInterception/Bundles/http-request-bundle-schema.json",
+  "id": "skill-no-favorites",
+  "version": 1,
+  "comment": "HTTP bundle for the skill's API with no favorite lines.",
+  "items": [
+    {
+      "comment": "Response for an access token with no favorite lines.",
+      "uri": "https://londontravel.martincostello.local/api/preferences",
+      "requestHeaders": {
+        "Authorization": [
+          "Bearer token-for-no-favorites"
+        ]
+      },
+      "contentFormat": "json",
+      "contentJson": {
+        "favoriteLines": [],
+        "userId": "009b70ea-b5af-4ed6-bbfe-40ad64f64874"
+      }
+    }
+  ]
+}

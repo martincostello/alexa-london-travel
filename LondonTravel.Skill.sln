@@ -1,0 +1,89 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29409.12
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8C59CF37-5860-4143-A891-A51E50620EBD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{27EF9EE1-288D-4AFD-9006-D7CE61B642DF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AF3F738F-308E-4EB0-A9E3-CE43D407992F}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		.travis.yml = .travis.yml
+		Build.ps1 = Build.ps1
+		build.sh = build.sh
+		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		global.json = global.json
+		LICENSE = LICENSE
+		LondonTravel.Skill.ruleset = LondonTravel.Skill.ruleset
+		NuGet.config = NuGet.config
+		README.md = README.md
+		stylecop.json = stylecop.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{791C7C14-F862-41ED-9D92-12F844223C1B}"
+	ProjectSection(SolutionItems) = preProject
+		.github\CONTRIBUTING.md = .github\CONTRIBUTING.md
+		.github\ISSUE_TEMPLATE.md = .github\ISSUE_TEMPLATE.md
+		.github\PULL_REQUEST_TEMPLATE.md = .github\PULL_REQUEST_TEMPLATE.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".vscode", ".vscode", "{AA565D13-18EE-4B43-ADD9-7AE69BE987AE}"
+	ProjectSection(SolutionItems) = preProject
+		.vscode\launch.json = .vscode\launch.json
+		.vscode\settings.json = .vscode\settings.json
+		.vscode\tasks.json = .vscode\tasks.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{A1F2C611-AB01-42E7-8F57-97025AE5816A}"
+	ProjectSection(SolutionItems) = preProject
+		deploy\iam-policy.json = deploy\iam-policy.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "static", "static", "{87F99EB8-63C9-4216-ACD6-F0284F61E8DF}"
+	ProjectSection(SolutionItems) = preProject
+		static\alexa.png = static\alexa.png
+		static\favicon.ico = static\favicon.ico
+		static\icon-108x108.png = static\icon-108x108.png
+		static\icon-512x512.png = static\icon-512x512.png
+		static\tfl.png = static\tfl.png
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Skill", "src\LondonTravel.Skill\LondonTravel.Skill.csproj", "{A2110669-0B44-4F8D-9863-F44EA9F64759}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Skill.Tests", "test\LondonTravel.Skill.Tests\LondonTravel.Skill.Tests.csproj", "{24473A89-5428-4E9E-8F55-661BBDBA8C31}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A2110669-0B44-4F8D-9863-F44EA9F64759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2110669-0B44-4F8D-9863-F44EA9F64759}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2110669-0B44-4F8D-9863-F44EA9F64759}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2110669-0B44-4F8D-9863-F44EA9F64759}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24473A89-5428-4E9E-8F55-661BBDBA8C31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24473A89-5428-4E9E-8F55-661BBDBA8C31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24473A89-5428-4E9E-8F55-661BBDBA8C31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24473A89-5428-4E9E-8F55-661BBDBA8C31}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{791C7C14-F862-41ED-9D92-12F844223C1B} = {AF3F738F-308E-4EB0-A9E3-CE43D407992F}
+		{AA565D13-18EE-4B43-ADD9-7AE69BE987AE} = {AF3F738F-308E-4EB0-A9E3-CE43D407992F}
+		{A1F2C611-AB01-42E7-8F57-97025AE5816A} = {AF3F738F-308E-4EB0-A9E3-CE43D407992F}
+		{87F99EB8-63C9-4216-ACD6-F0284F61E8DF} = {AF3F738F-308E-4EB0-A9E3-CE43D407992F}
+		{A2110669-0B44-4F8D-9863-F44EA9F64759} = {8C59CF37-5860-4143-A891-A51E50620EBD}
+		{24473A89-5428-4E9E-8F55-661BBDBA8C31} = {27EF9EE1-288D-4AFD-9006-D7CE61B642DF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7E57D002-B20B-49BE-AD07-7FC61C2A764B}
+	EndGlobalSection
+EndGlobal

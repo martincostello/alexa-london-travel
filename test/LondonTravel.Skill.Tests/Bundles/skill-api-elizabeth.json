@@ -1,0 +1,24 @@
+{
+  "$schema": "https://raw.githubusercontent.com/justeat/httpclient-interception/master/src/HttpClientInterception/Bundles/http-request-bundle-schema.json",
+  "id": "tfl",
+  "version": 1,
+  "comment": "HTTP bundle for the skill's API for only the Elizabeth line being a favorite.",
+  "items": [
+    {
+      "comment": "Response for an access token with only the Elizabeth line as a favorite line.",
+      "uri": "https://londontravel.martincostello.local/api/preferences",
+      "requestHeaders": {
+        "Authorization": [
+          "Bearer token-for-only-elizabeth-line"
+        ]
+      },
+      "contentFormat": "json",
+      "contentJson": {
+        "favoriteLines": [
+          "elizabeth"
+        ],
+        "userId": "20b41d96-3c82-462f-9b1e-fa26fdf35292"
+      }
+    }
+  ]
+}
