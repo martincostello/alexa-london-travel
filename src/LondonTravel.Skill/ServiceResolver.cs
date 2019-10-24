@@ -35,6 +35,7 @@ namespace MartinCostello.LondonTravel.Skill
             services.TryAddSingleton((_) => SkillConfiguration.CreateDefaultConfiguration());
 
             services.AddSingleton<AlexaSkill>();
+            services.AddSingleton<FunctionHandler>();
             services.AddSingleton<IntentFactory>();
             services.AddSingleton<LambdaContextAccessor>();
             services.AddSingleton((_) => TelemetryConfiguration.CreateDefault());
