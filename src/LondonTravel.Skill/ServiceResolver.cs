@@ -8,6 +8,7 @@ using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill
 {
@@ -29,14 +30,16 @@ namespace MartinCostello.LondonTravel.Skill
 
             configure(services);
 
+            services.AddLogging((builder) => builder.AddLambdaLogger());
+
             services.AddHttpClients();
             services.AddPolly();
 
             services.TryAddSingleton((_) => SkillConfiguration.CreateDefaultConfiguration());
 
             services.AddSingleton<AlexaSkill>();
+            services.AddSingleton<FunctionHandler>();
             services.AddSingleton<IntentFactory>();
-            services.AddSingleton<LambdaContextAccessor>();
             services.AddSingleton((_) => TelemetryConfiguration.CreateDefault());
             services.AddSingleton(CreateTelemetryClient);
 

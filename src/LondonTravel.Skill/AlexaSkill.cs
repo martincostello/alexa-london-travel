@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Alexa.NET.Request;
 using Alexa.NET.Response;
 using Microsoft.ApplicationInsights;
+using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill
 {
@@ -20,15 +21,15 @@ namespace MartinCostello.LondonTravel.Skill
         /// Initializes a new instance of the <see cref="AlexaSkill"/> class.
         /// </summary>
         /// <param name="intentFactory">The factory to use for the skill intents.</param>
-        /// <param name="contextAccessor">The AWS Lambda execution context accessor.</param>
         /// <param name="telemetry">The telemetry client to use.</param>
+        /// <param name="logger">The logger to use.</param>
         public AlexaSkill(
             IntentFactory intentFactory,
-            LambdaContextAccessor contextAccessor,
-            TelemetryClient telemetry)
+            TelemetryClient telemetry,
+            ILogger<AlexaSkill> logger)
         {
-            ContextAccessor = contextAccessor;
             IntentFactory = intentFactory;
+            Logger = logger;
             Telemetry = telemetry;
         }
 
@@ -38,9 +39,9 @@ namespace MartinCostello.LondonTravel.Skill
         private IntentFactory IntentFactory { get; }
 
         /// <summary>
-        /// Gets the AWS Lambda execution context accessor.
+        /// Gets the logger to use.
         /// </summary>
-        private LambdaContextAccessor ContextAccessor { get; }
+        private ILogger Logger { get; }
 
         /// <summary>
         /// Gets the telemetery client to use.
@@ -57,7 +58,7 @@ namespace MartinCostello.LondonTravel.Skill
         /// </returns>
         public SkillResponse OnError(Exception exception, Session session)
         {
-            ContextAccessor.LambdaContext.Logger.LogLine($"Failed to handle request: {exception}");
+            Logger.LogError(exception, "Failed to handle request for session {SessionId}.", session.SessionId);
 
             TrackException(exception, session);
 
