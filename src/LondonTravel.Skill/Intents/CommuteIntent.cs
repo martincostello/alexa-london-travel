@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Alexa.NET.Request;
 using Alexa.NET.Response;
 using MartinCostello.LondonTravel.Skill.Clients;
+using Microsoft.Extensions.Logging;
 using Refit;
 
 namespace MartinCostello.LondonTravel.Skill.Intents
@@ -26,14 +27,15 @@ namespace MartinCostello.LondonTravel.Skill.Intents
         /// <param name="tflClient">The TfL API client to use.</param>
         /// <param name="contextAccessor">The AWS Lambda context accessor to use.</param>
         /// <param name="config">The skill configuration to use.</param>
+        /// <param name="logger">The logger to use.</param>
         public CommuteIntent(
             ISkillClient skillClient,
             ITflClient tflClient,
-            LambdaContextAccessor contextAccessor,
-            SkillConfiguration config)
+            SkillConfiguration config,
+            ILogger<CommuteIntent> logger)
         {
             Config = config;
-            ContextAccessor = contextAccessor;
+            Logger = logger;
             SkillClient = skillClient;
             TflClient = tflClient;
         }
@@ -44,9 +46,9 @@ namespace MartinCostello.LondonTravel.Skill.Intents
         private SkillConfiguration Config { get; }
 
         /// <summary>
-        /// Gets the Lambda context accessor.
+        /// Gets the logger to use.
         /// </summary>
-        private LambdaContextAccessor ContextAccessor { get; }
+        private ILogger Logger { get; }
 
         /// <summary>
         /// Gets the skill client.
@@ -125,8 +127,10 @@ namespace MartinCostello.LondonTravel.Skill.Intents
             }
             catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
             {
-                ContextAccessor.LambdaContext.Logger.LogLine(
-                    $"Access token is invalid for user Id '{session.User.UserId}' and session id '{session.SessionId}'.");
+                Logger.LogWarning(
+                    "Access token is invalid for user Id {UserId} and session Id {SessionId}.",
+                    session.User.UserId,
+                    session.SessionId);
 
                 return null;
             }
@@ -142,8 +146,9 @@ namespace MartinCostello.LondonTravel.Skill.Intents
 
         private SkillResponse NoFavorites(Session session)
         {
-            ContextAccessor.LambdaContext.Logger.LogLine(
-                $"User with Id '{session.User.UserId}' has set no line preferences.");
+            Logger.LogInformation(
+                "User with Id {UserId} has set no line preferences.",
+                session.User.UserId);
 
             string text = Strings.CommuteIntentNoFavorites;
 
@@ -155,8 +160,9 @@ namespace MartinCostello.LondonTravel.Skill.Intents
 
         private SkillResponse NotLinked(Session session)
         {
-            ContextAccessor.LambdaContext.Logger.LogLine(
-                $"User with Id '{session.User?.UserId}' has not linked account.");
+            Logger.LogInformation(
+                "User with Id {UserId} has not linked account.",
+                session.User?.UserId);
 
             return SkillResponseBuilder
                 .Tell(Strings.CommuteIntentAccountNotLinked)
@@ -166,8 +172,9 @@ namespace MartinCostello.LondonTravel.Skill.Intents
 
         private SkillResponse Unauthorized(Session session)
         {
-            ContextAccessor.LambdaContext.Logger.LogLine(
-                $"User with Id '{session.User.UserId}' has an invalid access token.");
+            Logger.LogInformation(
+                "User with Id {UserId} has an invalid access token.",
+                session.User.UserId);
 
             return SkillResponseBuilder
                 .Tell(Strings.CommuteIntentInvalidToken)

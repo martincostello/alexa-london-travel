@@ -30,18 +30,8 @@ namespace MartinCostello.LondonTravel.Skill
             IServiceProvider serviceProvider = CreateServiceProvider();
 
             var handler = serviceProvider.GetRequiredService<FunctionHandler>();
-            var accessor = serviceProvider.GetRequiredService<LambdaContextAccessor>();
 
-            accessor.LambdaContext = context;
-
-            try
-            {
-                return await handler.HandleAsync(request);
-            }
-            finally
-            {
-                accessor.LambdaContext = null;
-            }
+            return await handler.HandleAsync(request);
         }
 
         /// <summary>

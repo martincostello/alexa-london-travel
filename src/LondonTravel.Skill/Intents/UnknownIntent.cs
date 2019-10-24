@@ -4,6 +4,7 @@
 using System.Threading.Tasks;
 using Alexa.NET.Request;
 using Alexa.NET.Response;
+using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill.Intents
 {
@@ -15,21 +16,24 @@ namespace MartinCostello.LondonTravel.Skill.Intents
         /// <summary>
         /// Initializes a new instance of the <see cref="UnknownIntent"/> class.
         /// </summary>
-        /// <param name="contextAccessor">The <see cref="LambdaContextAccessor"/> to use.</param>
-        public UnknownIntent(LambdaContextAccessor contextAccessor)
+        /// <param name="logger">The logger to use.</param>
+        public UnknownIntent(ILogger<UnknownIntent> logger)
         {
-            ContextAccessor = contextAccessor;
+            Logger = logger;
         }
 
         /// <summary>
-        /// Gets the AWS Lambda request context accessor.
+        /// Gets the logger to use.
         /// </summary>
-        private LambdaContextAccessor ContextAccessor { get; }
+        private ILogger Logger { get; }
 
         /// <inheritdoc />
         public Task<SkillResponse> RespondAsync(Intent intent, Session session)
         {
-            ContextAccessor.LambdaContext.Logger.LogLine($"Unknown intent '{intent.Name}' cannot be handled.");
+            Logger.LogWarning(
+                "Unknown intent {IntentName} cannot be handled for session Id {SessionId}.",
+                intent.Name,
+                session.SessionId);
 
             var response = SkillResponseBuilder
                 .Tell(Strings.UnknownCommand)
