@@ -51,7 +51,7 @@ namespace MartinCostello.LondonTravel.Skill
         /// <summary>
         /// Handles an error.
         /// </summary>
-        /// <param name="exception">The exception that occured, if any.</param>
+        /// <param name="exception">The exception that occurred, if any.</param>
         /// <param name="session">The Alexa session.</param>
         /// <returns>
         /// The <see cref="ResponseBody"/> to return from the skill.
