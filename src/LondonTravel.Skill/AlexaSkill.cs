@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Alexa.NET.Request;
+using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
 using Microsoft.ApplicationInsights;
 using Microsoft.Extensions.Logging;
@@ -47,6 +48,28 @@ namespace MartinCostello.LondonTravel.Skill
         /// Gets the telemetery client to use.
         /// </summary>
         private TelemetryClient Telemetry { get; }
+
+        /// <summary>
+        /// Handles a system error.
+        /// </summary>
+        /// <param name="error">The error that occurred.</param>
+        /// <param name="session">The Alexa session.</param>
+        /// <returns>
+        /// The <see cref="ResponseBody"/> to return from the skill.
+        /// </returns>
+        public SkillResponse OnError(SystemExceptionRequest error, Session session)
+        {
+            Logger.LogError(
+                "Failed to handle request for session {SessionId}. Error type {ErrorType} with cause {ErrorCause}: {ErrorMessage}",
+                session.SessionId,
+                error.Error.Type,
+                error.ErrorCause?.requestId,
+                error.Error.Message);
+
+            return SkillResponseBuilder
+                .Tell(Strings.InternalError)
+                .Build();
+        }
 
         /// <summary>
         /// Handles an error.
