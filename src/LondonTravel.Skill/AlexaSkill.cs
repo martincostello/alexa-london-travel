@@ -134,7 +134,7 @@ namespace MartinCostello.LondonTravel.Skill
         {
             IDictionary<string, string> properties = ToTelemetryProperties(session);
 
-            if (intent != null)
+            if (intent?.Slots?.Count > 0)
             {
                 foreach (var slot in intent.Slots.Values)
                 {
