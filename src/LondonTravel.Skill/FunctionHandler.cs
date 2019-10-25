@@ -82,9 +82,13 @@ namespace MartinCostello.LondonTravel.Skill
                 {
                     return Skill.OnSessionEnded(request.Session);
                 }
+                else if (request.Request is SystemExceptionRequest error)
+                {
+                    return Skill.OnError(error, request.Session);
+                }
                 else
                 {
-                    return Skill.OnError(null, request.Session);
+                    return Skill.OnError(null as Exception, request.Session);
                 }
             }
 #pragma warning disable CA1031

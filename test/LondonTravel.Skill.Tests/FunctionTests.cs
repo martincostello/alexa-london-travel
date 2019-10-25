@@ -69,24 +69,23 @@ namespace MartinCostello.LondonTravel.Skill
 
         protected virtual SkillRequest CreateIntentRequest(string name, params Slot[] slots)
         {
-            var intentSlots = new Dictionary<string, Slot>();
-
-            if (slots?.Length > 0)
-            {
-                foreach (var slot in slots)
-                {
-                    intentSlots[slot.Name] = slot;
-                }
-            }
-
             var request = new IntentRequest()
             {
                 Intent = new Intent()
                 {
                     Name = name,
-                    Slots = intentSlots,
                 },
             };
+
+            if (slots?.Length > 0)
+            {
+                request.Intent.Slots = new Dictionary<string, Slot>();
+
+                foreach (var slot in slots)
+                {
+                    request.Intent.Slots[slot.Name] = slot;
+                }
+            }
 
             return CreateRequest(request);
         }

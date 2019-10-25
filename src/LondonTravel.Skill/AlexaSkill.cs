@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Alexa.NET.Request;
+using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
 using Microsoft.ApplicationInsights;
 using Microsoft.Extensions.Logging;
@@ -49,9 +50,31 @@ namespace MartinCostello.LondonTravel.Skill
         private TelemetryClient Telemetry { get; }
 
         /// <summary>
+        /// Handles a system error.
+        /// </summary>
+        /// <param name="error">The error that occurred.</param>
+        /// <param name="session">The Alexa session.</param>
+        /// <returns>
+        /// The <see cref="ResponseBody"/> to return from the skill.
+        /// </returns>
+        public SkillResponse OnError(SystemExceptionRequest error, Session session)
+        {
+            Logger.LogError(
+                "Failed to handle request for session {SessionId}. Error type {ErrorType} with cause {ErrorCause}: {ErrorMessage}",
+                session.SessionId,
+                error.Error.Type,
+                error.ErrorCause?.requestId,
+                error.Error.Message);
+
+            return SkillResponseBuilder
+                .Tell(Strings.InternalError)
+                .Build();
+        }
+
+        /// <summary>
         /// Handles an error.
         /// </summary>
-        /// <param name="exception">The exception that occured, if any.</param>
+        /// <param name="exception">The exception that occurred, if any.</param>
         /// <param name="session">The Alexa session.</param>
         /// <returns>
         /// The <see cref="ResponseBody"/> to return from the skill.
@@ -122,19 +145,21 @@ namespace MartinCostello.LondonTravel.Skill
         {
             bool hasAccessToken = !string.IsNullOrEmpty(session.User?.AccessToken);
 
+#pragma warning disable CA1308
             return new Dictionary<string, string>()
             {
-                ["hasAccessToken"] = hasAccessToken.ToString(CultureInfo.InvariantCulture),
+                ["hasAccessToken"] = hasAccessToken.ToString(CultureInfo.InvariantCulture).ToLowerInvariant(),
                 ["sessionId"] = session.SessionId,
                 ["userId"] = session.User?.UserId,
             };
+#pragma warning restore CA1308
         }
 
         private void TrackEvent(string eventName, Session session, Intent intent = null)
         {
             IDictionary<string, string> properties = ToTelemetryProperties(session);
 
-            if (intent != null)
+            if (intent?.Slots?.Count > 0)
             {
                 foreach (var slot in intent.Slots.Values)
                 {

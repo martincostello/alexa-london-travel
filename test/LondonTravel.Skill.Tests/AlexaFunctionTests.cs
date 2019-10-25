@@ -4,6 +4,7 @@
 using System;
 using System.Threading.Tasks;
 using Alexa.NET.Request;
+using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
 using Amazon.Lambda.Core;
 using Shouldly;
@@ -62,6 +63,44 @@ namespace MartinCostello.LondonTravel.Skill
 
             response.OutputSpeech.ShouldNotBeNull();
             response.OutputSpeech.Type.ShouldBe("SSML");
+        }
+
+        [Fact]
+        public async Task Cannot_Invoke_Function_With_System_Failure()
+        {
+            // Arrange
+            AlexaFunction function = CreateFunction();
+            ILambdaContext context = CreateContext();
+
+            var error = new SystemExceptionRequest()
+            {
+                Error = new Error()
+                {
+                    Message = "Internal error.",
+                    Type = ErrorType.InternalError,
+                },
+                ErrorCause = new ErrorCause()
+                {
+                    requestId = "my-request-id",
+                },
+            };
+
+            var request = CreateRequest(error);
+
+            // Act
+            SkillResponse actual = await function.HandlerAsync(request, context);
+
+            // Assert
+            ResponseBody response = AssertResponse(actual);
+
+            response.Card.ShouldBeNull();
+            response.Reprompt.ShouldBeNull();
+
+            response.OutputSpeech.ShouldNotBeNull();
+            response.OutputSpeech.Type.ShouldBe("SSML");
+
+            var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
+            ssml.Ssml.ShouldBe("<speak>Sorry, something went wrong.</speak>");
         }
     }
 }
