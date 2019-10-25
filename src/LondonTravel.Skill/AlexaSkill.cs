@@ -122,12 +122,14 @@ namespace MartinCostello.LondonTravel.Skill
         {
             bool hasAccessToken = !string.IsNullOrEmpty(session.User?.AccessToken);
 
+#pragma warning disable CA1308
             return new Dictionary<string, string>()
             {
-                ["hasAccessToken"] = hasAccessToken.ToString(CultureInfo.InvariantCulture),
+                ["hasAccessToken"] = hasAccessToken.ToString(CultureInfo.InvariantCulture).ToLowerInvariant(),
                 ["sessionId"] = session.SessionId,
                 ["userId"] = session.User?.UserId,
             };
+#pragma warning restore CA1308
         }
 
         private void TrackEvent(string eventName, Session session, Intent intent = null)
