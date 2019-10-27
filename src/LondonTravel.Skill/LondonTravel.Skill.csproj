@@ -7,10 +7,10 @@
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(CI)' != '' ">
+  <PropertyGroup Condition=" '$(TRAVIS)' == 'true' ">
     <AssemblyName>bootstrap</AssemblyName>
     <PublishReadyToRun>true</PublishReadyToRun>    
-    <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Alexa.NET" Version="1.8.2" />
