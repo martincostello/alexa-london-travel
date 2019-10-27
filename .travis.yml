@@ -20,7 +20,6 @@ addons:
     - libicu-dev
     - libssl-dev
     - libunwind8
-    - zip
 
 branches:
   only:
