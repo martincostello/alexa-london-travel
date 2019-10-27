@@ -25,6 +25,7 @@ branches:
   only:
     - master
     - deploy
+    - DotNet-Core-3
 
 cache:
   directories:
@@ -46,7 +47,7 @@ deploy:
     secret_access_key:
       secure: "AAlbSXUSgawEkKHnDjk5tA8NsVkd24ttpVXAAGETsf4aDbDSCWS/eV8cEQZkCNE2H2W7TG44qHvBGIXZLRO8VC9VXluX4kg2d1FMJC6NyHQNqU/PWV9eoIUHqxfe1MfJzXRosqQuYE5SWemNkONyh+/dw/FPMUjtNUMfilGVQLhK5xpkJvmJLvaUNilEd1M9DHWG/3xeY4WnXaauoaVL5WAu9cpGgMASKKaBP+Vx+4N7SGY/QepAS7nT8grPkDX1SlnQXCqXIBZli9m9gEUclQglEWfNwmCT8aAd+G4g3iEs1v8gEmTxPMrdeCvU4VHhed8kfjwFDzBMmgWNZXQFAdEPgl5j6aWN+YNwFyOFU00U5FzOb+iRc9dswrYC/tnNTG1JLCw/Zhk8PDE44/9ZA0B2ix31RvxLKlwWEn7qecx7+ODqmYLeZ2uDwfmn9FVpvGkTx8cy4hz92kDUHiODBNAO13kNhmkvHphLXTAmjevTePyOxUybDmHm27uRj1Q5gTG7en0nekJb8CMPIwnFD+j+OMG5HRJ9T95DTw3At3OMHOPUHprSmLBBFlI2qjbMvkKmduapyh2h5au0kZS7q+tQkcW5jvRFeGox//wshtILgOZmC0cjc5w9KTiavO3ItFcd5o69f1Hcmy/IuQyN3YTXWYByd0ircTBXUBtRLhE="
     on:
-      branch: master
+      branch: DotNet-Core-3
   - provider: lambda
     function_name: "alexa-london-travel"
     memory_size: 256
