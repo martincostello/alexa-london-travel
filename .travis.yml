@@ -39,7 +39,7 @@ deploy:
     role: "arn:aws:iam::492538393790:role/lambda_basic_execution"
     runtime: "provided"
     timeout: 10
-    zip: "./artifacts/publish"
+    zip: "./artifacts/alexa-london-travel.zip"
     module_name: "LondonTravel.Skill::MartinCostello.LondonTravel.Skill"
     handler_name: "AlexaFunction::HandlerAsync"
     access_key_id:
@@ -55,7 +55,7 @@ deploy:
     role: "arn:aws:iam::492538393790:role/lambda_basic_execution"
     runtime: "provided"
     timeout: 10
-    zip: "./artifacts/publish"
+    zip: "./artifacts/alexa-london-travel.zip"
     module_name: "LondonTravel.Skill::MartinCostello.LondonTravel.Skill"
     handler_name: "AlexaFunction::HandlerAsync"
     access_key_id:
