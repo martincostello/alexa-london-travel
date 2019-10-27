@@ -43,4 +43,4 @@ dotnet build ./LondonTravel.Skill.sln --output $artifacts --configuration $confi
 
 dotnet test ./test/LondonTravel.Skill.Tests/LondonTravel.Skill.Tests.csproj --output $artifacts --configuration $configuration || exit 1
 
-dotnet publish ./src/LondonTravel.Skill/LondonTravel.Skill.csproj --output $artifacts/publish --configuration $configuration || exit 1
+dotnet publish ./src/LondonTravel.Skill/LondonTravel.Skill.csproj --output $artifacts/publish --configuration $configuration --runtime linux-x64 --self-contained true /p:AssemblyName=bootstrap || exit 1
