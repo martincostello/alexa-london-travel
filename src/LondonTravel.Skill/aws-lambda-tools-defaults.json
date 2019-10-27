@@ -2,9 +2,9 @@
   "profile": "alexa-london-travel",
   "region": "eu-west-1",
   "configuration": "Release",
-  "framework": "netcoreapp2.1",
-  "function-runtime": "dotnetcore2.1",
-  "function-memory-size": 128,
+  "framework": "netcoreapp3.0",
+  "function-runtime": "provided",
+  "function-memory-size": 256,
   "function-timeout": 10,
   "function-handler": "LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunction::HandlerAsync"
 }
