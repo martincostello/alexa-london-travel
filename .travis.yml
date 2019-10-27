@@ -37,7 +37,7 @@ deploy:
     memory_size: 256
     region: "eu-west-1"
     role: "arn:aws:iam::492538393790:role/lambda_basic_execution"
-    runtime: "dotnetcore2.1"
+    runtime: "provided"
     timeout: 10
     zip: "./artifacts/publish"
     module_name: "LondonTravel.Skill::MartinCostello.LondonTravel.Skill"
@@ -53,7 +53,7 @@ deploy:
     memory_size: 256
     region: "eu-west-1"
     role: "arn:aws:iam::492538393790:role/lambda_basic_execution"
-    runtime: "dotnetcore2.1"
+    runtime: "provided"
     timeout: 10
     zip: "./artifacts/publish"
     module_name: "LondonTravel.Skill::MartinCostello.LondonTravel.Skill"
