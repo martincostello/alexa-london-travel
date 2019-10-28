@@ -47,5 +47,5 @@ dotnet publish ./src/LondonTravel.Skill/LondonTravel.Skill.csproj --output $arti
 
 if [ "$TRAVIS" == "true" ]; then
     cd $artifacts/publish
-    zip -r alexa-london-travel.zip . || exit 1
+    zip -r ./alexa-london-travel.zip . || exit 1
 fi
