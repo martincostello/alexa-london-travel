@@ -33,10 +33,8 @@ namespace MartinCostello.LondonTravel.Skill.Clients
         /// <inheritdoc/>
         public async Task<T> DeserializeAsync<T>(HttpContent content)
         {
-            using (Stream utf8Json = await content.ReadAsStreamAsync())
-            {
-                return await JsonSerializer.DeserializeAsync<T>(utf8Json, SerializerOptions);
-            }
+            using Stream utf8Json = await content.ReadAsStreamAsync();
+            return await JsonSerializer.DeserializeAsync<T>(utf8Json, SerializerOptions);
         }
 
         /// <inheritdoc/>
