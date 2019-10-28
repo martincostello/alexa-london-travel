@@ -4,6 +4,7 @@
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <NoWarn>$(NoWarn);CA1822</NoWarn>
     <OutputType>Exe</OutputType>
+    <PublishReadyToRunShowWarnings>true</PublishReadyToRunShowWarnings>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
