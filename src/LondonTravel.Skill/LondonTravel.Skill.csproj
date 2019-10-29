@@ -6,8 +6,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <TieredCompilation>true</TieredCompilation>
-    <TieredCompilationQuickJit>true</TieredCompilationQuickJit>
+    <TieredCompilation>false</TieredCompilation>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Alexa.NET" Version="1.8.2" />
