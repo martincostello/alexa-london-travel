@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -47,7 +48,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
 
             ChannelReader<LambdaResponse> reader = await server.EnqueueAsync(
                 "my-request-id",
-                Encoding.UTF8.GetBytes(@"{""Values"": [ 1, 2, 3 ]}"));
+                @"{""Values"": [ 1, 2, 3 ]}");
 
             // Queue a task to stop the Lambda function as soon as the response is processed
             _ = Task.Run(async () =>
@@ -72,6 +73,68 @@ namespace MartinCostello.LondonTravel.Skill.Integration
             response.IsSuccessful.ShouldBeTrue();
             response.Content.ShouldNotBeNull();
             Encoding.UTF8.GetString(response.Content).ShouldBe(@"{""Sum"":6}");
+        }
+
+        [Fact]
+        public async Task Function_Can_Process_Multiple_Requests()
+        {
+            // Arrange
+            void Configure(IServiceCollection services)
+            {
+                services.AddLogging((builder) => builder.AddXUnit(this));
+            }
+
+            using var server = new TestLambdaServer(Configure);
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+
+            await server.StartAsync(cancellationTokenSource.Token);
+
+            var channels = new List<(int expected, ChannelReader<LambdaResponse> reader)>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                var request = new MyRequest()
+                {
+                    Values = Enumerable.Range(1, i + 1).ToArray(),
+                };
+
+                string requestId = i.ToString(CultureInfo.InvariantCulture);
+                string json = System.Text.Json.JsonSerializer.Serialize(request);
+
+                channels.Add((request.Values.Sum(), await server.EnqueueAsync(requestId, json)));
+            }
+
+            // Queue a task to stop the Lambda function as soon as all the responses are processed
+            _ = Task.Run(async () =>
+            {
+                foreach ((var _, var reader) in channels)
+                {
+                    await reader.WaitToReadAsync(cancellationTokenSource.Token);
+                }
+
+                if (!cancellationTokenSource.IsCancellationRequested)
+                {
+                    cancellationTokenSource.Cancel();
+                }
+            });
+
+            using var httpClient = server.CreateHttpClient();
+
+            // Act
+            await MyFunctionEntrypoint.RunAsync(httpClient, cancellationTokenSource.Token);
+
+            // Assert
+            foreach ((int expected, ChannelReader<LambdaResponse> channel) in channels)
+            {
+                channel.TryRead(out LambdaResponse response).ShouldBeTrue();
+
+                response.ShouldNotBeNull();
+                response.IsSuccessful.ShouldBeTrue();
+                response.Content.ShouldNotBeNull();
+
+                var deserialized = System.Text.Json.JsonSerializer.Deserialize<MyResponse>(response.Content);
+                deserialized.Sum.ShouldBe(expected);
+            }
         }
 
         private static class MyFunctionEntrypoint
