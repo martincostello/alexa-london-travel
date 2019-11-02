@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
-using MartinCostello.LondonTravel.Skill.Integration;
+using MartinCostello.Testing.AwsLambdaTestServer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -44,7 +44,7 @@ namespace MartinCostello.LondonTravel.Skill
 
             await server.StartAsync(cancellationTokenSource.Token);
 
-            ChannelReader<LambdaResponse> reader = await server.EnqueueAsync(json);
+            ChannelReader<LambdaTestResponse> reader = await server.EnqueueAsync(json);
 
             // Queue a task to stop the Lambda function as soon as the response is processed
             _ = Task.Run(async () =>
@@ -63,7 +63,7 @@ namespace MartinCostello.LondonTravel.Skill
             await Function.RunAsync(httpClient, cancellationTokenSource.Token);
 
             // Assert
-            reader.TryRead(out LambdaResponse result).ShouldBeTrue();
+            reader.TryRead(out LambdaTestResponse result).ShouldBeTrue();
 
             result.ShouldNotBeNull();
             result.IsSuccessful.ShouldBeTrue();
