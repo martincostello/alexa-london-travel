@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Globalization;
 using System.IO;
 using System.Net.Mime;
 using System.Text;
@@ -25,9 +26,9 @@ namespace MartinCostello.LondonTravel.Skill.Integration
         private readonly CancellationToken _cancellationToken;
 
         /// <summary>
-        /// The ARN of the function being handled. This field is read-only.
+        /// The test server's options. This field is read-only.
         /// </summary>
-        private readonly string _functionArn;
+        private readonly LambdaTestServerOptions _options;
 
         /// <summary>
         /// The channel of function requests to process. This field is read-only.
@@ -42,22 +43,22 @@ namespace MartinCostello.LondonTravel.Skill.Integration
         /// <summary>
         /// Initializes a new instance of the <see cref="RuntimeHandler"/> class.
         /// </summary>
-        /// <param name="functionArn">The ARN of the function being handled.</param>
+        /// <param name="options">The test server's options.</param>
         /// <param name="cancellationToken">The cancellation token that is signalled when request listening should stop.</param>
-        internal RuntimeHandler(string functionArn, CancellationToken cancellationToken)
+        internal RuntimeHandler(LambdaTestServerOptions options, CancellationToken cancellationToken)
         {
             _cancellationToken = cancellationToken;
-            _functionArn = functionArn;
+            _options = options;
 
             // Support multi-threaded access to the request queue, although the default
             // usage scenario would be a single reader and writer from a test method.
-            var options = new UnboundedChannelOptions()
+            var channelOptions = new UnboundedChannelOptions()
             {
                 SingleReader = false,
                 SingleWriter = false,
             };
 
-            _requests = Channel.CreateUnbounded<LambdaRequest>(options);
+            _requests = Channel.CreateUnbounded<LambdaRequest>(channelOptions);
             _responses = new ConcurrentDictionary<string, Channel<LambdaResponse>>(StringComparer.Ordinal);
         }
 
@@ -111,7 +112,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
         {
             Logger.LogInformation(
                 "Waiting for new request for Lambda function with ARN {LambdaFunctionArn}.",
-                _functionArn);
+                _options);
 
             LambdaRequest request;
 
@@ -129,7 +130,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
                 Logger.LogInformation(
                     ex,
                     "Stopped listening for additional requests for Lambda function with ARN {LambdaFunctionArn}.",
-                    _functionArn);
+                    _options);
 
                 // Send a dummy response to prevent the listen loop from erroring
                 request = new LambdaRequest("completed", new[] { (byte)'{', (byte)'}' });
@@ -143,7 +144,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
 
             Logger.LogInformation(
                 "Invoking Lambda function with ARN {LambdaFunctionArn} for request Id {AwsRequestId} and trace Id {AwsTraceId}.",
-                _functionArn,
+                _options,
                 request.AwsRequestId,
                 traceId);
 
@@ -151,9 +152,13 @@ namespace MartinCostello.LondonTravel.Skill.Integration
 
             // These headers are required, as otherwise an exception is thrown
             httpContext.Response.Headers.Add("Lambda-Runtime-Aws-Request-Id", request.AwsRequestId);
-            httpContext.Response.Headers.Add("Lambda-Runtime-Invoked-Function-Arn", _functionArn);
+            httpContext.Response.Headers.Add("Lambda-Runtime-Invoked-Function-Arn", _options.FunctionArn);
 
+            var deadline = DateTimeOffset.UtcNow.Add(_options.FunctionTimeout).ToUnixTimeMilliseconds();
+
+            httpContext.Response.Headers.Add("Lambda-Runtime-Deadline-Ms", deadline.ToString("F0", CultureInfo.InvariantCulture));
             httpContext.Response.Headers.Add("Lambda-Runtime-Trace-Id", traceId);
+
             httpContext.Response.ContentType = MediaTypeNames.Application.Json;
             httpContext.Response.StatusCode = StatusCodes.Status200OK;
 
@@ -175,7 +180,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
 
             Logger.LogInformation(
                 "Invoked Lambda function with ARN {LambdaFunctionArn} for request Id {AwsRequestId}: {ResponseContent}.",
-                _functionArn,
+                _options,
                 awsRequestId,
                 ToString(content));
 
@@ -203,7 +208,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
 
             Logger.LogError(
                 "Error invoking Lambda function with ARN {LambdaFunctionArn} for request Id {AwsRequestId}: {ErrorContent}",
-                _functionArn,
+                _options,
                 awsRequestId,
                 ToString(content));
 
@@ -229,7 +234,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
 
             Logger.LogError(
                 "Error initializing Lambda function with ARN {LambdaFunctionArn}: {ErrorContent}",
-                _functionArn,
+                _options,
                 ToString(content));
 
             httpContext.Response.StatusCode = StatusCodes.Status204NoContent;
@@ -260,7 +265,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
                 Logger.LogError(
                     "Could not find response channel with AWS request Id {AwsRequestId} for Lambda function with ARN {LambdaFunctionArn}.",
                     awsRequestId,
-                    _functionArn);
+                    _options);
 
                 return;
             }

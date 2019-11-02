@@ -33,7 +33,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
         public ITestOutputHelper OutputHelper { get; set; }
 
         [Fact]
-        public async Task Function_Can_Process_Requests()
+        public async Task Function_Can_Process_Request()
         {
             // Arrange
             void Configure(IServiceCollection services)
