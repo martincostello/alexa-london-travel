@@ -70,32 +70,29 @@ namespace MartinCostello.LondonTravel.Skill.Integration
         /// <summary>
         /// Enqueues a request for the Lambda function to process as an asynchronous operation.
         /// </summary>
-        /// <param name="awsRequestId">The AWS request Id associated with the content.</param>
-        /// <param name="content">The request content to process.</param>
+        /// <param name="request">The request to invoke the function with.</param>
         /// <param name="cancellationToken">The cancellation token to use when enqueuing the item.</param>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation to enqueue the request
         /// which returns a channel reader which completes once the request is processed by the function.
         /// </returns>
         /// <exception cref="InvalidOperationException">
-        /// A request with Id <paramref name="awsRequestId"/> is already in-flight.
+        /// A request with the Id specified by <paramref name="request"/> is currently in-flight.
         /// </exception>
         internal async Task<ChannelReader<LambdaResponse>> EnqueueAsync(
-            string awsRequestId,
-            byte[] content,
+            LambdaRequest request,
             CancellationToken cancellationToken)
         {
             // There is only one response per request, so the channel is bounded to one item
             var channel = Channel.CreateBounded<LambdaResponse>(1);
 
-            if (!_responses.TryAdd(awsRequestId, channel))
+            if (!_responses.TryAdd(request.AwsRequestId, channel))
             {
-                throw new InvalidOperationException($"A request with AWS request Id '{awsRequestId}' is already in-flight.");
+                throw new InvalidOperationException($"A request with AWS request Id '{request.AwsRequestId}' is currently in-flight.");
             }
 
             // Enqueue the request for the Lambda runtime to process
-            var item = new LambdaRequest(awsRequestId, content);
-            await _requests.Writer.WriteAsync(item, cancellationToken);
+            await _requests.Writer.WriteAsync(request, cancellationToken);
 
             // Return the reader to the caller to await the function being handled
             return channel.Reader;
@@ -111,8 +108,8 @@ namespace MartinCostello.LondonTravel.Skill.Integration
         internal async Task HandleNextAsync(HttpContext httpContext)
         {
             Logger.LogInformation(
-                "Waiting for new request for Lambda function with ARN {LambdaFunctionArn}.",
-                _options);
+                "Waiting for new request for Lambda function with ARN {FunctionArn}.",
+                _options.FunctionArn);
 
             LambdaRequest request;
 
@@ -129,11 +126,11 @@ namespace MartinCostello.LondonTravel.Skill.Integration
             {
                 Logger.LogInformation(
                     ex,
-                    "Stopped listening for additional requests for Lambda function with ARN {LambdaFunctionArn}.",
-                    _options);
+                    "Stopped listening for additional requests for Lambda function with ARN {FunctionArn}.",
+                    _options.FunctionArn);
 
                 // Send a dummy response to prevent the listen loop from erroring
-                request = new LambdaRequest("completed", new[] { (byte)'{', (byte)'}' });
+                request = new LambdaRequest(new[] { (byte)'{', (byte)'}' }, "xx-lambda-test-server-stopped-xx");
 
                 // This dummy request wasn't enqueued, so it needs manually adding
                 _responses.GetOrAdd(request.AwsRequestId, (_) => Channel.CreateBounded<LambdaResponse>(1));
@@ -143,8 +140,8 @@ namespace MartinCostello.LondonTravel.Skill.Integration
             string traceId = Guid.NewGuid().ToString();
 
             Logger.LogInformation(
-                "Invoking Lambda function with ARN {LambdaFunctionArn} for request Id {AwsRequestId} and trace Id {AwsTraceId}.",
-                _options,
+                "Invoking Lambda function with ARN {FunctionArn} for request Id {AwsRequestId} and trace Id {AwsTraceId}.",
+                _options.FunctionArn,
                 request.AwsRequestId,
                 traceId);
 
@@ -154,10 +151,21 @@ namespace MartinCostello.LondonTravel.Skill.Integration
             httpContext.Response.Headers.Add("Lambda-Runtime-Aws-Request-Id", request.AwsRequestId);
             httpContext.Response.Headers.Add("Lambda-Runtime-Invoked-Function-Arn", _options.FunctionArn);
 
-            var deadline = DateTimeOffset.UtcNow.Add(_options.FunctionTimeout).ToUnixTimeMilliseconds();
-
-            httpContext.Response.Headers.Add("Lambda-Runtime-Deadline-Ms", deadline.ToString("F0", CultureInfo.InvariantCulture));
+            // These headers are optional
             httpContext.Response.Headers.Add("Lambda-Runtime-Trace-Id", traceId);
+
+            if (request.ClientContext != null)
+            {
+                httpContext.Response.Headers.Add("Lambda-Runtime-Client-Context", request.ClientContext);
+            }
+
+            if (request.CognitoIdentity != null)
+            {
+                httpContext.Response.Headers.Add("Lambda-Runtime-Cognito-Identity", request.CognitoIdentity);
+            }
+
+            var deadline = DateTimeOffset.UtcNow.Add(_options.FunctionTimeout).ToUnixTimeMilliseconds();
+            httpContext.Response.Headers.Add("Lambda-Runtime-Deadline-Ms", deadline.ToString("F0", CultureInfo.InvariantCulture));
 
             httpContext.Response.ContentType = MediaTypeNames.Application.Json;
             httpContext.Response.StatusCode = StatusCodes.Status200OK;
@@ -179,8 +187,8 @@ namespace MartinCostello.LondonTravel.Skill.Integration
             byte[] content = await ReadContentAsync(httpContext, httpContext.RequestAborted);
 
             Logger.LogInformation(
-                "Invoked Lambda function with ARN {LambdaFunctionArn} for request Id {AwsRequestId}: {ResponseContent}.",
-                _options,
+                "Invoked Lambda function with ARN {FunctionArn} for request Id {AwsRequestId}: {ResponseContent}.",
+                _options.FunctionArn,
                 awsRequestId,
                 ToString(content));
 
@@ -207,8 +215,8 @@ namespace MartinCostello.LondonTravel.Skill.Integration
             byte[] content = await ReadContentAsync(httpContext, httpContext.RequestAborted);
 
             Logger.LogError(
-                "Error invoking Lambda function with ARN {LambdaFunctionArn} for request Id {AwsRequestId}: {ErrorContent}",
-                _options,
+                "Error invoking Lambda function with ARN {FunctionArn} for request Id {AwsRequestId}: {ErrorContent}",
+                _options.FunctionArn,
                 awsRequestId,
                 ToString(content));
 
@@ -233,8 +241,8 @@ namespace MartinCostello.LondonTravel.Skill.Integration
             byte[] content = await ReadContentAsync(httpContext, httpContext.RequestAborted);
 
             Logger.LogError(
-                "Error initializing Lambda function with ARN {LambdaFunctionArn}: {ErrorContent}",
-                _options,
+                "Error initializing Lambda function with ARN {FunctionArn}: {ErrorContent}",
+                _options.FunctionArn,
                 ToString(content));
 
             httpContext.Response.StatusCode = StatusCodes.Status204NoContent;
@@ -263,9 +271,9 @@ namespace MartinCostello.LondonTravel.Skill.Integration
             if (!_responses.TryRemove(awsRequestId, out Channel<LambdaResponse> channel))
             {
                 Logger.LogError(
-                    "Could not find response channel with AWS request Id {AwsRequestId} for Lambda function with ARN {LambdaFunctionArn}.",
+                    "Could not find response channel with AWS request Id {AwsRequestId} for Lambda function with ARN {FunctionArn}.",
                     awsRequestId,
-                    _options);
+                    _options.FunctionArn);
 
                 return;
             }
@@ -276,19 +284,6 @@ namespace MartinCostello.LondonTravel.Skill.Integration
 
             // Mark the channel as complete as there will be no more responses written
             channel.Writer.Complete();
-        }
-
-        private sealed class LambdaRequest
-        {
-            internal LambdaRequest(string awsRequestId, byte[] content)
-            {
-                AwsRequestId = awsRequestId;
-                Content = content;
-            }
-
-            public string AwsRequestId { get; }
-
-            public byte[] Content { get; }
         }
     }
 }

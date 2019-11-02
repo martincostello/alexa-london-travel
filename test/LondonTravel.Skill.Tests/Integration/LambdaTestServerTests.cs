@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -46,9 +45,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
 
             await server.StartAsync(cancellationTokenSource.Token);
 
-            ChannelReader<LambdaResponse> reader = await server.EnqueueAsync(
-                "my-request-id",
-                @"{""Values"": [ 1, 2, 3 ]}");
+            ChannelReader<LambdaResponse> reader = await server.EnqueueAsync(@"{""Values"": [ 1, 2, 3 ]}");
 
             // Queue a task to stop the Lambda function as soon as the response is processed
             _ = Task.Run(async () =>
@@ -98,10 +95,9 @@ namespace MartinCostello.LondonTravel.Skill.Integration
                     Values = Enumerable.Range(1, i + 1).ToArray(),
                 };
 
-                string requestId = i.ToString(CultureInfo.InvariantCulture);
                 string json = System.Text.Json.JsonSerializer.Serialize(request);
 
-                channels.Add((request.Values.Sum(), await server.EnqueueAsync(requestId, json)));
+                channels.Add((request.Values.Sum(), await server.EnqueueAsync(json)));
             }
 
             // Queue a task to stop the Lambda function as soon as all the responses are processed

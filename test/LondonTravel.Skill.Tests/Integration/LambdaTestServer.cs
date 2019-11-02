@@ -100,8 +100,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
         /// <summary>
         /// Enqueues a request for the Lambda function to process as an asynchronous operation.
         /// </summary>
-        /// <param name="awsRequestId">The AWS request Id associated with the content.</param>
-        /// <param name="content">The request content to process.</param>
+        /// <param name="request">The request to invoke the function with.</param>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation to enqueue the request
         /// which returns a channel reader which completes once the request is processed by the function.
@@ -110,27 +109,22 @@ namespace MartinCostello.LondonTravel.Skill.Integration
         /// <paramref name="awsRequestId"/> or <paramref name="content"/> is <see langword="null"/>.
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// A request with Id <paramref name="awsRequestId"/> is already in-flight or the test server has not been started.
+        /// A request with the Id specified by <paramref name="request"/> is currently in-flight or the test server has not been started.
         /// </exception>
         /// <exception cref="ObjectDisposedException">
         /// The instance has been disposed.
         /// </exception>
-        public async Task<ChannelReader<LambdaResponse>> EnqueueAsync(string awsRequestId, byte[] content)
+        public async Task<ChannelReader<LambdaResponse>> EnqueueAsync(LambdaRequest request)
         {
             ThrowIfDisposed();
             ThrowIfNotStarted();
 
-            if (awsRequestId == null)
+            if (request == null)
             {
-                throw new ArgumentNullException(nameof(awsRequestId));
+                throw new ArgumentNullException(nameof(request));
             }
 
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            return await _handler.EnqueueAsync(awsRequestId, content, _onStopped.Token);
+            return await _handler.EnqueueAsync(request, _onStopped.Token);
         }
 
         /// <summary>
