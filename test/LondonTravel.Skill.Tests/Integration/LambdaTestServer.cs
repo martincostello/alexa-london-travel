@@ -17,7 +17,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
     /// <summary>
     /// A class representing a test AWS Lambda runtime HTTP server for an AWS Lambda function.
     /// </summary>
-    public class TestLambdaServer : IDisposable
+    public class LambdaTestServer : IDisposable
     {
         private readonly Action<IServiceCollection> _configure;
         private readonly CancellationTokenSource _onDisposed;
@@ -28,18 +28,18 @@ namespace MartinCostello.LondonTravel.Skill.Integration
         private CancellationTokenSource _onStopped;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TestLambdaServer"/> class.
+        /// Initializes a new instance of the <see cref="LambdaTestServer"/> class.
         /// </summary>
-        public TestLambdaServer()
+        public LambdaTestServer()
             : this(null)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TestLambdaServer"/> class.
+        /// Initializes a new instance of the <see cref="LambdaTestServer"/> class.
         /// </summary>
         /// <param name="configure">An optional delegate to invoke when configuring the test Lambda runtime server.</param>
-        public TestLambdaServer(Action<IServiceCollection> configure)
+        public LambdaTestServer(Action<IServiceCollection> configure)
         {
 #pragma warning disable CA1308
             FunctionName = "test-function";
@@ -51,9 +51,9 @@ namespace MartinCostello.LondonTravel.Skill.Integration
         }
 
         /// <summary>
-        /// Finalizes an instance of the <see cref="TestLambdaServer"/> class.
+        /// Finalizes an instance of the <see cref="LambdaTestServer"/> class.
         /// </summary>
-        ~TestLambdaServer()
+        ~LambdaTestServer()
         {
             Dispose(false);
         }

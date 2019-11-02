@@ -23,9 +23,9 @@ using Xunit.Abstractions;
 
 namespace MartinCostello.LondonTravel.Skill.Integration
 {
-    public class LambdaServerTests : ITestOutputHelperAccessor
+    public class LambdaTestServerTests : ITestOutputHelperAccessor
     {
-        public LambdaServerTests(ITestOutputHelper outputHelper)
+        public LambdaTestServerTests(ITestOutputHelper outputHelper)
         {
             OutputHelper = outputHelper;
         }
@@ -41,7 +41,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
                 services.AddLogging((builder) => builder.AddXUnit(this));
             }
 
-            using var server = new TestLambdaServer(Configure);
+            using var server = new LambdaTestServer(Configure);
             using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(2));
 
             await server.StartAsync(cancellationTokenSource.Token);
@@ -84,7 +84,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
                 services.AddLogging((builder) => builder.AddXUnit(this));
             }
 
-            using var server = new TestLambdaServer(Configure);
+            using var server = new LambdaTestServer(Configure);
             using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(2));
 
             await server.StartAsync(cancellationTokenSource.Token);

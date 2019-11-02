@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 namespace MartinCostello.LondonTravel.Skill.Integration
 {
     /// <summary>
-    /// A class containing extension methods for the <see cref="TestLambdaServer"/> class. This class cannot be inherited.
+    /// A class containing extension methods for the <see cref="LambdaTestServer"/> class. This class cannot be inherited.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public static class TestLambdaServerExtensions
+    public static class LambdaTestServerExtensions
     {
         /// <summary>
         /// Enqueues a request for the Lambda function to process as an asynchronous operation.
@@ -31,7 +31,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
         /// <exception cref="InvalidOperationException">
         /// A request with Id <paramref name="awsRequestId"/> is already in-flight or the test server has not been started.
         /// </exception>
-        public static async Task<ChannelReader<LambdaResponse>> EnqueueAsync(this TestLambdaServer server, string awsRequestId, string value)
+        public static async Task<ChannelReader<LambdaResponse>> EnqueueAsync(this LambdaTestServer server, string awsRequestId, string value)
         {
             if (server == null)
             {
