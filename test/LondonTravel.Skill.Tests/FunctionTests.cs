@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
@@ -17,7 +18,7 @@ using Xunit.Abstractions;
 
 namespace MartinCostello.LondonTravel.Skill
 {
-    public abstract class FunctionTests
+    public abstract class FunctionTests : ITestOutputHelperAccessor
     {
         protected FunctionTests(ITestOutputHelper outputHelper)
         {
@@ -25,9 +26,9 @@ namespace MartinCostello.LondonTravel.Skill
             Interceptor = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
         }
 
-        protected HttpClientInterceptorOptions Interceptor { get; }
+        public ITestOutputHelper OutputHelper { get; set; }
 
-        private ITestOutputHelper OutputHelper { get; }
+        protected HttpClientInterceptorOptions Interceptor { get; }
 
         protected virtual ResponseBody AssertResponse(SkillResponse actual, bool? shouldEndSession = true)
         {
@@ -93,16 +94,46 @@ namespace MartinCostello.LondonTravel.Skill
         protected virtual SkillRequest CreateRequest<T>(T request = null)
             where T : Request, new()
         {
+            var application = new Application()
+            {
+                ApplicationId = "my-skill-id",
+            };
+
+            var user = new User()
+            {
+                UserId = Guid.NewGuid().ToString(),
+            };
+
             var result = new SkillRequest()
             {
+                Context = new Context()
+                {
+                    AudioPlayer = new PlaybackState()
+                    {
+                        PlayerActivity = "IDLE",
+                    },
+                    System = new AlexaSystem()
+                    {
+                        Application = application,
+                        Device = new Device()
+                        {
+                            SupportedInterfaces = new Dictionary<string, object>()
+                            {
+                                ["AudioPlayer"] = new object(),
+                            },
+                        },
+                        User = user,
+                    },
+                },
                 Request = request ?? new T(),
                 Session = new Session()
                 {
-                    Application = new Application()
-                    {
-                        ApplicationId = "my-skill-id",
-                    },
+                    Application = application,
+                    Attributes = new Dictionary<string, object>(),
+                    New = true,
+                    User = user,
                 },
+                Version = "1.0",
             };
 
             result.Request.Locale = "en-GB";
