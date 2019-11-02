@@ -70,6 +70,20 @@ namespace MartinCostello.LondonTravel.Skill.Integration
         /// </summary>
         public LambdaTestServerOptions Options { get; }
 
+        /// <summary>
+        /// Clears any AWS Lambda environment variables set by instances of <see cref="LambdaTestServer"/>.
+        /// </summary>
+        public static void ClearLambdaEnvironmentVariables()
+        {
+            Environment.SetEnvironmentVariable("AWS_LAMBDA_FUNCTION_MEMORY_SIZE", null);
+            Environment.SetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME", null);
+            Environment.SetEnvironmentVariable("AWS_LAMBDA_FUNCTION_VERSION", null);
+            Environment.SetEnvironmentVariable("AWS_LAMBDA_LOG_GROUP_NAME", null);
+            Environment.SetEnvironmentVariable("AWS_LAMBDA_LOG_STREAM_NAME", null);
+            Environment.SetEnvironmentVariable("AWS_LAMBDA_RUNTIME_API", null);
+            Environment.SetEnvironmentVariable("_HANDLER", null);
+        }
+
         /// <inheritdoc />
         public void Dispose()
         {
@@ -193,8 +207,6 @@ namespace MartinCostello.LondonTravel.Skill.Integration
                     }
 
                     _server?.Dispose();
-
-                    ClearLambdaEnvironmentVariables();
                 }
 
                 _disposed = true;
@@ -239,17 +251,6 @@ namespace MartinCostello.LondonTravel.Skill.Integration
 
             builder.ConfigureServices(ConfigureServices);
             builder.Configure(Configure);
-        }
-
-        private static void ClearLambdaEnvironmentVariables()
-        {
-            Environment.SetEnvironmentVariable("AWS_LAMBDA_FUNCTION_MEMORY_SIZE", null);
-            Environment.SetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME", null);
-            Environment.SetEnvironmentVariable("AWS_LAMBDA_FUNCTION_VERSION", null);
-            Environment.SetEnvironmentVariable("AWS_LAMBDA_LOG_GROUP_NAME", null);
-            Environment.SetEnvironmentVariable("AWS_LAMBDA_LOG_STREAM_NAME", null);
-            Environment.SetEnvironmentVariable("AWS_LAMBDA_RUNTIME_API", null);
-            Environment.SetEnvironmentVariable("_HANDLER", null);
         }
 
         private void SetLambdaEnvironmentVariables(Uri baseAddress)
