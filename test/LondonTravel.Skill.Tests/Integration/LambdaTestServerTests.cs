@@ -61,7 +61,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
                 }
             });
 
-            using var httpClient = server.CreateHttpClient();
+            using var httpClient = server.CreateClient();
 
             // Act
             await MyFunctionEntrypoint.RunAsync(httpClient, cancellationTokenSource.Token);
@@ -118,7 +118,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
                 }
             });
 
-            using var httpClient = server.CreateHttpClient();
+            using var httpClient = server.CreateClient();
 
             // Act
             await MyFunctionEntrypoint.RunAsync(httpClient, cancellationTokenSource.Token);

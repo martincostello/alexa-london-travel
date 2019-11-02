@@ -84,12 +84,13 @@ namespace MartinCostello.LondonTravel.Skill.Integration
         /// <exception cref="InvalidOperationException">
         /// The test server has not been started.
         /// </exception>
-        public HttpClient CreateHttpClient()
+        /// <exception cref="ObjectDisposedException">
+        /// The instance has been disposed.
+        /// </exception>
+        public HttpClient CreateClient()
         {
-            if (_server == null)
-            {
-                throw new InvalidOperationException("The test server has not been started.");
-            }
+            ThrowIfDisposed();
+            ThrowIfNotStarted();
 
             return _server.CreateClient();
         }
@@ -109,8 +110,14 @@ namespace MartinCostello.LondonTravel.Skill.Integration
         /// <exception cref="InvalidOperationException">
         /// A request with Id <paramref name="awsRequestId"/> is already in-flight or the test server has not been started.
         /// </exception>
+        /// <exception cref="ObjectDisposedException">
+        /// The instance has been disposed.
+        /// </exception>
         public async Task<ChannelReader<LambdaResponse>> EnqueueAsync(string awsRequestId, byte[] content)
         {
+            ThrowIfDisposed();
+            ThrowIfNotStarted();
+
             if (awsRequestId == null)
             {
                 throw new ArgumentNullException(nameof(awsRequestId));
@@ -119,11 +126,6 @@ namespace MartinCostello.LondonTravel.Skill.Integration
             if (content == null)
             {
                 throw new ArgumentNullException(nameof(content));
-            }
-
-            if (_server == null)
-            {
-                throw new InvalidOperationException("The test server has not been started.");
             }
 
             return await _handler.EnqueueAsync(awsRequestId, content, _onStopped.Token);
@@ -141,8 +143,13 @@ namespace MartinCostello.LondonTravel.Skill.Integration
         /// <exception cref="InvalidOperationException">
         /// The test server has already been started.
         /// </exception>
+        /// <exception cref="ObjectDisposedException">
+        /// The instance has been disposed.
+        /// </exception>
         public virtual Task StartAsync(CancellationToken cancellationToken = default)
         {
+            ThrowIfDisposed();
+
             if (_server != null)
             {
                 throw new InvalidOperationException("The test server has already been started.");
@@ -207,6 +214,7 @@ namespace MartinCostello.LondonTravel.Skill.Integration
             app.UseRouting();
             app.UseEndpoints((endpoints) =>
             {
+                // See https://github.com/aws/aws-lambda-dotnet/blob/4f9142b95b376bd238bce6be43f4e1ec1f983592/Libraries/src/Amazon.Lambda.RuntimeSupport/Client/InternalClientAdapted.cs#L75
                 endpoints.MapGet("/{LambdaVersion}/runtime/invocation/next", _handler.HandleNextAsync);
                 endpoints.MapPost("/{LambdaVersion}/runtime/init/error", _handler.HandleInitializationErrorAsync);
                 endpoints.MapPost("/{LambdaVersion}/runtime/invocation/{AwsRequestId}/error", _handler.HandleInvocationErrorAsync);
@@ -244,7 +252,24 @@ namespace MartinCostello.LondonTravel.Skill.Integration
 
         private static void SetLambdaEnvironmentVariables(Uri baseAddress)
         {
+            // See https://github.com/aws/aws-lambda-dotnet/blob/4f9142b95b376bd238bce6be43f4e1ec1f983592/Libraries/src/Amazon.Lambda.RuntimeSupport/Context/LambdaEnvironment.cs#L46-L52
             Environment.SetEnvironmentVariable("AWS_LAMBDA_RUNTIME_API", $"{baseAddress.Host}:{baseAddress.Port}");
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(nameof(LambdaTestServer));
+            }
+        }
+
+        private void ThrowIfNotStarted()
+        {
+            if (_server == null)
+            {
+                throw new InvalidOperationException("The test server has not been started.");
+            }
         }
     }
 }
