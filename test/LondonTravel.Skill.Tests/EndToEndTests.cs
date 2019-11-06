@@ -3,7 +3,6 @@
 
 using System;
 using System.Threading;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
@@ -44,12 +43,12 @@ namespace MartinCostello.LondonTravel.Skill
 
             await server.StartAsync(cancellationTokenSource.Token);
 
-            ChannelReader<LambdaTestResponse> reader = await server.EnqueueAsync(json);
+            LambdaTestContext context = await server.EnqueueAsync(json);
 
             // Queue a task to stop the Lambda function as soon as the response is processed
             _ = Task.Run(async () =>
             {
-                await reader.WaitToReadAsync(cancellationTokenSource.Token);
+                await context.Response.WaitToReadAsync(cancellationTokenSource.Token);
 
                 if (!cancellationTokenSource.IsCancellationRequested)
                 {
@@ -63,10 +62,11 @@ namespace MartinCostello.LondonTravel.Skill
             await Function.RunAsync(httpClient, cancellationTokenSource.Token);
 
             // Assert
-            reader.TryRead(out LambdaTestResponse result).ShouldBeTrue();
+            context.Response.TryRead(out LambdaTestResponse result).ShouldBeTrue();
 
             result.ShouldNotBeNull();
             result.IsSuccessful.ShouldBeTrue();
+            result.Duration.ShouldBeInRange(TimeSpan.FromTicks(1), TimeSpan.FromSeconds(1));
             result.Content.ShouldNotBeNull();
             result.Content.ShouldNotBeEmpty();
 
