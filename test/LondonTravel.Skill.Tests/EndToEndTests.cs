@@ -67,10 +67,9 @@ namespace MartinCostello.LondonTravel.Skill
             result.ShouldNotBeNull();
             result.IsSuccessful.ShouldBeTrue();
             result.Duration.ShouldBeInRange(TimeSpan.FromTicks(1), TimeSpan.FromSeconds(1));
-            result.Content.ShouldNotBeNull();
             result.Content.ShouldNotBeEmpty();
 
-            json = System.Text.Encoding.UTF8.GetString(result.Content);
+            json = await result.ReadAsStringAsync();
             var actual = JsonConvert.DeserializeObject<SkillResponse>(json);
 
             actual.ShouldNotBeNull();
