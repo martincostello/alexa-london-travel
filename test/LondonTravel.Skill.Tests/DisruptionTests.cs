@@ -26,7 +26,7 @@ namespace MartinCostello.LondonTravel.Skill
             // Arrange
             Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-no-disruptions.json"));
 
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             SkillRequest request = CreateIntentRequest();
             ILambdaContext context = CreateContext();
 
@@ -46,7 +46,7 @@ namespace MartinCostello.LondonTravel.Skill
             // Arrange
             Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-one-disruption.json"));
 
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             SkillRequest request = CreateIntentRequest();
             ILambdaContext context = CreateContext();
 
@@ -66,7 +66,7 @@ namespace MartinCostello.LondonTravel.Skill
             // Arrange
             Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-multiple-disruptions.json"));
 
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             SkillRequest request = CreateIntentRequest();
             ILambdaContext context = CreateContext();
 
@@ -84,7 +84,7 @@ namespace MartinCostello.LondonTravel.Skill
         public async Task Can_Invoke_Function_When_The_Api_Fails()
         {
             // Arrange
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             SkillRequest request = CreateIntentRequest();
             ILambdaContext context = CreateContext();
 

@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
@@ -62,10 +63,14 @@ namespace MartinCostello.LondonTravel.Skill
             };
         }
 
-        protected virtual AlexaFunction CreateFunction()
+        protected virtual async Task<AlexaFunction> CreateFunctionAsync()
         {
             SkillConfiguration config = CreateConfiguration();
-            return new TestAlexaFunction(config, Interceptor, OutputHelper);
+            var function = new TestAlexaFunction(config, Interceptor, OutputHelper);
+
+            await function.InitializeAsync();
+
+            return function;
         }
 
         protected virtual SkillRequest CreateIntentRequest(string name, params Slot[] slots)
@@ -165,6 +170,8 @@ namespace MartinCostello.LondonTravel.Skill
                 services.AddSingleton(Config);
                 services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
                     (_) => new HttpRequestInterceptionFilter(Options));
+
+                base.ConfigureServices(services);
             }
         }
     }

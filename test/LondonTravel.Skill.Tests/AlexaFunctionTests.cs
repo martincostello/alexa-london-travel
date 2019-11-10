@@ -24,7 +24,7 @@ namespace MartinCostello.LondonTravel.Skill
         public async Task Cannot_Invoke_Function_If_Application_Id_Incorrect()
         {
             // Arrange
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
 
             SkillRequest request = CreateIntentRequest("AMAZON.HelpIntent");
             request.Session.Application.ApplicationId = "not-my-skill-id";
@@ -48,7 +48,7 @@ namespace MartinCostello.LondonTravel.Skill
         public async Task Can_Invoke_Function_If_Locale_Is_Invalid(string locale)
         {
             // Arrange
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
 
             SkillRequest request = CreateIntentRequest("AMAZON.HelpIntent");
             request.Request.Locale = locale;
@@ -69,7 +69,7 @@ namespace MartinCostello.LondonTravel.Skill
         public async Task Cannot_Invoke_Function_With_System_Failure()
         {
             // Arrange
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             ILambdaContext context = CreateContext();
 
             var error = new SystemExceptionRequest()

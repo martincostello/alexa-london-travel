@@ -17,7 +17,7 @@ namespace MartinCostello.LondonTravel.Skill
     /// <remarks>
     /// See https://aws.amazon.com/blogs/developer/announcing-amazon-lambda-runtimesupport/.
     /// </remarks>
-    internal static class Function
+    public static class FunctionEntrypoint
     {
         /// <summary>
         /// Runs the function using a custom runtime as an asynchronous operation.
@@ -27,7 +27,7 @@ namespace MartinCostello.LondonTravel.Skill
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation to run the function.
         /// </returns>
-        internal static async Task RunAsync(
+        public static async Task RunAsync(
             HttpClient httpClient = null,
             CancellationToken cancellationToken = default)
         {
@@ -35,7 +35,7 @@ namespace MartinCostello.LondonTravel.Skill
             var function = new AlexaFunction();
 
             using var handlerWrapper = HandlerWrapper.GetHandlerWrapper<SkillRequest, SkillResponse>(function.HandlerAsync, serializer);
-            using var bootstrap = new LambdaBootstrap(httpClient ?? new HttpClient(), handlerWrapper);
+            using var bootstrap = new LambdaBootstrap(httpClient ?? new HttpClient(), handlerWrapper, function.InitializeAsync);
 
             await bootstrap.RunAsync(cancellationToken);
         }

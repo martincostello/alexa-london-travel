@@ -25,7 +25,7 @@ namespace MartinCostello.LondonTravel.Skill
         public async Task Can_Invoke_Function_When_The_Skill_Is_Not_Linked()
         {
             // Arrange
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             SkillRequest request = CreateIntentRequestWithToken(accessToken: null);
             ILambdaContext context = CreateContext();
 
@@ -53,7 +53,7 @@ namespace MartinCostello.LondonTravel.Skill
             // Arrange
             Interceptor.RegisterBundle(Path.Combine("Bundles", "skill-api-invalid-token.json"));
 
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             SkillRequest request = CreateIntentRequestWithToken(accessToken: "invalid-access-token");
             ILambdaContext context = CreateContext();
 
@@ -79,7 +79,7 @@ namespace MartinCostello.LondonTravel.Skill
         public async Task Can_Invoke_Function_When_The_Skill_Api_Fails()
         {
             // Arrange
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             SkillRequest request = CreateIntentRequestWithToken(accessToken: "random-access-token");
             ILambdaContext context = CreateContext();
 
@@ -106,7 +106,7 @@ namespace MartinCostello.LondonTravel.Skill
             Interceptor.RegisterBundle(Path.Combine("Bundles", "skill-api-no-favorites.json"));
             Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-line-statuses.json"));
 
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             SkillRequest request = CreateIntentRequestWithToken(accessToken: "token-for-no-favorites");
             ILambdaContext context = CreateContext();
 
@@ -127,7 +127,7 @@ namespace MartinCostello.LondonTravel.Skill
             Interceptor.RegisterBundle(Path.Combine("Bundles", "skill-api-elizabeth.json"));
             Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-line-statuses.json"));
 
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             SkillRequest request = CreateIntentRequestWithToken(accessToken: "token-for-only-elizabeth-line");
             ILambdaContext context = CreateContext();
 
@@ -148,7 +148,7 @@ namespace MartinCostello.LondonTravel.Skill
             Interceptor.RegisterBundle(Path.Combine("Bundles", "skill-api-one-favorite.json"));
             Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-line-statuses.json"));
 
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             SkillRequest request = CreateIntentRequestWithToken(accessToken: "token-for-one-favorite");
             ILambdaContext context = CreateContext();
 
@@ -169,7 +169,7 @@ namespace MartinCostello.LondonTravel.Skill
             Interceptor.RegisterBundle(Path.Combine("Bundles", "skill-api-two-favorites.json"));
             Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-line-statuses.json"));
 
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             SkillRequest request = CreateIntentRequestWithToken(accessToken: "token-for-two-favorites");
             ILambdaContext context = CreateContext();
 
