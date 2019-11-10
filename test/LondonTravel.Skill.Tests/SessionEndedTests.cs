@@ -23,7 +23,7 @@ namespace MartinCostello.LondonTravel.Skill
         public async Task Can_Invoke_Function()
         {
             // Arrange
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
 
             SkillRequest request = CreateRequest<SessionEndedRequest>();
             ILambdaContext context = CreateContext();

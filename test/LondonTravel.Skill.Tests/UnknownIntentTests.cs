@@ -24,6 +24,7 @@ namespace MartinCostello.LondonTravel.Skill
         {
             // Arrange
             var function = new AlexaFunction();
+            await function.InitializeAsync();
 
             SkillRequest request = CreateIntentRequest("FooIntent");
             ILambdaContext context = CreateContext();

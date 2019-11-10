@@ -35,7 +35,7 @@ namespace MartinCostello.LondonTravel.Skill
             var function = new AlexaFunction();
 
             using var handlerWrapper = HandlerWrapper.GetHandlerWrapper<SkillRequest, SkillResponse>(function.HandlerAsync, serializer);
-            using var bootstrap = new LambdaBootstrap(httpClient ?? new HttpClient(), handlerWrapper);
+            using var bootstrap = new LambdaBootstrap(httpClient ?? new HttpClient(), handlerWrapper, function.InitializeAsync);
 
             await bootstrap.RunAsync(cancellationToken);
         }

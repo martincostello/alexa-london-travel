@@ -54,7 +54,7 @@ namespace MartinCostello.LondonTravel.Skill
             // Arrange
             Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-line-statuses.json"));
 
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             SkillRequest request = CreateIntentForLine(id);
             ILambdaContext context = CreateContext();
 
@@ -71,7 +71,7 @@ namespace MartinCostello.LondonTravel.Skill
         public async Task Can_Invoke_Function_For_Elizabeth_Line(string id)
         {
             // Arrange
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             SkillRequest request = CreateIntentForLine(id);
             ILambdaContext context = CreateContext();
 
@@ -104,7 +104,7 @@ namespace MartinCostello.LondonTravel.Skill
         public async Task Can_Invoke_Function_For_Invalid_Line(string id)
         {
             // Arrange
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             SkillRequest request = CreateIntentForLine(id);
             ILambdaContext context = CreateContext();
 
@@ -133,7 +133,7 @@ namespace MartinCostello.LondonTravel.Skill
         public async Task Can_Invoke_Function_When_The_Api_Fails()
         {
             // Arrange
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             SkillRequest request = CreateIntentForLine("district");
             ILambdaContext context = CreateContext();
 
@@ -175,7 +175,7 @@ namespace MartinCostello.LondonTravel.Skill
             // Arrange
             Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-line-severities.json"));
 
-            AlexaFunction function = CreateFunction();
+            AlexaFunction function = await CreateFunctionAsync();
             SkillRequest request = CreateIntentForLine(id);
             ILambdaContext context = CreateContext();
 
