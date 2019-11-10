@@ -76,17 +76,7 @@ namespace MartinCostello.LondonTravel.Skill
             {
                 var options = new LambdaLoggerOptions()
                 {
-                    Filter = (name, level) =>
-                    {
-                        if (level < LogLevel.Warning &&
-                            (name.StartsWith("System.", StringComparison.Ordinal) ||
-                             name.StartsWith("Microsoft.", StringComparison.Ordinal)))
-                        {
-                            return false;
-                        }
-
-                        return true;
-                    },
+                    Filter = FilterLogs,
                 };
 
                 builder.AddLambdaLogger(options);
@@ -128,6 +118,26 @@ namespace MartinCostello.LondonTravel.Skill
             {
                 InstrumentationKey = config.ApplicationInsightsKey,
             };
+        }
+
+        /// <summary>
+        /// Filters the Lambda logs.
+        /// </summary>
+        /// <param name="name">The name of the log.</param>
+        /// <param name="level">The log level.</param>
+        /// <returns>
+        /// <see langword="true"/> to log the message; otherwise <see langword="false"/>.
+        /// </returns>
+        private static bool FilterLogs(string name, LogLevel level)
+        {
+            if (level < LogLevel.Warning &&
+                (name.StartsWith("System.", StringComparison.Ordinal) ||
+                 name.StartsWith("Microsoft.", StringComparison.Ordinal)))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
