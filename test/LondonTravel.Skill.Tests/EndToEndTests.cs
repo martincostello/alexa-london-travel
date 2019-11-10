@@ -59,7 +59,7 @@ namespace MartinCostello.LondonTravel.Skill
             using var httpClient = server.CreateClient();
 
             // Act
-            await Function.RunAsync(httpClient, cancellationTokenSource.Token);
+            await FunctionEntrypoint.RunAsync(httpClient, cancellationTokenSource.Token);
 
             // Assert
             context.Response.TryRead(out LambdaTestResponse result).ShouldBeTrue();
