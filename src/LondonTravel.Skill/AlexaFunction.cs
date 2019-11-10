@@ -72,7 +72,25 @@ namespace MartinCostello.LondonTravel.Skill
         /// <param name="services">The service collection to configure.</param>
         protected virtual void ConfigureServices(IServiceCollection services)
         {
-            services.AddLogging((builder) => builder.AddLambdaLogger());
+            services.AddLogging((builder) =>
+            {
+                var options = new LambdaLoggerOptions()
+                {
+                    Filter = (name, level) =>
+                    {
+                        if (level < LogLevel.Warning &&
+                            (name.StartsWith("System.", StringComparison.Ordinal) ||
+                             name.StartsWith("Microsoft.", StringComparison.Ordinal)))
+                        {
+                            return false;
+                        }
+
+                        return true;
+                    },
+                };
+
+                builder.AddLambdaLogger(options);
+            });
 
             services.AddHttpClients();
             services.AddPolly();
