@@ -34,8 +34,10 @@ namespace MartinCostello.LondonTravel.Skill
             var serializer = new JsonSerializer();
             var function = new AlexaFunction();
 
+#pragma warning disable CA2000
             using var handlerWrapper = HandlerWrapper.GetHandlerWrapper<SkillRequest, SkillResponse>(function.HandlerAsync, serializer);
             using var bootstrap = new LambdaBootstrap(httpClient ?? new HttpClient(), handlerWrapper, function.InitializeAsync);
+#pragma warning restore CA2000
 
             await bootstrap.RunAsync(cancellationToken);
         }

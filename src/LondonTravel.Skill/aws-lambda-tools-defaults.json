@@ -2,7 +2,7 @@
   "profile": "alexa-london-travel",
   "region": "eu-west-1",
   "configuration": "Release",
-  "framework": "netcoreapp3.0",
+  "framework": "netcoreapp3.1",
   "function-runtime": "provided",
   "function-memory-size": 256,
   "function-timeout": 10,
