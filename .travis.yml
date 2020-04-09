@@ -1,6 +1,9 @@
 dist: bionic
 os: linux
 
+language: csharp
+mono: none
+
 env:
   global:
     - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
