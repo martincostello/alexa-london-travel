@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		.travis.yml = .travis.yml
+		.vsconfig = .vsconfig
 		Build.ps1 = Build.ps1
 		build.sh = build.sh
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
@@ -57,6 +58,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Skill", "src\L
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Skill.Tests", "test\LondonTravel.Skill.Tests\LondonTravel.Skill.Tests.csproj", "{24473A89-5428-4E9E-8F55-661BBDBA8C31}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{6F8B120B-EE10-459D-A59D-3FC0E8D59058}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\update-dotnet-sdk.yml = .github\workflows\update-dotnet-sdk.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +88,7 @@ Global
 		{87F99EB8-63C9-4216-ACD6-F0284F61E8DF} = {AF3F738F-308E-4EB0-A9E3-CE43D407992F}
 		{A2110669-0B44-4F8D-9863-F44EA9F64759} = {8C59CF37-5860-4143-A891-A51E50620EBD}
 		{24473A89-5428-4E9E-8F55-661BBDBA8C31} = {27EF9EE1-288D-4AFD-9006-D7CE61B642DF}
+		{6F8B120B-EE10-459D-A59D-3FC0E8D59058} = {791C7C14-F862-41ED-9D92-12F844223C1B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7E57D002-B20B-49BE-AD07-7FC61C2A764B}
