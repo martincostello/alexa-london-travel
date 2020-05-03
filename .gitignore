@@ -1,5 +1,6 @@
 .DS_Store
 .dotnetcli
+.idea
 .metadata
 .settings
 .vs
@@ -10,18 +11,16 @@ artifacts/
 Backup*/
 bin
 Bin
-BuildOutput
 coverage
 coverage.*
 obj
 packages
-project.lock.json
+PublishProfiles
 TestResults
 UpgradeLog*.htm
 UpgradeLog*.XML
-PublishProfiles
+*.coverage
 *.DotSettings
-*.GhostDoc.xml
 *.log
 *.nupkg
 *.opensdf
