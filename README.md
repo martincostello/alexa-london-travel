@@ -30,7 +30,7 @@ The repository is hosted in [GitHub](https://github.com/martincostello/alexa-lon
 
 ## Building and Testing
 
-To build and test the skill, run `build.sh` or `Build.ps1`.
+To build and test the skill, run `build.ps1` or `build.sh`.
 
 ## License
 
