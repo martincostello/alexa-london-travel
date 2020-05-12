@@ -66,6 +66,7 @@ namespace MartinCostello.LondonTravel.Skill
               .Replace("n/b", "northbound", StringComparison.Ordinal)
               .Replace("s/b", "southbound", StringComparison.Ordinal)
               .Replace("w/b", "westbound", StringComparison.Ordinal)
+              .Replace(" St ", " Street ", StringComparison.Ordinal) // As in "High St Kensington"
               .Replace("SWT", "South West Trains", StringComparison.Ordinal)
               .Replace("tfl", "T.F.L.", StringComparison.Ordinal)
               .Replace("TFL", "T.F.L.", StringComparison.Ordinal)
