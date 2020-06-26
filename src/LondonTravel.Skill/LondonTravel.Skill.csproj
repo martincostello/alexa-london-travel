@@ -11,7 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Alexa.NET" Version="1.13.3" />
     <PackageReference Include="Amazon.Lambda.Core" Version="1.1.0" />
-    <PackageReference Include="Amazon.Lambda.Logging.AspNetCore" Version="3.0.0" />
+    <PackageReference Include="Amazon.Lambda.Logging.AspNetCore" Version="3.0.1" />
     <PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="1.1.1" />
     <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="1.7.0" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.14.0" />
