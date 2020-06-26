@@ -2,9 +2,9 @@
 
 [![London Travel](./static/icon-108x108.png "London Travel")](https://www.amazon.co.uk/dp/B01NB0T86R)
 
-[![Build status](https://travis-ci.org/martincostello/alexa-london-travel.svg?branch=master)](https://travis-ci.org/martincostello/alexa-london-travel) [![Code coverage](https://codecov.io/gh/martincostello/alexa-london-travel/branch/master/graph/badge.svg)](https://codecov.io/gh/martincostello/alexa-london-travel)
+[![Build status](https://travis-ci.org/martincostello/alexa-london-travel.svg?branch=main)](https://travis-ci.org/martincostello/alexa-london-travel) [![Code coverage](https://codecov.io/gh/martincostello/alexa-london-travel/branch/main/graph/badge.svg)](https://codecov.io/gh/martincostello/alexa-london-travel)
 
-[![Build history](https://buildstats.info/travisci/chart/martincostello/alexa-london-travel?branch=master&includeBuildsFromPullRequest=false)](https://travis-ci.org/martincostello/alexa-london-travel)
+[![Build history](https://buildstats.info/travisci/chart/martincostello/alexa-london-travel?branch=main&includeBuildsFromPullRequest=false)](https://travis-ci.org/martincostello/alexa-london-travel)
 
 ## Overview
 
