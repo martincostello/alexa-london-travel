@@ -1,0 +1,43 @@
+<Project>
+  <PropertyGroup>
+    <AnalyzersVersion>3.0.0</AnalyzersVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Alexa.NET" Version="1.13.3" />
+    <PackageVersion Include="Amazon.Lambda.Core" Version="1.1.0" />
+    <PackageVersion Include="Amazon.Lambda.Logging.AspNetCore" Version="3.0.1" />
+    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.1.1" />
+    <PackageVersion Include="Amazon.Lambda.Serialization.Json" Version="1.7.0" />
+    <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="1.1.0" />
+    <PackageVersion Include="coverlet.msbuild" Version="2.9.0" />
+    <PackageVersion Include="JustEat.HttpClientInterception" Version="3.0.0" />
+    <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.1.0" />
+    <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.3.0" />
+    <PackageVersion Include="Microsoft.ApplicationInsights" Version="2.14.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(AnalyzersVersion)" />
+    <PackageVersion Include="Microsoft.CodeQuality.Analyzers" Version="$(AnalyzersVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="3.1.5" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="3.1.5" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="3.1.5" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="3.1.5" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />
+    <PackageVersion Include="Moq" Version="4.14.4" />
+    <PackageVersion Include="Polly" Version="7.2.1" />
+    <PackageVersion Include="Refit" Version="5.1.67" />
+    <PackageVersion Include="ReportGenerator" Version="4.6.1" />
+    <PackageVersion Include="Shouldly" Version="3.0.2" />
+    <PackageVersion Include="StyleCop.Analyzers" Version="1.1.118" />
+    <PackageVersion Include="System.Text.Json" Version="4.7.2" />
+    <PackageVersion Include="xunit" Version="2.4.1" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="coverlet.msbuild" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.CodeQuality.Analyzers" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+    <PackageReference Include="ReportGenerator" PrivateAssets="All" />
+    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" />
+  </ItemGroup>
+</Project>
