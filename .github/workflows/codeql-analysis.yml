@@ -2,7 +2,9 @@ name: code-scan
 
 on:
   push:
+    branches: [ main ]
   pull_request:
+    branches: [ main ]
   schedule:
     - cron: '0 6 * * 1'
 
@@ -19,7 +21,7 @@ jobs:
 
     - run: git checkout HEAD^2
       if: ${{ github.event_name == 'pull_request' }}
-      
+
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
       with:
