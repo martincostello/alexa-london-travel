@@ -9,19 +9,19 @@
     <TieredCompilation>false</TieredCompilation>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Alexa.NET" Version="1.13.3" />
-    <PackageReference Include="Amazon.Lambda.Core" Version="1.1.0" />
-    <PackageReference Include="Amazon.Lambda.Logging.AspNetCore" Version="3.0.1" />
-    <PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="1.1.1" />
-    <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="1.7.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.14.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.5" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.5" />
-    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.1.5" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.5" />
-    <PackageReference Include="Polly" Version="7.2.1" />
-    <PackageReference Include="Refit" Version="5.1.67" />
-    <PackageReference Include="System.Text.Json" Version="4.7.2" />
+    <PackageReference Include="Alexa.NET" />
+    <PackageReference Include="Amazon.Lambda.Core" />
+    <PackageReference Include="Amazon.Lambda.Logging.AspNetCore" />
+    <PackageReference Include="Amazon.Lambda.RuntimeSupport" />
+    <PackageReference Include="Amazon.Lambda.Serialization.Json" />
+    <PackageReference Include="Microsoft.ApplicationInsights" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+    <PackageReference Include="Polly" />
+    <PackageReference Include="Refit" />
+    <PackageReference Include="System.Text.Json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Strings.Designer.cs" AutoGen="True" DependentUpon="Strings.resx" DesignTime="True" />
