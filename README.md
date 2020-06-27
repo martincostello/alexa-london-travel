@@ -26,7 +26,7 @@ Any feedback or issues can be added to the issues for this project in [GitHub](h
 
 ## Repository
 
-The repository is hosted in [GitHub](https://github.com/martincostello/alexa-london-travel): https://github.com/martincostello/alexa-london-travel.git
+The repository is hosted in [GitHub](https://github.com/martincostello/alexa-london-travel): [https://github.com/martincostello/alexa-london-travel.git](https://github.com/martincostello/alexa-london-travel.git)
 
 ## Building and Testing
 
