@@ -3,7 +3,7 @@
     <AnalyzersVersion>3.0.0</AnalyzersVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Alexa.NET" Version="1.13.3" />
+    <PackageVersion Include="Alexa.NET" Version="1.14.0" />
     <PackageVersion Include="Amazon.Lambda.Core" Version="1.1.0" />
     <PackageVersion Include="Amazon.Lambda.Logging.AspNetCore" Version="3.0.1" />
     <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.1.1" />
@@ -16,13 +16,13 @@
     <PackageVersion Include="Microsoft.ApplicationInsights" Version="2.14.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(AnalyzersVersion)" />
     <PackageVersion Include="Microsoft.CodeQuality.Analyzers" Version="$(AnalyzersVersion)" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="3.1.5" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="3.1.5" />
-    <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="3.1.5" />
-    <PackageVersion Include="Microsoft.Extensions.Logging" Version="3.1.5" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="3.1.6" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="3.1.6" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="3.1.6" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="3.1.6" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />
-    <PackageVersion Include="Moq" Version="4.14.4" />
+    <PackageVersion Include="Moq" Version="4.14.5" />
     <PackageVersion Include="Polly" Version="7.2.1" />
     <PackageVersion Include="Refit" Version="5.1.67" />
     <PackageVersion Include="ReportGenerator" Version="4.6.1" />
