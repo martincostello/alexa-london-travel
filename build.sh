@@ -29,7 +29,7 @@ while :; do
     shift
 done
 
-CLI_VERSION=$(grep -E '[0-9]\.[0-9]\.[a-zA-Z0-9\-]*' -o < ./global.json)
+CLI_VERSION="5.0.100-preview.8.20417.9"
 
 export CLI_VERSION
 export DOTNET_INSTALL_DIR="$root/.dotnetcli"

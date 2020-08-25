@@ -1,8 +1,8 @@
 dist: bionic
 os: linux
 
-language: csharp
-mono: none
+#language: csharp
+#mono: none
 
 env:
   global:
