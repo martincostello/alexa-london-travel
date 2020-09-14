@@ -29,7 +29,7 @@ while :; do
     shift
 done
 
-CLI_VERSION="5.0.100-preview.8.20417.9"
+CLI_VERSION="5.0.100-rc.1.20452.10"
 
 export CLI_VERSION
 export DOTNET_INSTALL_DIR="$root/.dotnetcli"
