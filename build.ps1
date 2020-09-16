@@ -85,7 +85,14 @@ function DotNetTest {
     $coverageOutput = Join-Path $OutputPath "coverage.cobertura.xml"
     $reportOutput = Join-Path $OutputPath "coverage"
 
-    & $dotnet test $Project --output $OutputPath --configuration $Configuration
+    $additionalArgs = @()
+
+    if (![string]::IsNullOrEmpty($env:GITHUB_SHA)) {
+        $additionalArgs += "--logger"
+        $additionalArgs += "GitHubActions;report-warnings=false"
+    }
+
+    & $dotnet test $Project --output $OutputPath --configuration $Configuration $additionalArgs
 
     $dotNetTestExitCode = $LASTEXITCODE
 
@@ -116,7 +123,8 @@ function DotNetPublish {
 }
 
 $testProjects = @(
-    (Join-Path $solutionPath "test\LondonTravel.Skill.Tests\LondonTravel.Skill.Tests.csproj")
+    (Join-Path $solutionPath "test\LondonTravel.Skill.Tests\LondonTravel.Skill.Tests.csproj"),
+    (Join-Path $solutionPath "test\LondonTravel.Skill.EndToEndTests\LondonTravel.Skill.EndToEndTests.csproj")
 )
 
 $publishProjects = @(

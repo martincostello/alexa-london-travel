@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
+		Directory.Packages.props = Directory.Packages.props
 		global.json = global.json
 		LICENSE = LICENSE
 		LondonTravel.Skill.ruleset = LondonTravel.Skill.ruleset
@@ -64,6 +65,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\update-dotnet-sdk.yml = .github\workflows\update-dotnet-sdk.yml
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Skill.EndToEndTests", "test\LondonTravel.Skill.EndToEndTests\LondonTravel.Skill.EndToEndTests.csproj", "{385B221D-16BF-4703-8105-C8622C188B1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +81,10 @@ Global
 		{24473A89-5428-4E9E-8F55-661BBDBA8C31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24473A89-5428-4E9E-8F55-661BBDBA8C31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24473A89-5428-4E9E-8F55-661BBDBA8C31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{385B221D-16BF-4703-8105-C8622C188B1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{385B221D-16BF-4703-8105-C8622C188B1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{385B221D-16BF-4703-8105-C8622C188B1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{385B221D-16BF-4703-8105-C8622C188B1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +97,7 @@ Global
 		{A2110669-0B44-4F8D-9863-F44EA9F64759} = {8C59CF37-5860-4143-A891-A51E50620EBD}
 		{24473A89-5428-4E9E-8F55-661BBDBA8C31} = {27EF9EE1-288D-4AFD-9006-D7CE61B642DF}
 		{6F8B120B-EE10-459D-A59D-3FC0E8D59058} = {791C7C14-F862-41ED-9D92-12F844223C1B}
+		{385B221D-16BF-4703-8105-C8622C188B1A} = {27EF9EE1-288D-4AFD-9006-D7CE61B642DF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7E57D002-B20B-49BE-AD07-7FC61C2A764B}

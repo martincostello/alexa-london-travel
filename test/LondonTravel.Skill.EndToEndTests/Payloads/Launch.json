@@ -1,0 +1,38 @@
+{
+  "session": {
+    "new": true,
+    "sessionId": "amzn1.echo-api.session.LAMBDA-TEST-DEV",
+    "attributes": {},
+    "user": {
+      "userId": "amzn1.ask.account.LAMBDA-TEST-DEV"
+    },
+    "application": {
+      "applicationId": "amzn1.ask.skill.49f13574-8134-4748-afeb-62ef1defffa6"
+    }
+  },
+  "version": "1.0",
+  "request": {
+    "locale": "en-US",
+    "timestamp": "2016-10-27T18:21:44Z",
+    "type": "LaunchRequest",
+    "requestId": "amzn1.echo-api.request.LAMBDA-TEST-DEV"
+  },
+  "context": {
+    "AudioPlayer": {
+      "playerActivity": "IDLE"
+    },
+    "System": {
+      "device": {
+        "supportedInterfaces": {
+          "AudioPlayer": {}
+        }
+      },
+      "application": {
+        "applicationId": "amzn1.ask.skill.49f13574-8134-4748-afeb-62ef1defffa6"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.LAMBDA-TEST-DEV"
+      }
+    }
+  }
+}
