@@ -89,7 +89,7 @@ function DotNetTest {
 
     if (![string]::IsNullOrEmpty($env:GITHUB_SHA)) {
         $additionalArgs += "--logger"
-        $additionalArgs += "GitHubActions"
+        $additionalArgs += "GitHubActions;report-warnings=false"
     }
 
     & $dotnet test $Project --output $OutputPath --configuration $Configuration $additionalArgs
