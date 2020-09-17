@@ -33,7 +33,7 @@ namespace MartinCostello.LondonTravel.Skill
         [InlineData("SessionEnded")]
         [InlineData("Stop")]
         [InlineData("UnknownIntent")]
-        public async Task Can_Get_Disruption(string payloadName)
+        public async Task Can_Invoke_Intent_Can_Get_Json_Response(string payloadName)
         {
             string accessToken = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
             string secretKey = Environment.GetEnvironmentVariable("AWS_SECRET_KEY");
