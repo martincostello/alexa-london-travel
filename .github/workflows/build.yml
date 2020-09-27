@@ -55,7 +55,7 @@ jobs:
         path: ./artifacts
 
     - name: Create Lambda ZIP file
-      #if: ${{ github.ref == 'refs/heads/deploy' || github.ref == 'refs/heads/main' }}
+      #if: ${{ runner.os == 'Linux' && (github.ref == 'refs/heads/deploy' || github.ref == 'refs/heads/main') }}
       if: ${{ runner.os == 'Linux' }}
       run: |
         cd "./artifacts/publish" || exit
@@ -63,7 +63,7 @@ jobs:
         zip -r "../alexa-london-travel.zip" . || exit 1
 
     - name: Configure AWS credentials
-      #if: ${{ github.ref == 'refs/heads/deploy' }}
+      #if: ${{ runner.os == 'Linux' && github.ref == 'refs/heads/deploy' }}
       if: ${{ runner.os == 'Linux' }}
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -72,17 +72,17 @@ jobs:
         aws-region: eu-west-1
 
     - name: Update function code (dev)
-      #if: ${{ github.ref == 'refs/heads/deploy' }}
+      #if: ${{ runner.os == 'Linux' && github.ref == 'refs/heads/deploy' }}
       if: ${{ runner.os == 'Linux' }}
       run: |
         aws lambda update-function-code \
             --function-name alexa-london-travel-dev \
             --dry-run \
             --publish \
-            --zip-file ./artifacts/alexa-london-travel.zip
+            --zip-file fileb://./artifacts/alexa-london-travel.zip
 
     - name: Update function configuration (dev)
-      #if: ${{ github.ref == 'refs/heads/deploy' }}
+      #if: ${{ runner.os == 'Linux' && github.ref == 'refs/heads/deploy' }}
       if: ${{ runner.os == 'Linux' }}
       run: |
         aws lambda update-function-configuration \
@@ -95,7 +95,7 @@ jobs:
             --timeout 10
 
     - name: Run end-to-end tests
-      #if: ${{ github.ref == 'refs/heads/deploy' }}
+      #if: ${{ runner.os == 'Linux' && github.ref == 'refs/heads/deploy' }}
       if: ${{ runner.os == 'Linux' }}
       shell: pwsh
       run: dotnet test ./test/LondonTravel.Skill.EndToEndTests
