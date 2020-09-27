@@ -2,9 +2,7 @@
 
 [![London Travel](./static/icon-108x108.png "London Travel")](https://www.amazon.co.uk/dp/B01NB0T86R)
 
-[![Build status](https://travis-ci.org/martincostello/alexa-london-travel.svg?branch=main)](https://travis-ci.org/martincostello/alexa-london-travel) [![Code coverage](https://codecov.io/gh/martincostello/alexa-london-travel/branch/main/graph/badge.svg)](https://codecov.io/gh/martincostello/alexa-london-travel)
-
-[![Build history](https://buildstats.info/travisci/chart/martincostello/alexa-london-travel?branch=main&includeBuildsFromPullRequest=false)](https://travis-ci.org/martincostello/alexa-london-travel)
+[![Build status](https://github.com/martincostello/alexa-london-travel/workflows/build/badge.svg?branch=main&event=push)](https://github.com/martincostello/alexa-london-travel/actions?query=workflow%3Abuild+branch%3Amain+event%3Apush)
 
 ## Overview
 
@@ -30,7 +28,7 @@ The repository is hosted in [GitHub](https://github.com/martincostello/alexa-lon
 
 ## Building and Testing
 
-To build and test the skill, run `build.ps1` or `build.sh`.
+To build and test the skill, run `build.ps1`.
 
 ## License
 
