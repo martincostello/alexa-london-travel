@@ -77,8 +77,8 @@ jobs:
       run: |
         aws lambda update-function-code \
             --function-name alexa-london-travel-dev \
-            --dry-run true \
-            --publish true \
+            --dry-run \
+            --publish \
             --zip-file ./artifacts/alexa-london-travel.zip
 
     - name: Update function configuration (dev)
