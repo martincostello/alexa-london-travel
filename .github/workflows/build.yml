@@ -91,6 +91,28 @@ jobs:
             --timeout 10 \
             > /dev/null
 
+    - name: Update function code (prod)
+      if: ${{ runner.os == 'Linux' && github.ref == 'refs/heads/deploy' }}
+      run: |
+        aws lambda update-function-code \
+            --function-name alexa-london-travel \
+            --publish \
+            --zip-file fileb://./artifacts/alexa-london-travel.zip \
+            > /dev/null
+
+    - name: Update function configuration (prod)
+      if: ${{ runner.os == 'Linux' && github.ref == 'refs/heads/deploy' }}
+      run: |
+        aws lambda update-function-configuration \
+            --function-name alexa-london-travel \
+            --description "Deploy build ${{ github.run_number }} to AWS Lambda via GitHub Actions" \
+            --handler LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunction::HandlerAsync \
+            --memory-size 256 \
+            --role arn:aws:iam::492538393790:role/lambda_basic_execution \
+            --runtime provided.al2 \
+            --timeout 10 \
+            > /dev/null
+
     - name: Run end-to-end tests
       if: ${{ runner.os == 'Linux' && github.ref == 'refs/heads/main' }}
       shell: pwsh
