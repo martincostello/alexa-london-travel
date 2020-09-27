@@ -78,7 +78,8 @@ jobs:
             --zip-file fileb://./artifacts/alexa-london-travel.zip
 
     - name: Update function configuration (dev)
-      if: ${{ runner.os == 'Linux' && github.ref == 'refs/heads/deploy' }}
+      #if: ${{ runner.os == 'Linux' && github.ref == 'refs/heads/deploy' }}
+      if: ${{ runner.os == 'Linux' }}
       run: |
         aws lambda update-function-configuration \
             --function-name alexa-london-travel-dev \
