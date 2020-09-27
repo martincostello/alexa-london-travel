@@ -53,3 +53,53 @@ jobs:
       with:
         name: artifacts-${{ matrix.os_name }}
         path: ./artifacts
+
+    - name: Create Lambda ZIP file
+      uses: actions/upload-artifact@v1
+      #if: ${{ github.ref == 'refs/heads/deploy' || github.ref == 'refs/heads/main' }}
+      if: ${{ runner.os == 'Linux' }}
+      run: |
+        cd "./artifacts/publish" || exit
+        chmod +x ./bootstrap
+        zip -r "./artifacts/alexa-london-travel.zip" . || exit 1
+
+    - name: Configure AWS credentials
+      #if: ${{ github.ref == 'refs/heads/deploy' }}
+      if: ${{ runner.os == 'Linux' }}
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-1
+
+    - name: Update function code
+      #if: ${{ github.ref == 'refs/heads/deploy' }}
+      if: ${{ runner.os == 'Linux' }}
+      run: |
+        aws lambda update-function-code \
+            --function-name alexa-london-travel-dev \
+            --dry-run true \
+            --publish true \
+            --zip-file ./artifacts/alexa-london-travel.zip
+
+    - name: Update function configuration
+      #if: ${{ github.ref == 'refs/heads/deploy' }}
+      if: ${{ runner.os == 'Linux' }}
+      run: |
+        aws lambda update-function-configuration \
+            --function-name alexa-london-travel-dev \
+            --description "Deploy build ${{ GITHUB_RUN_NUMBER }} to AWS Lambda via GitHub Actions" \
+            --handler LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunction::HandlerAsync \
+            --memory-size 256 \
+            --role arn:aws:iam::492538393790:role/lambda_basic_execution \
+            --runtime provided.al2 \
+            --timeout 10
+
+    - name: Run end-to-end tests
+      #if: ${{ github.ref == 'refs/heads/deploy' }}
+      if: ${{ runner.os == 'Linux' }}
+      shell: pwsh
+      run: dotnet test ./test/LondonTravel.Skill.EndToEndTests
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
