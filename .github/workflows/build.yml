@@ -87,7 +87,7 @@ jobs:
       run: |
         aws lambda update-function-configuration \
             --function-name alexa-london-travel-dev \
-            --description "Deploy build ${{ GITHUB_RUN_NUMBER }} to AWS Lambda via GitHub Actions" \
+            --description "Deploy build ${{ github.run_number }} to AWS Lambda via GitHub Actions" \
             --handler LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunction::HandlerAsync \
             --memory-size 256 \
             --role arn:aws:iam::492538393790:role/lambda_basic_execution \
