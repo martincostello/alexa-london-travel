@@ -1,8 +1,6 @@
 <Project>
   <PropertyGroup>
     <CommitBranch Condition=" '$(CommitBranch)' == '' and '$(GITHUB_REF)' != '' ">$(GITHUB_REF.Substring(11))</CommitBranch>
-    <CommitBranch Condition=" '$(CommitBranch)' == '' ">$(TRAVIS_PULL_REQUEST_BRANCH)</CommitBranch>
-    <CommitBranch Condition=" '$(CommitBranch)' == '' ">$(TRAVIS_BRANCH)</CommitBranch>
     <CommitHash Condition=" '$(CommitHash)' == '' ">$(GITHUB_SHA)</CommitHash>
   </PropertyGroup>
   <Target Name="AddGitMetadaAssemblyAttributes"

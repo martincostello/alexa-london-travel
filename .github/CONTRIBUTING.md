@@ -17,6 +17,6 @@ If you wish to contribute code to the skill, please follow the guidelines below:
   1. Ensure ```npm run lint``` and ```npm test``` both run with no errors or warnings.
   1. Open a pull request against the ```main``` branch, referencing your issue if appropriate.
 
-Once your pull request is opened, the project maintainers will assess it for validity and an appropriate level of quality. For example, the [Travis CI build](https://travis-ci.org/martincostello/alexa-london-travel) should pass.
+Once your pull request is opened, the project maintainers will assess it for validity and an appropriate level of quality. For example, the [GitHub Actions CI build](https://github.com/martincostello/alexa-london-travel/actions?query=workflow%3Abuild) should pass.
 
 If the project maintainers are satisfied that your contribution is appropriate it will be merged into the main branch when appropriate and it will then be deployed when the skill is next updated in AWS.
