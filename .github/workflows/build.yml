@@ -68,10 +68,10 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
         aws-region: eu-west-1
 
-    - name: Update function code
+    - name: Update function code (dev)
       #if: ${{ github.ref == 'refs/heads/deploy' }}
       if: ${{ runner.os == 'Linux' }}
       run: |
@@ -81,7 +81,7 @@ jobs:
             --publish true \
             --zip-file ./artifacts/alexa-london-travel.zip
 
-    - name: Update function configuration
+    - name: Update function configuration (dev)
       #if: ${{ github.ref == 'refs/heads/deploy' }}
       if: ${{ runner.os == 'Linux' }}
       run: |
