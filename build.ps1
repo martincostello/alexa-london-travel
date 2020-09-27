@@ -115,7 +115,18 @@ function DotNetPublish {
 
     $publishPath = (Join-Path $OutputPath "publish")
 
-    & $dotnet publish $Project --output $publishPath --configuration $Configuration
+    $additionalArgs = @()
+
+    if ($IsLinux) {
+        $additionalArgs += "--runtime"
+        $additionalArgs += "linux-x64"
+        $additionalArgs += "--self-contained"
+        $additionalArgs += "true"
+        $additionalArgs += "/p:AssemblyName=bootstrap"
+        $additionalArgs += "/p:PublishReadyToRun=true"
+    }
+
+    & $dotnet publish $Project --output $publishPath --configuration $Configuration $additionalArgs
 
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet publish failed with exit code $LASTEXITCODE"
