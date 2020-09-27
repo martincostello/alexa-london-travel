@@ -60,7 +60,7 @@ jobs:
       run: |
         cd "./artifacts/publish" || exit
         chmod +x ./bootstrap
-        zip -r "./artifacts/alexa-london-travel.zip" . || exit 1
+        zip -r "../alexa-london-travel.zip" . || exit 1
 
     - name: Configure AWS credentials
       #if: ${{ github.ref == 'refs/heads/deploy' }}
