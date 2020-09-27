@@ -62,7 +62,8 @@ jobs:
         zip -r "../alexa-london-travel.zip" . || exit 1
 
     - name: Configure AWS credentials
-      if: ${{ runner.os == 'Linux' && github.ref == 'refs/heads/deploy' }}
+      #if: ${{ runner.os == 'Linux' && github.ref == 'refs/heads/deploy' }}
+      if: ${{ runner.os == 'Linux' }}
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
