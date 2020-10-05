@@ -6,7 +6,7 @@
     <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.1.1" />
     <PackageVersion Include="Amazon.Lambda.Serialization.Json" Version="1.7.0" />
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="1.1.0" />
-    <PackageVersion Include="AWSSDK.Lambda" Version="3.5.0.23" />
+    <PackageVersion Include="AWSSDK.Lambda" Version="3.5.0.24" />
     <PackageVersion Include="coverlet.msbuild" Version="2.9.0" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="1.1.1" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="3.0.0" />
