@@ -17,7 +17,7 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0-rc.2.20462.5" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="5.0.0-rc.2.20462.5" />
     <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="5.0.0-rc.2.20464.3" />
-    <PackageVersion Include="Microsoft.Extensions.Logging" Version="5.0.0-rc.2.20462.5" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="5.0.0-rtm.20508.7" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />
     <PackageVersion Include="Moq" Version="4.14.6" />
