@@ -31,6 +31,7 @@ namespace MartinCostello.LondonTravel.Skill
         [InlineData("Help")]
         [InlineData("Launch")]
         [InlineData("SessionEnded")]
+        [InlineData("Status")]
         [InlineData("Stop")]
         [InlineData("UnknownIntent")]
         public async Task Can_Invoke_Intent_Can_Get_Json_Response(string payloadName)
