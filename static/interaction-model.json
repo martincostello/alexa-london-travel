@@ -170,6 +170,10 @@
           "samples": []
         },
         {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
           "name": "StatusIntent",
           "slots": [
             {
