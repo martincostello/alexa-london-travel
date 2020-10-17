@@ -13,7 +13,7 @@ jobs:
           git remote set-url origin https://github.com/$GITHUB_REPOSITORY.git
           git fetch origin
           git checkout $DEPLOY_BRANCH --
-          git pull $DEFAULT_BRANCH
+          git pull origin $DEFAULT_BRANCH --ff-only
           git push -u origin $DEPLOY_BRANCH
         env:
           DEFAULT_BRANCH: main
