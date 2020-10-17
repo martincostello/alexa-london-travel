@@ -114,7 +114,7 @@ jobs:
             > /dev/null
 
     - name: Run end-to-end tests
-      if: ${{ runner.os == 'Linux' && github.ref == 'refs/heads/main' }}
+      if: ${{ runner.os == 'Linux' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/deploy') }}
       shell: pwsh
       run: dotnet test ./test/LondonTravel.Skill.EndToEndTests
       env:
