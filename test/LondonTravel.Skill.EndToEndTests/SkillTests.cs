@@ -1,10 +1,12 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Amazon;
@@ -50,6 +52,7 @@ namespace MartinCostello.LondonTravel.Skill
                 string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(secretKey),
                 "No AWS credentials are configured.");
 
+            // Arrange
             string payload = await File.ReadAllTextAsync(Path.Combine("Payloads", $"{payloadName}.json"));
 
             var credentials = new BasicAWSCredentials(accessToken, secretKey);
@@ -59,11 +62,14 @@ namespace MartinCostello.LondonTravel.Skill
 
             var request = new InvokeRequest()
             {
-                FunctionName = "alexa-london-travel-dev",
+                FunctionName = FunctionName(),
                 InvocationType = InvocationType.RequestResponse,
                 LogType = LogType.None,
                 Payload = payload,
             };
+
+            OutputHelper.WriteLine($"FunctionName: {request.FunctionName}");
+            OutputHelper.WriteLine($"Payload: {request.Payload}");
 
             // Act
             InvokeResponse response = await client.InvokeAsync(request);
@@ -85,6 +91,19 @@ namespace MartinCostello.LondonTravel.Skill
 
             using var document = JsonDocument.Parse(responsePayload);
             document.RootElement.ValueKind.ShouldBe(JsonValueKind.Object);
+        }
+
+        private static string FunctionName()
+        {
+            string branchName = typeof(SkillTests).Assembly.GetCustomAttributes<AssemblyMetadataAttribute>()
+                .Where((p) => string.Equals(p.Key, "CommitBranch", StringComparison.Ordinal))
+                .Select((p) => p.Value)
+                .FirstOrDefault();
+
+            return
+                string.Equals(branchName, "deploy", StringComparison.OrdinalIgnoreCase) ?
+                "alexa-london-travel" :
+                "alexa-london-travel-dev";
         }
     }
 }
