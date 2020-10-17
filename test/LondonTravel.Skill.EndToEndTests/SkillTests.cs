@@ -1,7 +1,9 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -23,17 +25,22 @@ namespace MartinCostello.LondonTravel.Skill
             OutputHelper = outputHelper;
         }
 
+        public static IEnumerable<object[]> Payloads
+        {
+            get
+            {
+                return Directory.GetFiles("Payloads")
+                    .Select((p) => Path.GetFileNameWithoutExtension(p))
+                    .OrderBy((p) => p)
+                    .Select((p) => new object[] { p })
+                    .ToArray();
+            }
+        }
+
         private ITestOutputHelper OutputHelper { get; }
 
         [SkippableTheory]
-        [InlineData("Cancel")]
-        [InlineData("Disruption")]
-        [InlineData("Help")]
-        [InlineData("Launch")]
-        [InlineData("SessionEnded")]
-        [InlineData("Status")]
-        [InlineData("Stop")]
-        [InlineData("UnknownIntent")]
+        [MemberData(nameof(Payloads))]
         public async Task Can_Invoke_Intent_Can_Get_Json_Response(string payloadName)
         {
             string accessToken = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
