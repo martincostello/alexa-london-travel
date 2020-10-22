@@ -2,7 +2,7 @@
   <ItemGroup>
     <PackageVersion Include="Alexa.NET" Version="1.14.0" />
     <PackageVersion Include="Amazon.Lambda.Core" Version="1.2.0" />
-    <PackageVersion Include="Amazon.Lambda.Logging.AspNetCore" Version="3.0.1" />
+    <PackageVersion Include="Amazon.Lambda.Logging.AspNetCore" Version="3.1.0" />
     <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.2.0" />
     <PackageVersion Include="Amazon.Lambda.Serialization.Json" Version="1.7.0" />
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="1.1.0" />
