@@ -11,7 +11,7 @@
     <PackageVersion Include="GitHubActionsTestLogger" Version="1.1.2" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="3.0.0" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.1.0" />
-    <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.3.0" />
+    <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.4.0" />
     <PackageVersion Include="Microsoft.ApplicationInsights" Version="2.15.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />
