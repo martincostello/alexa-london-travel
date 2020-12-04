@@ -3,6 +3,7 @@
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
   </ItemGroup>
   <PropertyGroup>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <Authors>martin_costello</Authors>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)LondonTravel.Skill.ruleset</CodeAnalysisRuleSet>
     <Company>https://github.com/martincostello/alexa-london-travel</Company>
@@ -10,6 +11,7 @@
     <Copyright>Martin Costello (c) 2017-$([System.DateTime]::UtcNow.ToString(yyyy))</Copyright>
     <Deterministic Condition=" '$(IsTestProject)' == '' ">true</Deterministic>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <GenerateGitMetadata Condition=" '$(CI)' != '' and '$(GenerateGitMetadata)' == '' ">true</GenerateGitMetadata>
     <LangVersion>latest</LangVersion>

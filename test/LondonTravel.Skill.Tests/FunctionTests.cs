@@ -83,7 +83,7 @@ namespace MartinCostello.LondonTravel.Skill
                 },
             };
 
-            if (slots?.Length > 0)
+            if (slots.Length > 0)
             {
                 request.Intent.Slots = new Dictionary<string, Slot>();
 
