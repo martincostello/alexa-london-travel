@@ -40,7 +40,7 @@ namespace MartinCostello.LondonTravel.Skill.Extensions
                 .ApplyDefaultConfiguration();
 
             services.AddSingleton(CreateJsonSerializerOptions);
-            services.AddSingleton<IContentSerializer, SystemTextJsonContentSerializer>();
+            services.AddSingleton<IHttpContentSerializer, SystemTextJsonContentSerializer>();
             services.AddTransient(CreateRefitSettings);
 
             return services;
@@ -105,12 +105,12 @@ namespace MartinCostello.LondonTravel.Skill.Extensions
         /// </returns>
         private static RefitSettings CreateRefitSettings(IServiceProvider provider)
         {
-            var contentSerializer = provider.GetRequiredService<IContentSerializer>();
+            var contentSerializer = provider.GetRequiredService<IHttpContentSerializer>();
             var messageHandlerFactory = provider.GetRequiredService<IHttpMessageHandlerFactory>();
 
             return new RefitSettings()
             {
-                ContentSerializer = provider.GetRequiredService<IContentSerializer>(),
+                ContentSerializer = provider.GetRequiredService<IHttpContentSerializer>(),
                 HttpMessageHandlerFactory = messageHandlerFactory.CreateHandler,
             };
         }
