@@ -19,7 +19,7 @@
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="5.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />
-    <PackageVersion Include="Moq" Version="4.16.0" />
+    <PackageVersion Include="Moq" Version="4.16.1" />
     <PackageVersion Include="Polly" Version="7.2.1" />
     <PackageVersion Include="Refit" Version="6.0.24" />
     <PackageVersion Include="ReportGenerator" Version="4.8.6" />
