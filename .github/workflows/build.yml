@@ -85,7 +85,7 @@ jobs:
         path: ./artifacts/${{ env.LAMBDA_FUNCTION }}.zip
 
   deploy-dev:
-    #if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/main' }}
     name: dev
     needs: build
     runs-on: ubuntu-latest
