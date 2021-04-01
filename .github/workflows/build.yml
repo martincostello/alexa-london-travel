@@ -72,7 +72,6 @@ jobs:
 
     - name: Create Lambda ZIP file
       if: ${{ runner.os == 'Linux' }}
-      #if: ${{ runner.os == 'Linux' && github.ref == 'refs/heads/main' }}
       run: |
         cd "./artifacts/publish" || exit
         chmod +x ./bootstrap
@@ -81,10 +80,9 @@ jobs:
     - name: Publish deployment package
       uses: actions/upload-artifact@v2
       if: ${{ runner.os == 'Linux' }}
-      #if: ${{ runner.os == 'Linux' && github.ref == 'refs/heads/main' }}
       with:
         name: lambda
-        path: ./artifacts/publish/${{ env.LAMBDA_FUNCTION }}.zip
+        path: ./artifacts/${{ env.LAMBDA_FUNCTION }}.zip
 
   deploy-dev:
     #if: ${{ github.ref == 'refs/heads/main' }}
