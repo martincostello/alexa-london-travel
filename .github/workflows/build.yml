@@ -88,6 +88,7 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' }}
     name: dev
     needs: build
+    concurrency: development_environment
     runs-on: ubuntu-latest
     environment:
       name: dev
@@ -130,6 +131,7 @@ jobs:
     name: production
     needs: deploy-dev
     runs-on: ubuntu-latest
+    concurrency: production_environment
     environment:
       name: production
 
