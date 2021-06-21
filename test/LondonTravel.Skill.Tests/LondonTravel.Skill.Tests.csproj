@@ -21,6 +21,9 @@
     <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)..\GlobalTestUsings.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="xunit.runner.json;Bundles\*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <PropertyGroup>
