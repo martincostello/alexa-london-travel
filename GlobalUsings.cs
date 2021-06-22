@@ -7,3 +7,9 @@ global using System.Globalization;
 global using System.Linq;
 global using System.Threading;
 global using System.Threading.Tasks;
+
+#if TEST_PROJECT
+global using Shouldly;
+global using Xunit;
+global using Xunit.Abstractions;
+#endif

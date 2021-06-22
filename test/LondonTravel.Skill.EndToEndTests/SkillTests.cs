@@ -9,7 +9,6 @@ using Amazon;
 using Amazon.Lambda;
 using Amazon.Lambda.Model;
 using Amazon.Runtime;
-using Xunit.Abstractions;
 using Environment = System.Environment;
 
 namespace MartinCostello.LondonTravel.Skill

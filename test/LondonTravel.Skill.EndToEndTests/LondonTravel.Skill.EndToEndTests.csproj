@@ -15,9 +15,6 @@
     <PackageReference Include="Xunit.SkippableFact" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)..\GlobalTestUsings.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="xunit.runner.json;Payloads\*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

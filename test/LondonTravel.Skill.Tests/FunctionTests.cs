@@ -11,7 +11,6 @@ using MartinCostello.Logging.XUnit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Xunit.Abstractions;
 
 namespace MartinCostello.LondonTravel.Skill
 {
