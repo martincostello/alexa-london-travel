@@ -5,9 +5,6 @@ using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
 using Amazon.Lambda.Core;
-using Shouldly;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace MartinCostello.LondonTravel.Skill
 {

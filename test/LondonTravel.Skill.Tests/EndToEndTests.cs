@@ -8,7 +8,6 @@ using MartinCostello.Testing.AwsLambdaTestServer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Xunit.Abstractions;
 
 namespace MartinCostello.LondonTravel.Skill
 {

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <IsTestProject>true</IsTestProject>
     <NoWarn>$(NoWarn);CA1062;CA1707;CA2007;CA2234;SA1600</NoWarn>
@@ -19,9 +19,6 @@
     <PackageReference Include="Shouldly" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)..\GlobalTestUsings.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="xunit.runner.json;Bundles\*.json" CopyToOutputDirectory="PreserveNewest" />
