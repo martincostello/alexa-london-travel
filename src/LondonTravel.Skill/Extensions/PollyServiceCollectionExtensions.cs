@@ -1,11 +1,9 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Extensions.Http;
-using Polly.Registry;
 
 namespace MartinCostello.LondonTravel.Skill.Extensions
 {
@@ -23,21 +21,21 @@ namespace MartinCostello.LondonTravel.Skill.Extensions
         /// </returns>
         public static IServiceCollection AddPolly(this IServiceCollection services)
         {
-            var sleepDurations = new[]
+            return services.AddPolicyRegistry((_, registry) =>
             {
-                TimeSpan.FromSeconds(0.5),
-                TimeSpan.FromSeconds(1.0),
-                TimeSpan.FromSeconds(2.0),
-            };
+                var sleepDurations = new[]
+                {
+                    TimeSpan.FromSeconds(0.5),
+                    TimeSpan.FromSeconds(1.0),
+                    TimeSpan.FromSeconds(2.0),
+                };
 
-            var readPolicy = HttpPolicyExtensions.HandleTransientHttpError()
-                .WaitAndRetryAsync(sleepDurations)
-                .WithPolicyKey("ReadPolicy");
+                var readPolicy = HttpPolicyExtensions.HandleTransientHttpError()
+                    .WaitAndRetryAsync(sleepDurations)
+                    .WithPolicyKey("ReadPolicy");
 
-            IPolicyRegistry<string> registry = services.AddPolicyRegistry();
-            registry.Add(readPolicy.PolicyKey, readPolicy);
-
-            return services;
+                registry.Add(readPolicy.PolicyKey, readPolicy);
+            });
         }
     }
 }

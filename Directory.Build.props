@@ -1,6 +1,7 @@
 <Project>
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalUsings.cs" />
   </ItemGroup>
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
