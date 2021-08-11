@@ -29,10 +29,7 @@ namespace MartinCostello.LondonTravel.Skill.Intents
         /// <inheritdoc />
         public Task<SkillResponse> RespondAsync(Intent intent, Session session)
         {
-            Logger.LogWarning(
-                "Unknown intent {IntentName} cannot be handled for session Id {SessionId}.",
-                intent.Name,
-                session.SessionId);
+            Log.UnknownIntent(Logger, intent.Name, session.SessionId);
 
             var response = SkillResponseBuilder
                 .Tell(Strings.UnknownCommand)

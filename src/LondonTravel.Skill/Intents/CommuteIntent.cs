@@ -122,11 +122,6 @@ namespace MartinCostello.LondonTravel.Skill.Intents
             }
             catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
             {
-                Logger.LogWarning(
-                    "Access token is invalid for user Id {UserId} and session Id {SessionId}.",
-                    session.User.UserId,
-                    session.SessionId);
-
                 return null;
             }
         }
@@ -141,9 +136,7 @@ namespace MartinCostello.LondonTravel.Skill.Intents
 
         private SkillResponse NoFavorites(Session session)
         {
-            Logger.LogInformation(
-                "User with Id {UserId} has set no line preferences.",
-                session.User.UserId);
+            Log.NoLinePreferences(Logger, session.User.UserId);
 
             string text = Strings.CommuteIntentNoFavorites;
 
@@ -155,9 +148,7 @@ namespace MartinCostello.LondonTravel.Skill.Intents
 
         private SkillResponse NotLinked(Session session)
         {
-            Logger.LogInformation(
-                "User with Id {UserId} has not linked account.",
-                session.User?.UserId);
+            Log.AccountNotLinked(Logger, session.User?.UserId);
 
             return SkillResponseBuilder
                 .Tell(Strings.CommuteIntentAccountNotLinked)
@@ -167,9 +158,7 @@ namespace MartinCostello.LondonTravel.Skill.Intents
 
         private SkillResponse Unauthorized(Session session)
         {
-            Logger.LogInformation(
-                "User with Id {UserId} has an invalid access token.",
-                session.User.UserId);
+            Log.InvalidAccessToken(Logger, session.User.UserId, session.SessionId);
 
             return SkillResponseBuilder
                 .Tell(Strings.CommuteIntentInvalidToken)

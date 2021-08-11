@@ -55,10 +55,10 @@ namespace MartinCostello.LondonTravel.Skill
         /// </returns>
         public SkillResponse OnError(SystemExceptionRequest error, Session session)
         {
-            Logger.LogError(
-                "Failed to handle request for session {SessionId}. Error type {ErrorType} with cause {ErrorCause}: {ErrorMessage}",
+            Log.SystemError(
+                Logger,
                 session.SessionId,
-                error.Error.Type,
+                error.Error.Type.ToString(),
                 error.ErrorCause?.requestId,
                 error.Error.Message);
 
@@ -77,7 +77,7 @@ namespace MartinCostello.LondonTravel.Skill
         /// </returns>
         public SkillResponse OnError(Exception exception, Session session)
         {
-            Logger.LogError(exception, "Failed to handle request for session {SessionId}.", session.SessionId);
+            Log.HandlerException(Logger, exception, session.SessionId);
 
             TrackException(exception, session);
 
