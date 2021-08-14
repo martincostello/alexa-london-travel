@@ -10,7 +10,7 @@
       "args": [
         "test"
       ],
-      "cwd": "${workspaceRoot}/test/LondonTravel.Skill.Tests",
+      "cwd": "${workspaceFolder}/test/LondonTravel.Skill.Tests",
       "console": "internalConsole",
       "stopAtEntry": false,
       "internalConsoleOptions": "openOnSessionStart"
