@@ -3,6 +3,8 @@
 
 using Microsoft.Extensions.Logging;
 
+//// TODO Cannot use file-scoped namespace due to https://github.com/dotnet/runtime/issues/57880
+
 namespace MartinCostello.LondonTravel.Skill
 {
     /// <summary>
