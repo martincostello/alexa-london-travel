@@ -12,145 +12,144 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 
-namespace MartinCostello.LondonTravel.Skill
+namespace MartinCostello.LondonTravel.Skill;
+
+/// <summary>
+/// A class representing the AWS Lambda function entry-point for the London Travel Amazon Alexa skill.
+/// </summary>
+public class AlexaFunction
 {
     /// <summary>
-    /// A class representing the AWS Lambda function entry-point for the London Travel Amazon Alexa skill.
+    /// The <see cref="IServiceProvider"/> to use.
     /// </summary>
-    public class AlexaFunction
+    private IServiceProvider _serviceProvider;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AlexaFunction"/> class.
+    /// </summary>
+    public AlexaFunction()
     {
-        /// <summary>
-        /// The <see cref="IServiceProvider"/> to use.
-        /// </summary>
-        private IServiceProvider _serviceProvider;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AlexaFunction"/> class.
-        /// </summary>
-        public AlexaFunction()
+    /// <summary>
+    /// Handles a request to the skill as an asynchronous operation.
+    /// </summary>
+    /// <param name="request">The skill request.</param>
+    /// <param name="context">The AWS Lambda execution context.</param>
+    /// <returns>
+    /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the skill's response.
+    /// </returns>
+    public async Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
+    {
+        context.Logger.LogLine($"Invoking skill request of type {request.Request.GetType().Name}.");
+
+        var handler = _serviceProvider.GetRequiredService<FunctionHandler>();
+
+        return await handler.HandleAsync(request);
+    }
+
+    /// <summary>
+    /// Initializes the skill as an asynchronous operation.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="Task{TResult}"/> representing the asynchronous operation to initialize the skill.
+    /// </returns>
+    public Task<bool> InitializeAsync()
+    {
+        if (_serviceProvider == null)
         {
+            _serviceProvider = CreateServiceProvider();
         }
 
-        /// <summary>
-        /// Handles a request to the skill as an asynchronous operation.
-        /// </summary>
-        /// <param name="request">The skill request.</param>
-        /// <param name="context">The AWS Lambda execution context.</param>
-        /// <returns>
-        /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the skill's response.
-        /// </returns>
-        public async Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
+        return Task.FromResult(true);
+    }
+
+    /// <summary>
+    /// Configures the <see cref="IServiceCollection"/> to use.
+    /// </summary>
+    /// <param name="services">The service collection to configure.</param>
+    protected virtual void ConfigureServices(IServiceCollection services)
+    {
+        services.AddLogging((builder) =>
         {
-            context.Logger.LogLine($"Invoking skill request of type {request.Request.GetType().Name}.");
-
-            var handler = _serviceProvider.GetRequiredService<FunctionHandler>();
-
-            return await handler.HandleAsync(request);
-        }
-
-        /// <summary>
-        /// Initializes the skill as an asynchronous operation.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="Task{TResult}"/> representing the asynchronous operation to initialize the skill.
-        /// </returns>
-        public Task<bool> InitializeAsync()
-        {
-            if (_serviceProvider == null)
+            var options = new LambdaLoggerOptions()
             {
-                _serviceProvider = CreateServiceProvider();
-            }
-
-            return Task.FromResult(true);
-        }
-
-        /// <summary>
-        /// Configures the <see cref="IServiceCollection"/> to use.
-        /// </summary>
-        /// <param name="services">The service collection to configure.</param>
-        protected virtual void ConfigureServices(IServiceCollection services)
-        {
-            services.AddLogging((builder) =>
-            {
-                var options = new LambdaLoggerOptions()
-                {
-                    Filter = FilterLogs,
-                };
-
-                builder.AddLambdaLogger(options);
-            });
-
-            services.AddHttpClients();
-            services.AddPolly();
-
-            services.TryAddSingleton((_) => SkillConfiguration.CreateDefaultConfiguration());
-
-            services.AddSingleton<AlexaSkill>();
-            services.AddSingleton<FunctionHandler>();
-            services.AddSingleton<IntentFactory>();
-            services.AddSingleton((_) => TelemetryConfiguration.CreateDefault());
-            services.AddSingleton(CreateTelemetryClient);
-
-            services.AddSingleton<EmptyIntent>();
-            services.AddSingleton<HelpIntent>();
-            services.AddSingleton<UnknownIntent>();
-
-            services.AddTransient<CommuteIntent>();
-            services.AddTransient<DisruptionIntent>();
-            services.AddTransient<StatusIntent>();
-        }
-
-        /// <summary>
-        /// Creates an <see cref="TelemetryClient"/>.
-        /// </summary>
-        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to use.</param>
-        /// <returns>
-        /// The created instance of <see cref="TelemetryClient"/>.
-        /// </returns>
-        private static TelemetryClient CreateTelemetryClient(IServiceProvider serviceProvider)
-        {
-            var config = serviceProvider.GetRequiredService<SkillConfiguration>();
-            var configuration = serviceProvider.GetRequiredService<TelemetryConfiguration>();
-
-            return new TelemetryClient(configuration)
-            {
-                InstrumentationKey = config.ApplicationInsightsKey,
+                Filter = FilterLogs,
             };
-        }
 
-        /// <summary>
-        /// Filters the Lambda logs.
-        /// </summary>
-        /// <param name="name">The name of the log.</param>
-        /// <param name="level">The log level.</param>
-        /// <returns>
-        /// <see langword="true"/> to log the message; otherwise <see langword="false"/>.
-        /// </returns>
-        private static bool FilterLogs(string name, LogLevel level)
+            builder.AddLambdaLogger(options);
+        });
+
+        services.AddHttpClients();
+        services.AddPolly();
+
+        services.TryAddSingleton((_) => SkillConfiguration.CreateDefaultConfiguration());
+
+        services.AddSingleton<AlexaSkill>();
+        services.AddSingleton<FunctionHandler>();
+        services.AddSingleton<IntentFactory>();
+        services.AddSingleton((_) => TelemetryConfiguration.CreateDefault());
+        services.AddSingleton(CreateTelemetryClient);
+
+        services.AddSingleton<EmptyIntent>();
+        services.AddSingleton<HelpIntent>();
+        services.AddSingleton<UnknownIntent>();
+
+        services.AddTransient<CommuteIntent>();
+        services.AddTransient<DisruptionIntent>();
+        services.AddTransient<StatusIntent>();
+    }
+
+    /// <summary>
+    /// Creates an <see cref="TelemetryClient"/>.
+    /// </summary>
+    /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to use.</param>
+    /// <returns>
+    /// The created instance of <see cref="TelemetryClient"/>.
+    /// </returns>
+    private static TelemetryClient CreateTelemetryClient(IServiceProvider serviceProvider)
+    {
+        var config = serviceProvider.GetRequiredService<SkillConfiguration>();
+        var configuration = serviceProvider.GetRequiredService<TelemetryConfiguration>();
+
+        return new TelemetryClient(configuration)
         {
-            if (level < LogLevel.Warning &&
-                (name.StartsWith("System.", StringComparison.Ordinal) ||
-                 name.StartsWith("Microsoft.", StringComparison.Ordinal)))
-            {
-                return false;
-            }
+            InstrumentationKey = config.ApplicationInsightsKey,
+        };
+    }
 
-            return true;
-        }
-
-        /// <summary>
-        /// Creates the <see cref="IServiceProvider"/> to use.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IServiceProvider"/> to use.
-        /// </returns>
-        private IServiceProvider CreateServiceProvider()
+    /// <summary>
+    /// Filters the Lambda logs.
+    /// </summary>
+    /// <param name="name">The name of the log.</param>
+    /// <param name="level">The log level.</param>
+    /// <returns>
+    /// <see langword="true"/> to log the message; otherwise <see langword="false"/>.
+    /// </returns>
+    private static bool FilterLogs(string name, LogLevel level)
+    {
+        if (level < LogLevel.Warning &&
+            (name.StartsWith("System.", StringComparison.Ordinal) ||
+             name.StartsWith("Microsoft.", StringComparison.Ordinal)))
         {
-            var services = new ServiceCollection();
-
-            ConfigureServices(services);
-
-            return services.BuildServiceProvider();
+            return false;
         }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Creates the <see cref="IServiceProvider"/> to use.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="IServiceProvider"/> to use.
+    /// </returns>
+    private IServiceProvider CreateServiceProvider()
+    {
+        var services = new ServiceCollection();
+
+        ConfigureServices(services);
+
+        return services.BuildServiceProvider();
     }
 }

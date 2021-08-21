@@ -5,17 +5,16 @@ using Alexa.NET;
 using Alexa.NET.Request;
 using Alexa.NET.Response;
 
-namespace MartinCostello.LondonTravel.Skill.Intents
+namespace MartinCostello.LondonTravel.Skill.Intents;
+
+/// <summary>
+/// A class that handles an intent with no response. This class cannot be inherited.
+/// </summary>
+internal sealed class EmptyIntent : IIntent
 {
-    /// <summary>
-    /// A class that handles an intent with no response. This class cannot be inherited.
-    /// </summary>
-    internal sealed class EmptyIntent : IIntent
+    /// <inheritdoc />
+    public Task<SkillResponse> RespondAsync(Intent intent, Session session)
     {
-        /// <inheritdoc />
-        public Task<SkillResponse> RespondAsync(Intent intent, Session session)
-        {
-            return Task.FromResult(ResponseBuilder.Empty());
-        }
+        return Task.FromResult(ResponseBuilder.Empty());
     }
 }

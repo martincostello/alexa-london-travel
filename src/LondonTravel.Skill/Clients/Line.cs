@@ -3,23 +3,22 @@
 
 using System.Text.Json.Serialization;
 
-namespace MartinCostello.LondonTravel.Skill.Clients
+namespace MartinCostello.LondonTravel.Skill.Clients;
+
+/// <summary>
+/// A class representing a line. This class cannot be inherited.
+/// </summary>
+internal sealed class Line
 {
     /// <summary>
-    /// A class representing a line. This class cannot be inherited.
+    /// Gets or sets the line's name.
     /// </summary>
-    internal sealed class Line
-    {
-        /// <summary>
-        /// Gets or sets the line's name.
-        /// </summary>
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 
-        /// <summary>
-        /// Gets or sets the statuses for the line.
-        /// </summary>
-        [JsonPropertyName("lineStatuses")]
-        public IList<LineStatus> LineStatuses { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the statuses for the line.
+    /// </summary>
+    [JsonPropertyName("lineStatuses")]
+    public IList<LineStatus> LineStatuses { get; set; }
 }

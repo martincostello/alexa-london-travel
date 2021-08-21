@@ -1,53 +1,52 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-namespace MartinCostello.LondonTravel.Skill.Clients
+namespace MartinCostello.LondonTravel.Skill.Clients;
+
+/// <summary>
+/// An enumeration of line status severities.
+/// </summary>
+internal enum LineStatusSeverity
 {
-    /// <summary>
-    /// An enumeration of line status severities.
-    /// </summary>
-    internal enum LineStatusSeverity
-    {
-        SpecialService = 0,
+    SpecialService = 0,
 
-        Closed = 1,
+    Closed = 1,
 
-        Suspended = 2,
+    Suspended = 2,
 
-        PartSuspended = 3,
+    PartSuspended = 3,
 
-        PlannedClosure = 4,
+    PlannedClosure = 4,
 
-        PartClosure = 5,
+    PartClosure = 5,
 
-        SevereDelays = 6,
+    SevereDelays = 6,
 
-        ReducedService = 7,
+    ReducedService = 7,
 
-        BusService = 8,
+    BusService = 8,
 
-        MinorDelays = 9,
+    MinorDelays = 9,
 
-        GoodService = 10,
+    GoodService = 10,
 
-        PartClosed = 11,
+    PartClosed = 11,
 
-        ExitOnly = 12,
+    ExitOnly = 12,
 
-        NoStepFreeAccess = 13,
+    NoStepFreeAccess = 13,
 
-        ChangeOfFrequency = 14,
+    ChangeOfFrequency = 14,
 
-        Diverted = 15,
+    Diverted = 15,
 
-        NotRunning = 16,
+    NotRunning = 16,
 
-        IssuesReported = 17,
+    IssuesReported = 17,
 
-        NoIssues = 18,
+    NoIssues = 18,
 
-        Information = 19,
+    Information = 19,
 
-        ServiceClosed = 20,
-    }
+    ServiceClosed = 20,
 }

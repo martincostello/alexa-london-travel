@@ -6,33 +6,32 @@ using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
 using Amazon.Lambda.Core;
 
-namespace MartinCostello.LondonTravel.Skill
+namespace MartinCostello.LondonTravel.Skill;
+
+public class UnknownRequestTests : FunctionTests
 {
-    public class UnknownRequestTests : FunctionTests
+    public UnknownRequestTests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
     {
-        public UnknownRequestTests(ITestOutputHelper outputHelper)
-            : base(outputHelper)
-        {
-        }
+    }
 
-        [Fact]
-        public async Task Can_Invoke_Function()
-        {
-            // Arrange
-            AlexaFunction function = await CreateFunctionAsync();
+    [Fact]
+    public async Task Can_Invoke_Function()
+    {
+        // Arrange
+        AlexaFunction function = await CreateFunctionAsync();
 
-            SkillRequest request = CreateRequest<UnknownRequest>();
-            ILambdaContext context = CreateContext();
+        SkillRequest request = CreateRequest<UnknownRequest>();
+        ILambdaContext context = CreateContext();
 
-            // Act
-            SkillResponse actual = await function.HandlerAsync(request, context);
+        // Act
+        SkillResponse actual = await function.HandlerAsync(request, context);
 
-            // Assert
-            AssertResponse(actual);
-        }
+        // Assert
+        AssertResponse(actual);
+    }
 
-        private sealed class UnknownRequest : Request
-        {
-        }
+    private sealed class UnknownRequest : Request
+    {
     }
 }

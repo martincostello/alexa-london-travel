@@ -3,24 +3,23 @@
 
 using Refit;
 
-namespace MartinCostello.LondonTravel.Skill.Clients
+namespace MartinCostello.LondonTravel.Skill.Clients;
+
+/// <summary>
+/// Defines the client for the skill's API.
+/// </summary>
+internal interface ISkillClient
 {
     /// <summary>
-    /// Defines the client for the skill's API.
+    /// Get the current user's preferences from the skill's API as an asynchronous operation.
     /// </summary>
-    internal interface ISkillClient
-    {
-        /// <summary>
-        /// Get the current user's preferences from the skill's API as an asynchronous operation.
-        /// </summary>
-        /// <param name="authorization">The authorization to use for the API.</param>
-        /// <param name="cancellationToken">The optional cancellation token to use.</param>
-        /// <returns>
-        /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the current user's preferences from the skill API.
-        /// </returns>
-        [Get("/api/preferences")]
-        Task<SkillUserPreferences> GetPreferencesAsync(
-            [Header("Authorization")] string authorization,
-            CancellationToken cancellationToken = default);
-    }
+    /// <param name="authorization">The authorization to use for the API.</param>
+    /// <param name="cancellationToken">The optional cancellation token to use.</param>
+    /// <returns>
+    /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the current user's preferences from the skill API.
+    /// </returns>
+    [Get("/api/preferences")]
+    Task<SkillUserPreferences> GetPreferencesAsync(
+        [Header("Authorization")] string authorization,
+        CancellationToken cancellationToken = default);
 }
