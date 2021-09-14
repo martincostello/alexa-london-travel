@@ -2,27 +2,25 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using Amazon.Lambda.Core;
-using Xunit.Abstractions;
 
-namespace MartinCostello.LondonTravel.Skill
+namespace MartinCostello.LondonTravel.Skill;
+
+internal class XunitLambdaLogger : ILambdaLogger
 {
-    internal class XunitLambdaLogger : ILambdaLogger
+    internal XunitLambdaLogger(ITestOutputHelper outputHelper)
     {
-        internal XunitLambdaLogger(ITestOutputHelper outputHelper)
-        {
-            OutputHelper = outputHelper;
-        }
+        OutputHelper = outputHelper;
+    }
 
-        private ITestOutputHelper OutputHelper { get; }
+    private ITestOutputHelper OutputHelper { get; }
 
-        public void Log(string message)
-        {
-            OutputHelper.WriteLine(message);
-        }
+    public void Log(string message)
+    {
+        OutputHelper.WriteLine(message);
+    }
 
-        public void LogLine(string message)
-        {
-            OutputHelper.WriteLine(message);
-        }
+    public void LogLine(string message)
+    {
+        OutputHelper.WriteLine(message);
     }
 }
