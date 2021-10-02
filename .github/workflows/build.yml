@@ -111,6 +111,7 @@ jobs:
       run: |
         aws lambda update-function-code \
             --function-name ${{ env.LAMBDA_FUNCTION }}-dev \
+            --architectures arm64 \
             --publish \
             --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
             > /dev/null
@@ -119,7 +120,6 @@ jobs:
       run: |
         aws lambda update-function-configuration \
             --function-name ${{ env.LAMBDA_FUNCTION }}-dev \
-            --architectures arm64 \
             --description "Deploy build ${{ github.run_number }} to AWS Lambda via GitHub Actions" \
             --handler ${{ env.LAMBDA_HANDLER }} \
             --memory-size ${{ env.LAMBDA_MEMORY }} \
@@ -154,6 +154,7 @@ jobs:
       run: |
         aws lambda update-function-code \
             --function-name ${{ env.LAMBDA_FUNCTION }} \
+            --architectures arm64 \
             --publish \
             --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
             > /dev/null
@@ -162,7 +163,6 @@ jobs:
       run: |
         aws lambda update-function-configuration \
             --function-name ${{ env.LAMBDA_FUNCTION }} \
-            --architectures arm64 \
             --description "Deploy build ${{ github.run_number }} to AWS Lambda via GitHub Actions" \
             --handler ${{ env.LAMBDA_HANDLER }} \
             --memory-size ${{ env.LAMBDA_MEMORY }} \
