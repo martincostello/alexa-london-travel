@@ -28,7 +28,7 @@
   -->
   <ItemGroup>
     <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" />
-    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="68.2" />
+    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="68.2.0.9" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Strings.Designer.cs" AutoGen="True" DependentUpon="Strings.resx" DesignTime="True" />
