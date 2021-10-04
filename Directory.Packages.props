@@ -17,6 +17,10 @@
     <PackageVersion Include="Microsoft.Extensions.Http" Version="6.0.0-rc.1.21451.13" />
     <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="6.0.0-rc.1.21452.15" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="6.0.0-rc.1.21451.13" />
+    <!--
+      HACK Workaround for https://github.com/aws/aws-lambda-dotnet/issues/920
+    -->
+    <PackageVersion Include="Microsoft.ICU.ICU4C.Runtime" Version="68.2.0.9" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />
     <PackageVersion Include="Moq" Version="4.16.1" />
