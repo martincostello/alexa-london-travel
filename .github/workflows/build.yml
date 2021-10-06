@@ -54,9 +54,9 @@ jobs:
     - name: Build, Test and Package
       shell: pwsh
       run: ./build.ps1
-      #env:
-      #  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #  AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
     - uses: codecov/codecov-action@v1
       name: Upload coverage to Codecov
