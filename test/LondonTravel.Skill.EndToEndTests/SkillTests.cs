@@ -52,7 +52,7 @@ public class SkillTests
         string regionName = Environment.GetEnvironmentVariable("AWS_REGION");
 
         Skip.If(
-            string.IsNullOrEmpty(functionName),
+            string.IsNullOrEmpty(regionName),
             "No AWS region name is configured.");
 
         // Arrange
