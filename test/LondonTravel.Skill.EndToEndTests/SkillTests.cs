@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Net;
-using System.Reflection;
 using System.Text.Json;
 using Amazon;
 using Amazon.Lambda;
@@ -44,17 +43,29 @@ public class SkillTests
             string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(secretKey),
             "No AWS credentials are configured.");
 
+        string functionName = Environment.GetEnvironmentVariable("LAMBDA_FUNCTION_NAME");
+
+        Skip.If(
+            string.IsNullOrEmpty(functionName),
+            "No Lambda function name is configured.");
+
+        string regionName = Environment.GetEnvironmentVariable("AWS_REGION");
+
+        Skip.If(
+            string.IsNullOrEmpty(functionName),
+            "No AWS region name is configured.");
+
         // Arrange
         string payload = await File.ReadAllTextAsync(Path.Combine("Payloads", $"{payloadName}.json"));
 
         var credentials = new BasicAWSCredentials(accessToken, secretKey);
-        var region = RegionEndpoint.EUWest1;
+        var region = RegionEndpoint.GetBySystemName(regionName);
 
         using var client = new AmazonLambdaClient(credentials, region);
 
         var request = new InvokeRequest()
         {
-            FunctionName = FunctionName(),
+            FunctionName = functionName,
             InvocationType = InvocationType.RequestResponse,
             LogType = LogType.None,
             Payload = payload,
@@ -83,18 +94,5 @@ public class SkillTests
 
         using var document = JsonDocument.Parse(responsePayload);
         document.RootElement.ValueKind.ShouldBe(JsonValueKind.Object);
-    }
-
-    private static string FunctionName()
-    {
-        string branchName = typeof(SkillTests).Assembly.GetCustomAttributes<AssemblyMetadataAttribute>()
-            .Where((p) => string.Equals(p.Key, "CommitBranch", StringComparison.Ordinal))
-            .Select((p) => p.Value)
-            .FirstOrDefault();
-
-        return
-            string.Equals(branchName, "deploy", StringComparison.OrdinalIgnoreCase) ?
-            "alexa-london-travel" :
-            "alexa-london-travel-dev";
     }
 }
