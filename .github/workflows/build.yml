@@ -133,8 +133,6 @@ jobs:
     needs: deploy-dev
     runs-on: ubuntu-latest
     concurrency: development_environment
-    environment:
-      name: dev
 
     steps:
 
@@ -154,7 +152,7 @@ jobs:
 
   deploy-prod:
     name: production
-    needs: deploy-dev
+    needs: tests-dev
     runs-on: ubuntu-latest
     concurrency: production_environment
     environment:
@@ -200,8 +198,6 @@ jobs:
     needs: deploy-prod
     runs-on: ubuntu-latest
     concurrency: production_environment
-    environment:
-      name: production
 
     steps:
 
