@@ -154,7 +154,7 @@ jobs:
 
   deploy-prod:
     name: production
-    needs: deploy-dev
+    needs: tests-dev
     runs-on: ubuntu-latest
     concurrency: production_environment
     environment:
