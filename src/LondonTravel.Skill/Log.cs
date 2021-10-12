@@ -3,55 +3,52 @@
 
 using Microsoft.Extensions.Logging;
 
-//// TODO Cannot use file-scoped namespace due to https://github.com/dotnet/runtime/issues/57880
+namespace MartinCostello.LondonTravel.Skill;
 
-namespace MartinCostello.LondonTravel.Skill
+/// <summary>
+/// A class containing log messages for the skill.
+/// </summary>
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+internal static partial class Log
 {
-    /// <summary>
-    /// A class containing log messages for the skill.
-    /// </summary>
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    internal static partial class Log
-    {
-        [LoggerMessage(
-            EventId = 1,
-            Level = LogLevel.Error,
-            Message = "Failed to handle request for session {SessionId}.")]
-        public static partial void HandlerException(ILogger logger, Exception exception, string sessionId);
+    [LoggerMessage(
+        EventId = 1,
+        Level = LogLevel.Error,
+        Message = "Failed to handle request for session {SessionId}.")]
+    public static partial void HandlerException(ILogger logger, Exception exception, string sessionId);
 
-        [LoggerMessage(
-            EventId = 2,
-            Level = LogLevel.Error,
-            Message = "Failed to handle request for session {SessionId}. Error type {ErrorType} with cause {ErrorCause}: {ErrorMessage}")]
-        public static partial void SystemError(
-            ILogger logger,
-            string sessionId,
-            string errorType,
-            string errorCause,
-            string errorMessage);
+    [LoggerMessage(
+        EventId = 2,
+        Level = LogLevel.Error,
+        Message = "Failed to handle request for session {SessionId}. Error type {ErrorType} with cause {ErrorCause}: {ErrorMessage}")]
+    public static partial void SystemError(
+        ILogger logger,
+        string sessionId,
+        string errorType,
+        string errorCause,
+        string errorMessage);
 
-        [LoggerMessage(
-            EventId = 3,
-            Level = LogLevel.Information,
-            Message = "User with Id {UserId} has not linked account.")]
-        public static partial void AccountNotLinked(ILogger logger, string userId);
+    [LoggerMessage(
+        EventId = 3,
+        Level = LogLevel.Information,
+        Message = "User with Id {UserId} has not linked account.")]
+    public static partial void AccountNotLinked(ILogger logger, string userId);
 
-        [LoggerMessage(
-            EventId = 4,
-            Level = LogLevel.Warning,
-            Message = "Access token is invalid for user Id {UserId} and session Id {SessionId}.")]
-        public static partial void InvalidAccessToken(ILogger logger, string userId, string sessionId);
+    [LoggerMessage(
+        EventId = 4,
+        Level = LogLevel.Warning,
+        Message = "Access token is invalid for user Id {UserId} and session Id {SessionId}.")]
+    public static partial void InvalidAccessToken(ILogger logger, string userId, string sessionId);
 
-        [LoggerMessage(
-            EventId = 5,
-            Level = LogLevel.Information,
-            Message = "User with Id {UserId} has set no line preferences.")]
-        public static partial void NoLinePreferences(ILogger logger, string userId);
+    [LoggerMessage(
+        EventId = 5,
+        Level = LogLevel.Information,
+        Message = "User with Id {UserId} has set no line preferences.")]
+    public static partial void NoLinePreferences(ILogger logger, string userId);
 
-        [LoggerMessage(
-            EventId = 6,
-            Level = LogLevel.Warning,
-            Message = "Unknown intent {IntentName} cannot be handled for session Id {SessionId}.")]
-        public static partial void UnknownIntent(ILogger logger, string intentName, string sessionId);
-    }
+    [LoggerMessage(
+        EventId = 6,
+        Level = LogLevel.Warning,
+        Message = "Unknown intent {IntentName} cannot be handled for session Id {SessionId}.")]
+    public static partial void UnknownIntent(ILogger logger, string intentName, string sessionId);
 }
