@@ -116,6 +116,12 @@ jobs:
             --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
             > /dev/null
 
+    - name: Wait for function code update
+      run: |
+        aws lambda function-updated \
+            --function-name ${{ env.LAMBDA_FUNCTION }} \
+            > /dev/null
+
     - name: Update function configuration
       run: |
         aws lambda update-function-configuration \
@@ -179,6 +185,12 @@ jobs:
             --architectures arm64 \
             --publish \
             --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
+            > /dev/null
+
+    - name: Wait for function code update
+      run: |
+        aws lambda function-updated \
+            --function-name ${{ env.LAMBDA_FUNCTION }} \
             > /dev/null
 
     - name: Update function configuration
