@@ -119,7 +119,7 @@ jobs:
     - name: Wait for function code update
       run: |
         aws lambda wait function-updated \
-            --function-name ${{ env.LAMBDA_FUNCTION }} \
+            --function-name ${{ env.LAMBDA_FUNCTION }}-dev \
             > /dev/null
 
     - name: Update function configuration
