@@ -24,6 +24,7 @@
       "Sid": "DeployCode",
       "Effect": "Allow",
       "Action": [
+        "lambda:GetFunctionConfiguration",
         "lambda:UpdateFunctionCode",
         "lambda:UpdateFunctionConfiguration"
       ],
