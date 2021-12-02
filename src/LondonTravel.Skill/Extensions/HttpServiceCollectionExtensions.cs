@@ -41,8 +41,10 @@ internal static class HttpServiceCollectionExtensions
 
         services.AddSingleton<IHttpContentSerializer>((p) =>
         {
-            var context = new ApplicationJsonSerializerContext();
-            return new SystemTextJsonContentSerializerForSourceGenerator(context);
+            var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+            options.AddContext<ApplicationJsonSerializerContext>();
+
+            return new SystemTextJsonContentSerializer(options);
         });
 
         services.AddTransient(CreateRefitSettings);
