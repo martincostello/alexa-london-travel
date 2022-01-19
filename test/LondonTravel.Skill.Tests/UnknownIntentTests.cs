@@ -19,7 +19,7 @@ public class UnknownIntentTests : FunctionTests
     public async Task Can_Invoke_Function()
     {
         // Arrange
-        var function = new AlexaFunction();
+        await using var function = new AlexaFunction();
         await function.InitializeAsync();
 
         SkillRequest request = CreateIntentRequest("FooIntent");

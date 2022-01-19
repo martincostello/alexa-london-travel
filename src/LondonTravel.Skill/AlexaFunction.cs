@@ -18,18 +18,54 @@ namespace MartinCostello.LondonTravel.Skill;
 /// <summary>
 /// A class representing the AWS Lambda function entry-point for the London Travel Amazon Alexa skill.
 /// </summary>
-public class AlexaFunction
+public class AlexaFunction : IAsyncDisposable, IDisposable
 {
     /// <summary>
-    /// The <see cref="IServiceProvider"/> to use.
+    /// Whether the instance has been disposed.
     /// </summary>
-    private IServiceProvider _serviceProvider;
+    private bool _disposed;
+
+    /// <summary>
+    /// The <see cref="ServiceProvider"/> to use.
+    /// </summary>
+    private ServiceProvider _serviceProvider;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AlexaFunction"/> class.
     /// </summary>
     public AlexaFunction()
     {
+    }
+
+    /// <summary>
+    /// Finalizes an instance of the <see cref="AlexaFunction"/> class.
+    /// </summary>
+    ~AlexaFunction()
+    {
+        Dispose(false);
+    }
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <inheritdoc/>
+    public async virtual ValueTask DisposeAsync()
+    {
+        if (!_disposed)
+        {
+            if (_serviceProvider is not null)
+            {
+                await _serviceProvider.DisposeAsync();
+            }
+
+            _disposed = true;
+        }
+
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>
@@ -57,11 +93,7 @@ public class AlexaFunction
     /// </returns>
     public Task<bool> InitializeAsync()
     {
-        if (_serviceProvider == null)
-        {
-            _serviceProvider = CreateServiceProvider();
-        }
-
+        _serviceProvider ??= CreateServiceProvider();
         return Task.FromResult(true);
     }
 
@@ -99,6 +131,19 @@ public class AlexaFunction
         services.AddTransient<CommuteIntent>();
         services.AddTransient<DisruptionIntent>();
         services.AddTransient<StatusIntent>();
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                _serviceProvider?.Dispose();
+            }
+
+            _disposed = true;
+        }
     }
 
     /// <summary>
@@ -140,12 +185,12 @@ public class AlexaFunction
     }
 
     /// <summary>
-    /// Creates the <see cref="IServiceProvider"/> to use.
+    /// Creates the <see cref="ServiceProvider"/> to use.
     /// </summary>
     /// <returns>
-    /// The <see cref="IServiceProvider"/> to use.
+    /// The <see cref="ServiceProvider"/> to use.
     /// </returns>
-    private IServiceProvider CreateServiceProvider()
+    private ServiceProvider CreateServiceProvider()
     {
         var services = new ServiceCollection();
 
