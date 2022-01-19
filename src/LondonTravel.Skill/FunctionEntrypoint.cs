@@ -29,7 +29,7 @@ public static class FunctionEntrypoint
         CancellationToken cancellationToken = default)
     {
         var serializer = new JsonSerializer();
-        var function = new AlexaFunction();
+        await using var function = new AlexaFunction();
 
 #pragma warning disable CA2000
         using var handlerWrapper = HandlerWrapper.GetHandlerWrapper<SkillRequest, SkillResponse>(function.HandlerAsync, serializer);
