@@ -159,7 +159,7 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
 
         private HttpClientInterceptorOptions Options { get; }
 
-        protected override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(IServiceCollection services)
         {
             services.AddLogging((builder) => builder.AddXUnit(this));
             services.AddSingleton(Config);

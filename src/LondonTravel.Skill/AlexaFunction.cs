@@ -3,6 +3,7 @@
 
 using Alexa.NET.Request;
 using Alexa.NET.Response;
+using Amazon.Lambda.Annotations;
 using Amazon.Lambda.Core;
 using MartinCostello.LondonTravel.Skill.Extensions;
 using MartinCostello.LondonTravel.Skill.Intents;
@@ -18,6 +19,7 @@ namespace MartinCostello.LondonTravel.Skill;
 /// <summary>
 /// A class representing the AWS Lambda function entry-point for the London Travel Amazon Alexa skill.
 /// </summary>
+[LambdaStartup]
 public class AlexaFunction : IAsyncDisposable, IDisposable
 {
     /// <summary>
@@ -76,6 +78,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     /// <returns>
     /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the skill's response.
     /// </returns>
+    [LambdaFunction]
     public async Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
     {
         context.Logger.LogLine($"Invoking skill request of type {request.Request.GetType().Name}.");
@@ -101,7 +104,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     /// Configures the <see cref="IServiceCollection"/> to use.
     /// </summary>
     /// <param name="services">The service collection to configure.</param>
-    protected virtual void ConfigureServices(IServiceCollection services)
+    public virtual void ConfigureServices(IServiceCollection services)
     {
         services.AddLogging((builder) =>
         {

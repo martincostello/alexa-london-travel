@@ -16,6 +16,7 @@ coverage.*
 obj
 packages
 PublishProfiles
+src/LondonTravel.Skill/serverless.template
 TestResults
 UpgradeLog*.htm
 UpgradeLog*.XML

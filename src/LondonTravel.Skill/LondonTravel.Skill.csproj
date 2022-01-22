@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Alexa.NET" />
+    <PackageReference Include="Amazon.Lambda.Annotations" />
     <PackageReference Include="Amazon.Lambda.Core" />
     <PackageReference Include="Amazon.Lambda.Logging.AspNetCore" />
     <PackageReference Include="Amazon.Lambda.RuntimeSupport" />
