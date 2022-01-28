@@ -26,7 +26,7 @@
     <PackageVersion Include="Moq" Version="4.16.1" />
     <PackageVersion Include="Polly" Version="7.2.3" />
     <PackageVersion Include="Refit" Version="6.2.16" />
-    <PackageVersion Include="ReportGenerator" Version="5.0.2" />
+    <PackageVersion Include="ReportGenerator" Version="5.0.3" />
     <PackageVersion Include="Shouldly" Version="4.0.3" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.354" />
     <PackageVersion Include="System.Text.Json" Version="6.0.1" />
