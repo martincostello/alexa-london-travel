@@ -150,7 +150,7 @@ jobs:
 
     - name: Run end-to-end tests
       shell: pwsh
-      run: dotnet test ./test/LondonTravel.Skill.EndToEndTests
+      run: dotnet test ./test/LondonTravel.Skill.EndToEndTests --configuration Release 
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
@@ -221,7 +221,7 @@ jobs:
 
     - name: Run end-to-end tests
       shell: pwsh
-      run: dotnet test ./test/LondonTravel.Skill.EndToEndTests
+      run: dotnet test ./test/LondonTravel.Skill.EndToEndTests --configuration Release
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
