@@ -3,7 +3,7 @@
     <IsTestProject>true</IsTestProject>
     <NoWarn>$(NoWarn);CA1707;SA1600</NoWarn>
     <RootNamespace>LondonTravel.Skill.EndToEndTests</RootNamespace>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AWSSDK.Lambda" />
