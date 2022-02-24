@@ -113,6 +113,7 @@ function DotNetPublish {
 
     $additionalArgs = @()
 
+    <#
     if ($IsLinux) {
         $additionalArgs += "--runtime"
         $additionalArgs += "linux-arm64"
@@ -121,6 +122,7 @@ function DotNetPublish {
         $additionalArgs += "/p:AssemblyName=bootstrap"
         $additionalArgs += "/p:PublishReadyToRun=true"
     }
+    #>
 
     & $dotnet publish $Project --output $publishPath --configuration $Configuration $additionalArgs
 

@@ -3,8 +3,8 @@
   "region": "eu-west-1",
   "configuration": "Release",
   "framework": "net6.0",
-  "function-runtime": "provided",
+  "function-runtime": "dotnet6",
   "function-memory-size": 256,
   "function-timeout": 10,
-  "function-handler": "LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunction::HandlerAsync"
+  "function-handler": "LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunctionHandler::HandleAsync"
 }
