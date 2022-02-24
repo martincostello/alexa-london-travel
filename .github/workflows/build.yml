@@ -19,10 +19,10 @@ env:
   DOTNET_NOLOGO: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   LAMBDA_FUNCTION: 'alexa-london-travel'
-  LAMBDA_HANDLER: 'LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunction::HandlerAsync'
+  LAMBDA_HANDLER: 'LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunctionHandler::HandleAsync'
   LAMBDA_MEMORY: 256
   LAMBDA_ROLE: 'arn:aws:iam::492538393790:role/lambda_basic_execution'
-  LAMBDA_RUNTIME: 'provided.al2'
+  LAMBDA_RUNTIME: 'dotnet6'
   LAMBDA_TIMEOUT: 10
   NUGET_XMLDOC_MODE: skip
 
@@ -74,7 +74,10 @@ jobs:
       if: ${{ runner.os == 'Linux' }}
       run: |
         cd "./artifacts/publish" || exit
-        chmod +x ./bootstrap
+        if [ -f "./bootstrap" ]
+        then
+          chmod +x ./bootstrap
+        fi
         zip -r "../${{ env.LAMBDA_FUNCTION }}.zip" . || exit 1
 
     - name: Publish deployment package
