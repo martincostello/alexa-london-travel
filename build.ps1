@@ -1,7 +1,8 @@
 #! /usr/bin/env pwsh
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
-    [Parameter(Mandatory = $false)][string] $OutputPath = ""
+    [Parameter(Mandatory = $false)][string] $OutputPath = "",
+    [Parameter(Mandatory = $false)][switch] $UseManagedRuntime
 )
 
 $ErrorActionPreference = "Stop"
@@ -113,8 +114,7 @@ function DotNetPublish {
 
     $additionalArgs = @()
 
-    <#
-    if ($IsLinux) {
+    if ($IsLinux -And (-Not $UseManagedRuntime)) {
         $additionalArgs += "--runtime"
         $additionalArgs += "linux-arm64"
         $additionalArgs += "--self-contained"
@@ -122,7 +122,6 @@ function DotNetPublish {
         $additionalArgs += "/p:AssemblyName=bootstrap"
         $additionalArgs += "/p:PublishReadyToRun=true"
     }
-    #>
 
     & $dotnet publish $Project --output $publishPath --configuration $Configuration $additionalArgs
 
