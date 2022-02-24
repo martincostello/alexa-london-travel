@@ -74,7 +74,10 @@ jobs:
       if: ${{ runner.os == 'Linux' }}
       run: |
         cd "./artifacts/publish" || exit
-        chmod +x ./bootstrap
+        if [ -f "./bootstrap" ]
+        then
+          chmod +x ./bootstrap
+        fi
         zip -r "../${{ env.LAMBDA_FUNCTION }}.zip" . || exit 1
 
     - name: Publish deployment package
