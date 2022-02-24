@@ -22,7 +22,7 @@ env:
   LAMBDA_HANDLER: 'LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunctionHandler::HandleAsync'
   LAMBDA_MEMORY: 256
   LAMBDA_ROLE: 'arn:aws:iam::492538393790:role/lambda_basic_execution'
-  LAMBDA_RUNTIME: 'dotnet6'
+  LAMBDA_RUNTIME: 'provided.al2'
   LAMBDA_TIMEOUT: 10
   NUGET_XMLDOC_MODE: skip
 
