@@ -31,16 +31,12 @@ public static class FunctionEntrypoint
         var serializer = new JsonSerializer();
         await using var function = new AlexaFunction();
 
-        var builder = LambdaBootstrapBuilder
+        using var bootstrap = LambdaBootstrapBuilder
             .Create<SkillRequest, SkillResponse>(function.HandlerAsync, serializer)
-            .UseBootstrapHandler(function.InitializeAsync);
+            .UseBootstrapHandler(function.InitializeAsync)
+            .UseHttpClient(httpClient)
+            .Build();
 
-        if (httpClient is not null)
-        {
-            builder.UseHttpClient(httpClient);
-        }
-
-        using var bootstrap = builder.Build();
         await bootstrap.RunAsync(cancellationToken);
     }
 
