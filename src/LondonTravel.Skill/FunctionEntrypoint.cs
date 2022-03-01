@@ -31,12 +31,18 @@ public static class FunctionEntrypoint
         var serializer = new JsonSerializer();
         await using var function = new AlexaFunction();
 
-#pragma warning disable CA2000
-        using var handlerWrapper = HandlerWrapper.GetHandlerWrapper<SkillRequest, SkillResponse>(function.HandlerAsync, serializer);
-        using var bootstrap = new LambdaBootstrap(httpClient ?? new HttpClient(), handlerWrapper, function.InitializeAsync);
-#pragma warning restore CA2000
+        var builder = LambdaBootstrapBuilder
+            .Create<SkillRequest, SkillResponse>(function.HandlerAsync, serializer)
+            .UseBootstrapHandler(function.InitializeAsync);
 
-        await bootstrap.RunAsync(cancellationToken);
+        if (httpClient is not null)
+        {
+            builder.UseHttpClient(httpClient);
+        }
+
+        await builder
+            .Build()
+            .RunAsync(cancellationToken);
     }
 
     /// <summary>
