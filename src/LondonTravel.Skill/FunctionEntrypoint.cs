@@ -40,9 +40,8 @@ public static class FunctionEntrypoint
             builder.UseHttpClient(httpClient);
         }
 
-        await builder
-            .Build()
-            .RunAsync(cancellationToken);
+        using var bootstrap = builder.Build();
+        await bootstrap.RunAsync(cancellationToken);
     }
 
     /// <summary>
