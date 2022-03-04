@@ -65,7 +65,7 @@ jobs:
         flags: ${{ matrix.os_name }}
 
     - name: Publish artifacts
-      uses: actions/upload-artifact@v2.3.1
+      uses: actions/upload-artifact@v3
       with:
         name: artifacts-${{ matrix.os_name }}
         path: ./artifacts
@@ -81,7 +81,7 @@ jobs:
         zip -r "../${{ env.LAMBDA_FUNCTION }}.zip" . || exit 1
 
     - name: Publish deployment package
-      uses: actions/upload-artifact@v2.3.1
+      uses: actions/upload-artifact@v3
       if: ${{ runner.os == 'Linux' }}
       with:
         name: lambda
