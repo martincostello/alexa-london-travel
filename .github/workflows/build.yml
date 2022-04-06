@@ -58,7 +58,7 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
-    - uses: codecov/codecov-action@v2.1.0
+    - uses: codecov/codecov-action@v3
       name: Upload coverage to Codecov
       with:
         file: ./artifacts/coverage.cobertura.xml
