@@ -18,6 +18,7 @@ env:
   DOTNET_MULTILEVEL_LOOKUP: 0
   DOTNET_NOLOGO: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
   LAMBDA_FUNCTION: 'alexa-london-travel'
   LAMBDA_HANDLER: 'LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunctionHandler::HandleAsync'
   LAMBDA_MEMORY: 256
@@ -25,6 +26,7 @@ env:
   LAMBDA_RUNTIME: 'provided.al2'
   LAMBDA_TIMEOUT: 10
   NUGET_XMLDOC_MODE: skip
+  TERM: xterm
 
 jobs:
   build:
