@@ -208,16 +208,13 @@ internal sealed class StatusIntent : IIntent
     /// </returns>
     private static bool ShouldStatusUseCustomResponse(LineStatusSeverity statusSeverity)
     {
-        switch (statusSeverity)
+        return statusSeverity switch
         {
-            case LineStatusSeverity.GoodService:
-            case LineStatusSeverity.NoIssues:
-            case LineStatusSeverity.ServiceClosed:
-                return true;
-
-            default:
-                return false;
-        }
+            LineStatusSeverity.GoodService => true,
+            LineStatusSeverity.NoIssues => true,
+            LineStatusSeverity.ServiceClosed => true,
+            _ => false,
+        };
     }
 
     private async Task<IList<Line>> GetStatusesAsync(string id)
