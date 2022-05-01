@@ -65,7 +65,7 @@ internal sealed class CommuteIntent : IIntent
             return NotLinked(session);
         }
 
-        ICollection<string> favoriteLines = await GetFavoriteLinesAsync(session, accessToken);
+        ICollection<string> favoriteLines = await GetFavoriteLinesAsync(accessToken);
 
         if (favoriteLines == null)
         {
@@ -108,17 +108,12 @@ internal sealed class CommuteIntent : IIntent
             .Build();
     }
 
-    private async Task<ICollection<string>> GetFavoriteLinesAsync(Session session, string accessToken)
+    private async Task<ICollection<string>> GetFavoriteLinesAsync(string accessToken)
     {
         try
         {
             SkillUserPreferences preferences = await SkillClient.GetPreferencesAsync($"Bearer {accessToken}");
-            var favouriteLines = preferences.FavoriteLines ?? Array.Empty<string>();
-
-            // TODO Remove once supported by the TfL API (see https://github.com/martincostello/alexa-london-travel/issues/54)
-            favouriteLines.Remove("elizabeth");
-
-            return favouriteLines;
+            return preferences.FavoriteLines ?? Array.Empty<string>();
         }
         catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
         {

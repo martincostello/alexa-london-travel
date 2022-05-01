@@ -15,7 +15,7 @@ internal sealed class DisruptionIntent : IIntent
     /// <summary>
     /// The supported modes of transport. This field is read-only.
     /// </summary>
-    private static readonly string SupportedModes = string.Join(',', "dlr", "overground", "tube", "tflrail");
+    private static readonly string SupportedModes = string.Join(',', "dlr", "elizabeth-line", "overground", "tube", "tflrail");
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DisruptionIntent"/> class.

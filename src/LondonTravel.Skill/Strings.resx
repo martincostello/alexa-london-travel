@@ -180,9 +180,6 @@
   <data name="StatusIntentClosedFormat" xml:space="preserve">
     <value>{0} is closed.</value>
   </data>
-  <data name="StatusIntentElizabethLineNotImplemented" xml:space="preserve">
-    <value>Sorry, I cannot tell you about the status of the Elizabeth Line yet.</value>
-  </data>
   <data name="StatusIntentGoodServiceFormat" xml:space="preserve">
     <value>There is a good service on {0}.</value>
   </data>

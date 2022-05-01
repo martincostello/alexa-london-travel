@@ -53,12 +53,6 @@ internal sealed class StatusIntent : IIntent
                 .Tell(Strings.StatusIntentUnknownLine)
                 .WithReprompt();
         }
-        else if (string.Equals(id, "elizabeth", StringComparison.Ordinal))
-        {
-            builder = SkillResponseBuilder
-                .Tell(Strings.StatusIntentElizabethLineNotImplemented)
-                .WithReprompt();
-        }
         else
         {
             IList<Line> statuses = await GetStatusesAsync(id);
