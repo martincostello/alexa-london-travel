@@ -113,7 +113,11 @@ public class StatusTests : FunctionTests
         response.OutputSpeech.ShouldNotBeNull();
         response.Reprompt.ShouldNotBeNull();
 
-        var speeches = new[] { response.OutputSpeech, response.Reprompt.OutputSpeech };
+        var speeches = new[]
+        {
+            response.OutputSpeech,
+            response.Reprompt.OutputSpeech,
+        };
 
         foreach (var speech in speeches)
         {

@@ -50,6 +50,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "static", "static", "{87F99E
 		static\favicon.ico = static\favicon.ico
 		static\icon-108x108.png = static\icon-108x108.png
 		static\icon-512x512.png = static\icon-512x512.png
+		static\interaction-model.json = static\interaction-model.json
 		static\tfl.png = static\tfl.png
 	EndProjectSection
 EndProject

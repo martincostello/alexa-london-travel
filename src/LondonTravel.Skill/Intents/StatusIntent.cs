@@ -161,7 +161,7 @@ internal sealed class StatusIntent : IIntent
 
         if (index > -1)
         {
-            response = response.Substring(index + delimiter.Length);
+            response = response[(index + delimiter.Length)..];
         }
 
         return response;
@@ -196,7 +196,7 @@ internal sealed class StatusIntent : IIntent
         string spokenName = Verbalizer.LineName(name);
         string statusText = string.Format(culture, format, spokenName);
 
-        return char.ToUpper(statusText[0], culture) + statusText.Substring(1);
+        return char.ToUpper(statusText[0], culture) + statusText[1..];
     }
 
     /// <summary>
@@ -208,16 +208,13 @@ internal sealed class StatusIntent : IIntent
     /// </returns>
     private static bool ShouldStatusUseCustomResponse(LineStatusSeverity statusSeverity)
     {
-        switch (statusSeverity)
+        return statusSeverity switch
         {
-            case LineStatusSeverity.GoodService:
-            case LineStatusSeverity.NoIssues:
-            case LineStatusSeverity.ServiceClosed:
-                return true;
-
-            default:
-                return false;
-        }
+            LineStatusSeverity.GoodService => true,
+            LineStatusSeverity.NoIssues => true,
+            LineStatusSeverity.ServiceClosed => true,
+            _ => false,
+        };
     }
 
     private async Task<IList<Line>> GetStatusesAsync(string id)

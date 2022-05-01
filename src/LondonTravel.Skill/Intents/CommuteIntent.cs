@@ -83,7 +83,7 @@ internal sealed class CommuteIntent : IIntent
 
     private async Task<SkillResponse> CommuteAsync(ICollection<string> favoriteLines)
     {
-        IList<Line> lines = await GetStatusesAsync(string.Join(",", favoriteLines));
+        IList<Line> lines = await GetStatusesAsync(string.Join(',', favoriteLines));
 
         var paragraphs = new List<string>();
 
@@ -104,7 +104,7 @@ internal sealed class CommuteIntent : IIntent
 
         return SkillResponseBuilder
             .Tell(paragraphs)
-            .WithCard(Strings.CommuteIntentCardTitle, string.Join("\n", paragraphs))
+            .WithCard(Strings.CommuteIntentCardTitle, string.Join('\n', paragraphs))
             .Build();
     }
 
