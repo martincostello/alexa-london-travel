@@ -10,7 +10,7 @@
     <PackageVersion Include="coverlet.msbuild" Version="3.1.2" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="1.4.1" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="3.1.1" />
-    <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.2.0" />
+    <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.2.1" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.6.0" />
     <PackageVersion Include="Microsoft.ApplicationInsights" Version="2.20.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
