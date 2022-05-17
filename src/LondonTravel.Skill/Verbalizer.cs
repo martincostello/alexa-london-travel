@@ -27,6 +27,11 @@ internal static class Verbalizer
             prefix = Strings.ThePrefix;
             spokenName = Verbalize("DLR");
         }
+        else if (Lines.IsElizabethLine(name))
+        {
+            prefix = Strings.ThePrefix;
+            spokenName = name;
+        }
         else if (Lines.IsOverground(name))
         {
             spokenName = name;
