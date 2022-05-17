@@ -242,7 +242,7 @@
         {
           "$type": "Tfl.Api.Presentation.Entities.Line, Tfl.Api.Presentation.Entities",
           "id": "elizabeth",
-          "name": "Elizabeth Line",
+          "name": "Elizabeth line",
           "modeName": "elizabeth-line",
           "disruptions": [],
           "created": "2019-10-17T12:58:58.107Z",

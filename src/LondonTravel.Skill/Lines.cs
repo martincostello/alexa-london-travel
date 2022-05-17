@@ -21,6 +21,18 @@ internal static class Lines
     }
 
     /// <summary>
+    /// Returns whether the specified line name refers to the Elizabeth line.
+    /// </summary>
+    /// <param name="name">The name of the line as reported from the TfL API.</param>
+    /// <returns>
+    /// A boolean indicating whether the line is the Elizabeth line.
+    /// </returns>
+    public static bool IsElizabethLine(string name)
+    {
+        return string.Equals(name, "elizabeth", StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
     /// Returns whether the specified line name refers to the London Overground.
     /// </summary>
     /// <param name="name">The name of the line as reported from the TfL API.</param>
@@ -124,7 +136,10 @@ internal static class Lines
     {
         string suffix;
 
-        if (IsDlr(name) || IsOverground(name) || IsTfLRail(name))
+        if (IsDlr(name) ||
+            IsElizabethLine(name) ||
+            IsOverground(name) ||
+            IsTfLRail(name))
         {
             suffix = string.Empty;
         }

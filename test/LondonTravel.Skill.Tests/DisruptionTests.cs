@@ -71,8 +71,8 @@ public class DisruptionTests : FunctionTests
         // Assert
         AssertResponse(
             actual,
-            "<speak><p>Circle Line: There are minor delays on the Circle Line.</p><p>District Line: There are severe delays on the District Line.</p><p>Hammersmith and City Line: There are minor delays on the Hammersmith and City Line.</p><p>There is a good service on all other lines.</p></speak>",
-            "Circle Line: There are minor delays on the Circle Line.\nDistrict Line: There are severe delays on the District Line.\nHammersmith & City Line: There are minor delays on the Hammersmith & City Line.");
+            "<speak><p>Circle Line: There are minor delays on the Circle Line.</p><p>District Line: There are severe delays on the District Line.</p><p>Elizabeth line: There are minor delays on the Elizabeth line.</p><p>Hammersmith and City Line: There are minor delays on the Hammersmith and City Line.</p><p>There is a good service on all other lines.</p></speak>",
+            "Circle Line: There are minor delays on the Circle Line.\nDistrict Line: There are severe delays on the District Line.\nElizabeth line: There are minor delays on the Elizabeth line.\nHammersmith & City Line: There are minor delays on the Hammersmith & City Line.");
     }
 
     [Fact]

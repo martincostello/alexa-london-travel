@@ -31,6 +31,7 @@ public class StatusTests : FunctionTests
     [InlineData("Docklands Railway")]
     [InlineData("Elizabeth")]
     [InlineData("Elizabeth Line")]
+    [InlineData("Elizabeth line")]
     [InlineData("Hammersmith")]
     [InlineData("Hammersmith & City")]
     [InlineData("Hammersmith and City")]
