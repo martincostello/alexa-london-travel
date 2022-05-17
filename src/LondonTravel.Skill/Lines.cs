@@ -29,7 +29,7 @@ internal static class Lines
     /// </returns>
     public static bool IsElizabethLine(string name)
     {
-        return string.Equals(name, "elizabeth", StringComparison.OrdinalIgnoreCase);
+        return name.Contains("elizabeth", StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>

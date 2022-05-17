@@ -266,7 +266,7 @@
               "lineId": "elizabeth",
               "statusSeverity": 5,
               "statusSeverityDescription": "Part Closure",
-              "reason": "Elizabeth line: Saturday 19 and Sunday 20 October, no service Canning Town to Woolwich Arsenal due to planned engineering works.",
+              "reason": "Elizabeth line: Saturday 19 and Sunday 20 October, no service Paddington to Canary Wharf due to planned engineering works.",
               "created": "0001-01-01T00:00:00",
               "validityPeriods": [
                 {
@@ -280,7 +280,7 @@
                 "$type": "Tfl.Api.Presentation.Entities.Disruption, Tfl.Api.Presentation.Entities",
                 "category": "PlannedWork",
                 "categoryDescription": "PlannedWork",
-                "description": "Elizabeth line: Saturday 19 and Sunday 20 October, no service Canning Town to Woolwich Arsenal due to planned engineering works.",
+                "description": "Elizabeth line: Saturday 19 and Sunday 20 October, no service Paddington to Canary Wharf due to planned engineering works.",
                 "created": "2019-08-06T13:55:00Z",
                 "affectedRoutes": [],
                 "affectedStops": [],

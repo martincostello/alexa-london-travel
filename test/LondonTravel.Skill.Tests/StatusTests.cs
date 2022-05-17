@@ -131,6 +131,7 @@ public class StatusTests : FunctionTests
     [InlineData("Circle", "Saturday 19 and Sunday 20 October, no service between Edgware Road and Aldgate (via Victoria).")]
     [InlineData("District", "There is a good service on the District line.")]
     [InlineData("DLR", "There is a good service on the D.L.R..")]
+    [InlineData("Elizabeth line", "There is a good service on the Elizabeth line.")]
     [InlineData("Hammersmith & City", "There is a good service on the Hammersmith and City line.")]
     [InlineData("Jubilee", "There is a good service on the Jubilee line.")]
     [InlineData("London Overground", "There is a good service on London Overground.")]
