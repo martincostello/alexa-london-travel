@@ -248,14 +248,14 @@
       ]
     },
     {
-      "uri": "https://api.tfl.gov.uk/Line/dlr/Status?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
+      "uri": "https://api.tfl.gov.uk/Line/elizabeth/Status?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
       "contentFormat": "json",
       "contentJson": [
         {
           "$type": "Tfl.Api.Presentation.Entities.Line, Tfl.Api.Presentation.Entities",
-          "id": "dlr",
-          "name": "DLR",
-          "modeName": "dlr",
+          "id": "elizabeth",
+          "name": "Elizabeth Line",
+          "modeName": "elizabeth-line",
           "disruptions": [],
           "created": "2019-10-17T12:58:58.107Z",
           "modified": "2019-10-17T12:58:58.107Z",
@@ -263,10 +263,10 @@
             {
               "$type": "Tfl.Api.Presentation.Entities.LineStatus, Tfl.Api.Presentation.Entities",
               "id": 0,
-              "lineId": "dlr",
+              "lineId": "elizabeth",
               "statusSeverity": 5,
               "statusSeverityDescription": "Part Closure",
-              "reason": "DLR: Saturday 19 and Sunday 20 October, no service Canning Town to Woolwich Arsenal due to planned engineering works.",
+              "reason": "Elizabeth Line: Saturday 19 and Sunday 20 October, no service Canning Town to Woolwich Arsenal due to planned engineering works.",
               "created": "0001-01-01T00:00:00",
               "validityPeriods": [
                 {
@@ -280,7 +280,7 @@
                 "$type": "Tfl.Api.Presentation.Entities.Disruption, Tfl.Api.Presentation.Entities",
                 "category": "PlannedWork",
                 "categoryDescription": "PlannedWork",
-                "description": "DLR: Saturday 19 and Sunday 20 October, no service Canning Town to Woolwich Arsenal due to planned engineering works.",
+                "description": "Elizabeth Line: Saturday 19 and Sunday 20 October, no service Canning Town to Woolwich Arsenal due to planned engineering works.",
                 "created": "2019-08-06T13:55:00Z",
                 "affectedRoutes": [],
                 "affectedStops": [],
@@ -293,7 +293,7 @@
             {
               "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
               "name": "Regular",
-              "uri": "/Line/Route?ids=DLR&serviceTypes=Regular"
+              "uri": "/Line/Route?ids=elizabeth&serviceTypes=Regular"
             }
           ],
           "crowding": {

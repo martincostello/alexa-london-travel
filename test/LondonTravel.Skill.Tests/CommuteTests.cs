@@ -115,27 +115,6 @@ public class CommuteTests : FunctionTests
     }
 
     [Fact]
-    public async Task Can_Invoke_Function_When_The_Skill_Is_Linked_And_Only_The_Elizabeth_Line_Is_A_Favorite()
-    {
-        // Arrange
-        Interceptor.RegisterBundle(Path.Combine("Bundles", "skill-api-elizabeth.json"));
-        Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-line-statuses.json"));
-
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentRequestWithToken(accessToken: "token-for-only-elizabeth-line");
-        ILambdaContext context = CreateContext();
-
-        // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
-
-        // Assert
-        AssertResponse(
-            actual,
-            "<speak>You have not selected any favourite lines yet. Visit the London Travel website to set your preferences.</speak>",
-            "You have not selected any favourite lines yet. Visit the London Travel website to set your preferences.");
-    }
-
-    [Fact]
     public async Task Can_Invoke_Function_When_The_Skill_Is_Linked_And_Has_One_Favorite_Line()
     {
         // Arrange

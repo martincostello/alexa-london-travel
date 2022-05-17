@@ -21,6 +21,7 @@ public class StatusTests : FunctionTests
     [InlineData("BAKERLOO")]
     [InlineData("Central")]
     [InlineData("Circle")]
+    [InlineData("crossrail")]
     [InlineData("District")]
     [InlineData("DLR")]
     [InlineData("Docklands")]
@@ -28,6 +29,8 @@ public class StatusTests : FunctionTests
     [InlineData("Docklands Light Railway")]
     [InlineData("Docklands Rail")]
     [InlineData("Docklands Railway")]
+    [InlineData("Elizabeth")]
+    [InlineData("Elizabeth Line")]
     [InlineData("Hammersmith")]
     [InlineData("Hammersmith & City")]
     [InlineData("Hammersmith and City")]
@@ -58,37 +61,6 @@ public class StatusTests : FunctionTests
 
         // Assert
         AssertLineResponse(actual);
-    }
-
-    [Theory]
-    [InlineData("crossrail")]
-    [InlineData("Elizabeth")]
-    public async Task Can_Invoke_Function_For_Elizabeth_Line(string id)
-    {
-        // Arrange
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentForLine(id);
-        ILambdaContext context = CreateContext();
-
-        // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
-
-        // Assert
-        ResponseBody response = AssertResponse(actual);
-
-        response.Card.ShouldBeNull();
-        response.OutputSpeech.ShouldNotBeNull();
-        response.Reprompt.ShouldNotBeNull();
-
-        var speeches = new[] { response.OutputSpeech, response.Reprompt.OutputSpeech };
-
-        foreach (var speech in speeches)
-        {
-            speech.Type.ShouldBe("SSML");
-
-            var ssml = speech.ShouldBeOfType<SsmlOutputSpeech>();
-            ssml.Ssml.ShouldBe("<speak>Sorry, I cannot tell you about the status of the Elizabeth Line yet.</speak>");
-        }
     }
 
     [Theory]

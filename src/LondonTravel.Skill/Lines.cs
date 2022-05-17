@@ -77,6 +77,7 @@ internal static class Lines
 
             case "crossrail":
             case "elizabeth":
+            case "elizabeth line":
                 return "elizabeth";
 
             case "london overground":
