@@ -8,7 +8,7 @@
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="2.0.0" />
     <PackageVersion Include="AWSSDK.Lambda" Version="3.7.9" />
     <PackageVersion Include="coverlet.msbuild" Version="3.1.2" />
-    <PackageVersion Include="GitHubActionsTestLogger" Version="1.4.1" />
+    <PackageVersion Include="GitHubActionsTestLogger" Version="2.0.0" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="3.1.1" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.6.0" />
