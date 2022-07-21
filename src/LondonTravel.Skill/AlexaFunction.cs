@@ -156,12 +156,15 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     private static TelemetryClient CreateTelemetryClient(IServiceProvider serviceProvider)
     {
         var config = serviceProvider.GetRequiredService<SkillConfiguration>();
+
         var configuration = serviceProvider.GetRequiredService<TelemetryConfiguration>();
 
-        return new TelemetryClient(configuration)
+        if (!string.IsNullOrEmpty(config.ApplicationInsightsConnectionString))
         {
-            InstrumentationKey = config.ApplicationInsightsKey,
-        };
+            configuration.ConnectionString = config.ApplicationInsightsConnectionString;
+        }
+
+        return new TelemetryClient(configuration);
     }
 
     /// <summary>

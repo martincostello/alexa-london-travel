@@ -40,7 +40,7 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
     {
         var config = SkillConfiguration.CreateDefaultConfiguration();
 
-        config.ApplicationInsightsKey = "my-application-insights-key";
+        config.ApplicationInsightsConnectionString = "InstrumentationKey=my-application-insights-key;IngestionEndpoint=https://northeurope-0.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/";
         config.SkillApiUrl = "https://londontravel.martincostello.local/";
         config.SkillId = "my-skill-id";
         config.TflApplicationId = "my-tfl-app-id";

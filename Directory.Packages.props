@@ -12,7 +12,7 @@
     <PackageVersion Include="JustEat.HttpClientInterception" Version="3.1.1" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.6.0" />
-    <PackageVersion Include="Microsoft.ApplicationInsights" Version="2.20.0" />
+    <PackageVersion Include="Microsoft.ApplicationInsights" Version="2.21.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="6.0.7" />

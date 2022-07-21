@@ -9,9 +9,9 @@ namespace MartinCostello.LondonTravel.Skill;
 public sealed class SkillConfiguration
 {
     /// <summary>
-    /// Gets or sets the ApplicationInsights instrumentation key to use.
+    /// Gets or sets the ApplicationInsights connection string to use.
     /// </summary>
-    public string ApplicationInsightsKey { get; set; } = string.Empty;
+    public string ApplicationInsightsConnectionString { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the URL for the skill API.
@@ -53,7 +53,7 @@ public sealed class SkillConfiguration
 
         return new SkillConfiguration()
         {
-            ApplicationInsightsKey = GetEnvironmentVariable("APPINSIGHTS_INSTRUMENTATIONKEY"),
+            ApplicationInsightsConnectionString = GetEnvironmentVariable("APPINSIGHTS_CONNECTIONSTRING"),
             SkillApiUrl = GetEnvironmentVariable("SKILL_API_HOSTNAME"),
             SkillId = GetEnvironmentVariable("SKILL_ID"),
             TflApplicationId = GetEnvironmentVariable("TFL_APP_ID"),
