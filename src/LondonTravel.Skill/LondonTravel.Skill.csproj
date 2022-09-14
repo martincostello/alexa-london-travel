@@ -5,7 +5,7 @@
     <NoWarn>$(NoWarn);CA1822</NoWarn>
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <TieredCompilation>false</TieredCompilation>
   </PropertyGroup>
   <ItemGroup>

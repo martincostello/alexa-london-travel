@@ -24,7 +24,7 @@ public class SkillTests
         {
             return Directory.GetFiles("Payloads")
                 .Select((p) => Path.GetFileNameWithoutExtension(p))
-                .Order()
+                .OrderBy((p) => p)
                 .Select((p) => new object[] { p })
                 .ToArray();
         }
