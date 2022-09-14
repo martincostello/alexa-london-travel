@@ -31,8 +31,8 @@ public class DisruptionTests : FunctionTests
         // Assert
         AssertResponse(
             actual,
-            "<speak>There is currently no disruption on the tube, London Overground, the D.L.R. or T.F.L. Rail.</speak>",
-            "There is currently no disruption on the tube, London Overground, the DLR or TfL Rail.");
+            "<speak>There is currently no disruption on the tube, London Overground, the D.L.R. or the Elizabeth line.</speak>",
+            "There is currently no disruption on the tube, London Overground, the DLR or the Elizabeth line.");
     }
 
     [Fact]

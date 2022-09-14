@@ -139,10 +139,10 @@
     <value>There is a good service on all other lines.</value>
   </data>
   <data name="DisruptionIntentNoDisruption" xml:space="preserve">
-    <value>There is currently no disruption on the tube, London Overground, the DLR or TfL Rail.</value>
+    <value>There is currently no disruption on the tube, London Overground, the DLR or the Elizabeth line.</value>
   </data>
   <data name="HelpIntentParagraph1" xml:space="preserve">
-    <value>This skill allows you to check for the status of a specific line, or for disruption in general. You can ask about any London Underground line, London Overground, the Docklands Light Railway or TfL Rail.</value>
+    <value>This skill allows you to check for the status of a specific line, or for disruption in general. You can ask about any London Underground line, London Overground, the Docklands Light Railway or the Elizabeth line.</value>
   </data>
   <data name="HelpIntentParagraph2" xml:space="preserve">
     <value>Asking about disruption in general provides information about any lines that are currently experiencing issues, such as any delays or planned closures.</value>
@@ -157,7 +157,7 @@
     <value>Sorry, something went wrong.</value>
   </data>
   <data name="LaunchResponse" xml:space="preserve">
-    <value>Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground, the DLR or TfL Rail.</value>
+    <value>Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground, the DLR or the Elizabeth line.</value>
   </data>
   <data name="LineNameWithoutPrefixFormat" xml:space="preserve">
     <value>{0}{1}</value>
@@ -184,7 +184,7 @@
     <value>There is a good service on {0}.</value>
   </data>
   <data name="StatusIntentUnknownLine" xml:space="preserve">
-    <value>Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground, the DLR or TfL Rail.</value>
+    <value>Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground, the DLR or the Elizabeth line.</value>
   </data>
   <data name="ThePrefix" xml:space="preserve">
     <value>the </value>
