@@ -97,7 +97,7 @@ public class StatusTests : FunctionTests
             speech.Type.ShouldBe("SSML");
 
             var ssml = speech.ShouldBeOfType<SsmlOutputSpeech>();
-            ssml.Ssml.ShouldBe("<speak>Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground, the D.L.R. or T.F.L. Rail.</speak>");
+            ssml.Ssml.ShouldBe("<speak>Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground, the D.L.R. or the Elizabeth line.</speak>");
         }
     }
 

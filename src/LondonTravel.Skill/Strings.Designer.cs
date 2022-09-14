@@ -124,7 +124,7 @@ namespace MartinCostello.LondonTravel.Skill {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is currently no disruption on the tube, London Overground, the DLR or TfL Rail..
+        ///   Looks up a localized string similar to There is currently no disruption on the tube, London Overground, the DLR or the Elizabeth line..
         /// </summary>
         internal static string DisruptionIntentNoDisruption {
             get {
@@ -133,7 +133,7 @@ namespace MartinCostello.LondonTravel.Skill {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This skill allows you to check for the status of a specific line, or for disruption in general. You can ask about any London Underground line, London Overground, the Docklands Light Railway or TfL Rail..
+        ///   Looks up a localized string similar to This skill allows you to check for the status of a specific line, or for disruption in general. You can ask about any London Underground line, London Overground, the Docklands Light Railway or the Elizabeth line..
         /// </summary>
         internal static string HelpIntentParagraph1 {
             get {
@@ -178,7 +178,7 @@ namespace MartinCostello.LondonTravel.Skill {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground, the DLR or TfL Rail..
+        ///   Looks up a localized string similar to Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground, the DLR or the Elizabeth line..
         /// </summary>
         internal static string LaunchResponse {
             get {
@@ -259,7 +259,7 @@ namespace MartinCostello.LondonTravel.Skill {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground, the DLR or TfL Rail..
+        ///   Looks up a localized string similar to Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground, the DLR or the Elizabeth line..
         /// </summary>
         internal static string StatusIntentUnknownLine {
             get {
