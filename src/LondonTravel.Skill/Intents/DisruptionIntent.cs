@@ -86,7 +86,7 @@ internal sealed class DisruptionIntent : IIntent
         // has a planned closure and severe delays, the message will appear twice.
         return descriptions
             .Distinct(StringComparer.OrdinalIgnoreCase)
-            .OrderBy((p) => p, StringComparer.OrdinalIgnoreCase)
+            .Order(StringComparer.OrdinalIgnoreCase)
             .ToList();
     }
 }
