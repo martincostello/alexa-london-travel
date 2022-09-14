@@ -93,6 +93,8 @@ public class SkillTests
         response.ExecutedVersion.ShouldBe("$LATEST");
 
         using var document = JsonDocument.Parse(responsePayload);
+
         document.RootElement.ValueKind.ShouldBe(JsonValueKind.Object);
+        document.RootElement.ToString().ShouldNotContain("Sorry, something went wrong.");
     }
 }
