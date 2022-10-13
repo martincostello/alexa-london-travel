@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup>
-    <PackageVersion Include="Alexa.NET" Version="1.20.0" />
+    <PackageVersion Include="Alexa.NET" Version="1.21.0" />
     <PackageVersion Include="Amazon.Lambda.Core" Version="2.1.0" />
     <PackageVersion Include="Amazon.Lambda.Logging.AspNetCore" Version="3.1.0" />
     <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.8.2" />
