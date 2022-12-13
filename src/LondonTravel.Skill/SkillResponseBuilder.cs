@@ -7,7 +7,7 @@ using Alexa.NET.Response.Ssml;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-internal class SkillResponseBuilder
+internal sealed class SkillResponseBuilder
 {
     private SkillResponseBuilder(Speech speech)
     {

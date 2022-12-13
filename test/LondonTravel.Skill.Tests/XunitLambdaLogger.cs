@@ -5,7 +5,7 @@ using Amazon.Lambda.Core;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-internal class XunitLambdaLogger : ILambdaLogger
+internal sealed class XunitLambdaLogger : ILambdaLogger
 {
     internal XunitLambdaLogger(ITestOutputHelper outputHelper)
     {
