@@ -36,7 +36,7 @@ public class AlexaFunctionHandlerTests : FunctionTests
         // Assert
         response = AssertResponse(actual, shouldEndSession: false);
 
-        response.OutputSpeech.ShouldNotBeNull();
+        response.OutputSpeech.ShouldBeNull();
         response.OutputSpeech.Type.ShouldBe("SSML");
     }
 }
