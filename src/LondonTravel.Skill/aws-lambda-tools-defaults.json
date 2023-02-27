@@ -2,7 +2,7 @@
   "profile": "alexa-london-travel",
   "region": "eu-west-1",
   "configuration": "Release",
-  "framework": "net7.0",
+  "framework": "net8.0",
   "function-runtime": "provided.al2",
   "function-memory-size": 256,
   "function-timeout": 10,
