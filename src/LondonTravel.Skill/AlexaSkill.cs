@@ -137,7 +137,7 @@ internal sealed class AlexaSkill
             .Build();
     }
 
-    private IDictionary<string, string> ToTelemetryProperties(Session session)
+    private Dictionary<string, string> ToTelemetryProperties(Session session)
     {
         bool hasAccessToken = !string.IsNullOrEmpty(session.User?.AccessToken);
 
@@ -153,7 +153,7 @@ internal sealed class AlexaSkill
 
     private void TrackEvent(string eventName, Session session, Intent intent = null)
     {
-        IDictionary<string, string> properties = ToTelemetryProperties(session);
+        Dictionary<string, string> properties = ToTelemetryProperties(session);
 
         if (intent?.Slots?.Count > 0)
         {
@@ -168,7 +168,7 @@ internal sealed class AlexaSkill
 
     private void TrackException(Exception exception, Session session)
     {
-        IDictionary<string, string> properties = ToTelemetryProperties(session);
+        Dictionary<string, string> properties = ToTelemetryProperties(session);
         Telemetry.TrackException(exception, properties);
     }
 }
