@@ -116,7 +116,7 @@ jobs:
       run: |
         aws lambda update-function-code \
             --function-name ${{ env.LAMBDA_FUNCTION }}-dev \
-            --architectures x86_64 \
+            --architectures arm64 \
             --publish \
             --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
             > /dev/null
@@ -187,7 +187,7 @@ jobs:
       run: |
         aws lambda update-function-code \
             --function-name ${{ env.LAMBDA_FUNCTION }} \
-            --architectures x86_64 \
+            --architectures arm64 \
             --publish \
             --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
             > /dev/null
