@@ -46,7 +46,7 @@ public class EndToEndTests : FunctionTests
 
             if (!cancellationTokenSource.IsCancellationRequested)
             {
-                cancellationTokenSource.Cancel();
+                await cancellationTokenSource.CancelAsync();
             }
         });
 
