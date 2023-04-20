@@ -76,7 +76,7 @@ jobs:
     - name: Create Lambda ZIP file
       if: ${{ runner.os == 'Linux' }}
       run: |
-        cd "./artifacts/publish/LondonTravel.Skill/release_linux-arm64" || exit
+        cd "./.artifacts/publish/LondonTravel.Skill/release_linux-arm64" || exit
         if [ -f "./bootstrap" ]
         then
           chmod +x ./bootstrap
