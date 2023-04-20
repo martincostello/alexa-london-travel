@@ -73,24 +73,24 @@ jobs:
       uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
       with:
         name: artifacts-${{ matrix.os_name }}
-        path: ./artifacts
+        path: ./.artifacts
 
     - name: Create Lambda ZIP file
       if: ${{ runner.os == 'Linux' }}
       run: |
-        cd "./artifacts/publish" || exit
+        cd "./artifacts/publish/LondonTravel.Skill/release" || exit
         if [ -f "./bootstrap" ]
         then
           chmod +x ./bootstrap
         fi
-        zip -r "../${{ env.LAMBDA_FUNCTION }}.zip" . || exit 1
+        zip -r "../../../${{ env.LAMBDA_FUNCTION }}.zip" . || exit 1
 
     - name: Publish deployment package
       uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
       if: ${{ runner.os == 'Linux' && success() }}
       with:
         name: lambda
-        path: ./artifacts/${{ env.LAMBDA_FUNCTION }}.zip
+        path: ./.artifacts/${{ env.LAMBDA_FUNCTION }}.zip
         if-no-files-found: error
 
   deploy-dev:
