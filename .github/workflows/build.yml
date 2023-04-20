@@ -91,6 +91,7 @@ jobs:
       with:
         name: lambda
         path: ./artifacts/${{ env.LAMBDA_FUNCTION }}.zip
+        if-no-files-found: error
 
   deploy-dev:
     if: ${{ github.ref == 'refs/heads/main' }}
