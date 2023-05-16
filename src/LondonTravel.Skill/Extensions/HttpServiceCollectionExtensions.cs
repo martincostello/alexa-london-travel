@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using MartinCostello.LondonTravel.Skill.Clients;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -42,7 +43,9 @@ internal static class HttpServiceCollectionExtensions
         services.AddSingleton<IHttpContentSerializer>((p) =>
         {
             var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
-            options.AddContext<ApplicationJsonSerializerContext>();
+            options.TypeInfoResolver = JsonTypeInfoResolver.Combine(
+                ApplicationJsonSerializerContext.Default,
+                new DefaultJsonTypeInfoResolver());
 
             return new SystemTextJsonContentSerializer(options);
         });
