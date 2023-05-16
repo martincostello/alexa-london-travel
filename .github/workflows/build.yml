@@ -73,12 +73,12 @@ jobs:
       uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
       with:
         name: artifacts-${{ matrix.os_name }}
-        path: ./.artifacts
+        path: ./artifacts
 
     - name: Create Lambda ZIP file
       if: ${{ runner.os == 'Linux' }}
       run: |
-        cd "./.artifacts/publish/LondonTravel.Skill/release_linux-arm64" || exit
+        cd "./artifacts/publish/LondonTravel.Skill/release_linux-arm64" || exit
         if [ -f "./bootstrap" ]
         then
           chmod +x ./bootstrap
@@ -90,7 +90,7 @@ jobs:
       if: ${{ runner.os == 'Linux' && success() }}
       with:
         name: lambda
-        path: ./.artifacts/${{ env.LAMBDA_FUNCTION }}.zip
+        path: ./artifacts/${{ env.LAMBDA_FUNCTION }}.zip
         if-no-files-found: error
 
   deploy-dev:
