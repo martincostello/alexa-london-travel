@@ -66,7 +66,7 @@ jobs:
     - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d # v3.1.4
       name: Upload coverage to Codecov
       with:
-        file: ./artifacts/coverage.cobertura.xml
+        file: ./artifacts/coverage/coverage.cobertura.xml
         flags: ${{ matrix.os_name }}
 
     - name: Publish artifacts
@@ -87,7 +87,7 @@ jobs:
 
     - name: Publish deployment package
       uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
-      if: ${{ runner.os == 'Linux' }}
+      if: ${{ runner.os == 'Linux' && success() }}
       with:
         name: lambda
         path: ./artifacts/${{ env.LAMBDA_FUNCTION }}.zip
