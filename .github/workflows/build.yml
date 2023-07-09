@@ -120,7 +120,7 @@ jobs:
       uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
       with:
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-deploy
-        role-session-name: github-actions-${{ github.repository }}-${{ github.run_id }}-deploy-dev
+        role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-dev
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Update function code
@@ -195,7 +195,7 @@ jobs:
       uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
       with:
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-deploy
-        role-session-name: github-actions-${{ github.repository }}-${{ github.run_id }}-deploy-production
+        role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-production
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Update function code
