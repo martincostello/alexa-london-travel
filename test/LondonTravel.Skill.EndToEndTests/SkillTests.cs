@@ -23,7 +23,7 @@ public class SkillTests
         get
         {
             return Directory.GetFiles("Payloads")
-                .Select((p) => Path.GetFileNameWithoutExtension(p))
+                .Select(Path.GetFileNameWithoutExtension)
                 .Order()
                 .Select((p) => new object[] { p })
                 .ToArray();
@@ -36,12 +36,9 @@ public class SkillTests
     [MemberData(nameof(Payloads))]
     public async Task Can_Invoke_Intent_Can_Get_Json_Response(string payloadName)
     {
-        string accessToken = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
-        string secretKey = Environment.GetEnvironmentVariable("AWS_SECRET_KEY");
+        var credentials = GetAwsCredentials();
 
-        Skip.If(
-            string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(secretKey),
-            "No AWS credentials are configured.");
+        Skip.If(credentials is null, "No AWS credentials are configured.");
 
         string functionName = Environment.GetEnvironmentVariable("LAMBDA_FUNCTION_NAME");
 
@@ -58,7 +55,6 @@ public class SkillTests
         // Arrange
         string payload = await File.ReadAllTextAsync(Path.Combine("Payloads", $"{payloadName}.json"));
 
-        var credentials = new BasicAWSCredentials(accessToken, secretKey);
         var region = RegionEndpoint.GetBySystemName(regionName);
 
         using var client = new AmazonLambdaClient(credentials, region);
@@ -96,5 +92,26 @@ public class SkillTests
 
         document.RootElement.ValueKind.ShouldBe(JsonValueKind.Object);
         document.RootElement.ToString().ShouldNotContain("Sorry, something went wrong.");
+    }
+
+    private static AWSCredentials GetAwsCredentials()
+    {
+        try
+        {
+            return new EnvironmentVariablesAWSCredentials();
+        }
+        catch (InvalidOperationException)
+        {
+            // Not configured
+        }
+
+        try
+        {
+            return AssumeRoleWithWebIdentityCredentials.FromEnvironmentVariables();
+        }
+        catch (ArgumentException)
+        {
+            return null;
+        }
     }
 }

@@ -60,12 +60,9 @@ jobs:
     - name: Build, Test and Package
       shell: pwsh
       run: ./build.ps1
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
-    - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d # v3.1.4
-      name: Upload coverage to Codecov
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d # v3.1.4
       with:
         file: ./artifacts/coverage/coverage.cobertura.xml
         flags: ${{ matrix.os_name }}
@@ -156,6 +153,9 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: development_environment
 
+    permissions:
+      id-token: write
+
     steps:
 
     - name: Checkout code
@@ -164,12 +164,17 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
 
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+      with:
+        role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-test
+        role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-tests-dev
+        aws-region: ${{ env.AWS_REGION }}
+
     - name: Run end-to-end tests
       shell: pwsh
       run: dotnet test ./test/LondonTravel.Skill.EndToEndTests --configuration Release --logger "GitHubActions;report-warnings=false"
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
         LAMBDA_FUNCTION_NAME: ${{ env.LAMBDA_FUNCTION }}-dev
 
   deploy-prod:
@@ -231,6 +236,9 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: production_environment
 
+    permissions:
+      id-token: write
+
     steps:
 
     - name: Checkout code
@@ -239,10 +247,15 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
 
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+      with:
+        role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-test
+        role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-tests-production
+        aws-region: ${{ env.AWS_REGION }}
+
     - name: Run end-to-end tests
       shell: pwsh
       run: dotnet test ./test/LondonTravel.Skill.EndToEndTests --configuration Release --logger "GitHubActions;report-warnings=false"
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
         LAMBDA_FUNCTION_NAME: ${{ env.LAMBDA_FUNCTION }}
