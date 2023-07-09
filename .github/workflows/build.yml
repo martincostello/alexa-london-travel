@@ -94,7 +94,7 @@ jobs:
   deploy-dev:
     if: |
       github.event.repository.fork == false &&
-      github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+      github.ref_name == github.event.repository.default_branch
     name: dev
     needs: build
     concurrency: development_environment
