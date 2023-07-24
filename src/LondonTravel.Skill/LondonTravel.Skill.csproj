@@ -23,16 +23,20 @@
     <PackageReference Include="Refit" />
     <PackageReference Include="System.Text.Json" />
   </ItemGroup>
-  <!--
-    HACK Workaround for https://github.com/aws/aws-lambda-dotnet/issues/920
-  -->
-  <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'linux-arm64' ">
-    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" />
-    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.1" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Update="Strings.Designer.cs" AutoGen="True" DependentUpon="Strings.resx" DesignTime="True" />
     <EmbeddedResource Update="Strings.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings.Designer.cs" />
     <EmbeddedResource Update="Strings.*.resx" DependentUpon="Strings.resx" />
   </ItemGroup>
+  <!--
+    HACK Workaround for https://github.com/aws/aws-lambda-dotnet/issues/920
+  -->
+  <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'linux-arm64' ">
+    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" />
+  </ItemGroup>
+  <Target Name="SetAppLocalIcuVersion" BeforeTargets="Compile">
+    <ItemGroup>
+      <RuntimeHostConfigurationOption Condition=" '%(PackageVersion.Identity)' == 'Microsoft.ICU.ICU4C.Runtime' " Include="System.Globalization.AppLocalIcu" Value="%(PackageVersion.Version)" />
+    </ItemGroup>
+  </Target>
 </Project>
