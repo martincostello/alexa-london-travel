@@ -51,7 +51,7 @@ public class StatusTests : FunctionTests
     public async Task Can_Invoke_Function_For_Valid_Line(string id)
     {
         // Arrange
-        Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-line-statuses.json"));
+        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-line-statuses.json"));
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentForLine(id);
@@ -146,7 +146,7 @@ public class StatusTests : FunctionTests
         string expected)
     {
         // Arrange
-        Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-line-severities.json"));
+        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-line-severities.json"));
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentForLine(id);

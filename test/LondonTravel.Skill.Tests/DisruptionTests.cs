@@ -19,7 +19,7 @@ public class DisruptionTests : FunctionTests
     public async Task Can_Invoke_Function_When_There_Are_No_Disruptions()
     {
         // Arrange
-        Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-no-disruptions.json"));
+        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-no-disruptions.json"));
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequest();
@@ -39,7 +39,7 @@ public class DisruptionTests : FunctionTests
     public async Task Can_Invoke_Function_When_There_Is_One_Disruption()
     {
         // Arrange
-        Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-one-disruption.json"));
+        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-one-disruption.json"));
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequest();
@@ -59,7 +59,7 @@ public class DisruptionTests : FunctionTests
     public async Task Can_Invoke_Function_When_There_Are_Multiple_Disruptions()
     {
         // Arrange
-        Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-multiple-disruptions.json"));
+        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-multiple-disruptions.json"));
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequest();
