@@ -45,7 +45,7 @@ public class CommuteTests : FunctionTests
     public async Task Can_Invoke_Function_When_The_Skill_Token_Is_Invalid()
     {
         // Arrange
-        Interceptor.RegisterBundle(Path.Combine("Bundles", "skill-api-invalid-token.json"));
+        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "skill-api-invalid-token.json"));
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequestWithToken(accessToken: "invalid-access-token");
@@ -97,8 +97,8 @@ public class CommuteTests : FunctionTests
     public async Task Can_Invoke_Function_When_The_Skill_Is_Linked_And_Has_No_Favorite_Lines()
     {
         // Arrange
-        Interceptor.RegisterBundle(Path.Combine("Bundles", "skill-api-no-favorites.json"));
-        Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-line-statuses.json"));
+        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "skill-api-no-favorites.json"));
+        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-line-statuses.json"));
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequestWithToken(accessToken: "token-for-no-favorites");
@@ -118,8 +118,8 @@ public class CommuteTests : FunctionTests
     public async Task Can_Invoke_Function_When_The_Skill_Is_Linked_And_Has_One_Favorite_Line()
     {
         // Arrange
-        Interceptor.RegisterBundle(Path.Combine("Bundles", "skill-api-one-favorite.json"));
-        Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-line-statuses.json"));
+        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "skill-api-one-favorite.json"));
+        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-line-statuses.json"));
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequestWithToken(accessToken: "token-for-one-favorite");
@@ -139,8 +139,8 @@ public class CommuteTests : FunctionTests
     public async Task Can_Invoke_Function_When_The_Skill_Is_Linked_And_Has_Two_Favorite_Lines()
     {
         // Arrange
-        Interceptor.RegisterBundle(Path.Combine("Bundles", "skill-api-two-favorites.json"));
-        Interceptor.RegisterBundle(Path.Combine("Bundles", "tfl-line-statuses.json"));
+        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "skill-api-two-favorites.json"));
+        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-line-statuses.json"));
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequestWithToken(accessToken: "token-for-two-favorites");
