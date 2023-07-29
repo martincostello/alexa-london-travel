@@ -75,7 +75,7 @@ internal sealed class DisruptionIntent : IIntent
     {
         ICollection<ServiceDisruption> disruptions = await GetDisruptionAsync();
 
-        var descriptions = new List<string>();
+        var descriptions = new List<string>(disruptions.Count);
 
         foreach (var disruption in disruptions)
         {

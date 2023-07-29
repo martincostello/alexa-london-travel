@@ -85,7 +85,7 @@ internal sealed class CommuteIntent : IIntent
     {
         IList<Line> lines = await GetStatusesAsync(string.Join(',', favoriteLines));
 
-        var paragraphs = new List<string>();
+        var paragraphs = new List<string>(lines.Count);
 
         bool hasMultipleStatuses = lines.Count > 1;
 

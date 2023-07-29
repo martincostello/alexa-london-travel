@@ -25,12 +25,12 @@ internal sealed class SkillResponseBuilder
 
     public static SkillResponseBuilder Tell(params string[] paragraphs)
     {
-        return Tell(paragraphs as IEnumerable<string>);
+        return Tell(paragraphs as ICollection<string>);
     }
 
-    public static SkillResponseBuilder Tell(IEnumerable<string> paragraphs)
+    public static SkillResponseBuilder Tell(ICollection<string> paragraphs)
     {
-        var rawText = new List<IParagraphSsml>();
+        var rawText = new List<IParagraphSsml>(paragraphs.Count);
 
         foreach (string paragraph in paragraphs)
         {
@@ -38,7 +38,7 @@ internal sealed class SkillResponseBuilder
             rawText.Add(new PlainText(text));
         }
 
-        var elements = new List<ISsml>();
+        var elements = new List<ISsml>(rawText.Count);
 
         if (rawText.Count == 1)
         {
