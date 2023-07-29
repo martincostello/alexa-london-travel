@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Using Include="System.Globalization" />
+    <Using Include="System.Text" />
   </ItemGroup>
   <ItemGroup Condition=" '$(IsTestProject)' == 'true' ">
     <Using Include="Shouldly" />
