@@ -21,7 +21,7 @@
       HACK Workaround for https://github.com/aws/aws-lambda-dotnet/issues/920
     -->
     <PackageVersion Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.1" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
     <PackageVersion Include="Moq" Version="4.18.4" />
     <PackageVersion Include="Polly" Version="7.2.4" />
