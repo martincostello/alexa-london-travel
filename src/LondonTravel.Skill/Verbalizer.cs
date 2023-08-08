@@ -8,6 +8,9 @@ namespace MartinCostello.LondonTravel.Skill;
 /// </summary>
 internal static class Verbalizer
 {
+    private static readonly CompositeFormat LineNameWithoutPrefixFormat = CompositeFormat.Parse(Strings.LineNameWithoutPrefixFormat);
+    private static readonly CompositeFormat LineNameWithPrefixFormat = CompositeFormat.Parse(Strings.LineNameWithPrefixFormat);
+
     /// <summary>
     /// Returns the spoken version of the specified line name.
     /// </summary>
@@ -49,8 +52,8 @@ internal static class Verbalizer
 
         return
             asTitleCase ?
-            string.Format(CultureInfo.CurrentCulture, Strings.LineNameWithoutPrefixFormat, spokenName, suffix) :
-            string.Format(CultureInfo.CurrentCulture, Strings.LineNameWithPrefixFormat, prefix, spokenName, suffix);
+            string.Format(CultureInfo.CurrentCulture, LineNameWithoutPrefixFormat, spokenName, suffix) :
+            string.Format(CultureInfo.CurrentCulture, LineNameWithPrefixFormat, prefix, spokenName, suffix);
     }
 
     /// <summary>
