@@ -117,7 +117,7 @@ jobs:
         name: lambda
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@ef93a73b1313f148011965ef7361f667f371f58b # v3.0.0
+      uses: aws-actions/configure-aws-credentials@04b98b3f9e85f563fb061be8751a0352327246b0 # v3.0.1
       with:
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-deploy
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-dev
@@ -168,7 +168,7 @@ jobs:
       uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@ef93a73b1313f148011965ef7361f667f371f58b # v3.0.0
+      uses: aws-actions/configure-aws-credentials@04b98b3f9e85f563fb061be8751a0352327246b0 # v3.0.1
       with:
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-test
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-tests-dev
@@ -200,7 +200,7 @@ jobs:
         name: lambda
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@ef93a73b1313f148011965ef7361f667f371f58b # v3.0.0
+      uses: aws-actions/configure-aws-credentials@04b98b3f9e85f563fb061be8751a0352327246b0 # v3.0.1
       with:
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-deploy
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-production
@@ -251,7 +251,7 @@ jobs:
       uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@ef93a73b1313f148011965ef7361f667f371f58b # v3.0.0
+      uses: aws-actions/configure-aws-credentials@04b98b3f9e85f563fb061be8751a0352327246b0 # v3.0.1
       with:
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-test
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-tests-production
