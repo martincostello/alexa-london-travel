@@ -29,6 +29,11 @@ jobs:
       function-name: ${{ steps.set-outputs.outputs.function-name }}
       ref: ${{ steps.set-outputs.outputs.function-name }}
 
+    permissions:
+      actions: read
+      contents: read
+      issues: write
+
     steps:
 
     - name: Get environment name
