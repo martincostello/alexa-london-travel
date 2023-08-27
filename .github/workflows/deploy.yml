@@ -163,19 +163,21 @@ jobs:
     - name: Set outputs
       id: set-outputs
       run: |
-        environment_name = "${{ steps.get-environment-name.outputs.result }}"
-        function_description = "Deploy build ${{ steps.download-artifact.outputs.run-id }} to AWS Lambda via GitHub Actions"
+        environment_name="${{ steps.get-environment-name.outputs.result }}"
+        function_description="Deploy build ${{ steps.download-artifact.outputs.run-id }} to AWS Lambda via GitHub Actions"
 
-        if [ $environment_name == "production" ]
+        if [ "${environment_name}" == "production" ]
         then
-          function_name = "${{ env.LAMBDA_FUNCTION }}"
+          function_name="${{ env.LAMBDA_FUNCTION }}"
         else
-          function_name = "${{ env.LAMBDA_FUNCTION }}-${environment_name}"
+          function_name="${{ env.LAMBDA_FUNCTION }}-${environment_name}"
         fi
 
-        echo "environment-name=${environment_name}" >> "$GITHUB_OUTPUT"
-        echo "function-description=${function_description}" >> "$GITHUB_OUTPUT"
-        echo "function-name=${function_name}" >> "$GITHUB_OUTPUT"
+        {
+          echo "environment-name=${environment_name}"
+          echo "function-description=${function_description}"
+          echo "function-name=${function_name}"
+        } >> "$GITHUB_OUTPUT"
 
   deploy:
     name: ${{ needs.get-inputs.outputs.environment-name }}
