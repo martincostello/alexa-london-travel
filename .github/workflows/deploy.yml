@@ -24,10 +24,13 @@ jobs:
       startsWith(github.event.comment.body, '/deploy')
 
     outputs:
+      comment-id: ${{ steps.post-comment.outputs.result }}
       environment-name: ${{ steps.set-outputs.outputs.environment-name }}
+      environment-url: ${{ steps.set-outputs.outputs.environment-url }}
       function-description: ${{ steps.set-outputs.outputs.function-description }}
       function-name: ${{ steps.set-outputs.outputs.function-name }}
       ref: ${{ steps.set-outputs.outputs.ref }}
+      workflow-url: ${{ steps.set-outputs.outputs.workflow-url }}
 
     permissions:
       actions: read
@@ -44,7 +47,6 @@ jobs:
         script: |
           const owner = context.payload.repository.owner.login;
           const repo = context.payload.repository.name;
-          const issue_number = context.issue.number;
           const username = context.payload.comment.user.login;
 
           try {
@@ -171,8 +173,10 @@ jobs:
       id: set-outputs
       run: |
         environment_name="${{ steps.get-environment-name.outputs.result }}"
+        environment_url="${{ github.server_url }}/${{ github.repository }}/deployments/${environment_name}"
         function_description="Deploy build ${{ steps.download-artifact.outputs.run-number }} to AWS Lambda via GitHub Actions"
         ref="${{ steps.download-artifact.outputs.ref }}"
+        workflow_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
         if [ "${environment_name}" == "production" ]
         then
@@ -183,15 +187,20 @@ jobs:
 
         {
           echo "environment-name=${environment_name}"
+          echo "environment-url=${environment_url}"
           echo "function-description=${function_description}"
           echo "function-name=${function_name}"
           echo "ref=${ref}"
+          echo "workflow-url=${workflow_url}"
         } >> "$GITHUB_OUTPUT"
 
     - name: Post comment
       uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+      id: post-comment
       env:
         ENVIRONMENT_NAME: ${{ steps.set-outputs.outputs.environment-name }}
+        ENVIRONMENT_URL: ${{ steps.set-outputs.outputs.environment-url }}
+        WORKFLOW_URL: ${{ steps.set-outputs.outputs.workflow-url }}
       with:
         result-encoding: string
         script: |
@@ -199,17 +208,17 @@ jobs:
           const repo = context.payload.repository.name;
           const issue_number = context.issue.number;
           const environment = process.env.ENVIRONMENT_NAME;
-          const run_id = process.env.GITHUB_RUN_ID;
+          const environment_url = process.env.ENVIRONMENT_URL;
+          const workflow_url = process.env.WORKFLOW_URL;
 
-          const workflowUrl = `${{ github.server_url }}/${owner}/${repo}/actions/runs/${run_id}`;
-          const body = `Starting deployment to [${environment}](${workflowUrl}) :rocket:`;
-
-          await github.rest.issues.createComment({
+          const { data: comment } = await github.rest.issues.createComment({
             owner,
             repo,
             issue_number,
-            body,
+            body: `Starting [deployment](${workflow_url}) to [${environment}](${environment_url}) :rocket:`,
           });
+
+          return comment.id;
 
   deploy:
     name: ${{ needs.setup.outputs.environment-name }}
@@ -232,6 +241,7 @@ jobs:
 
     permissions:
       id-token: write
+      pull-requests: write
 
     steps:
 
@@ -279,6 +289,35 @@ jobs:
           --function-name "${FUNCTION_NAME}" \
           > /dev/null
 
+    - name: Post comment
+      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+      if: ${{ !cancelled() }}
+      env:
+        COMMENT_ID: ${{ needs.setup.outputs.comment-id }}
+        ENVIRONMENT_NAME: ${{ needs.setup.outputs.environment-name }}
+        ENVIRONMENT_URL: ${{ needs.setup.outputs.environment-url }}
+        OUTCOME: ${{ job.status }}
+        WORKFLOW_URL: ${{ needs.setup.outputs.workflow-url }}
+      with:
+        script: |
+          const owner = context.payload.repository.owner.login;
+          const repo = context.payload.repository.name;
+          const comment_id = process.env.COMMENT_ID;
+          const environment = process.env.ENVIRONMENT_NAME;
+          const environment_url = process.env.ENVIRONMENT_URL;
+          const workflow_url = process.env.WORKFLOW_URL;
+
+          const succeeded = process.env.OUTCOME === 'success';
+          const outcome = succeeded ? 'successful' : 'failed';
+          const emoji = succeeded ? ':white_check_mark:' : ':x:';
+
+          await github.rest.issues.updateComment({
+            owner,
+            repo,
+            comment_id,
+            body: `[Deployment](${workflow_url}) to [${environment}](${environment_url}) ${outcome} ${emoji}`,
+          });
+
   tests:
     name: tests-${{ needs.setup.outputs.environment-name }}
     needs: [ setup, deploy ]
@@ -296,6 +335,7 @@ jobs:
 
     permissions:
       id-token: write
+      pull-requests: write
 
     steps:
 
@@ -319,3 +359,32 @@ jobs:
       run: dotnet test ./test/LondonTravel.Skill.EndToEndTests --configuration Release --logger "GitHubActions;report-warnings=false"
       env:
         LAMBDA_FUNCTION_NAME: ${{ needs.setup.outputs.function-name }}
+
+    - name: Post comment
+      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+      if: ${{ !cancelled() }}
+      env:
+        COMMENT_ID: ${{ needs.setup.outputs.comment-id }}
+        ENVIRONMENT_NAME: ${{ needs.setup.outputs.environment-name }}
+        ENVIRONMENT_URL: ${{ needs.setup.outputs.environment-url }}
+        OUTCOME: ${{ job.status }}
+        WORKFLOW_URL: ${{ needs.setup.outputs.workflow-url }}
+      with:
+        script: |
+          const owner = context.payload.repository.owner.login;
+          const repo = context.payload.repository.name;
+          const comment_id = process.env.COMMENT_ID;
+          const environment = process.env.ENVIRONMENT_NAME;
+          const environment_url = process.env.ENVIRONMENT_URL;
+          const workflow_url = process.env.WORKFLOW_URL;
+
+          const succeeded = process.env.OUTCOME === 'success';
+          const outcome = succeeded ? 'passed' : 'failed';
+          const emoji = succeeded ? ':white_check_mark:' : ':x:';
+
+          await github.rest.issues.updateComment({
+            owner,
+            repo,
+            comment_id,
+            body: `:test_tube: [Tests](${workflow_url}) for deployment to [${environment}](${environment_url}) ${outcome} ${emoji}`,
+          });
