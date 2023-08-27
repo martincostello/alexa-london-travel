@@ -150,6 +150,12 @@ jobs:
             --timeout ${{ env.LAMBDA_TIMEOUT }} \
             > /dev/null
 
+    - name: Wait for function configuration update
+      run: |
+        aws lambda wait function-updated-v2 \
+            --function-name ${{ env.LAMBDA_FUNCTION }} \
+            > /dev/null
+
   tests-dev:
     name: tests-dev
     needs: deploy-dev
@@ -231,6 +237,12 @@ jobs:
             --role ${{ env.LAMBDA_ROLE }} \
             --runtime ${{ env.LAMBDA_RUNTIME }} \
             --timeout ${{ env.LAMBDA_TIMEOUT }} \
+            > /dev/null
+
+    - name: Wait for function configuration update
+      run: |
+        aws lambda wait function-updated-v2 \
+            --function-name ${{ env.LAMBDA_FUNCTION }} \
             > /dev/null
 
   tests-prod:
