@@ -233,7 +233,7 @@ jobs:
         aws lambda update-function-configuration \
           --function-name "${FUNCTION_NAME}" \
           --description "${LAMBDA_DESCRIPTION}" \
-          --handler "${LAMBDA_HANDLER}"" \
+          --handler "${LAMBDA_HANDLER}" \
           --memory-size "${LAMBDA_MEMORY}" \
           --role "${LAMBDA_ROLE}" \
           --runtime "${LAMBDA_RUNTIME}" \
