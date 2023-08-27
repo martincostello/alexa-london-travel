@@ -105,7 +105,7 @@ jobs:
             head_sha,
             status: 'success',
           });
-          const [workflow] = workflows.workflow_runs.find((run) => run.name === workflowName);
+          const workflow = workflows.workflow_runs.find((run) => run.name === workflowName);
 
           if (!workflow) {
             throw new Error(`No successful workflow run found for ${owner}/${repo}@${head_sha.slice(0, 7)} with name ${workflowName}.`);
