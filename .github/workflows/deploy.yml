@@ -25,8 +25,8 @@ jobs:
 
     outputs:
       environment-name: ${{ steps.set-outputs.outputs.environment-name }}
-      function-name: ${{ steps.set-outputs.outputs.function-name }}
       function-description: ${{ steps.set-outputs.outputs.function-description }}
+      function-name: ${{ steps.set-outputs.outputs.function-name }}
 
     steps:
 
@@ -180,7 +180,7 @@ jobs:
 
   deploy:
     name: ${{ needs.get-inputs.outputs.environment-name }}
-    needs: get-inputs
+    needs: [ get-inputs ]
     concurrency: '${{ needs.get-inputs.outputs.environment-name }}_environment'
     runs-on: ubuntu-latest
 
