@@ -150,11 +150,21 @@ jobs:
           core.setOutput('run-number', workflow.run_number);
           core.setOutput('zip-path', downloadPath);
 
+    - name: Extract the artifact
+      id: extract-artifact
+      env:
+        ARTIFACT_PATH: ${{ steps.download-artifact.outputs.zip-path }}
+        STAGING_PATH: '${{ github.workspace }}/staging'
+      run: |
+        mkdir --parents "${STAGING_PATH}"
+        unzip -q "${ARTIFACT_PATH}" -d "${STAGING_PATH}"
+        echo "lambda-artifact-path=${STAGING_PATH}" >> "$GITHUB_OUTPUT"
+
     - name: Publish deployment package
       uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
       with:
         name: ${{ env.ARTIFACT_NAME }}
-        path: ${{ steps.download-artifact.outputs.zip-path }}
+        path: ${{ steps.extract-artifact.outputs.lambda-artifact-path }}
         if-no-files-found: error
 
     - name: Set outputs
