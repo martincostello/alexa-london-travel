@@ -160,6 +160,21 @@ jobs:
           --function-name "${FUNCTION_NAME}" \
           > /dev/null
 
+    - name: Get the latest published version
+      id: get-function-version
+      run: |
+        $functionArn = aws lambda list-versions-by-function \
+          --function-name "${FUNCTION_NAME}" \
+          --output json \
+          --query "max_by(Versions, &to_number(to_number(Version) || '0')).FunctionArn" | jq --raw-output
+        echo "function-latest-version-arn=${functionArn}" >> "$GITHUB_OUTPUT"
+
+    - name: Wait for published function version to be active
+      run: |
+        aws lambda wait published-version-active \
+          --function-name ${{ steps.get-function-version.outputs.function-latest-version-arn }} \
+          > /dev/null
+
   tests-dev:
     name: tests-dev
     needs: deploy-dev
@@ -251,6 +266,21 @@ jobs:
       run: |
         aws lambda wait function-updated-v2 \
           --function-name "${FUNCTION_NAME}" \
+          > /dev/null
+
+    - name: Get the latest published version
+      id: get-function-version
+      run: |
+        $functionArn = aws lambda list-versions-by-function \
+          --function-name "${FUNCTION_NAME}" \
+          --output json \
+          --query "max_by(Versions, &to_number(to_number(Version) || '0')).FunctionArn" | jq --raw-output
+        echo "function-latest-version-arn=${functionArn}" >> "$GITHUB_OUTPUT"
+
+    - name: Wait for published function version to be active
+      run: |
+        aws lambda wait published-version-active \
+          --function-name ${{ steps.get-function-version.outputs.function-latest-version-arn }} \
           > /dev/null
 
   tests-prod:
