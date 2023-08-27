@@ -127,6 +127,20 @@ jobs:
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-dev
         aws-region: ${{ env.AWS_REGION }}
 
+    - name: Update function code
+      run: |
+        aws lambda update-function-code \
+          --function-name "${FUNCTION_NAME}" \
+          --architectures arm64 \
+          --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
+          > /dev/null
+
+    - name: Wait for function code update
+      run: |
+        aws lambda wait function-updated-v2 \
+          --function-name "${FUNCTION_NAME}" \
+          > /dev/null
+
     - name: Update function configuration
       run: |
         aws lambda update-function-configuration \
@@ -140,20 +154,6 @@ jobs:
           > /dev/null
 
     - name: Wait for function configuration update
-      run: |
-        aws lambda wait function-updated-v2 \
-          --function-name "${FUNCTION_NAME}" \
-          > /dev/null
-
-    - name: Update function code
-      run: |
-        aws lambda update-function-code \
-          --function-name "${FUNCTION_NAME}" \
-          --architectures arm64 \
-          --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
-          > /dev/null
-
-    - name: Wait for function code update
       run: |
         aws lambda wait function-updated-v2 \
           --function-name "${FUNCTION_NAME}" \
@@ -219,6 +219,20 @@ jobs:
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-production
         aws-region: ${{ env.AWS_REGION }}
 
+    - name: Update function code
+      run: |
+        aws lambda update-function-code \
+          --function-name "${FUNCTION_NAME}" \
+          --architectures arm64 \
+          --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
+          > /dev/null
+
+    - name: Wait for function code update
+      run: |
+        aws lambda wait function-updated-v2 \
+          --function-name "${FUNCTION_NAME}" \
+          > /dev/null
+
     - name: Update function configuration
       run: |
         aws lambda update-function-configuration \
@@ -232,20 +246,6 @@ jobs:
           > /dev/null
 
     - name: Wait for function configuration update
-      run: |
-        aws lambda wait function-updated-v2 \
-          --function-name "${FUNCTION_NAME}" \
-          > /dev/null
-
-    - name: Update function code
-      run: |
-        aws lambda update-function-code \
-          --function-name "${FUNCTION_NAME}" \
-          --architectures arm64 \
-          --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
-          > /dev/null
-
-    - name: Wait for function code update
       run: |
         aws lambda wait function-updated-v2 \
           --function-name "${FUNCTION_NAME}" \
