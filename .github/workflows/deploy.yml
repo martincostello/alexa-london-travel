@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 jobs:
-  get-inputs:
+  setup:
     runs-on: ubuntu-latest
     if: |
       github.event.issue.pull_request != '' &&
@@ -27,6 +27,7 @@ jobs:
       environment-name: ${{ steps.set-outputs.outputs.environment-name }}
       function-description: ${{ steps.set-outputs.outputs.function-description }}
       function-name: ${{ steps.set-outputs.outputs.function-name }}
+      ref: ${{ steps.set-outputs.outputs.function-name }}
 
     steps:
 
@@ -70,7 +71,7 @@ jobs:
 
           return environment;
 
-    - name: Download artifact
+    - name: 'Download artifact from #${{ github.event.issue.number }}'
       uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
       id: download-artifact
       env:
@@ -99,18 +100,19 @@ jobs:
             throw new Error(`Pull request ${owner}/${repo}#${pull_number} not found.`);
           }
 
-          core.debug(`Getting workflow runs for ${owner}/${repo}#${pull_number}`);
+          const head_sha = pull.head.sha;
+          core.debug(`Getting workflow runs for ${owner}/${repo}#${pull_number}@${head_sha}`);
           const { data: workflows } = await github.rest.actions.listWorkflowRunsForRepo({
             owner,
             repo,
             event: 'pull_request',
-            head_sha: pull.head.sha,
+            head_sha,
             status: 'success',
           });
           const [workflow] = workflows.workflow_runs.find((run) => run.name === workflowName);
 
           if (!workflow) {
-            throw new Error(`No successful workflow run found for ${owner}/${repo}@${pull.head.sha.slice(0, 7)} with name ${workflowName}.`);
+            throw new Error(`No successful workflow run found for ${owner}/${repo}@${head_sha.slice(0, 7)} with name ${workflowName}.`);
           }
 
           const run_id = workflow.id;
@@ -149,6 +151,7 @@ jobs:
           core.debug(`Writing ZIP ${downloadPath} to disk`);
           await fs.promises.writeFile(downloadPath, Buffer.from(download));
 
+          core.setOutput('ref', head_sha);
           core.setOutput('run-id', run_id);
           core.setOutput('zip-path', downloadPath);
 
@@ -164,6 +167,7 @@ jobs:
       run: |
         environment_name="${{ steps.get-environment-name.outputs.result }}"
         function_description="Deploy build ${{ steps.download-artifact.outputs.run-id }} to AWS Lambda via GitHub Actions"
+        ref="${{ steps.download-artifact.outputs.ref }}"
 
         if [ "${environment_name}" == "production" ]
         then
@@ -176,18 +180,19 @@ jobs:
           echo "environment-name=${environment_name}"
           echo "function-description=${function_description}"
           echo "function-name=${function_name}"
+          echo "ref=${ref}"
         } >> "$GITHUB_OUTPUT"
 
   deploy:
-    name: ${{ needs.get-inputs.outputs.environment-name }}
-    needs: [ get-inputs ]
-    concurrency: '${{ needs.get-inputs.outputs.environment-name }}_environment'
+    name: ${{ needs.setup.outputs.environment-name }}
+    needs: [ setup ]
+    concurrency: '${{ needs.setup.outputs.environment-name }}_environment'
     runs-on: ubuntu-latest
 
     env:
-      FUNCTION_NAME: ${{ needs.get-inputs.outputs.function-name }}
+      FUNCTION_NAME: ${{ needs.setup.outputs.function-name }}
       LAMBDA_ARCHITECTURES: 'arm64'
-      LAMBDA_DESCRIPTION: ${{ needs.get-inputs.outputs.function-description }}
+      LAMBDA_DESCRIPTION: ${{ needs.setup.outputs.function-description }}
       LAMBDA_HANDLER: 'LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunctionHandler::HandleAsync'
       LAMBDA_MEMORY: 256
       LAMBDA_ROLE: ${{ vars.AWS_LAMBDA_ROLE }}
@@ -195,7 +200,7 @@ jobs:
       LAMBDA_TIMEOUT: 10
 
     environment:
-      name: ${{ needs.get-inputs.outputs.environment-name }}
+      name: ${{ needs.setup.outputs.environment-name }}
 
     permissions:
       id-token: write
@@ -211,7 +216,7 @@ jobs:
       uses: aws-actions/configure-aws-credentials@04b98b3f9e85f563fb061be8751a0352327246b0 # v3.0.1
       with:
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-deploy
-        role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-${{ needs.get-inputs.outputs.environment-name }}
+        role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-${{ needs.setup.outputs.environment-name }}
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Update function code
@@ -247,10 +252,10 @@ jobs:
           > /dev/null
 
   tests:
-    name: tests-${{ needs.get-inputs.outputs.environment-name }}
-    needs: [ get-inputs, deploy ]
+    name: tests-${{ needs.setup.outputs.environment-name }}
+    needs: [ setup, deploy ]
     runs-on: ubuntu-latest
-    concurrency: '${{ needs.get-inputs.outputs.environment-name }}_environment'
+    concurrency: '${{ needs.setup.outputs.environment-name }}_environment'
 
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -268,6 +273,8 @@ jobs:
 
     - name: Checkout code
       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      with:
+        ref: ${{ needs.setup.outputs.ref }}
 
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
@@ -276,11 +283,11 @@ jobs:
       uses: aws-actions/configure-aws-credentials@04b98b3f9e85f563fb061be8751a0352327246b0 # v3.0.1
       with:
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-test
-        role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-tests-${{ needs.get-inputs.outputs.environment-name }}
+        role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-tests-${{ needs.setup.outputs.environment-name }}
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Run end-to-end tests
       shell: pwsh
       run: dotnet test ./test/LondonTravel.Skill.EndToEndTests --configuration Release --logger "GitHubActions;report-warnings=false"
       env:
-        LAMBDA_FUNCTION_NAME: ${{ needs.get-inputs.outputs.function-name }}
+        LAMBDA_FUNCTION_NAME: ${{ needs.setup.outputs.function-name }}
