@@ -134,7 +134,7 @@ jobs:
 
     - name: Wait for function code update
       run: |
-        aws lambda wait function-updated \
+        aws lambda wait function-updated-v2 \
             --function-name ${{ env.LAMBDA_FUNCTION }}-dev \
             > /dev/null
 
@@ -217,7 +217,7 @@ jobs:
 
     - name: Wait for function code update
       run: |
-        aws lambda wait function-updated \
+        aws lambda wait function-updated-v2 \
             --function-name ${{ env.LAMBDA_FUNCTION }} \
             > /dev/null
 
