@@ -148,7 +148,7 @@ jobs:
           await fs.promises.writeFile(downloadPath, Buffer.from(download));
 
           core.setOutput('ref', head_sha);
-          core.setOutput('run-id', run_id);
+          core.setOutput('run-number', workflow.run_number);
           core.setOutput('zip-path', downloadPath);
 
     - name: Publish deployment package
@@ -162,7 +162,7 @@ jobs:
       id: set-outputs
       run: |
         environment_name="${{ steps.get-environment-name.outputs.result }}"
-        function_description="Deploy build ${{ steps.download-artifact.outputs.run-id }} to AWS Lambda via GitHub Actions"
+        function_description="Deploy build ${{ steps.download-artifact.outputs.run-number }} to AWS Lambda via GitHub Actions"
         ref="${{ steps.download-artifact.outputs.ref }}"
 
         if [ "${environment_name}" == "production" ]
