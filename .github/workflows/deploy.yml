@@ -27,7 +27,7 @@ jobs:
       environment-name: ${{ steps.set-outputs.outputs.environment-name }}
       function-description: ${{ steps.set-outputs.outputs.function-description }}
       function-name: ${{ steps.set-outputs.outputs.function-name }}
-      ref: ${{ steps.set-outputs.outputs.function-name }}
+      ref: ${{ steps.set-outputs.outputs.ref }}
 
     permissions:
       actions: read
