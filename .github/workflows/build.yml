@@ -111,6 +111,10 @@ jobs:
 
     steps:
 
+    - name: Set function name
+      run: |
+        echo "FUNCTION_NAME=${{ env.LAMBDA_FUNCTION }}-dev" >> "$GITHUB_ENV"
+
     - name: Download artifacts
       uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
       with:
@@ -123,25 +127,10 @@ jobs:
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-dev
         aws-region: ${{ env.AWS_REGION }}
 
-    - name: Update function code
-      run: |
-        aws lambda update-function-code \
-          --function-name ${{ env.LAMBDA_FUNCTION }}-dev \
-          --architectures arm64 \
-          --publish \
-          --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
-          > /dev/null
-
-    - name: Wait for function code update
-      run: |
-        aws lambda wait function-updated-v2 \
-          --function-name ${{ env.LAMBDA_FUNCTION }}-dev \
-          > /dev/null
-
     - name: Update function configuration
       run: |
         aws lambda update-function-configuration \
-          --function-name ${{ env.LAMBDA_FUNCTION }}-dev \
+          --function-name "${FUNCTION_NAME}" \
           --description "Deploy build ${{ github.run_number }} to AWS Lambda via GitHub Actions" \
           --handler ${{ env.LAMBDA_HANDLER }} \
           --memory-size ${{ env.LAMBDA_MEMORY }} \
@@ -153,7 +142,22 @@ jobs:
     - name: Wait for function configuration update
       run: |
         aws lambda wait function-updated-v2 \
-          --function-name ${{ env.LAMBDA_FUNCTION }} \
+          --function-name "${FUNCTION_NAME}" \
+          > /dev/null
+
+    - name: Update function code
+      run: |
+        aws lambda update-function-code \
+          --function-name "${FUNCTION_NAME}" \
+          --architectures arm64 \
+          --publish \
+          --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
+          > /dev/null
+
+    - name: Wait for function code update
+      run: |
+        aws lambda wait function-updated-v2 \
+          --function-name "${FUNCTION_NAME}" \
           > /dev/null
 
   tests-dev:
@@ -200,6 +204,10 @@ jobs:
 
     steps:
 
+    - name: Set function name
+      run: |
+        echo "FUNCTION_NAME=${{ env.LAMBDA_FUNCTION }}" >> "$GITHUB_ENV"
+
     - name: Download artifacts
       uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
       with:
@@ -212,25 +220,10 @@ jobs:
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-production
         aws-region: ${{ env.AWS_REGION }}
 
-    - name: Update function code
-      run: |
-        aws lambda update-function-code \
-          --function-name ${{ env.LAMBDA_FUNCTION }} \
-          --architectures arm64 \
-          --publish \
-          --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
-          > /dev/null
-
-    - name: Wait for function code update
-      run: |
-        aws lambda wait function-updated-v2 \
-          --function-name ${{ env.LAMBDA_FUNCTION }} \
-          > /dev/null
-
     - name: Update function configuration
       run: |
         aws lambda update-function-configuration \
-          --function-name ${{ env.LAMBDA_FUNCTION }} \
+          --function-name "${FUNCTION_NAME}" \
           --description "Deploy build ${{ github.run_number }} to AWS Lambda via GitHub Actions" \
           --handler ${{ env.LAMBDA_HANDLER }} \
           --memory-size ${{ env.LAMBDA_MEMORY }} \
@@ -242,7 +235,22 @@ jobs:
     - name: Wait for function configuration update
       run: |
         aws lambda wait function-updated-v2 \
-          --function-name ${{ env.LAMBDA_FUNCTION }} \
+          --function-name "${FUNCTION_NAME}" \
+          > /dev/null
+
+    - name: Update function code
+      run: |
+        aws lambda update-function-code \
+          --function-name "${FUNCTION_NAME}" \
+          --architectures arm64 \
+          --publish \
+          --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
+          > /dev/null
+
+    - name: Wait for function code update
+      run: |
+        aws lambda wait function-updated-v2 \
+          --function-name "${FUNCTION_NAME}" \
           > /dev/null
 
   tests-prod:
