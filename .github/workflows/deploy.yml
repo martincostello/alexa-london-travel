@@ -75,7 +75,6 @@ jobs:
         PULL_NUMBER: ${{ github.event.issue.number }}
         WORKFLOW_NAME: 'build'
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const artifactName = process.env.ARTIFACT_NAME;
           const pull_number = process.env.PULL_NUMBER;
