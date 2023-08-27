@@ -126,35 +126,35 @@ jobs:
     - name: Update function code
       run: |
         aws lambda update-function-code \
-            --function-name ${{ env.LAMBDA_FUNCTION }}-dev \
-            --architectures arm64 \
-            --publish \
-            --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
-            > /dev/null
+          --function-name ${{ env.LAMBDA_FUNCTION }}-dev \
+          --architectures arm64 \
+          --publish \
+          --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
+          > /dev/null
 
     - name: Wait for function code update
       run: |
         aws lambda wait function-updated-v2 \
-            --function-name ${{ env.LAMBDA_FUNCTION }}-dev \
-            > /dev/null
+          --function-name ${{ env.LAMBDA_FUNCTION }}-dev \
+          > /dev/null
 
     - name: Update function configuration
       run: |
         aws lambda update-function-configuration \
-            --function-name ${{ env.LAMBDA_FUNCTION }}-dev \
-            --description "Deploy build ${{ github.run_number }} to AWS Lambda via GitHub Actions" \
-            --handler ${{ env.LAMBDA_HANDLER }} \
-            --memory-size ${{ env.LAMBDA_MEMORY }} \
-            --role ${{ env.LAMBDA_ROLE }} \
-            --runtime ${{ env.LAMBDA_RUNTIME }} \
-            --timeout ${{ env.LAMBDA_TIMEOUT }} \
-            > /dev/null
+          --function-name ${{ env.LAMBDA_FUNCTION }}-dev \
+          --description "Deploy build ${{ github.run_number }} to AWS Lambda via GitHub Actions" \
+          --handler ${{ env.LAMBDA_HANDLER }} \
+          --memory-size ${{ env.LAMBDA_MEMORY }} \
+          --role ${{ env.LAMBDA_ROLE }} \
+          --runtime ${{ env.LAMBDA_RUNTIME }} \
+          --timeout ${{ env.LAMBDA_TIMEOUT }} \
+          > /dev/null
 
     - name: Wait for function configuration update
       run: |
         aws lambda wait function-updated-v2 \
-            --function-name ${{ env.LAMBDA_FUNCTION }} \
-            > /dev/null
+          --function-name ${{ env.LAMBDA_FUNCTION }} \
+          > /dev/null
 
   tests-dev:
     name: tests-dev
@@ -215,35 +215,35 @@ jobs:
     - name: Update function code
       run: |
         aws lambda update-function-code \
-            --function-name ${{ env.LAMBDA_FUNCTION }} \
-            --architectures arm64 \
-            --publish \
-            --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
-            > /dev/null
+          --function-name ${{ env.LAMBDA_FUNCTION }} \
+          --architectures arm64 \
+          --publish \
+          --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
+          > /dev/null
 
     - name: Wait for function code update
       run: |
         aws lambda wait function-updated-v2 \
-            --function-name ${{ env.LAMBDA_FUNCTION }} \
-            > /dev/null
+          --function-name ${{ env.LAMBDA_FUNCTION }} \
+          > /dev/null
 
     - name: Update function configuration
       run: |
         aws lambda update-function-configuration \
-            --function-name ${{ env.LAMBDA_FUNCTION }} \
-            --description "Deploy build ${{ github.run_number }} to AWS Lambda via GitHub Actions" \
-            --handler ${{ env.LAMBDA_HANDLER }} \
-            --memory-size ${{ env.LAMBDA_MEMORY }} \
-            --role ${{ env.LAMBDA_ROLE }} \
-            --runtime ${{ env.LAMBDA_RUNTIME }} \
-            --timeout ${{ env.LAMBDA_TIMEOUT }} \
-            > /dev/null
+          --function-name ${{ env.LAMBDA_FUNCTION }} \
+          --description "Deploy build ${{ github.run_number }} to AWS Lambda via GitHub Actions" \
+          --handler ${{ env.LAMBDA_HANDLER }} \
+          --memory-size ${{ env.LAMBDA_MEMORY }} \
+          --role ${{ env.LAMBDA_ROLE }} \
+          --runtime ${{ env.LAMBDA_RUNTIME }} \
+          --timeout ${{ env.LAMBDA_TIMEOUT }} \
+          > /dev/null
 
     - name: Wait for function configuration update
       run: |
         aws lambda wait function-updated-v2 \
-            --function-name ${{ env.LAMBDA_FUNCTION }} \
-            > /dev/null
+          --function-name ${{ env.LAMBDA_FUNCTION }} \
+          > /dev/null
 
   tests-prod:
     name: tests-prod
