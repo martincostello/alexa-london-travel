@@ -1,0 +1,285 @@
+name: deploy
+
+on:
+  issue_comment:
+    types: [ created ]
+
+env:
+  ARTIFACT_NAME: 'lambda'
+  AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  LAMBDA_FUNCTION: 'alexa-london-travel'
+  TERM: xterm
+
+permissions:
+  contents: read
+
+jobs:
+  get-inputs:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.issue.pull_request != '' &&
+      github.event.repository.fork == false &&
+      github.triggering_actor == github.event.repository.owner.login &&
+      startsWith(github.event.comment.body, '/deploy')
+
+    # TODO Get the values from the deploy comment
+    outputs:
+      environment-name: 'dev'
+      function-name: ${{ steps.set-outputs.outputs.function-name }}
+      function-description: ${{ steps.set-outputs.outputs.function-description }}
+
+    steps:
+
+    - name: Get environment name
+      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+      id: get-environment-name
+      with:
+        result-encoding: string
+        script: |
+          const owner = context.payload.repository.owner.login;
+          const repo = context.payload.repository.name;
+          const issue_number = context.issue.number;
+          const username = context.payload.comment.user.login;
+
+          try {
+            await github.rest.repos.checkCollaborator({
+              owner,
+              repo,
+              username,
+            });
+          } catch (err) {
+            throw new Error(`Error: @${username} is not a repository collaborator.`);
+          }
+
+          const regex = /\/deploy ([a-zA-Z\d\-\_]+)/;
+          const arguments = regex.exec(context.payload.comment.body);
+
+          if (arguments === null || arguments.length < 2) {
+            throw new Error('Invalid command');
+          }
+
+          const environment = arguments[1].trim();
+          const workflowUrl = `${{ github.server_url }}/${context.repo.owner}/${context.repo.repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+
+          await github.rest.issues.createComment({
+            owner,
+            repo,
+            issue_number,
+            body: `Started deployment to [${environment}](${workflowUrl}) :rocket:`
+          });
+
+          return environment;
+
+    - name: Download artifact
+      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+      id: download-artifact
+      env:
+        DOWNLOAD_PATH: ${{ github.workspace }}
+        PULL_NUMBER: ${{ github.event.issue.number }}
+        WORKFLOW_NAME: 'build'
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const artifactName = process.env.ARTIFACT_NAME;
+          const pull_number = process.env.PULL_NUMBER;
+          const workflowName = process.env.WORKFLOW_NAME;
+          const workingDirectory = process.env.DOWNLOAD_PATH;
+
+          const owner = context.repo.owner;
+          const repo = context.repo.repo;
+
+          core.debug(`Getting pull request ${owner}/${repo}#${pull_number}`);
+          const { data: pull } = await github.rest.pulls.get({
+            owner,
+            repo,
+            pull_number,
+          });
+
+          if (!pull) {
+            throw new Error(`Pull request ${owner}/${repo}#${pull_number} not found.`);
+          }
+
+          core.debug(`Getting workflow runs for ${owner}/${repo}#${pull_number}`);
+          const { data: workflows } = await github.rest.actions.listWorkflowRunsForRepo({
+            owner,
+            repo,
+            event: 'pull_request',
+            head_sha: pull.head.sha,
+            status: 'success',
+          });
+          const [workflow] = workflows.workflow_runs.find((run) => run.name === workflowName);
+
+          if (!workflow) {
+            throw new Error(`No successful workflow run found for ${owner}/${repo}@${pull.head.sha.slice(0, 7)} with name ${workflowName}.`);
+          }
+
+          const run_id = workflow.id;
+          core.debug(`Getting artifacts for workflow run ${owner}/${repo} number ${run_id}`);
+          const { data: allArtifacts } = await github.rest.actions.listWorkflowRunArtifacts({
+            owner,
+            repo,
+            run_id,
+          });
+
+          core.debug(`Found ${allArtifacts.length} artifact(s)`);
+          const [artifact] = allArtifacts.artifacts.filter((artifact) => artifact.name === artifactName);
+          if (!artifact) {
+              throw new Error(`No ${artifactName} artifact found in workflow run with ID ${run_id}.`);
+          }
+
+          const artifact_id = artifact.id;
+          core.debug(`Downloading artifact ${artifactName} with ID ${artifact_id}`);
+          const { data: download } = await github.rest.actions.downloadArtifact({
+              owner,
+              repo,
+              artifact_id,
+              archive_format: 'zip',
+          });
+
+          const fs = require('fs');
+          const path = require('path');
+          const fileName = `${artifactName}.zip`;
+          if (!fs.existsSync(workingDirectory)) {
+            core.debug(`Creating working directory ${workingDirectory}`);
+            await fs.promises.mkdir(workingDirectory);
+          }
+
+          const downloadPath = path.join(workingDirectory, fileName);
+
+          core.debug(`Writing ZIP ${downloadPath} to disk`);
+          await fs.promises.writeFile(downloadPath, Buffer.from(download));
+
+          core.setOutput('run-id', run_id);
+          core.setOutput('zip-path', downloadPath);
+
+    - name: Publish deployment package
+      uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+      with:
+        name: ${{ env.ARTIFACT_NAME }}
+        path: ${{ steps.download-artifact.outputs.zip-path }}
+        if-no-files-found: error
+
+    - name: Set outputs
+      id: set-outputs
+      run: |
+        environment_name = "${{ steps.get-environment-name.outputs.result }}"
+        function_description = "Deploy build ${{ steps.download-artifact.outputs.run-id }} to AWS Lambda via GitHub Actions"
+
+        if [ $environment_name == "production" ]
+        then
+          function_name = "${{ env.LAMBDA_FUNCTION }}"
+        else
+          function_name = "${{ env.LAMBDA_FUNCTION }}-${environment_name}"
+        fi
+
+        echo "environment-name=${environment_name}" >> "$GITHUB_OUTPUT"
+        echo "function-description=${function_description}" >> "$GITHUB_OUTPUT"
+        echo "function-name=${function_name}" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    name: ${{ needs.get-inputs.outputs.environment-name }}
+    needs: get-inputs
+    concurrency: '${{ needs.get-inputs.outputs.environment-name }}_environment'
+    runs-on: ubuntu-latest
+
+    env:
+      FUNCTION_NAME: ${{ needs.get-inputs.outputs.function-name }}
+      LAMBDA_ARCHITECTURES: 'arm64'
+      LAMBDA_DESCRIPTION: ${{ needs.get-inputs.outputs.function-description }}
+      LAMBDA_HANDLER: 'LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunctionHandler::HandleAsync'
+      LAMBDA_MEMORY: 256
+      LAMBDA_ROLE: ${{ vars.AWS_LAMBDA_ROLE }}
+      LAMBDA_RUNTIME: 'provided.al2'
+      LAMBDA_TIMEOUT: 10
+
+    environment:
+      name: ${{ needs.get-inputs.outputs.environment-name }}
+
+    permissions:
+      id-token: write
+
+    steps:
+
+    - name: Download artifacts
+      uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
+      with:
+        name: ${{ env.ARTIFACT_NAME }}
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@04b98b3f9e85f563fb061be8751a0352327246b0 # v3.0.1
+      with:
+        role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-deploy
+        role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-${{ needs.get-inputs.outputs.environment-name }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Update function code
+      run: |
+        aws lambda update-function-code \
+          --function-name "${FUNCTION_NAME}" \
+          --architectures "${LAMBDA_ARCHITECTURES}" \
+          --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
+          > /dev/null
+
+    - name: Wait for function code update
+      run: |
+        aws lambda wait function-updated-v2 \
+          --function-name "${FUNCTION_NAME}" \
+          > /dev/null
+
+    - name: Update function configuration
+      run: |
+        aws lambda update-function-configuration \
+          --function-name "${FUNCTION_NAME}" \
+          --description "${LAMBDA_DESCRIPTION}" \
+          --handler "${LAMBDA_HANDLER}"" \
+          --memory-size "${LAMBDA_MEMORY}" \
+          --role "${LAMBDA_ROLE}" \
+          --runtime "${LAMBDA_RUNTIME}" \
+          --timeout "${LAMBDA_TIMEOUT}" \
+          > /dev/null
+
+    - name: Wait for function configuration update
+      run: |
+        aws lambda wait function-updated-v2 \
+          --function-name "${FUNCTION_NAME}" \
+          > /dev/null
+
+  tests:
+    name: tests-${{ needs.get-inputs.outputs.environment-name }}
+    needs: deploy
+    runs-on: ubuntu-latest
+    concurrency: '${{ needs.get-inputs.outputs.environment-name }}_environment'
+
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+      DOTNET_MULTILEVEL_LOOKUP: 0
+      DOTNET_NOLOGO: true
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
+      NUGET_XMLDOC_MODE: skip
+
+    permissions:
+      id-token: write
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@04b98b3f9e85f563fb061be8751a0352327246b0 # v3.0.1
+      with:
+        role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-test
+        role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-tests-${{ needs.get-inputs.outputs.environment-name }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Run end-to-end tests
+      shell: pwsh
+      run: dotnet test ./test/LondonTravel.Skill.EndToEndTests --configuration Release --logger "GitHubActions;report-warnings=false"
+      env:
+        LAMBDA_FUNCTION_NAME: ${{ needs.get-inputs.outputs.function-name }}
