@@ -15,18 +15,21 @@ on:
   workflow_dispatch:
 
 env:
-  AWS_ACCOUNT_ID: '492538393790'
-  AWS_REGION: eu-west-1
+  ARTIFACT_NAME: 'lambda'
+  AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
+  AWS_REGION: ${{ vars.AWS_REGION }}
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_GENERATE_ASPNET_CERTIFICATE: false
   DOTNET_MULTILEVEL_LOOKUP: 0
   DOTNET_NOLOGO: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
+  LAMBDA_ARCHITECTURES: 'arm64'
+  LAMBDA_DESCRIPTION: 'Deploy build ${{ github.run_number }} to AWS Lambda via GitHub Actions'
   LAMBDA_FUNCTION: 'alexa-london-travel'
   LAMBDA_HANDLER: 'LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunctionHandler::HandleAsync'
   LAMBDA_MEMORY: 256
-  LAMBDA_ROLE: 'arn:aws:iam::492538393790:role/lambda_basic_execution'
+  LAMBDA_ROLE: ${{ vars.AWS_LAMBDA_ROLE }}
   LAMBDA_RUNTIME: 'provided.al2'
   LAMBDA_TIMEOUT: 10
   NUGET_XMLDOC_MODE: skip
@@ -90,7 +93,7 @@ jobs:
       uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
       if: ${{ runner.os == 'Linux' && success() }}
       with:
-        name: lambda
+        name: ${{ env.ARTIFACT_NAME }}
         path: ./artifacts/${{ env.LAMBDA_FUNCTION }}.zip
         if-no-files-found: error
 
@@ -100,7 +103,7 @@ jobs:
       github.ref_name == github.event.repository.default_branch
     name: dev
     needs: build
-    concurrency: development_environment
+    concurrency: dev_environment
     runs-on: ubuntu-latest
 
     environment:
@@ -118,7 +121,7 @@ jobs:
     - name: Download artifacts
       uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
       with:
-        name: lambda
+        name: ${{ env.ARTIFACT_NAME }}
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@04b98b3f9e85f563fb061be8751a0352327246b0 # v3.0.1
@@ -131,7 +134,7 @@ jobs:
       run: |
         aws lambda update-function-code \
           --function-name "${FUNCTION_NAME}" \
-          --architectures arm64 \
+          --architectures "${LAMBDA_ARCHITECTURES}" \
           --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
           > /dev/null
 
@@ -145,7 +148,7 @@ jobs:
       run: |
         aws lambda update-function-configuration \
           --function-name "${FUNCTION_NAME}" \
-          --description "Deploy build ${{ github.run_number }} to AWS Lambda via GitHub Actions" \
+          --description "${LAMBDA_DESCRIPTION}" \
           --handler ${{ env.LAMBDA_HANDLER }} \
           --memory-size ${{ env.LAMBDA_MEMORY }} \
           --role ${{ env.LAMBDA_ROLE }} \
@@ -163,7 +166,7 @@ jobs:
     name: tests-dev
     needs: deploy-dev
     runs-on: ubuntu-latest
-    concurrency: development_environment
+    concurrency: dev_environment
 
     permissions:
       id-token: write
@@ -223,7 +226,7 @@ jobs:
       run: |
         aws lambda update-function-code \
           --function-name "${FUNCTION_NAME}" \
-          --architectures arm64 \
+          --architectures "${LAMBDA_ARCHITECTURES}" \
           --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
           > /dev/null
 
@@ -237,7 +240,7 @@ jobs:
       run: |
         aws lambda update-function-configuration \
           --function-name "${FUNCTION_NAME}" \
-          --description "Deploy build ${{ github.run_number }} to AWS Lambda via GitHub Actions" \
+          --description "${LAMBDA_DESCRIPTION}" \
           --handler ${{ env.LAMBDA_HANDLER }} \
           --memory-size ${{ env.LAMBDA_MEMORY }} \
           --role ${{ env.LAMBDA_ROLE }} \
@@ -252,7 +255,6 @@ jobs:
           > /dev/null
 
   tests-prod:
-    name: tests-prod
     needs: deploy-prod
     runs-on: ubuntu-latest
     concurrency: production_environment
