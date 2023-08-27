@@ -23,9 +23,8 @@ jobs:
       github.triggering_actor == github.event.repository.owner.login &&
       startsWith(github.event.comment.body, '/deploy')
 
-    # TODO Get the values from the deploy comment
     outputs:
-      environment-name: 'dev'
+      environment-name: ${{ steps.set-outputs.outputs.environment-name }}
       function-name: ${{ steps.set-outputs.outputs.function-name }}
       function-description: ${{ steps.set-outputs.outputs.function-description }}
 
@@ -249,7 +248,7 @@ jobs:
 
   tests:
     name: tests-${{ needs.get-inputs.outputs.environment-name }}
-    needs: deploy
+    needs: [ get-inputs, deploy ]
     runs-on: ubuntu-latest
     concurrency: '${{ needs.get-inputs.outputs.environment-name }}_environment'
 
