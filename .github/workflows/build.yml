@@ -80,7 +80,7 @@ jobs:
         path: ./artifacts
 
     - name: Create Lambda ZIP file
-      if: ${{ runner.os == 'Linux' }}
+      if: runner.os == 'Linux'
       run: |
         cd "./artifacts/publish" || exit
         if [ -f "./bootstrap" ]
@@ -91,7 +91,7 @@ jobs:
 
     - name: Publish deployment package
       uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
-      if: ${{ runner.os == 'Linux' && success() }}
+      if: runner.os == 'Linux' && success()
       with:
         name: ${{ env.ARTIFACT_NAME }}
         path: ./artifacts/${{ env.LAMBDA_FUNCTION }}.zip
