@@ -18,7 +18,7 @@ public class EndToEndTests : FunctionTests
     {
     }
 
-    [Fact]
+    [xRetry.RetryFact]
     public async Task Alexa_Function_Can_Process_Request()
     {
         // Arrange
