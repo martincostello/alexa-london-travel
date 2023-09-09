@@ -87,7 +87,7 @@ jobs:
         then
           chmod +x ./bootstrap
         fi
-        zip -r "../${{ env.LAMBDA_FUNCTION }}.zip" . || exit 1
+        zip -r "../${LAMBDA_FUNCTION}.zip" . || exit 1
 
     - name: Publish deployment package
       uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
@@ -116,7 +116,7 @@ jobs:
 
     - name: Set function name
       run: |
-        echo "FUNCTION_NAME=${{ env.LAMBDA_FUNCTION }}-dev" >> "$GITHUB_ENV"
+        echo "FUNCTION_NAME=${LAMBDA_FUNCTION}-dev" >> "$GITHUB_ENV"
 
     - name: Download artifacts
       uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
@@ -135,7 +135,7 @@ jobs:
         aws lambda update-function-code \
           --function-name "${FUNCTION_NAME}" \
           --architectures "${LAMBDA_ARCHITECTURES}" \
-          --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
+          --zip-file "fileb://./${LAMBDA_FUNCTION}.zip" \
           > /dev/null
 
     - name: Wait for function code update
@@ -149,11 +149,11 @@ jobs:
         aws lambda update-function-configuration \
           --function-name "${FUNCTION_NAME}" \
           --description "${LAMBDA_DESCRIPTION}" \
-          --handler ${{ env.LAMBDA_HANDLER }} \
-          --memory-size ${{ env.LAMBDA_MEMORY }} \
-          --role ${{ env.LAMBDA_ROLE }} \
-          --runtime ${{ env.LAMBDA_RUNTIME }} \
-          --timeout ${{ env.LAMBDA_TIMEOUT }} \
+          --handler "${LAMBDA_HANDLER}" \
+          --memory-size "${LAMBDA_MEMORY}" \
+          --role "${LAMBDA_ROLE}" \
+          --runtime "${LAMBDA_RUNTIME}" \
+          --timeout "${LAMBDA_TIMEOUT}" \
           > /dev/null
 
     - name: Wait for function configuration update
@@ -208,12 +208,12 @@ jobs:
 
     - name: Set function name
       run: |
-        echo "FUNCTION_NAME=${{ env.LAMBDA_FUNCTION }}" >> "$GITHUB_ENV"
+        echo "FUNCTION_NAME=${LAMBDA_FUNCTION}" >> "$GITHUB_ENV"
 
     - name: Download artifacts
       uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
       with:
-        name: lambda
+        name: ${{ env.ARTIFACT_NAME }}
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@50ac8dd1e1b10d09dac7b8727528b91bed831ac0 # v3.0.2
@@ -227,7 +227,7 @@ jobs:
         aws lambda update-function-code \
           --function-name "${FUNCTION_NAME}" \
           --architectures "${LAMBDA_ARCHITECTURES}" \
-          --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
+          --zip-file "fileb://./${LAMBDA_FUNCTION}.zip" \
           > /dev/null
 
     - name: Wait for function code update
@@ -241,11 +241,11 @@ jobs:
         aws lambda update-function-configuration \
           --function-name "${FUNCTION_NAME}" \
           --description "${LAMBDA_DESCRIPTION}" \
-          --handler ${{ env.LAMBDA_HANDLER }} \
-          --memory-size ${{ env.LAMBDA_MEMORY }} \
-          --role ${{ env.LAMBDA_ROLE }} \
-          --runtime ${{ env.LAMBDA_RUNTIME }} \
-          --timeout ${{ env.LAMBDA_TIMEOUT }} \
+          --handler "${LAMBDA_HANDLER}" \
+          --memory-size "${LAMBDA_MEMORY}" \
+          --role "${LAMBDA_ROLE}" \
+          --runtime "${LAMBDA_RUNTIME}" \
+          --timeout "${LAMBDA_TIMEOUT}" \
           > /dev/null
 
     - name: Wait for function configuration update
