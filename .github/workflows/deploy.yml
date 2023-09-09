@@ -180,9 +180,9 @@ jobs:
 
         if [ "${environment_name}" == "production" ]
         then
-          function_name="${{ env.LAMBDA_FUNCTION }}"
+          function_name="${LAMBDA_FUNCTION}"
         else
-          function_name="${{ env.LAMBDA_FUNCTION }}-${environment_name}"
+          function_name="${LAMBDA_FUNCTION}-${environment_name}"
         fi
 
         {
@@ -262,7 +262,7 @@ jobs:
         aws lambda update-function-code \
           --function-name "${FUNCTION_NAME}" \
           --architectures "${LAMBDA_ARCHITECTURES}" \
-          --zip-file fileb://./${{ env.LAMBDA_FUNCTION }}.zip \
+          --zip-file "fileb://./${LAMBDA_FUNCTION}.zip" \
           > /dev/null
 
     - name: Wait for function code update
