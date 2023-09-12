@@ -251,7 +251,7 @@ jobs:
         name: ${{ env.ARTIFACT_NAME }}
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@50ac8dd1e1b10d09dac7b8727528b91bed831ac0 # v3.0.2
+      uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
       with:
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-deploy
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-${{ needs.setup.outputs.environment-name }}
@@ -348,7 +348,7 @@ jobs:
       uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@50ac8dd1e1b10d09dac7b8727528b91bed831ac0 # v3.0.2
+      uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
       with:
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-test
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-tests-${{ needs.setup.outputs.environment-name }}
