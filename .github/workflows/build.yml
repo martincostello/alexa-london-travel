@@ -82,12 +82,12 @@ jobs:
     - name: Create Lambda ZIP file
       if: runner.os == 'Linux'
       run: |
-        cd "./artifacts/publish" || exit
+        cd "./artifacts/publish/LondonTravel.Skill/release_linux-arm64" || exit
         if [ -f "./bootstrap" ]
         then
           chmod +x ./bootstrap
         fi
-        zip -r "../${LAMBDA_FUNCTION}.zip" . || exit 1
+        zip -r "../../../${LAMBDA_FUNCTION}.zip" . || exit 1
 
     - name: Publish deployment package
       uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3

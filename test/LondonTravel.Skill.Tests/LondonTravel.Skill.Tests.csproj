@@ -3,7 +3,7 @@
     <IsTestProject>true</IsTestProject>
     <NoWarn>$(NoWarn);CA1062;CA1707;CA2007;CA2234;SA1600</NoWarn>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\LondonTravel.Skill\LondonTravel.Skill.csproj" />
@@ -25,7 +25,7 @@
   </ItemGroup>
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
-    <CoverletOutput>$([System.IO.Path]::Combine($(OutputPath), 'coverage', 'coverage'))</CoverletOutput>
+    <CoverletOutput>$([System.IO.Path]::Combine($(ArtifactsPath), 'coverage', 'coverage'))</CoverletOutput>
     <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
     <Exclude>[Alexa.NET*]*,[Amazon.Lambda*]*,[LondonTravel.Skill.EndToEndTests]*,[Refit*]*,[xunit.*]*</Exclude>
     <Threshold>93</Threshold>

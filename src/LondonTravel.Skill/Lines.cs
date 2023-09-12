@@ -8,6 +8,8 @@ namespace MartinCostello.LondonTravel.Skill;
 /// </summary>
 internal static class Lines
 {
+    private static readonly CompositeFormat StatusIntentCardTitleFormat = CompositeFormat.Parse(Strings.StatusIntentCardTitleFormat);
+
     /// <summary>
     /// Returns whether the specified line name refers to the Docklands Light Railway.
     /// </summary>
@@ -148,6 +150,6 @@ internal static class Lines
             suffix = Strings.LineSuffixUpper;
         }
 
-        return string.Format(CultureInfo.CurrentCulture, Strings.StatusIntentCardTitleFormat, name, suffix);
+        return string.Format(CultureInfo.CurrentCulture, StatusIntentCardTitleFormat, name, suffix);
     }
 }

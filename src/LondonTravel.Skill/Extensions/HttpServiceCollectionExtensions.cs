@@ -42,7 +42,7 @@ internal static class HttpServiceCollectionExtensions
         services.AddSingleton<IHttpContentSerializer>((p) =>
         {
             var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
-            options.AddContext<ApplicationJsonSerializerContext>();
+            options.TypeInfoResolverChain.Add(ApplicationJsonSerializerContext.Default);
 
             return new SystemTextJsonContentSerializer(options);
         });

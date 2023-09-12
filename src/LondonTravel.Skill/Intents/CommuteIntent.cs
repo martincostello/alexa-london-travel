@@ -15,6 +15,8 @@ namespace MartinCostello.LondonTravel.Skill.Intents;
 /// </summary>
 internal sealed class CommuteIntent : IIntent
 {
+    private static readonly CompositeFormat CommuteIntentPrefixFormat = CompositeFormat.Parse(Strings.CommuteIntentPrefixFormat);
+
     /// <summary>
     /// Initializes a new instance of the <see cref="CommuteIntent"/> class.
     /// </summary>
@@ -96,7 +98,7 @@ internal sealed class CommuteIntent : IIntent
             if (hasMultipleStatuses)
             {
                 string displayName = Verbalizer.LineName(line.Name, asTitleCase: true);
-                text = string.Format(CultureInfo.CurrentCulture, Strings.CommuteIntentPrefixFormat, displayName, text);
+                text = string.Format(CultureInfo.CurrentCulture, CommuteIntentPrefixFormat, displayName, text);
             }
 
             paragraphs.Add(text);
