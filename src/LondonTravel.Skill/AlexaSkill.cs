@@ -12,39 +12,17 @@ namespace MartinCostello.LondonTravel.Skill;
 /// <summary>
 /// A class representing the implementation of the London Travel Alexa skill. This class cannot be inherited.
 /// </summary>
-internal sealed class AlexaSkill
+/// <remarks>
+/// Initializes a new instance of the <see cref="AlexaSkill"/> class.
+/// </remarks>
+/// <param name="intentFactory">The factory to use for the skill intents.</param>
+/// <param name="telemetry">The telemetry client to use.</param>
+/// <param name="logger">The logger to use.</param>
+internal sealed class AlexaSkill(
+    IntentFactory intentFactory,
+    TelemetryClient telemetry,
+    ILogger<AlexaSkill> logger)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="AlexaSkill"/> class.
-    /// </summary>
-    /// <param name="intentFactory">The factory to use for the skill intents.</param>
-    /// <param name="telemetry">The telemetry client to use.</param>
-    /// <param name="logger">The logger to use.</param>
-    public AlexaSkill(
-        IntentFactory intentFactory,
-        TelemetryClient telemetry,
-        ILogger<AlexaSkill> logger)
-    {
-        IntentFactory = intentFactory;
-        Logger = logger;
-        Telemetry = telemetry;
-    }
-
-    /// <summary>
-    /// Gets the AWS Lambda execution context.
-    /// </summary>
-    private IntentFactory IntentFactory { get; }
-
-    /// <summary>
-    /// Gets the logger to use.
-    /// </summary>
-    private ILogger Logger { get; }
-
-    /// <summary>
-    /// Gets the telemetery client to use.
-    /// </summary>
-    private TelemetryClient Telemetry { get; }
-
     /// <summary>
     /// Handles a system error.
     /// </summary>
@@ -56,7 +34,7 @@ internal sealed class AlexaSkill
     public SkillResponse OnError(SystemExceptionRequest error, Session session)
     {
         Log.SystemError(
-            Logger,
+            logger,
             session.SessionId,
             error.Error.Type.ToString(),
             error.ErrorCause?.requestId,
@@ -77,7 +55,7 @@ internal sealed class AlexaSkill
     /// </returns>
     public SkillResponse OnError(Exception exception, Session session)
     {
-        Log.HandlerException(Logger, exception, session.SessionId);
+        Log.HandlerException(logger, exception, session.SessionId);
 
         TrackException(exception, session);
 
@@ -99,7 +77,7 @@ internal sealed class AlexaSkill
     {
         TrackEvent(intent.Name, session, intent);
 
-        IIntent userIntent = IntentFactory.Create(intent);
+        IIntent userIntent = intentFactory.Create(intent);
 
         return await userIntent.RespondAsync(intent, session);
     }
@@ -163,12 +141,12 @@ internal sealed class AlexaSkill
             }
         }
 
-        Telemetry.TrackEvent(eventName, properties);
+        telemetry.TrackEvent(eventName, properties);
     }
 
     private void TrackException(Exception exception, Session session)
     {
         Dictionary<string, string> properties = ToTelemetryProperties(session);
-        Telemetry.TrackException(exception, properties);
+        telemetry.TrackException(exception, properties);
     }
 }

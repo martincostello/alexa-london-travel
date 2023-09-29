@@ -11,13 +11,8 @@ using Newtonsoft.Json;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-public class EndToEndTests : FunctionTests
+public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
-    public EndToEndTests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [xRetry.RetryFact]
     public async Task Alexa_Function_Can_Process_Request()
     {

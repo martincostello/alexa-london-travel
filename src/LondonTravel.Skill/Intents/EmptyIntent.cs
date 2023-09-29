@@ -14,7 +14,5 @@ internal sealed class EmptyIntent : IIntent
 {
     /// <inheritdoc />
     public Task<SkillResponse> RespondAsync(Intent intent, Session session)
-    {
-        return Task.FromResult(ResponseBuilder.Empty());
-    }
+        => Task.FromResult(ResponseBuilder.Empty());
 }

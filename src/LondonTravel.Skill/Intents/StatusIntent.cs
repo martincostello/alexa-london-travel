@@ -11,29 +11,13 @@ namespace MartinCostello.LondonTravel.Skill.Intents;
 /// <summary>
 /// A class that handles the status intent. This class cannot be inherited.
 /// </summary>
-internal sealed class StatusIntent : IIntent
+/// <remarks>
+/// Initializes a new instance of the <see cref="StatusIntent"/> class.
+/// </remarks>
+/// <param name="tflClient">The TfL API client to use.</param>
+/// <param name="config">The skill configuration to use.</param>
+internal sealed class StatusIntent(ITflClient tflClient, SkillConfiguration config) : IIntent
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="StatusIntent"/> class.
-    /// </summary>
-    /// <param name="tflClient">The TfL API client to use.</param>
-    /// <param name="config">The skill configuration to use.</param>
-    public StatusIntent(ITflClient tflClient, SkillConfiguration config)
-    {
-        Config = config;
-        TflClient = tflClient;
-    }
-
-    /// <summary>
-    /// Gets the skill configuration.
-    /// </summary>
-    private SkillConfiguration Config { get; }
-
-    /// <summary>
-    /// Gets the TfL API client.
-    /// </summary>
-    private ITflClient TflClient { get; }
-
     /// <inheritdoc />
     public async Task<SkillResponse> RespondAsync(Intent intent, Session session)
     {
@@ -213,9 +197,9 @@ internal sealed class StatusIntent : IIntent
 
     private async Task<IList<Line>> GetStatusesAsync(string id)
     {
-        return await TflClient.GetLineStatusAsync(
+        return await tflClient.GetLineStatusAsync(
             id,
-            Config.TflApplicationId,
-            Config.TflApplicationKey);
+            config.TflApplicationId,
+            config.TflApplicationKey);
     }
 }

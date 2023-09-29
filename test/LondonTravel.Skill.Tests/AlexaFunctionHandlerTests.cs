@@ -7,13 +7,8 @@ using Amazon.Lambda.Core;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-public class AlexaFunctionHandlerTests : FunctionTests
+public class AlexaFunctionHandlerTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
-    public AlexaFunctionHandlerTests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Fact]
     public async Task Can_Invoke_Static_Function()
     {

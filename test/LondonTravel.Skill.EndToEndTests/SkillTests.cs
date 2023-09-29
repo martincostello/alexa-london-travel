@@ -11,13 +11,8 @@ using Environment = System.Environment;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-public class SkillTests
+public class SkillTests(ITestOutputHelper outputHelper)
 {
-    public SkillTests(ITestOutputHelper outputHelper)
-    {
-        OutputHelper = outputHelper;
-    }
-
     public static IEnumerable<object[]> Payloads
     {
         get
@@ -29,8 +24,6 @@ public class SkillTests
                 .ToArray();
         }
     }
-
-    private ITestOutputHelper OutputHelper { get; }
 
     [SkippableTheory]
     [MemberData(nameof(Payloads))]
@@ -67,8 +60,8 @@ public class SkillTests
             Payload = payload,
         };
 
-        OutputHelper.WriteLine($"FunctionName: {request.FunctionName}");
-        OutputHelper.WriteLine($"Payload: {request.Payload}");
+        outputHelper.WriteLine($"FunctionName: {request.FunctionName}");
+        outputHelper.WriteLine($"Payload: {request.Payload}");
 
         // Act
         InvokeResponse response = await client.InvokeAsync(request);
@@ -76,11 +69,11 @@ public class SkillTests
         using var reader = new StreamReader(response.Payload);
         string responsePayload = await reader.ReadToEndAsync();
 
-        OutputHelper.WriteLine($"ExecutedVersion: {response.ExecutedVersion}");
-        OutputHelper.WriteLine($"FunctionError: {response.FunctionError}");
-        OutputHelper.WriteLine($"HttpStatusCode: {response.HttpStatusCode}");
-        OutputHelper.WriteLine($"RequestId: {response.ResponseMetadata.RequestId}");
-        OutputHelper.WriteLine($"StatusCode: {response.StatusCode}");
+        outputHelper.WriteLine($"ExecutedVersion: {response.ExecutedVersion}");
+        outputHelper.WriteLine($"FunctionError: {response.FunctionError}");
+        outputHelper.WriteLine($"HttpStatusCode: {response.HttpStatusCode}");
+        outputHelper.WriteLine($"RequestId: {response.ResponseMetadata.RequestId}");
+        outputHelper.WriteLine($"StatusCode: {response.StatusCode}");
 
         // Assert
         response.HttpStatusCode.ShouldBe(HttpStatusCode.OK);

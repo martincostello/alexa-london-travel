@@ -8,13 +8,8 @@ using Amazon.Lambda.Core;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-public class SessionEndedTests : FunctionTests
+public class SessionEndedTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
-    public SessionEndedTests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Fact]
     public async Task Can_Invoke_Function()
     {

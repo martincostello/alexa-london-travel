@@ -10,29 +10,13 @@ namespace MartinCostello.LondonTravel.Skill;
 /// <summary>
 /// A class representing the function handler for the London Travel Amazon Alexa skill.
 /// </summary>
-internal sealed class FunctionHandler
+/// <remarks>
+/// Initializes a new instance of the <see cref="FunctionHandler"/> class.
+/// </remarks>
+/// <param name="skill">The <see cref="AlexaSkill"/> to use.</param>
+/// <param name="config">The <see cref="SkillConfiguration"/> to use.</param>
+internal sealed class FunctionHandler(AlexaSkill skill, SkillConfiguration config)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="FunctionHandler"/> class.
-    /// </summary>
-    /// <param name="skill">The <see cref="AlexaSkill"/> to use.</param>
-    /// <param name="config">The <see cref="SkillConfiguration"/> to use.</param>
-    public FunctionHandler(AlexaSkill skill, SkillConfiguration config)
-    {
-        Config = config;
-        Skill = skill;
-    }
-
-    /// <summary>
-    /// Gets the <see cref="SkillConfiguration"/> to use.
-    /// </summary>
-    private SkillConfiguration Config { get; }
-
-    /// <summary>
-    /// Gets the <see cref="AlexaSkill"/> to use.
-    /// </summary>
-    private AlexaSkill Skill { get; }
-
     /// <summary>
     /// Handles a request to the skill as an asynchronous operation.
     /// </summary>
@@ -69,30 +53,30 @@ internal sealed class FunctionHandler
         {
             if (request.Request is LaunchRequest)
             {
-                return Skill.OnLaunch(request.Session);
+                return skill.OnLaunch(request.Session);
             }
             else if (request.Request is IntentRequest intent)
             {
-                return await Skill.OnIntentAsync(intent.Intent, request.Session);
+                return await skill.OnIntentAsync(intent.Intent, request.Session);
             }
             else if (request.Request is SessionEndedRequest)
             {
-                return Skill.OnSessionEnded(request.Session);
+                return skill.OnSessionEnded(request.Session);
             }
             else if (request.Request is SystemExceptionRequest error)
             {
-                return Skill.OnError(error, request.Session);
+                return skill.OnError(error, request.Session);
             }
             else
             {
-                return Skill.OnError(null as Exception, request.Session);
+                return skill.OnError(null as Exception, request.Session);
             }
         }
 #pragma warning disable CA1031
         catch (Exception ex)
 #pragma warning restore CA1031
         {
-            return Skill.OnError(ex, request.Session);
+            return skill.OnError(ex, request.Session);
         }
     }
 
@@ -111,9 +95,7 @@ internal sealed class FunctionHandler
         {
             CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(request.Request.Locale ?? "en-GB");
         }
-#pragma warning disable CA1031
         catch (ArgumentException)
-#pragma warning restore CA1031
         {
             // Ignore invalid/unknown cultures
         }
@@ -127,13 +109,13 @@ internal sealed class FunctionHandler
     /// <param name="request">The function request.</param>
     private void VerifySkillId(SkillRequest request)
     {
-        if (Config.VerifySkillId)
+        if (config.VerifySkillId)
         {
             string applicationId = request.Session.Application.ApplicationId;
 
-            if (!string.Equals(applicationId, Config.SkillId, StringComparison.Ordinal))
+            if (!string.Equals(applicationId, config.SkillId, StringComparison.Ordinal))
             {
-                throw new InvalidOperationException($"Request application Id '{applicationId}' and configured skill Id '{Config.SkillId}' mismatch.");
+                throw new InvalidOperationException($"Request application Id '{applicationId}' and configured skill Id '{config.SkillId}' mismatch.");
             }
         }
     }

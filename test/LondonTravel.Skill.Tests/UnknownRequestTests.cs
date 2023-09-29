@@ -8,13 +8,8 @@ using Amazon.Lambda.Core;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-public class UnknownRequestTests : FunctionTests
+public class UnknownRequestTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
-    public UnknownRequestTests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Fact]
     public async Task Can_Invoke_Function()
     {

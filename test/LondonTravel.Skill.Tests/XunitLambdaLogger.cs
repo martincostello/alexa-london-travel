@@ -5,22 +5,15 @@ using Amazon.Lambda.Core;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-internal sealed class XunitLambdaLogger : ILambdaLogger
+internal sealed class XunitLambdaLogger(ITestOutputHelper outputHelper) : ILambdaLogger
 {
-    internal XunitLambdaLogger(ITestOutputHelper outputHelper)
-    {
-        OutputHelper = outputHelper;
-    }
-
-    private ITestOutputHelper OutputHelper { get; }
-
     public void Log(string message)
     {
-        OutputHelper.WriteLine(message);
+        outputHelper.WriteLine(message);
     }
 
     public void LogLine(string message)
     {
-        OutputHelper.WriteLine(message);
+        outputHelper.WriteLine(message);
     }
 }

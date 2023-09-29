@@ -80,7 +80,9 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
 
         if (slots.Length > 0)
         {
-            request.Intent.Slots = new Dictionary<string, Slot>();
+#pragma warning disable SA1010
+            request.Intent.Slots = [];
+#pragma warning restore SA1010
 
             foreach (var slot in slots)
             {
@@ -141,30 +143,19 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
         return result;
     }
 
-    private sealed class TestAlexaFunction : AlexaFunction, ITestOutputHelperAccessor
+    private sealed class TestAlexaFunction(
+        SkillConfiguration config,
+        HttpClientInterceptorOptions options,
+        ITestOutputHelper outputHelper) : AlexaFunction, ITestOutputHelperAccessor
     {
-        public TestAlexaFunction(
-            SkillConfiguration config,
-            HttpClientInterceptorOptions options,
-            ITestOutputHelper outputHelper)
-        {
-            Config = config;
-            Options = options;
-            OutputHelper = outputHelper;
-        }
-
-        public ITestOutputHelper OutputHelper { get; set; }
-
-        private SkillConfiguration Config { get; }
-
-        private HttpClientInterceptorOptions Options { get; }
+        public ITestOutputHelper OutputHelper { get; set; } = outputHelper;
 
         protected override void ConfigureServices(IServiceCollection services)
         {
             services.AddLogging((builder) => builder.AddXUnit(this));
-            services.AddSingleton(Config);
+            services.AddSingleton(config);
             services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
-                (_) => new HttpRequestInterceptionFilter(Options));
+                (_) => new HttpRequestInterceptionFilter(options));
 
             base.ConfigureServices(services);
         }
