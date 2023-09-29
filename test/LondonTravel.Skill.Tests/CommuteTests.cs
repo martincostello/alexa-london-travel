@@ -8,13 +8,8 @@ using JustEat.HttpClientInterception;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-public class CommuteTests : FunctionTests
+public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
-    public CommuteTests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Fact]
     public async Task Can_Invoke_Function_When_The_Skill_Is_Not_Linked()
     {

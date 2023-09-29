@@ -10,33 +10,17 @@ namespace MartinCostello.LondonTravel.Skill.Intents;
 /// <summary>
 /// A class that handles the disruption intent. This class cannot be inherited.
 /// </summary>
-internal sealed class DisruptionIntent : IIntent
+/// <remarks>
+/// Initializes a new instance of the <see cref="DisruptionIntent"/> class.
+/// </remarks>
+/// <param name="tflClient">The TfL API client to use.</param>
+/// <param name="config">The skill configuration to use.</param>
+internal sealed class DisruptionIntent(ITflClient tflClient, SkillConfiguration config) : IIntent
 {
     /// <summary>
     /// The supported modes of transport. This field is read-only.
     /// </summary>
     private static readonly string SupportedModes = string.Join(',', "dlr", "elizabeth-line", "overground", "tube");
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="DisruptionIntent"/> class.
-    /// </summary>
-    /// <param name="tflClient">The TfL API client to use.</param>
-    /// <param name="config">The skill configuration to use.</param>
-    public DisruptionIntent(ITflClient tflClient, SkillConfiguration config)
-    {
-        Config = config;
-        TflClient = tflClient;
-    }
-
-    /// <summary>
-    /// Gets the skill configuration.
-    /// </summary>
-    private SkillConfiguration Config { get; }
-
-    /// <summary>
-    /// Gets the TfL API client.
-    /// </summary>
-    private ITflClient TflClient { get; }
 
     /// <inheritdoc />
     public async Task<SkillResponse> RespondAsync(Intent intent, Session session)
@@ -65,10 +49,10 @@ internal sealed class DisruptionIntent : IIntent
 
     private async Task<ICollection<ServiceDisruption>> GetDisruptionAsync()
     {
-        return await TflClient.GetDisruptionAsync(
+        return await tflClient.GetDisruptionAsync(
             SupportedModes,
-            Config.TflApplicationId,
-            Config.TflApplicationKey);
+            config.TflApplicationId,
+            config.TflApplicationKey);
     }
 
     private async Task<IList<string>> GetRawDisruptionsAsync()

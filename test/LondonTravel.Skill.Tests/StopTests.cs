@@ -7,13 +7,8 @@ using Amazon.Lambda.Core;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-public class StopTests : FunctionTests
+public class StopTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
-    public StopTests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Fact]
     public async Task Can_Invoke_Function()
     {

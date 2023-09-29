@@ -8,13 +8,8 @@ using JustEat.HttpClientInterception;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-public class DisruptionTests : FunctionTests
+public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
-    public DisruptionTests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Fact]
     public async Task Can_Invoke_Function_When_There_Are_No_Disruptions()
     {

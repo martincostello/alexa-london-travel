@@ -13,49 +13,21 @@ namespace MartinCostello.LondonTravel.Skill.Intents;
 /// <summary>
 /// A class that handles the commute intent. This class cannot be inherited.
 /// </summary>
-internal sealed class CommuteIntent : IIntent
+/// <remarks>
+/// Initializes a new instance of the <see cref="CommuteIntent"/> class.
+/// </remarks>
+/// <param name="skillClient">The skill client to use.</param>
+/// <param name="tflClient">The TfL API client to use.</param>
+/// <param name="contextAccessor">The AWS Lambda context accessor to use.</param>
+/// <param name="config">The skill configuration to use.</param>
+/// <param name="logger">The logger to use.</param>
+internal sealed class CommuteIntent(
+    ISkillClient skillClient,
+    ITflClient tflClient,
+    SkillConfiguration config,
+    ILogger<CommuteIntent> logger) : IIntent
 {
     private static readonly CompositeFormat CommuteIntentPrefixFormat = CompositeFormat.Parse(Strings.CommuteIntentPrefixFormat);
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CommuteIntent"/> class.
-    /// </summary>
-    /// <param name="skillClient">The skill client to use.</param>
-    /// <param name="tflClient">The TfL API client to use.</param>
-    /// <param name="contextAccessor">The AWS Lambda context accessor to use.</param>
-    /// <param name="config">The skill configuration to use.</param>
-    /// <param name="logger">The logger to use.</param>
-    public CommuteIntent(
-        ISkillClient skillClient,
-        ITflClient tflClient,
-        SkillConfiguration config,
-        ILogger<CommuteIntent> logger)
-    {
-        Config = config;
-        Logger = logger;
-        SkillClient = skillClient;
-        TflClient = tflClient;
-    }
-
-    /// <summary>
-    /// Gets the skill configuration.
-    /// </summary>
-    private SkillConfiguration Config { get; }
-
-    /// <summary>
-    /// Gets the logger to use.
-    /// </summary>
-    private ILogger Logger { get; }
-
-    /// <summary>
-    /// Gets the skill client.
-    /// </summary>
-    private ISkillClient SkillClient { get; }
-
-    /// <summary>
-    /// Gets the TfL API client.
-    /// </summary>
-    private ITflClient TflClient { get; }
 
     /// <inheritdoc />
     public async Task<SkillResponse> RespondAsync(Intent intent, Session session)
@@ -114,7 +86,7 @@ internal sealed class CommuteIntent : IIntent
     {
         try
         {
-            SkillUserPreferences preferences = await SkillClient.GetPreferencesAsync($"Bearer {accessToken}");
+            SkillUserPreferences preferences = await skillClient.GetPreferencesAsync($"Bearer {accessToken}");
             return preferences.FavoriteLines ?? Array.Empty<string>();
         }
         catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
@@ -125,15 +97,15 @@ internal sealed class CommuteIntent : IIntent
 
     private async Task<IList<Line>> GetStatusesAsync(string ids)
     {
-        return await TflClient.GetLineStatusAsync(
+        return await tflClient.GetLineStatusAsync(
             ids,
-            Config.TflApplicationId,
-            Config.TflApplicationKey);
+            config.TflApplicationId,
+            config.TflApplicationKey);
     }
 
     private SkillResponse NoFavorites(Session session)
     {
-        Log.NoLinePreferences(Logger, session.User.UserId);
+        Log.NoLinePreferences(logger, session.User.UserId);
 
         string text = Strings.CommuteIntentNoFavorites;
 
@@ -145,7 +117,7 @@ internal sealed class CommuteIntent : IIntent
 
     private SkillResponse NotLinked(Session session)
     {
-        Log.AccountNotLinked(Logger, session.User?.UserId);
+        Log.AccountNotLinked(logger, session.User?.UserId);
 
         return SkillResponseBuilder
             .Tell(Strings.CommuteIntentAccountNotLinked)
@@ -155,7 +127,7 @@ internal sealed class CommuteIntent : IIntent
 
     private SkillResponse Unauthorized(Session session)
     {
-        Log.InvalidAccessToken(Logger, session.User.UserId, session.SessionId);
+        Log.InvalidAccessToken(logger, session.User.UserId, session.SessionId);
 
         return SkillResponseBuilder
             .Tell(Strings.CommuteIntentInvalidToken)

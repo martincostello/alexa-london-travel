@@ -8,13 +8,8 @@ using JustEat.HttpClientInterception;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-public class StatusTests : FunctionTests
+public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
-    public StatusTests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Theory]
     [InlineData("Bakerloo")]
     [InlineData("bakerloo")]

@@ -7,6 +7,8 @@ using MartinCostello.LondonTravel.Skill.Clients;
 
 namespace MartinCostello.LondonTravel.Skill.Extensions;
 
+#pragma warning disable SA1601
+
 [ExcludeFromCodeCoverage]
 [JsonSerializable(typeof(IList<Line>))]
 [JsonSerializable(typeof(IList<ServiceDisruption>))]

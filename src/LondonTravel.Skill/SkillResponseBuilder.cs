@@ -52,7 +52,7 @@ internal sealed class SkillResponseBuilder
             }
         }
 
-        var speech = new Speech(elements.ToArray());
+        var speech = new Speech([.. elements]);
 
         return new SkillResponseBuilder(speech);
     }

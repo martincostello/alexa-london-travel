@@ -71,6 +71,7 @@ internal static class Lines
         string normalized = (line ?? string.Empty).ToLowerInvariant();
 #pragma warning restore CA1308
 
+#pragma warning disable IDE0066
         switch (normalized)
         {
             case "bakerloo":
@@ -125,6 +126,7 @@ internal static class Lines
             default:
                 return null;
         }
+#pragma warning restore IDE0066
     }
 
     /// <summary>

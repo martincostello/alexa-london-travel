@@ -14,13 +14,13 @@ internal sealed class HelpIntent : IIntent
     /// <inheritdoc />
     public Task<SkillResponse> RespondAsync(Intent intent, Session session)
     {
-        string[] paragraphs = new[]
-        {
+        string[] paragraphs =
+        [
             Strings.HelpIntentParagraph1,
             Strings.HelpIntentParagraph2,
             Strings.HelpIntentParagraph3,
             Strings.HelpIntentParagraph4,
-        };
+        ];
 
         var result = SkillResponseBuilder
             .Tell(paragraphs)

@@ -10,22 +10,12 @@ namespace MartinCostello.LondonTravel.Skill;
 /// <summary>
 /// A class representing a factory for <see cref="IIntent"/> instances. This class cannot be inherited.
 /// </summary>
-internal sealed class IntentFactory
+/// <remarks>
+/// Initializes a new instance of the <see cref="IntentFactory"/> class.
+/// </remarks>
+/// <param name="serviceProvider">The <see cref="IServiceProvider"/> to use.</param>
+internal sealed class IntentFactory(IServiceProvider serviceProvider)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="IntentFactory"/> class.
-    /// </summary>
-    /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to use.</param>
-    public IntentFactory(IServiceProvider serviceProvider)
-    {
-        ServiceProvider = serviceProvider;
-    }
-
-    /// <summary>
-    /// Gets the <see cref="IServiceProvider"/> to use.
-    /// </summary>
-    private IServiceProvider ServiceProvider { get; }
-
     /// <summary>
     /// Creates an intent responder for the specified intent.
     /// </summary>
@@ -35,26 +25,14 @@ internal sealed class IntentFactory
     /// </returns>
     public IIntent Create(Intent intent)
     {
-        switch (intent.Name)
+        return intent.Name switch
         {
-            case "AMAZON.CancelIntent":
-            case "AMAZON.StopIntent":
-                return ServiceProvider.GetRequiredService<EmptyIntent>();
-
-            case "AMAZON.HelpIntent":
-                return ServiceProvider.GetRequiredService<HelpIntent>();
-
-            case "CommuteIntent":
-                return ServiceProvider.GetRequiredService<CommuteIntent>();
-
-            case "DisruptionIntent":
-                return ServiceProvider.GetRequiredService<DisruptionIntent>();
-
-            case "StatusIntent":
-                return ServiceProvider.GetRequiredService<StatusIntent>();
-
-            default:
-                return ServiceProvider.GetRequiredService<UnknownIntent>();
-        }
+            "AMAZON.CancelIntent" or "AMAZON.StopIntent" => serviceProvider.GetRequiredService<EmptyIntent>(),
+            "AMAZON.HelpIntent" => serviceProvider.GetRequiredService<HelpIntent>(),
+            "CommuteIntent" => serviceProvider.GetRequiredService<CommuteIntent>(),
+            "DisruptionIntent" => serviceProvider.GetRequiredService<DisruptionIntent>(),
+            "StatusIntent" => serviceProvider.GetRequiredService<StatusIntent>(),
+            _ => serviceProvider.GetRequiredService<UnknownIntent>(),
+        };
     }
 }

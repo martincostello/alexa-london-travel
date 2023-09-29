@@ -10,26 +10,16 @@ namespace MartinCostello.LondonTravel.Skill.Intents;
 /// <summary>
 /// A class that handles an unknown intent. This class cannot be inherited.
 /// </summary>
-internal sealed class UnknownIntent : IIntent
+/// <remarks>
+/// Initializes a new instance of the <see cref="UnknownIntent"/> class.
+/// </remarks>
+/// <param name="logger">The logger to use.</param>
+internal sealed class UnknownIntent(ILogger<UnknownIntent> logger) : IIntent
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="UnknownIntent"/> class.
-    /// </summary>
-    /// <param name="logger">The logger to use.</param>
-    public UnknownIntent(ILogger<UnknownIntent> logger)
-    {
-        Logger = logger;
-    }
-
-    /// <summary>
-    /// Gets the logger to use.
-    /// </summary>
-    private ILogger Logger { get; }
-
     /// <inheritdoc />
     public Task<SkillResponse> RespondAsync(Intent intent, Session session)
     {
-        Log.UnknownIntent(Logger, intent.Name, session.SessionId);
+        Log.UnknownIntent(logger, intent.Name, session.SessionId);
 
         var response = SkillResponseBuilder
             .Tell(Strings.UnknownCommand)

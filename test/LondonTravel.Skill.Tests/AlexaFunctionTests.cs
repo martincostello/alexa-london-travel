@@ -8,13 +8,8 @@ using Amazon.Lambda.Core;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-public class AlexaFunctionTests : FunctionTests
+public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
-    public AlexaFunctionTests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Fact]
     public async Task Cannot_Invoke_Function_If_Application_Id_Incorrect()
     {
