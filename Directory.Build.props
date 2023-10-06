@@ -5,6 +5,7 @@
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <Authors>martin_costello</Authors>
+    <ChecksumAlgorithm>SHA256</ChecksumAlgorithm>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)LondonTravel.Skill.ruleset</CodeAnalysisRuleSet>
     <Company>https://github.com/martincostello/alexa-london-travel</Company>
     <ContinuousIntegrationBuild Condition=" '$(CI)' != '' ">true</ContinuousIntegrationBuild>
