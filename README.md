@@ -43,4 +43,3 @@ The London Travel skill is copyright (&copy;) Martin Costello 2017.
 Amazon Alexa is a trademark of Amazon.com, Inc.
 
 The TfL roundel is a trademark of Transport for London (TfL).
-
