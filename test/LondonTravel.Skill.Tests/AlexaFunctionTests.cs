@@ -23,7 +23,7 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
 
         // Act
         InvalidOperationException exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await function.HandlerAsync(request, context));
+            () => function.HandlerAsync(request, context));
 
         // Assert
         exception.Message.ShouldBe("Request application Id 'not-my-skill-id' and configured skill Id 'my-skill-id' mismatch.");
