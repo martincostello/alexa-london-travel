@@ -114,7 +114,6 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         });
 
         services.AddHttpClients();
-        services.AddPolly();
 
         services.TryAddSingleton((_) => SkillConfiguration.CreateDefaultConfiguration());
 

@@ -5,8 +5,6 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using Polly;
-using Polly.Registry;
 
 namespace MartinCostello.LondonTravel.Skill.Extensions;
 
@@ -31,8 +29,7 @@ internal static class IHttpClientBuilderExtensions
     {
         return builder
             .ConfigurePrimaryHttpMessageHandler(CreatePrimaryHttpHandler)
-            .ConfigureHttpClient(ApplyDefaultConfiguration)
-            .AddPolicyHandlerFromRegistry(GetRequestPolicy);
+            .ConfigureHttpClient(ApplyDefaultConfiguration);
     }
 
     /// <summary>
@@ -43,21 +40,6 @@ internal static class IHttpClientBuilderExtensions
     {
         client.DefaultRequestHeaders.UserAgent.Add(_userAgent.Value);
         client.Timeout = TimeSpan.FromSeconds(5);
-    }
-
-    /// <summary>
-    /// Creates a policy to use for an HTTP request.
-    /// </summary>
-    /// <param name="registry">The policy registry to use.</param>
-    /// <param name="request">The HTTP request to get the policy for.</param>
-    /// <returns>
-    /// The policy to use for <paramref name="request"/>.
-    /// </returns>
-    private static IAsyncPolicy<HttpResponseMessage> GetRequestPolicy(
-        IReadOnlyPolicyRegistry<string> registry,
-        HttpRequestMessage request)
-    {
-        return registry.Get<IAsyncPolicy<HttpResponseMessage>>("ReadPolicy");
     }
 
     /// <summary>

@@ -4,6 +4,7 @@
 using System.Text.Json;
 using MartinCostello.LondonTravel.Skill.Clients;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Options;
 using Refit;
 
@@ -25,17 +26,20 @@ internal static class HttpServiceCollectionExtensions
     {
         services
             .AddHttpClient(Options.DefaultName)
-            .ApplyDefaultConfiguration();
+            .ApplyDefaultConfiguration()
+            .AddStandardResilienceHandler();
 
         services
             .AddHttpClient(nameof(ISkillClient))
             .AddTypedClient(AddSkill)
-            .ApplyDefaultConfiguration();
+            .ApplyDefaultConfiguration()
+            .AddStandardResilienceHandler();
 
         services
             .AddHttpClient(nameof(ITflClient))
             .AddTypedClient(AddTfl)
-            .ApplyDefaultConfiguration();
+            .ApplyDefaultConfiguration()
+            .AddStandardResilienceHandler();
 
         services.AddSingleton(CreateJsonSerializerOptions);
 
