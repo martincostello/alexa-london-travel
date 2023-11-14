@@ -233,7 +233,7 @@ jobs:
       LAMBDA_HANDLER: 'LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunctionHandler::HandleAsync'
       LAMBDA_MEMORY: 256
       LAMBDA_ROLE: ${{ vars.AWS_LAMBDA_ROLE }}
-      LAMBDA_RUNTIME: 'provided.al2'
+      LAMBDA_RUNTIME: 'provided.al2023'
       LAMBDA_TIMEOUT: 10
 
     environment:
