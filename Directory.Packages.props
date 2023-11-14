@@ -20,9 +20,6 @@
     <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.0-rc.2.23479.6" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="8.0.0-rc.2.23510.2" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0-rc.2.23479.6" />
-    <!--
-      HACK Workaround for https://github.com/aws/aws-lambda-dotnet/issues/920
-    -->
     <PackageVersion Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageVersion Include="Polly.Core" Version="$(PollyVersion)" />
