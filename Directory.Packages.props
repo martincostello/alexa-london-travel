@@ -26,7 +26,7 @@
     <PackageVersion Include="Polly.Extensions" Version="$(PollyVersion)" />
     <PackageVersion Include="Polly.RateLimiting" Version="$(PollyVersion)" />
     <PackageVersion Include="Refit" Version="7.0.0" />
-    <PackageVersion Include="ReportGenerator" Version="5.1.26" />
+    <PackageVersion Include="ReportGenerator" Version="5.2.0" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.507" />
     <PackageVersion Include="System.Text.Json" Version="8.0.0" />
