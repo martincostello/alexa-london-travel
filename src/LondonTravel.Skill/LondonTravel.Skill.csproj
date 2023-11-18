@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AWSProjectType>Lambda</AWSProjectType>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <NoWarn>$(NoWarn);CA1822;EXTEXP0003</NoWarn>
+    <NoWarn>$(NoWarn);CA1822</NoWarn>
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>net8.0</TargetFramework>
