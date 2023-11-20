@@ -6,7 +6,6 @@ using Alexa.NET.Request;
 using Alexa.NET.Response;
 using MartinCostello.LondonTravel.Skill.Clients;
 using Microsoft.Extensions.Logging;
-using Refit;
 
 namespace MartinCostello.LondonTravel.Skill.Intents;
 
@@ -22,8 +21,8 @@ namespace MartinCostello.LondonTravel.Skill.Intents;
 /// <param name="config">The skill configuration to use.</param>
 /// <param name="logger">The logger to use.</param>
 internal sealed class CommuteIntent(
-    ISkillClient skillClient,
-    ITflClient tflClient,
+    SkillClient skillClient,
+    TflClient tflClient,
     SkillConfiguration config,
     ILogger<CommuteIntent> logger) : IIntent
 {
@@ -86,10 +85,10 @@ internal sealed class CommuteIntent(
     {
         try
         {
-            SkillUserPreferences preferences = await skillClient.GetPreferencesAsync($"Bearer {accessToken}");
+            SkillUserPreferences preferences = await skillClient.GetPreferencesAsync(accessToken);
             return preferences.FavoriteLines ?? Array.Empty<string>();
         }
-        catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
         {
             return null;
         }

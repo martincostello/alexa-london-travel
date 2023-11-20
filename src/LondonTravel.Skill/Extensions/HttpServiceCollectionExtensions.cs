@@ -1,12 +1,9 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Text.Json;
 using MartinCostello.LondonTravel.Skill.Clients;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Options;
-using Refit;
 
 namespace MartinCostello.LondonTravel.Skill.Extensions;
 
@@ -30,98 +27,19 @@ internal static class HttpServiceCollectionExtensions
             .AddStandardResilienceHandler();
 
         services
-            .AddHttpClient(nameof(ISkillClient))
-            .AddTypedClient(AddSkill)
+            .AddHttpClient<SkillClient>((provider, client) =>
+            {
+                var config = provider.GetRequiredService<SkillConfiguration>();
+                client.BaseAddress = new Uri(config.SkillApiUrl, UriKind.Absolute);
+            })
             .ApplyDefaultConfiguration()
             .AddStandardResilienceHandler();
 
         services
-            .AddHttpClient(nameof(ITflClient))
-            .AddTypedClient(AddTfl)
+            .AddHttpClient<TflClient>((p) => p.BaseAddress = new Uri("https://api.tfl.gov.uk/", UriKind.Absolute))
             .ApplyDefaultConfiguration()
             .AddStandardResilienceHandler();
 
-        services.AddSingleton(CreateJsonSerializerOptions);
-
-        services.AddSingleton<IHttpContentSerializer>((p) =>
-        {
-            var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
-            options.TypeInfoResolverChain.Add(ApplicationJsonSerializerContext.Default);
-
-            return new SystemTextJsonContentSerializer(options);
-        });
-
-        services.AddTransient(CreateRefitSettings);
-
         return services;
-    }
-
-    /// <summary>
-    /// Adds a typed client for the skill's API.
-    /// </summary>
-    /// <param name="client">The <see cref="HttpClient"/> to configure the client with.</param>
-    /// <param name="provider">The <see cref="IServiceProvider"/> to use.</param>
-    /// <returns>
-    /// The <see cref="ISkillClient"/> to use.
-    /// </returns>
-    private static ISkillClient AddSkill(HttpClient client, IServiceProvider provider)
-    {
-        var config = provider.GetRequiredService<SkillConfiguration>();
-        var settings = provider.GetRequiredService<RefitSettings>();
-
-        client.BaseAddress = new Uri(config.SkillApiUrl, UriKind.Absolute);
-
-        return RestService.For<ISkillClient>(client, settings);
-    }
-
-    /// <summary>
-    /// Adds a typed client for the TfL API.
-    /// </summary>
-    /// <param name="client">The <see cref="HttpClient"/> to configure the client with.</param>
-    /// <param name="provider">The <see cref="IServiceProvider"/> to use.</param>
-    /// <returns>
-    /// The <see cref="ITflClient"/> to use.
-    /// </returns>
-    private static ITflClient AddTfl(HttpClient client, IServiceProvider provider)
-    {
-        var settings = provider.GetRequiredService<RefitSettings>();
-
-        client.BaseAddress = new Uri("https://api.tfl.gov.uk/", UriKind.Absolute);
-
-        return RestService.For<ITflClient>(client, settings);
-    }
-
-    /// <summary>
-    /// Creates an instance of <see cref="JsonSerializerOptions"/>.
-    /// </summary>
-    /// <param name="provider">The <see cref="IServiceProvider"/> to use.</param>
-    /// <returns>
-    /// The created instance of <see cref="JsonSerializerOptions"/>.
-    /// </returns>
-    private static JsonSerializerOptions CreateJsonSerializerOptions(IServiceProvider provider)
-    {
-        return new JsonSerializerOptions()
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        };
-    }
-
-    /// <summary>
-    /// Creates an instance of <see cref="RefitSettings"/>.
-    /// </summary>
-    /// <param name="provider">The <see cref="IServiceProvider"/> to use.</param>
-    /// <returns>
-    /// The created instance of <see cref="RefitSettings"/>.
-    /// </returns>
-    private static RefitSettings CreateRefitSettings(IServiceProvider provider)
-    {
-        var contentSerializer = provider.GetRequiredService<IHttpContentSerializer>();
-        var messageHandlerFactory = provider.GetRequiredService<IHttpMessageHandlerFactory>();
-
-        return new RefitSettings()
-        {
-            ContentSerializer = provider.GetRequiredService<IHttpContentSerializer>(),
-            HttpMessageHandlerFactory = messageHandlerFactory.CreateHandler,
-        };
     }
 }

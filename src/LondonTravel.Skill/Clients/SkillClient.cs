@@ -1,14 +1,14 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using Refit;
+using System.Net.Http.Json;
 
 namespace MartinCostello.LondonTravel.Skill.Clients;
 
 /// <summary>
 /// Defines the client for the skill's API.
 /// </summary>
-internal interface ISkillClient
+internal sealed class SkillClient(HttpClient httpClient)
 {
     /// <summary>
     /// Get the current user's preferences from the skill's API as an asynchronous operation.
@@ -18,8 +18,11 @@ internal interface ISkillClient
     /// <returns>
     /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the current user's preferences from the skill API.
     /// </returns>
-    [Get("/api/preferences")]
-    Task<SkillUserPreferences> GetPreferencesAsync(
-        [Header("Authorization")] string authorization,
-        CancellationToken cancellationToken = default);
+    public async Task<SkillUserPreferences> GetPreferencesAsync(
+        string authorization,
+        CancellationToken cancellationToken = default)
+    {
+        httpClient.DefaultRequestHeaders.Authorization = new("Bearer", authorization);
+        return await httpClient.GetFromJsonAsync("/api/preferences", AppJsonSerializerContext.Default.SkillUserPreferences, cancellationToken);
+    }
 }
