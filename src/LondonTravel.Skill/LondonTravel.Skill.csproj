@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AWSProjectType>Lambda</AWSProjectType>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -15,6 +15,7 @@
     <PackageReference Include="Amazon.Lambda.RuntimeSupport" />
     <PackageReference Include="Amazon.Lambda.Serialization.Json" />
     <PackageReference Include="Microsoft.ApplicationInsights" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
@@ -22,7 +23,6 @@
     <PackageReference Include="Polly.Core" />
     <PackageReference Include="Polly.Extensions" />
     <PackageReference Include="Polly.RateLimiting" />
-    <PackageReference Include="Refit" />
     <PackageReference Include="System.Text.Json" />
   </ItemGroup>
   <ItemGroup>

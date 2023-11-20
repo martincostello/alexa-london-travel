@@ -16,6 +16,7 @@
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.8.0" />
     <PackageVersion Include="Microsoft.ApplicationInsights" Version="2.21.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="8.0.0" />
@@ -25,7 +26,6 @@
     <PackageVersion Include="Polly.Core" Version="$(PollyVersion)" />
     <PackageVersion Include="Polly.Extensions" Version="$(PollyVersion)" />
     <PackageVersion Include="Polly.RateLimiting" Version="$(PollyVersion)" />
-    <PackageVersion Include="Refit" Version="7.0.0" />
     <PackageVersion Include="ReportGenerator" Version="5.2.0" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.507" />

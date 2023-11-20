@@ -15,7 +15,7 @@ namespace MartinCostello.LondonTravel.Skill.Intents;
 /// </remarks>
 /// <param name="tflClient">The TfL API client to use.</param>
 /// <param name="config">The skill configuration to use.</param>
-internal sealed class DisruptionIntent(ITflClient tflClient, SkillConfiguration config) : IIntent
+internal sealed class DisruptionIntent(TflClient tflClient, SkillConfiguration config) : IIntent
 {
     /// <summary>
     /// The supported modes of transport. This field is read-only.
