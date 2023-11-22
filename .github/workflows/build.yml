@@ -28,7 +28,7 @@ env:
   LAMBDA_DESCRIPTION: 'Deploy build ${{ github.run_number }} to AWS Lambda via GitHub Actions'
   LAMBDA_FUNCTION: 'alexa-london-travel'
   LAMBDA_HANDLER: 'LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunctionHandler::HandleAsync'
-  LAMBDA_MEMORY: 256
+  LAMBDA_MEMORY: 128
   LAMBDA_ROLE: ${{ vars.AWS_LAMBDA_ROLE }}
   LAMBDA_RUNTIME: 'provided.al2023'
   LAMBDA_TIMEOUT: 10
