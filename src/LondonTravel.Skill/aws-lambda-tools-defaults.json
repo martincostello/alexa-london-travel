@@ -4,7 +4,7 @@
   "configuration": "Release",
   "framework": "net8.0",
   "function-runtime": "provided.al2023",
-  "function-memory-size": 128,
+  "function-memory-size": 192,
   "function-timeout": 10,
   "function-handler": "LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunctionHandler::HandleAsync"
 }
