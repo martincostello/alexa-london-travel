@@ -1,0 +1,15 @@
+﻿{
+  Version: 1.0,
+  Response: {
+    OutputSpeech: {
+      Type: SSML,
+      Ssml: <speak>Saturday 19 and Sunday 20 October, no service between Hammersmith / Wimbledon / Kensington Olympia and South Kensington / Edgware Road. Replacement buses operate.</speak>
+    },
+    Card: {
+      Type: Standard,
+      Title: Your Commute,
+      Content: Saturday 19 and Sunday 20 October, no service between Hammersmith / Wimbledon / Kensington Olympia and South Kensington / Edgware Road. Replacement buses operate.
+    },
+    ShouldEndSession: true
+  }
+}

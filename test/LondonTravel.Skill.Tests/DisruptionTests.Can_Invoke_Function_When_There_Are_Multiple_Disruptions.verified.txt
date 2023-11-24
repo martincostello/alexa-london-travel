@@ -1,0 +1,19 @@
+﻿{
+  Version: 1.0,
+  Response: {
+    OutputSpeech: {
+      Type: SSML,
+      Ssml: <speak><p>Circle Line: There are minor delays on the Circle Line.</p><p>District Line: There are severe delays on the District Line.</p><p>Elizabeth line: There are minor delays on the Elizabeth line.</p><p>Hammersmith and City Line: There are minor delays on the Hammersmith and City Line.</p><p>There is a good service on all other lines.</p></speak>
+    },
+    Card: {
+      Type: Standard,
+      Title: Disruption Summary,
+      Content:
+Circle Line: There are minor delays on the Circle Line.
+District Line: There are severe delays on the District Line.
+Elizabeth line: There are minor delays on the Elizabeth line.
+Hammersmith & City Line: There are minor delays on the Hammersmith & City Line.
+    },
+    ShouldEndSession: true
+  }
+}

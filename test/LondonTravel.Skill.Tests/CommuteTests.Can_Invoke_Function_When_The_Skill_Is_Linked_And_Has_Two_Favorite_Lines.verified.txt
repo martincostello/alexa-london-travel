@@ -1,0 +1,17 @@
+﻿{
+  Version: 1.0,
+  Response: {
+    OutputSpeech: {
+      Type: SSML,
+      Ssml: <speak><p>Northern Line: There is a good service on the Northern line.</p><p>Victoria Line: There is a good service on the Victoria line.</p></speak>
+    },
+    Card: {
+      Type: Standard,
+      Title: Your Commute,
+      Content:
+Northern Line: There is a good service on the Northern line.
+Victoria Line: There is a good service on the Victoria line.
+    },
+    ShouldEndSession: true
+  }
+}

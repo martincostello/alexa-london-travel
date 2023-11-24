@@ -7,8 +7,26 @@ using JustEat.HttpClientInterception;
 
 namespace MartinCostello.LondonTravel.Skill;
 
+[UsesVerify]
 public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
+    [Fact]
+    public async Task Can_Invoke_Function_For_Valid_Line()
+    {
+        // Arrange
+        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-line-statuses.json"));
+
+        AlexaFunction function = await CreateFunctionAsync();
+        SkillRequest request = CreateIntentForLine("northern");
+        ILambdaContext context = CreateContext();
+
+        // Act
+        SkillResponse actual = await function.HandlerAsync(request, context);
+
+        // Assert
+        await Verify(actual);
+    }
+
     [Theory]
     [InlineData("Bakerloo")]
     [InlineData("bakerloo")]
@@ -42,7 +60,7 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
     [InlineData("Waterloo")]
     [InlineData("Waterloo & City")]
     [InlineData("Waterloo and City")]
-    public async Task Can_Invoke_Function_For_Valid_Line(string id)
+    public async Task Can_Invoke_Function_For_Valid_Lines(string id)
     {
         // Arrange
         await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-line-statuses.json"));
@@ -104,6 +122,8 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
         SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
+        await Verify(actual);
+
         ResponseBody response = AssertResponse(actual);
 
         response.Card.ShouldBeNull();

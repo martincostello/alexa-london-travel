@@ -1,0 +1,13 @@
+﻿{
+  Version: 1.0,
+  Response: {
+    OutputSpeech: {
+      Type: SSML,
+      Ssml: <speak>You need to link your account to be able to ask me about your commute.</speak>
+    },
+    Card: {
+      Type: LinkAccount
+    },
+    ShouldEndSession: true
+  }
+}

@@ -1,0 +1,15 @@
+﻿{
+  Version: 1.0,
+  Response: {
+    OutputSpeech: {
+      Type: SSML,
+      Ssml: <speak>There is currently no disruption on the tube, London Overground, the D.L.R. or the Elizabeth line.</speak>
+    },
+    Card: {
+      Type: Standard,
+      Title: Disruption Summary,
+      Content: There is currently no disruption on the tube, London Overground, the DLR or the Elizabeth line.
+    },
+    ShouldEndSession: true
+  }
+}

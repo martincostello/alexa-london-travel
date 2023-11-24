@@ -7,6 +7,7 @@ using JustEat.HttpClientInterception;
 
 namespace MartinCostello.LondonTravel.Skill;
 
+[UsesVerify]
 public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
     [Fact]
@@ -22,6 +23,8 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
         SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
+        await Verify(actual);
+
         AssertResponse(
             actual,
             "<speak>There is currently no disruption on the tube, London Overground, the D.L.R. or the Elizabeth line.</speak>",
@@ -41,6 +44,8 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
         SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
+        await Verify(actual);
+
         AssertResponse(
             actual,
             "<speak><p>There are severe delays on the District Line.</p><p>There is a good service on all other lines.</p></speak>",
@@ -60,6 +65,8 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
         SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
+        await Verify(actual);
+
         AssertResponse(
             actual,
             "<speak><p>Circle Line: There are minor delays on the Circle Line.</p><p>District Line: There are severe delays on the District Line.</p><p>Elizabeth line: There are minor delays on the Elizabeth line.</p><p>Hammersmith and City Line: There are minor delays on the Hammersmith and City Line.</p><p>There is a good service on all other lines.</p></speak>",
@@ -77,6 +84,8 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
         SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
+        await Verify(actual);
+
         ResponseBody response = AssertResponse(actual);
 
         response.Card.ShouldBeNull();

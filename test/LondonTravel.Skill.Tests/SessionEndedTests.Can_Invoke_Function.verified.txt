@@ -1,0 +1,10 @@
+﻿{
+  Version: 1.0,
+  Response: {
+    OutputSpeech: {
+      Type: SSML,
+      Ssml: <speak>Goodbye.</speak>
+    },
+    ShouldEndSession: true
+  }
+}

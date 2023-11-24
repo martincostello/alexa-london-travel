@@ -6,6 +6,7 @@ using Alexa.NET.Response;
 
 namespace MartinCostello.LondonTravel.Skill;
 
+[UsesVerify]
 public class CancelTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
     [Fact]
@@ -20,6 +21,8 @@ public class CancelTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
         SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
+        await Verify(actual);
+
         ResponseBody response = AssertResponse(actual);
 
         response.Card.ShouldBeNull();

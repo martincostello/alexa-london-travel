@@ -1,0 +1,15 @@
+﻿{
+  Version: 1.0,
+  Response: {
+    OutputSpeech: {
+      Type: SSML,
+      Ssml: <speak>There is a good service on the Northern line.</speak>
+    },
+    Card: {
+      Type: Standard,
+      Title: Northern Line Status,
+      Content: There is a good service on the Northern line.
+    },
+    ShouldEndSession: true
+  }
+}

@@ -7,6 +7,7 @@ using JustEat.HttpClientInterception;
 
 namespace MartinCostello.LondonTravel.Skill;
 
+[UsesVerify]
 public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
     [Fact]
@@ -20,6 +21,8 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
         SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
+        await Verify(actual);
+
         ResponseBody response = AssertResponse(actual);
 
         response.Card.ShouldNotBeNull();
@@ -47,6 +50,8 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
         SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
+        await Verify(actual);
+
         ResponseBody response = AssertResponse(actual);
 
         response.Card.ShouldNotBeNull();
@@ -72,6 +77,8 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
         SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
+        await Verify(actual);
+
         ResponseBody response = AssertResponse(actual);
 
         response.Card.ShouldBeNull();
@@ -98,6 +105,8 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
         SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
+        await Verify(actual);
+
         AssertResponse(
             actual,
             "<speak>You have not selected any favourite lines yet. Visit the London Travel website to set your preferences.</speak>",
@@ -118,6 +127,8 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
         SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
+        await Verify(actual);
+
         AssertResponse(
             actual,
             "<speak>Saturday 19 and Sunday 20 October, no service between Hammersmith / Wimbledon / Kensington Olympia and South Kensington / Edgware Road. Replacement buses operate.</speak>",
@@ -138,6 +149,8 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
         SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
+        await Verify(actual);
+
         AssertResponse(
             actual,
             "<speak><p>Northern Line: There is a good service on the Northern line.</p><p>Victoria Line: There is a good service on the Victoria line.</p></speak>",
