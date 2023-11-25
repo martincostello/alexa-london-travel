@@ -27,6 +27,7 @@ jobs:
       comment-id: ${{ steps.post-comment.outputs.result }}
       environment-name: ${{ steps.set-outputs.outputs.environment-name }}
       environment-url: ${{ steps.set-outputs.outputs.environment-url }}
+      function-architectures: ${{ steps.set-outputs.outputs.function-architectures }}
       function-description: ${{ steps.set-outputs.outputs.function-description }}
       function-name: ${{ steps.set-outputs.outputs.function-name }}
       ref: ${{ steps.set-outputs.outputs.ref }}
@@ -171,9 +172,12 @@ jobs:
 
     - name: Set outputs
       id: set-outputs
+      env:
+        LAMBDA_ARCHITECTURES_FILE: '${{ steps.extract-artifact.outputs.lambda-artifact-path }}/LAMBDA_ARCHITECTURES'
       run: |
         environment_name="${{ steps.get-environment-name.outputs.result }}"
         environment_url="${{ github.server_url }}/${{ github.repository }}/deployments/${environment_name}"
+        function_architectures="$(cat ${LAMBDA_ARCHITECTURES_FILE})"
         function_description="Deploy build ${{ steps.download-artifact.outputs.run-number }} to AWS Lambda via GitHub Actions"
         ref="${{ steps.download-artifact.outputs.ref }}"
         workflow_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
@@ -188,6 +192,7 @@ jobs:
         {
           echo "environment-name=${environment_name}"
           echo "environment-url=${environment_url}"
+          echo "function-architectures=${function_architectures}"
           echo "function-description=${function_description}"
           echo "function-name=${function_name}"
           echo "ref=${ref}"
@@ -228,7 +233,7 @@ jobs:
 
     env:
       FUNCTION_NAME: ${{ needs.setup.outputs.function-name }}
-      LAMBDA_ARCHITECTURES: 'arm64'
+      LAMBDA_ARCHITECTURES: ${{ needs.setup.outputs.function-function-architectures }}
       LAMBDA_DESCRIPTION: ${{ needs.setup.outputs.function-description }}
       LAMBDA_HANDLER: 'LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunctionHandler::HandleAsync'
       LAMBDA_MEMORY: 192
