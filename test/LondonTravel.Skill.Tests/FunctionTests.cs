@@ -1,11 +1,9 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using Alexa.NET.Request;
-using Alexa.NET.Request.Type;
-using Alexa.NET.Response;
 using JustEat.HttpClientInterception;
 using MartinCostello.Logging.XUnit;
+using MartinCostello.LondonTravel.Skill.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Http;
@@ -86,10 +84,6 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
         {
             Context = new()
             {
-                AudioPlayer = new()
-                {
-                    PlayerActivity = "IDLE",
-                },
                 System = new()
                 {
                     Application = application,

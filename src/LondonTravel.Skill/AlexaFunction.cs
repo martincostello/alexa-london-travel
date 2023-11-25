@@ -1,10 +1,9 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using Alexa.NET.Request;
-using Alexa.NET.Response;
 using MartinCostello.LondonTravel.Skill.Extensions;
 using MartinCostello.LondonTravel.Skill.Intents;
+using MartinCostello.LondonTravel.Skill.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -79,7 +78,11 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
 
         Log.InvokingSkillRequest(logger, request.Request.Type);
 
-        return await handler.HandleAsync(request);
+        var converted = request.FromModel();
+
+        var response = await handler.HandleAsync(converted);
+
+        return response.ToModel();
     }
 
     /// <summary>

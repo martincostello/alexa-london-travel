@@ -8,7 +8,7 @@ namespace MartinCostello.LondonTravel.Skill.Clients;
 /// <summary>
 /// A class representing a line's status. This class cannot be inherited.
 /// </summary>
-internal sealed class LineStatus
+public sealed class LineStatus
 {
     /// <summary>
     /// Gets or sets the status severity.

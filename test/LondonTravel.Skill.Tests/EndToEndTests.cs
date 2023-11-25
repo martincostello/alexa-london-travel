@@ -1,26 +1,121 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using Alexa.NET.Request;
-using Alexa.NET.Request.Type;
-using Alexa.NET.Response;
+using System.Text.Json;
+using MartinCostello.LondonTravel.Skill.Models;
 using MartinCostello.Testing.AwsLambdaTestServer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace MartinCostello.LondonTravel.Skill;
 
 public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
     [xRetry.RetryFact]
-    public async Task Alexa_Function_Can_Process_Request()
+    public async Task Alexa_Function_Can_Process_Intent_Request()
+    {
+        // Arrange
+        var intent = new IntentRequest()
+        {
+            Intent = new() { Name = "AMAZON.CancelIntent" },
+        };
+
+        SkillRequest request = CreateRequest(intent);
+
+        // Act
+        var actual = await ProcessRequestAsync(request);
+
+        // Assert
+        ResponseBody response = AssertResponse(actual);
+
+        response.Card.ShouldBeNull();
+        response.OutputSpeech.ShouldBeNull();
+        response.Reprompt.ShouldBeNull();
+    }
+
+    [xRetry.RetryFact]
+    public async Task Alexa_Function_Can_Process_Launch_Request()
     {
         // Arrange
         SkillRequest request = CreateRequest<LaunchRequest>();
-        request.Request.Type = "LaunchRequest";
 
-        string json = JsonConvert.SerializeObject(request);
+        // Act
+        var actual = await ProcessRequestAsync(request);
+
+        // Assert
+        ResponseBody response = AssertResponse(actual, shouldEndSession: false);
+
+        response.Card.ShouldBeNull();
+        response.Reprompt.ShouldBeNull();
+
+        response.OutputSpeech.ShouldNotBeNull();
+        response.OutputSpeech.Type.ShouldBe("SSML");
+
+        var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
+        ssml.Ssml.ShouldBe("<speak>Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground, the D.L.R. or the Elizabeth line.</speak>");
+    }
+
+    [xRetry.RetryFact]
+    public async Task Alexa_Function_Can_Process_Session_Ended_Request()
+    {
+        // Arrange
+        SkillRequest request = CreateRequest<SessionEndedRequest>();
+
+        // Act
+        var actual = await ProcessRequestAsync(request);
+
+        ResponseBody response = AssertResponse(actual);
+
+        // Assert
+        response.Card.ShouldBeNull();
+        response.Reprompt.ShouldBeNull();
+
+        response.OutputSpeech.ShouldNotBeNull();
+        response.OutputSpeech.Type.ShouldBe("SSML");
+
+        var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
+        ssml.Ssml.ShouldBe("<speak>Goodbye.</speak>");
+    }
+
+    [xRetry.RetryFact]
+    public async Task Alexa_Function_Can_Process_System_Exception_Request()
+    {
+        // Arrange
+        var exception = new SystemExceptionRequest()
+        {
+            Error = new()
+            {
+                Message = "An unknown error occurred.",
+                Type = AlexaErrorType.InternalServerError,
+            },
+            ErrorCause = new()
+            {
+                RequestId = "amzn1.echo-api.request.1234",
+            },
+        };
+
+        SkillRequest request = CreateRequest(exception);
+
+        // Act
+        var actual = await ProcessRequestAsync(request);
+
+        ResponseBody response = AssertResponse(actual);
+
+        // Assert
+        response.Card.ShouldBeNull();
+        response.Reprompt.ShouldBeNull();
+
+        response.OutputSpeech.ShouldNotBeNull();
+        response.OutputSpeech.Type.ShouldBe("SSML");
+
+        var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
+        ssml.Ssml.ShouldBe("<speak>Sorry, something went wrong.</speak>");
+    }
+
+    private async Task<SkillResponse> ProcessRequestAsync(SkillRequest request)
+    {
+        // Arrange
+        string json = JsonSerializer.Serialize(request, AppJsonSerializerContext.Default.SkillRequest);
 
         void Configure(IServiceCollection services)
         {
@@ -59,19 +154,10 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         result.Content.ShouldNotBeEmpty();
 
         json = await result.ReadAsStringAsync();
-        var actual = JsonConvert.DeserializeObject<SkillResponse>(json);
+        var actual = JsonSerializer.Deserialize(json, AppJsonSerializerContext.Default.SkillResponse);
 
         actual.ShouldNotBeNull();
 
-        ResponseBody response = AssertResponse(actual, shouldEndSession: false);
-
-        response.Card.ShouldBeNull();
-        response.Reprompt.ShouldBeNull();
-
-        response.OutputSpeech.ShouldNotBeNull();
-        response.OutputSpeech.Type.ShouldBe("SSML");
-
-        var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
-        ssml.Ssml.ShouldBe("<speak>Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground, the D.L.R. or the Elizabeth line.</speak>");
+        return actual;
     }
 }
