@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill.Intents;
 
+#pragma warning disable SA1010
+
 /// <summary>
 /// A class that handles the commute intent. This class cannot be inherited.
 /// </summary>
@@ -86,7 +88,7 @@ internal sealed class CommuteIntent(
         try
         {
             SkillUserPreferences preferences = await skillClient.GetPreferencesAsync(accessToken);
-            return preferences.FavoriteLines ?? Array.Empty<string>();
+            return preferences.FavoriteLines ?? [];
         }
         catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
         {
