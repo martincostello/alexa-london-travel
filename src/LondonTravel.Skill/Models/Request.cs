@@ -12,10 +12,10 @@ namespace MartinCostello.LondonTravel.Skill.Models;
 [JsonDerivedType(typeof(SessionEndedRequest), "SessionEndedRequest")]
 [JsonDerivedType(typeof(SystemExceptionRequest), "System.ExceptionEncountered")]
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-public abstract class Request
+public class Request
 {
     [JsonIgnore]
-    public abstract string Type { get; }
+    public virtual string Type { get; }
 
     [JsonPropertyName("requestId")]
     public string RequestId { get; set; }
