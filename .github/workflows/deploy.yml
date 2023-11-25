@@ -233,7 +233,7 @@ jobs:
 
     env:
       FUNCTION_NAME: ${{ needs.setup.outputs.function-name }}
-      LAMBDA_ARCHITECTURES: ${{ needs.setup.outputs.function-function-architectures }}
+      LAMBDA_ARCHITECTURES: ${{ needs.setup.outputs.function-architectures }}
       LAMBDA_DESCRIPTION: ${{ needs.setup.outputs.function-description }}
       LAMBDA_HANDLER: 'LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunctionHandler::HandleAsync'
       LAMBDA_MEMORY: 192
