@@ -19,7 +19,5 @@ public sealed class MixedDateTimeConverter : JsonConverter<DateTime>
     }
 
     public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
-    {
-        writer.WriteStringValue(value.ToString("O", CultureInfo.InvariantCulture));
-    }
+        => writer.WriteStringValue(value.ToString("O", CultureInfo.InvariantCulture));
 }
