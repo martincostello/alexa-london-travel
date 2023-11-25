@@ -145,6 +145,7 @@ public static class SkillRequestExtensions
                     Name = p.Value.Name,
                     Value = p.Value.Value,
                 });
+            }
         }
 
         return result;
