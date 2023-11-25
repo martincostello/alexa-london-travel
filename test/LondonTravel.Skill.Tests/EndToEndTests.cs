@@ -59,7 +59,17 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
     public async Task Alexa_Function_Can_Process_Session_Ended_Request()
     {
         // Arrange
-        SkillRequest request = CreateRequest<SessionEndedRequest>();
+        var session = new SessionEndedRequest()
+        {
+            Reason = Reason.ExceededMaxReprompts,
+            Error = new()
+            {
+                Message = "Too many requests.",
+                Type = AlexaErrorType.RateLimitExceeded,
+            },
+        };
+
+        SkillRequest request = CreateRequest(session);
 
         // Act
         var actual = await ProcessRequestAsync(request);
