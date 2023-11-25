@@ -95,6 +95,7 @@ function DotNetPublish {
         $additionalArgs += "--self-contained"
         $additionalArgs += "true"
         $additionalArgs += "/p:AssemblyName=bootstrap"
+        $additionalArgs += "/p:PublishAot=true"
         $additionalArgs += "/p:PublishReadyToRun=true"
     }
 
