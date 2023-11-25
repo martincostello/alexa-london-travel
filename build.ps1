@@ -7,6 +7,8 @@ param(
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 
+$env:MSBUILDTERMINALLOGGER = "auto"
+
 $solutionPath = $PSScriptRoot
 $sdkFile = Join-Path $solutionPath "global.json"
 
@@ -34,7 +36,7 @@ else {
 if ($installDotNetSdk -eq $true) {
 
     $env:DOTNET_INSTALL_DIR = Join-Path $PSScriptRoot ".dotnetcli"
-    $sdkPath = Join-Path $env:DOTNET_INSTALL_DIR "sdk\$dotnetVersion"
+    $sdkPath = Join-Path $env:DOTNET_INSTALL_DIR "sdk" $dotnetVersion
 
     if (!(Test-Path $sdkPath)) {
         if (!(Test-Path $env:DOTNET_INSTALL_DIR)) {
@@ -46,12 +48,12 @@ if ($installDotNetSdk -eq $true) {
             $installScript = Join-Path $env:DOTNET_INSTALL_DIR "install.sh"
             Invoke-WebRequest "https://dot.net/v1/dotnet-install.sh" -OutFile $installScript -UseBasicParsing
             chmod +x $installScript
-            & $installScript --version "$dotnetVersion" --install-dir "$env:DOTNET_INSTALL_DIR" --no-path
+            & $installScript --jsonfile $sdkFile --install-dir "$env:DOTNET_INSTALL_DIR" --no-path --skip-non-versioned-files
         }
         else {
             $installScript = Join-Path $env:DOTNET_INSTALL_DIR "install.ps1"
             Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile $installScript -UseBasicParsing
-            & $installScript -Version "$dotnetVersion" -InstallDir "$env:DOTNET_INSTALL_DIR" -NoPath
+            & $installScript -JsonFile $sdkFile -InstallDir "$env:DOTNET_INSTALL_DIR" -NoPath -SkipNonVersionedFiles
         }
     }
 }
@@ -68,7 +70,7 @@ if ($installDotNetSdk -eq $true) {
 function DotNetTest {
     param([string]$Project)
 
-    $additionalArgs = @("--tl")
+    $additionalArgs = @()
 
     if (![string]::IsNullOrEmpty($env:GITHUB_SHA)) {
         $additionalArgs += "--logger"
@@ -85,7 +87,7 @@ function DotNetTest {
 function DotNetPublish {
     param([string]$Project)
 
-    $additionalArgs = @("--tl")
+    $additionalArgs = @()
 
     if ($IsLinux -And (-Not $UseManagedRuntime)) {
         $additionalArgs += "--runtime"
@@ -104,12 +106,12 @@ function DotNetPublish {
 }
 
 $testProjects = @(
-    (Join-Path $solutionPath "test\LondonTravel.Skill.Tests\LondonTravel.Skill.Tests.csproj"),
-    (Join-Path $solutionPath "test\LondonTravel.Skill.EndToEndTests\LondonTravel.Skill.EndToEndTests.csproj")
+    (Join-Path $solutionPath "test" "LondonTravel.Skill.Tests" "LondonTravel.Skill.Tests.csproj"),
+    (Join-Path $solutionPath "test" "LondonTravel.Skill.EndToEndTests" "LondonTravel.Skill.EndToEndTests.csproj")
 )
 
 $publishProjects = @(
-    (Join-Path $solutionPath "src\LondonTravel.Skill\LondonTravel.Skill.csproj")
+    (Join-Path $solutionPath "src" "LondonTravel.Skill" "LondonTravel.Skill.csproj")
 )
 
 Write-Host "Publishing solution..." -ForegroundColor Green
@@ -121,4 +123,3 @@ Write-Host "Testing $($testProjects.Count) project(s)..." -ForegroundColor Green
 ForEach ($project in $testProjects) {
     DotNetTest $project
 }
-
