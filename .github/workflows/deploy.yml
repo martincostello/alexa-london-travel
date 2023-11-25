@@ -177,7 +177,7 @@ jobs:
       run: |
         environment_name="${{ steps.get-environment-name.outputs.result }}"
         environment_url="${{ github.server_url }}/${{ github.repository }}/deployments/${environment_name}"
-        function_architectures="$(cat ${LAMBDA_ARCHITECTURES_FILE})"
+        function_architectures="$(cat "${LAMBDA_ARCHITECTURES_FILE}")"
         function_description="Deploy build ${{ steps.download-artifact.outputs.run-number }} to AWS Lambda via GitHub Actions"
         ref="${{ steps.download-artifact.outputs.ref }}"
         workflow_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
