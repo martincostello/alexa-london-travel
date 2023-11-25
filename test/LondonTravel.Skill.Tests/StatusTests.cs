@@ -18,10 +18,9 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentForLine("northern");
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         await Verify(actual);

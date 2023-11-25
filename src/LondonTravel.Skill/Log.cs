@@ -57,4 +57,16 @@ internal static partial class Log
         Level = LogLevel.Information,
         Message = "Invoking skill request of type {RequestType}.")]
     public static partial void InvokingSkillRequest(ILogger logger, string requestType);
+
+    [LoggerMessage(
+        EventId = 8,
+        Level = LogLevel.Debug,
+        Message = "Launched session for user Id {UserId} and session Id {SessionId}.")]
+    public static partial void SessionLaunched(ILogger logger, string userId, string sessionId);
+
+    [LoggerMessage(
+        EventId = 9,
+        Level = LogLevel.Debug,
+        Message = "Ended session for user Id {UserId} and session Id {SessionId}.")]
+    public static partial void SessionEnded(ILogger logger, string userId, string sessionId);
 }

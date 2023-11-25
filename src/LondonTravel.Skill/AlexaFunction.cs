@@ -5,8 +5,6 @@ using Alexa.NET.Request;
 using Alexa.NET.Response;
 using MartinCostello.LondonTravel.Skill.Extensions;
 using MartinCostello.LondonTravel.Skill.Intents;
-using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -133,8 +131,6 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         services.AddSingleton<FunctionHandler>();
         services.AddSingleton<IntentFactory>();
         services.AddSingleton<IValidateOptions<SkillConfiguration>, ValidateSkillConfiguration>();
-        services.AddSingleton((_) => TelemetryConfiguration.CreateDefault());
-        services.AddSingleton(CreateTelemetryClient);
         services.AddSingleton((p) => p.GetRequiredService<IOptions<SkillConfiguration>>().Value);
         services.AddSingleton(configuration);
 
@@ -158,27 +154,6 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
 
             _disposed = true;
         }
-    }
-
-    /// <summary>
-    /// Creates an <see cref="TelemetryClient"/>.
-    /// </summary>
-    /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to use.</param>
-    /// <returns>
-    /// The created instance of <see cref="TelemetryClient"/>.
-    /// </returns>
-    private static TelemetryClient CreateTelemetryClient(IServiceProvider serviceProvider)
-    {
-        var config = serviceProvider.GetRequiredService<SkillConfiguration>();
-
-        var configuration = serviceProvider.GetRequiredService<TelemetryConfiguration>();
-
-        if (!string.IsNullOrEmpty(config.ApplicationInsightsConnectionString))
-        {
-            configuration.ConnectionString = config.ApplicationInsightsConnectionString;
-        }
-
-        return new TelemetryClient(configuration);
     }
 
     /// <summary>
