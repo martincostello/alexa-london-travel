@@ -14,7 +14,7 @@ public class SessionEndedTests(ITestOutputHelper outputHelper) : FunctionTests(o
         // Arrange
         AlexaFunction function = await CreateFunctionAsync();
 
-        SkillRequest request = CreateRequest<SessionEndedRequest>();
+        SkillRequest request = CreateRequest("SessionEndedRequest");
 
         // Act
         SkillResponse actual = await function.HandlerAsync(request);

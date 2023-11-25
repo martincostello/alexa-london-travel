@@ -12,12 +12,12 @@ public static class SkillRequestExtensions
     {
         var result = MapRequest(request);
 
-        result.Request = request.Request switch
+        result.Request = request.Request.Type switch
         {
-            Models.IntentRequest intent => MapIntent(intent),
-            Models.LaunchRequest => new LaunchRequest(),
-            Models.SessionEndedRequest session => MapSessionEnd(session),
-            Models.SystemExceptionRequest exception => MapException(exception),
+            "IntentRequest" => MapIntent(request.Request),
+            "LaunchRequest" => new LaunchRequest(),
+            "SessionEndedRequest" => MapSessionEnd(request.Request),
+            "System.ExceptionEncountered" => MapException(request.Request),
             _ => new UnknownRequest(),
         };
 
@@ -106,7 +106,7 @@ public static class SkillRequestExtensions
         return result;
     }
 
-    private static SystemExceptionRequest MapException(Models.SystemExceptionRequest exception)
+    private static SystemExceptionRequest MapException(Models.Request exception)
     {
         var result = new SystemExceptionRequest();
 
@@ -127,7 +127,7 @@ public static class SkillRequestExtensions
         return result;
     }
 
-    private static IntentRequest MapIntent(Models.IntentRequest request)
+    private static IntentRequest MapIntent(Models.Request request)
     {
         var result = new IntentRequest()
         {
@@ -151,7 +151,7 @@ public static class SkillRequestExtensions
         return result;
     }
 
-    private static SessionEndedRequest MapSessionEnd(Models.SessionEndedRequest session)
+    private static SessionEndedRequest MapSessionEnd(Models.Request session)
     {
         var result = new SessionEndedRequest()
         {

@@ -46,7 +46,7 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
 
     protected virtual SkillRequest CreateIntentRequest(string name, params Slot[] slots)
     {
-        var request = new IntentRequest()
+        var request = new Request()
         {
             Intent = new Intent()
             {
@@ -64,11 +64,10 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
             }
         }
 
-        return CreateRequest(request);
+        return CreateRequest("IntentRequest", request);
     }
 
-    protected virtual SkillRequest CreateRequest<T>(T request = null)
-        where T : Request, new()
+    protected virtual SkillRequest CreateRequest(string type, Request request = null)
     {
         var application = new Application()
         {
@@ -97,7 +96,7 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
                     User = user,
                 },
             },
-            Request = request ?? new T(),
+            Request = request ?? new(),
             Session = new()
             {
                 Application = application,
@@ -108,6 +107,7 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
             Version = "1.0",
         };
 
+        result.Request.Type = type;
         result.Request.Locale = "en-GB";
 
         return result;

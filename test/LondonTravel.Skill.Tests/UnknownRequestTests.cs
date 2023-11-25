@@ -13,17 +13,12 @@ public class UnknownRequestTests(ITestOutputHelper outputHelper) : FunctionTests
         // Arrange
         AlexaFunction function = await CreateFunctionAsync();
 
-        SkillRequest request = CreateRequest<UnknownRequest>();
+        SkillRequest request = CreateRequest("Unknown");
 
         // Act
         SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         AssertResponse(actual);
-    }
-
-    private sealed class UnknownRequest : Request
-    {
-        public override string Type => "Unknown";
     }
 }

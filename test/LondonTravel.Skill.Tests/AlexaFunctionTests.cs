@@ -55,7 +55,7 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
         // Arrange
         AlexaFunction function = await CreateFunctionAsync();
 
-        var error = new SystemExceptionRequest()
+        var error = new Request()
         {
             Error = new()
             {
@@ -68,7 +68,7 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
             },
         };
 
-        var request = CreateRequest(error);
+        var request = CreateRequest("System.ExceptionEncountered", error);
 
         // Act
         SkillResponse actual = await function.HandlerAsync(request);

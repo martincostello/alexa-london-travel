@@ -7,15 +7,11 @@ namespace MartinCostello.LondonTravel.Skill.Models;
 
 #pragma warning disable CA1724
 
-[JsonDerivedType(typeof(IntentRequest), "IntentRequest")]
-[JsonDerivedType(typeof(LaunchRequest), "LaunchRequest")]
-[JsonDerivedType(typeof(SessionEndedRequest), "SessionEndedRequest")]
-[JsonDerivedType(typeof(SystemExceptionRequest), "System.ExceptionEncountered")]
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-public class Request
+public sealed class Request
 {
-    [JsonIgnore]
-    public virtual string Type { get; }
+    [JsonPropertyName("type")]
+    [JsonRequired]
+    public string Type { get; set; }
 
     [JsonPropertyName("requestId")]
     public string RequestId { get; set; }
@@ -26,4 +22,29 @@ public class Request
     [JsonConverter(typeof(MixedDateTimeConverter))]
     [JsonPropertyName("timestamp")]
     public DateTime Timestamp { get; set; }
+
+    //// Properties for "IntentRequest"
+
+    [JsonPropertyName("dialogState")]
+    public string DialogState { get; set; }
+
+    [JsonPropertyName("intent")]
+    public Intent Intent { get; set; }
+
+    //// Properties for "SessionEndedRequest"
+
+    [JsonConverter(typeof(CustomStringEnumConverter<Reason>))]
+    [JsonPropertyName("reason")]
+    public Reason Reason { get; set; }
+
+    //// Properties for "System.ExceptionEncountered"
+
+    [JsonPropertyName("cause")]
+    public AlexaErrorCause ErrorCause { get; set; }
+
+    //// Properties for "SessionEndedRequest" and "System.ExceptionEncountered"
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("error")]
+    public AlexaError Error { get; set; }
 }

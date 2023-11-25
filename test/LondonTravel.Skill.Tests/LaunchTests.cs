@@ -14,7 +14,7 @@ public class LaunchTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
         // Arrange
         AlexaFunction function = await CreateFunctionAsync();
 
-        SkillRequest request = CreateRequest<LaunchRequest>();
+        SkillRequest request = CreateRequest("LaunchRequest");
 
         // Act
         SkillResponse actual = await function.HandlerAsync(request);

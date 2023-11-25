@@ -15,12 +15,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
     public async Task Alexa_Function_Can_Process_Intent_Request()
     {
         // Arrange
-        var intent = new IntentRequest()
-        {
-            Intent = new() { Name = "AMAZON.CancelIntent" },
-        };
-
-        SkillRequest request = CreateRequest(intent);
+        SkillRequest request = CreateIntentRequest("AMAZON.CancelIntent");
 
         // Act
         var actual = await ProcessRequestAsync(request);
@@ -37,7 +32,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
     public async Task Alexa_Function_Can_Process_Launch_Request()
     {
         // Arrange
-        SkillRequest request = CreateRequest<LaunchRequest>();
+        SkillRequest request = CreateRequest("LaunchRequest");
 
         // Act
         var actual = await ProcessRequestAsync(request);
@@ -59,7 +54,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
     public async Task Alexa_Function_Can_Process_Session_Ended_Request()
     {
         // Arrange
-        var session = new SessionEndedRequest()
+        var session = new Request()
         {
             Reason = Reason.ExceededMaxReprompts,
             Error = new()
@@ -69,7 +64,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
             },
         };
 
-        SkillRequest request = CreateRequest(session);
+        SkillRequest request = CreateRequest("SessionEndedRequest", session);
 
         // Act
         var actual = await ProcessRequestAsync(request);
@@ -91,7 +86,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
     public async Task Alexa_Function_Can_Process_System_Exception_Request()
     {
         // Arrange
-        var exception = new SystemExceptionRequest()
+        var exception = new Request()
         {
             Error = new()
             {
@@ -104,7 +99,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
             },
         };
 
-        SkillRequest request = CreateRequest(exception);
+        SkillRequest request = CreateRequest("System.ExceptionEncountered", exception);
 
         // Act
         var actual = await ProcessRequestAsync(request);
