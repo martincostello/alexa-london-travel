@@ -173,14 +173,17 @@ jobs:
     - name: Set outputs
       id: set-outputs
       env:
-        LAMBDA_ARCHITECTURES_FILE: '${{ steps.extract-artifact.outputs.lambda-artifact-path }}/LAMBDA_ARCHITECTURES'
+        LAMBDA_ARTIFACT_PATH: ${{ steps.extract-artifact.outputs.lambda-artifact-path }}
+        LAMBDA_ARTIFACT_REF: ${{ steps.download-artifact.outputs.ref }}
+        LAMBDA_ARTIFACT_RUN_NUMBER: ${{ steps.download-artifact.outputs.run-number }}
+        LAMBDA_ENVIRONMENT: ${{ steps.get-environment-name.outputs.result }}
       run: |
-        environment_name="${{ steps.get-environment-name.outputs.result }}"
-        environment_url="${{ github.server_url }}/${{ github.repository }}/deployments/${environment_name}"
-        function_architectures="$(cat "${LAMBDA_ARCHITECTURES_FILE}")"
-        function_description="Deploy build ${{ steps.download-artifact.outputs.run-number }} to AWS Lambda via GitHub Actions"
-        ref="${{ steps.download-artifact.outputs.ref }}"
-        workflow_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        environment_name="${LAMBDA_ENVIRONMENT}"
+        environment_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/deployments/${environment_name}"
+        function_architectures="$(unzip -p "${LAMBDA_ARTIFACT_PATH}/${LAMBDA_FUNCTION}.zip" LAMBDA_ARCHITECTURES)"
+        function_description="Deploy build ${LAMBDA_ARTIFACT_RUN_NUMBER} to AWS Lambda via GitHub Actions"
+        ref="${LAMBDA_ARTIFACT_REF}"
+        workflow_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
         if [ "${environment_name}" == "production" ]
         then
