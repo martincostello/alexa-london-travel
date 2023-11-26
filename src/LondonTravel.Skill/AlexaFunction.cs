@@ -121,7 +121,11 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         services.AddOptions();
         services.Configure<SkillConfiguration>(configuration.GetSection("Skill"));
 
-        services.AddLogging((builder) => builder.AddJsonConsole());
+        services.AddLogging((builder) =>
+        {
+            builder.AddConfiguration(configuration.GetSection("Logging"));
+            builder.AddJsonConsole();
+        });
 
         services.AddHttpClients();
 
