@@ -48,7 +48,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         using var httpClient = server.CreateClient();
 
         // Act
-        await FunctionEntrypoint.RunAsync(httpClient, cancellationTokenSource.Token);
+        await FunctionEntrypoint.RunAsync<TestSettingsAlexaFunction>(httpClient, cancellationTokenSource.Token);
 
         // Assert
         context.Response.TryRead(out LambdaTestResponse result).ShouldBeTrue();

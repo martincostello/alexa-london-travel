@@ -132,6 +132,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         services.AddSingleton<AlexaSkill>();
         services.AddSingleton<FunctionHandler>();
         services.AddSingleton<IntentFactory>();
+        services.AddSingleton<IValidateOptions<SkillConfiguration>, ValidateSkillConfiguration>();
         services.AddSingleton((_) => TelemetryConfiguration.CreateDefault());
         services.AddSingleton(CreateTelemetryClient);
         services.AddSingleton((p) => p.GetRequiredService<IOptions<SkillConfiguration>>().Value);
