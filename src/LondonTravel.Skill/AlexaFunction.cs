@@ -105,12 +105,9 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     {
         services.AddLogging((builder) =>
         {
-            var options = new LambdaLoggerOptions()
-            {
-                Filter = FilterLogs,
-            };
-
-            builder.AddLambdaLogger(options);
+            builder.SetMinimumLevel(LogLevel.Information)
+                   .AddFilter(FilterLogs)
+                   .AddJsonConsole();
         });
 
         services.AddHttpClients();
@@ -178,7 +175,8 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     {
         if (level < LogLevel.Warning &&
             (name.StartsWith("System.", StringComparison.Ordinal) ||
-             name.StartsWith("Microsoft.", StringComparison.Ordinal)))
+             name.StartsWith("Microsoft.", StringComparison.Ordinal) ||
+             name.StartsWith("Polly", StringComparison.Ordinal)))
         {
             return false;
         }
