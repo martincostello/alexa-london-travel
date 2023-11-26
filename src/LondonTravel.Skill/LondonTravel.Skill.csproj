@@ -3,6 +3,7 @@
     <AWSProjectType>Lambda</AWSProjectType>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <InvariantGlobalization>true</InvariantGlobalization>
     <NoWarn>$(NoWarn);CA1822</NoWarn>
     <OutputType>Exe</OutputType>
     <PublishAot>true</PublishAot>
@@ -34,12 +35,4 @@
     <EmbeddedResource Update="Strings.*.resx" DependentUpon="Strings.resx" />
     <None Include="appsettings.json;aws-lambda-tools-defaults.json" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'linux-x64' ">
-    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" />
-  </ItemGroup>
-  <Target Name="SetAppLocalIcuVersion" BeforeTargets="Compile" Condition=" '$(RuntimeIdentifier)' == 'linux-x64' ">
-    <ItemGroup>
-      <RuntimeHostConfigurationOption Condition=" '%(PackageVersion.Identity)' == 'Microsoft.ICU.ICU4C.Runtime' " Include="System.Globalization.AppLocalIcu" Value="%(PackageVersion.Version)" />
-    </ItemGroup>
-  </Target>
 </Project>
