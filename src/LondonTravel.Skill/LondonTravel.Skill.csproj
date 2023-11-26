@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AWSProjectType>Lambda</AWSProjectType>
+    <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <NoWarn>$(NoWarn);CA1822</NoWarn>
     <OutputType>Exe</OutputType>
