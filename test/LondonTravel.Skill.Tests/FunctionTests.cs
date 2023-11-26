@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill;
 
+#pragma warning disable SA1010
+
 public abstract class FunctionTests : ITestOutputHelperAccessor
 {
     protected FunctionTests(ITestOutputHelper outputHelper)
@@ -70,9 +72,7 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
 
         if (slots.Length > 0)
         {
-#pragma warning disable SA1010
             request.Intent.Slots = [];
-#pragma warning restore SA1010
 
             foreach (var slot in slots)
             {
@@ -98,30 +98,30 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
 
         var result = new SkillRequest()
         {
-            Context = new Context()
+            Context = new()
             {
-                AudioPlayer = new PlaybackState()
+                AudioPlayer = new()
                 {
                     PlayerActivity = "IDLE",
                 },
-                System = new AlexaSystem()
+                System = new()
                 {
                     Application = application,
-                    Device = new Device()
+                    Device = new()
                     {
-                        SupportedInterfaces = new Dictionary<string, object>()
+                        SupportedInterfaces = new()
                         {
-                            ["AudioPlayer"] = new object(),
+                            ["AudioPlayer"] = new(),
                         },
                     },
                     User = user,
                 },
             },
             Request = request ?? new T(),
-            Session = new Session()
+            Session = new()
             {
                 Application = application,
-                Attributes = new Dictionary<string, object>(),
+                Attributes = [],
                 New = true,
                 User = user,
             },
