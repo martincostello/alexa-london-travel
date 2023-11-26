@@ -7,10 +7,10 @@ using MartinCostello.LondonTravel.Skill.Extensions;
 using MartinCostello.LondonTravel.Skill.Intents;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-using LogLevel = Microsoft.Extensions.Logging.LogLevel;
+using Microsoft.Extensions.Options;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -97,27 +97,41 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     }
 
     /// <summary>
+    /// Configures the <see cref="ConfigurationBuilder"/> to use.
+    /// </summary>
+    /// <param name="builder">The configuration builder to configure.</param>
+    protected virtual void Configure(ConfigurationBuilder builder)
+    {
+        builder.AddJsonFile("appsettings.json", optional: true)
+               .AddEnvironmentVariables();
+    }
+
+    /// <summary>
     /// Configures the <see cref="IServiceCollection"/> to use.
     /// </summary>
     /// <param name="services">The service collection to configure.</param>
     protected virtual void ConfigureServices(IServiceCollection services)
     {
-        services.AddLogging((builder) =>
-        {
-            builder.SetMinimumLevel(LogLevel.Information)
-                   .AddFilter(FilterLogs)
-                   .AddJsonConsole();
-        });
+        var builder = new ConfigurationBuilder();
+
+        Configure(builder);
+
+        var configuration = builder.Build();
+
+        services.AddOptions();
+        services.Configure<SkillConfiguration>(configuration.GetSection("Skill"));
+
+        services.AddLogging((builder) => builder.AddJsonConsole());
 
         services.AddHttpClients();
-
-        services.TryAddSingleton((_) => SkillConfiguration.CreateDefaultConfiguration());
 
         services.AddSingleton<AlexaSkill>();
         services.AddSingleton<FunctionHandler>();
         services.AddSingleton<IntentFactory>();
         services.AddSingleton((_) => TelemetryConfiguration.CreateDefault());
         services.AddSingleton(CreateTelemetryClient);
+        services.AddSingleton((p) => p.GetRequiredService<IOptions<SkillConfiguration>>().Value);
+        services.AddSingleton(configuration);
 
         services.AddSingleton<EmptyIntent>();
         services.AddSingleton<HelpIntent>();
@@ -160,27 +174,6 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         }
 
         return new TelemetryClient(configuration);
-    }
-
-    /// <summary>
-    /// Filters the Lambda logs.
-    /// </summary>
-    /// <param name="name">The name of the log.</param>
-    /// <param name="level">The log level.</param>
-    /// <returns>
-    /// <see langword="true"/> to log the message; otherwise <see langword="false"/>.
-    /// </returns>
-    private static bool FilterLogs(string name, LogLevel level)
-    {
-        if (level < LogLevel.Warning &&
-            (name.StartsWith("System.", StringComparison.Ordinal) ||
-             name.StartsWith("Microsoft.", StringComparison.Ordinal) ||
-             name.StartsWith("Polly", StringComparison.Ordinal)))
-        {
-            return false;
-        }
-
-        return true;
     }
 
     /// <summary>
