@@ -24,14 +24,9 @@ env:
   DOTNET_NOLOGO: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
-  LAMBDA_ARCHITECTURES: 'arm64'
   LAMBDA_DESCRIPTION: 'Deploy build ${{ github.run_number }} to AWS Lambda via GitHub Actions'
   LAMBDA_FUNCTION: 'alexa-london-travel'
-  LAMBDA_HANDLER: 'LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunctionHandler::HandleAsync'
-  LAMBDA_MEMORY: 192
   LAMBDA_ROLE: ${{ vars.AWS_LAMBDA_ROLE }}
-  LAMBDA_RUNTIME: 'provided.al2023'
-  LAMBDA_TIMEOUT: 10
   NUGET_XMLDOC_MODE: skip
   TERM: xterm
 
@@ -122,6 +117,18 @@ jobs:
       uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
       with:
         name: ${{ env.ARTIFACT_NAME }}
+
+    - name: Get Lambda configuration
+      shell: bash
+      run: |
+        LAMBDA_CONFIG="$(unzip -p "${LAMBDA_FUNCTION}.zip" aws-lambda-tools-defaults.json)"
+        {
+          echo "LAMBDA_ARCHITECTURES=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-architecture"')"
+          echo "LAMBDA_HANDLER=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-handler"')"
+          echo "LAMBDA_MEMORY=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-memory-size"')"
+          echo "LAMBDA_RUNTIME=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-runtime"')"
+          echo "LAMBDA_TIMEOUT=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-timeout"')"
+        } >> "$GITHUB_ENV"
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
@@ -214,6 +221,18 @@ jobs:
       uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
       with:
         name: ${{ env.ARTIFACT_NAME }}
+
+    - name: Get Lambda configuration
+      shell: bash
+      run: |
+        LAMBDA_CONFIG="$(unzip -p "${LAMBDA_FUNCTION}.zip" aws-lambda-tools-defaults.json)"
+        {
+          echo "LAMBDA_ARCHITECTURES=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-architecture"')"
+          echo "LAMBDA_HANDLER=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-handler"')"
+          echo "LAMBDA_MEMORY=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-memory-size"')"
+          echo "LAMBDA_RUNTIME=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-runtime"')"
+          echo "LAMBDA_TIMEOUT=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-timeout"')"
+        } >> "$GITHUB_ENV"
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
