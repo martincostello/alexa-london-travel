@@ -6,6 +6,7 @@ using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
 using JustEat.HttpClientInterception;
 using MartinCostello.Logging.XUnit;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Logging;
@@ -36,26 +37,11 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
         return actual.Response;
     }
 
-    protected virtual SkillConfiguration CreateConfiguration()
-    {
-        var config = SkillConfiguration.CreateDefaultConfiguration();
-
-        config.ApplicationInsightsConnectionString = "InstrumentationKey=my-application-insights-key;IngestionEndpoint=https://northeurope-0.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/";
-        config.SkillApiUrl = "https://londontravel.martincostello.local/";
-        config.SkillId = "my-skill-id";
-        config.TflApplicationId = "my-tfl-app-id";
-        config.TflApplicationKey = "my-tfl-app-key";
-        config.VerifySkillId = true;
-
-        return config;
-    }
-
     protected virtual async Task<AlexaFunction> CreateFunctionAsync()
     {
-        SkillConfiguration config = CreateConfiguration();
-        var function = new TestAlexaFunction(config, Interceptor, OutputHelper);
+        var function = new TestAlexaFunction(Interceptor, OutputHelper);
 
-        await function.InitializeAsync();
+        _ = await function.InitializeAsync();
 
         return function;
     }
@@ -134,16 +120,20 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
     }
 
     private sealed class TestAlexaFunction(
-        SkillConfiguration config,
         HttpClientInterceptorOptions options,
         ITestOutputHelper outputHelper) : AlexaFunction, ITestOutputHelperAccessor
     {
         public ITestOutputHelper OutputHelper { get; set; } = outputHelper;
 
+        protected override void Configure(ConfigurationBuilder builder)
+        {
+            base.Configure(builder);
+            builder.AddJsonFile("testsettings.json");
+        }
+
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddLogging((builder) => builder.AddXUnit(this).SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Debug));
-            services.AddSingleton(config);
+            services.AddLogging((builder) => builder.AddXUnit(this));
             services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
                 (_) => new HttpRequestInterceptionFilter(options));
 

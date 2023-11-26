@@ -37,31 +37,4 @@ public sealed class SkillConfiguration
     /// Gets or sets a value indicating whether to validate the skill's Id.
     /// </summary>
     public bool VerifySkillId { get; set; }
-
-    /// <summary>
-    /// Create a default instance of the skill configuration.
-    /// </summary>
-    /// <returns>
-    /// The default <see cref="SkillConfiguration"/> to use.
-    /// </returns>
-    public static SkillConfiguration CreateDefaultConfiguration()
-    {
-        if (!bool.TryParse(GetEnvironmentVariable("VERIFY_SKILL_ID"), out bool verifySkillId))
-        {
-            verifySkillId = false;
-        }
-
-        return new SkillConfiguration()
-        {
-            ApplicationInsightsConnectionString = GetEnvironmentVariable("APPINSIGHTS_CONNECTIONSTRING"),
-            SkillApiUrl = GetEnvironmentVariable("SKILL_API_HOSTNAME"),
-            SkillId = GetEnvironmentVariable("SKILL_ID"),
-            TflApplicationId = GetEnvironmentVariable("TFL_APP_ID"),
-            TflApplicationKey = GetEnvironmentVariable("TFL_APP_KEY"),
-            VerifySkillId = verifySkillId,
-        };
-    }
-
-    private static string GetEnvironmentVariable(string name)
-        => Environment.GetEnvironmentVariable(name) ?? string.Empty;
 }
