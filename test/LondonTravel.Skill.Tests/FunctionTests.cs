@@ -152,7 +152,7 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
 
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddLogging((builder) => builder.AddXUnit(this));
+            services.AddLogging((builder) => builder.AddXUnit(this).SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Debug));
             services.AddSingleton(config);
             services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
                 (_) => new HttpRequestInterceptionFilter(options));
