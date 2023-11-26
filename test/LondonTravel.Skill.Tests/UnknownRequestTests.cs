@@ -4,7 +4,6 @@
 using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
-using Amazon.Lambda.Core;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -17,10 +16,9 @@ public class UnknownRequestTests(ITestOutputHelper outputHelper) : FunctionTests
         AlexaFunction function = await CreateFunctionAsync();
 
         SkillRequest request = CreateRequest<UnknownRequest>();
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         AssertResponse(actual);

@@ -3,7 +3,6 @@
 
 using Alexa.NET.Request;
 using Alexa.NET.Response;
-using Amazon.Lambda.Core;
 using JustEat.HttpClientInterception;
 
 namespace MartinCostello.LondonTravel.Skill;
@@ -50,10 +49,9 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentForLine(id);
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         AssertLineResponse(actual);
@@ -69,10 +67,9 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
         // Arrange
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentForLine(id);
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         ResponseBody response = AssertResponse(actual);
@@ -102,10 +99,9 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
         // Arrange
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentForLine("district");
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         ResponseBody response = AssertResponse(actual);
@@ -145,10 +141,9 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentForLine(id);
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         AssertLineResponse(actual, expectedSsml: "<speak>" + expected + "</speak>");

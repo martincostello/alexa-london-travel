@@ -4,7 +4,6 @@
 using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
-using Amazon.Lambda.Core;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -19,11 +18,9 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
         SkillRequest request = CreateIntentRequest("AMAZON.HelpIntent");
         request.Session.Application.ApplicationId = "not-my-skill-id";
 
-        ILambdaContext context = CreateContext();
-
         // Act
         InvalidOperationException exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            () => function.HandlerAsync(request, context));
+            () => function.HandlerAsync(request));
 
         // Assert
         exception.Message.ShouldBe("Request application Id 'not-my-skill-id' and configured skill Id 'my-skill-id' mismatch.");
@@ -43,10 +40,8 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
         SkillRequest request = CreateIntentRequest("AMAZON.HelpIntent");
         request.Request.Locale = locale;
 
-        ILambdaContext context = CreateContext();
-
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         ResponseBody response = AssertResponse(actual, shouldEndSession: false);
@@ -60,7 +55,6 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
     {
         // Arrange
         AlexaFunction function = await CreateFunctionAsync();
-        ILambdaContext context = CreateContext();
 
         var error = new SystemExceptionRequest()
         {
@@ -78,7 +72,7 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
         var request = CreateRequest(error);
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         ResponseBody response = AssertResponse(actual);

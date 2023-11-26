@@ -3,7 +3,6 @@
 
 using Alexa.NET.Request;
 using Alexa.NET.Response;
-using Amazon.Lambda.Core;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -14,10 +13,9 @@ public class AlexaFunctionHandlerTests(ITestOutputHelper outputHelper) : Functio
     {
         // Arrange
         SkillRequest request = CreateIntentRequest("AMAZON.HelpIntent");
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await AlexaFunctionHandler.HandleAsync(request, context);
+        SkillResponse actual = await AlexaFunctionHandler.HandleAsync(request);
 
         // Assert
         ResponseBody response = AssertResponse(actual, shouldEndSession: false);
@@ -26,7 +24,7 @@ public class AlexaFunctionHandlerTests(ITestOutputHelper outputHelper) : Functio
         response.OutputSpeech.Type.ShouldBe("SSML");
 
         // Act
-        actual = await AlexaFunctionHandler.HandleAsync(request, context);
+        actual = await AlexaFunctionHandler.HandleAsync(request);
 
         // Assert
         response = AssertResponse(actual, shouldEndSession: false);

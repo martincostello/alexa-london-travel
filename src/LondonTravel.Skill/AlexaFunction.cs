@@ -3,7 +3,6 @@
 
 using Alexa.NET.Request;
 using Alexa.NET.Response;
-using Amazon.Lambda.Core;
 using MartinCostello.LondonTravel.Skill.Extensions;
 using MartinCostello.LondonTravel.Skill.Intents;
 using Microsoft.ApplicationInsights;
@@ -72,15 +71,15 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     /// Handles a request to the skill as an asynchronous operation.
     /// </summary>
     /// <param name="request">The skill request.</param>
-    /// <param name="context">The AWS Lambda execution context.</param>
     /// <returns>
     /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the skill's response.
     /// </returns>
-    public async Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
+    public async Task<SkillResponse> HandlerAsync(SkillRequest request)
     {
-        context.Logger.LogLine($"Invoking skill request of type {request.Request.GetType().Name}.");
-
         var handler = _serviceProvider.GetRequiredService<FunctionHandler>();
+        var logger = _serviceProvider.GetRequiredService<ILogger<AlexaFunction>>();
+
+        Log.InvokingSkillRequest(logger, request.Request.Type);
 
         return await handler.HandleAsync(request);
     }

@@ -3,7 +3,6 @@
 
 using Alexa.NET.Request;
 using Alexa.NET.Response;
-using Amazon.Lambda.Core;
 using JustEat.HttpClientInterception;
 
 namespace MartinCostello.LondonTravel.Skill;
@@ -16,10 +15,9 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
         // Arrange
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequestWithToken(accessToken: null);
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         ResponseBody response = AssertResponse(actual);
@@ -44,10 +42,9 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequestWithToken(accessToken: "invalid-access-token");
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         ResponseBody response = AssertResponse(actual);
@@ -70,10 +67,9 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
         // Arrange
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequestWithToken(accessToken: "random-access-token");
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         ResponseBody response = AssertResponse(actual);
@@ -97,10 +93,9 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequestWithToken(accessToken: "token-for-no-favorites");
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         AssertResponse(
@@ -118,10 +113,9 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequestWithToken(accessToken: "token-for-one-favorite");
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         AssertResponse(
@@ -139,10 +133,9 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequestWithToken(accessToken: "token-for-two-favorites");
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         AssertResponse(
