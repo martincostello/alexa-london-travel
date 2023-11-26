@@ -51,4 +51,10 @@ internal static partial class Log
         Level = LogLevel.Warning,
         Message = "Unknown intent {IntentName} cannot be handled for session Id {SessionId}.")]
     public static partial void UnknownIntent(ILogger logger, string intentName, string sessionId);
+
+    [LoggerMessage(
+        EventId = 7,
+        Level = LogLevel.Information,
+        Message = "Invoking skill request of type {RequestType}.")]
+    public static partial void InvokingSkillRequest(ILogger logger, string requestType);
 }

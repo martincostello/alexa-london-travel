@@ -4,8 +4,6 @@
 using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
-using Amazon.Lambda.Core;
-using Amazon.Lambda.TestUtilities;
 using JustEat.HttpClientInterception;
 using MartinCostello.Logging.XUnit;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,14 +46,6 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
         config.VerifySkillId = true;
 
         return config;
-    }
-
-    protected virtual ILambdaContext CreateContext()
-    {
-        return new TestLambdaContext()
-        {
-            Logger = new XunitLambdaLogger(OutputHelper),
-        };
     }
 
     protected virtual async Task<AlexaFunction> CreateFunctionAsync()

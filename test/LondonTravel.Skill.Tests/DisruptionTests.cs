@@ -3,7 +3,6 @@
 
 using Alexa.NET.Request;
 using Alexa.NET.Response;
-using Amazon.Lambda.Core;
 using JustEat.HttpClientInterception;
 
 namespace MartinCostello.LondonTravel.Skill;
@@ -18,10 +17,9 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequest();
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         AssertResponse(
@@ -38,10 +36,9 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequest();
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         AssertResponse(
@@ -58,10 +55,9 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequest();
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         AssertResponse(
@@ -76,10 +72,9 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
         // Arrange
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequest();
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         ResponseBody response = AssertResponse(actual);

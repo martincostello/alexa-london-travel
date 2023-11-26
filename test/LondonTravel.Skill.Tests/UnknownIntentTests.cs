@@ -4,7 +4,6 @@
 using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
-using Amazon.Lambda.Core;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -18,10 +17,9 @@ public class UnknownIntentTests(ITestOutputHelper outputHelper) : FunctionTests(
         await function.InitializeAsync();
 
         SkillRequest request = CreateIntentRequest("FooIntent");
-        ILambdaContext context = CreateContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
         ResponseBody response = AssertResponse(actual);

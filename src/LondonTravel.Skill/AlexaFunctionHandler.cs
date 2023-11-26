@@ -3,7 +3,6 @@
 
 using Alexa.NET.Request;
 using Alexa.NET.Response;
-using Amazon.Lambda.Core;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -19,14 +18,13 @@ public static class AlexaFunctionHandler
     /// Handles a request to the skill as an asynchronous operation.
     /// </summary>
     /// <param name="request">The skill request.</param>
-    /// <param name="context">The current Lambda context.</param>
     /// <returns>
     /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the skill's response.
     /// </returns>
-    public static async Task<SkillResponse> HandleAsync(SkillRequest request, ILambdaContext context)
+    public static async Task<SkillResponse> HandleAsync(SkillRequest request)
     {
         await EnsureInitialized();
-        return await _function.HandlerAsync(request, context);
+        return await _function.HandlerAsync(request);
     }
 
     private static async Task EnsureInitialized()
