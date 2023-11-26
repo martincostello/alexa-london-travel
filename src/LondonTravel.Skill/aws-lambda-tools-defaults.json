@@ -5,7 +5,7 @@
   "framework": "net8.0",
   "function-architecture": "x86_64",
   "function-handler": "LondonTravel.Skill",
-  "function-memory-size": 192,
+  "function-memory-size": 128,
   "function-runtime": "provided.al2023",
   "function-timeout": 10
 }
