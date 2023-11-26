@@ -19,17 +19,19 @@ public static class FunctionEntrypoint
     /// <summary>
     /// Runs the function using a custom runtime as an asynchronous operation.
     /// </summary>
+    /// <typeparam name="T">The type of the function to execute.</typeparam>
     /// <param name="httpClient">The optional HTTP client to use.</param>
     /// <param name="cancellationToken">The optional cancellation token to use.</param>
     /// <returns>
     /// A <see cref="Task"/> representing the asynchronous operation to run the function.
     /// </returns>
-    public static async Task RunAsync(
+    public static async Task RunAsync<T>(
         HttpClient httpClient = null,
         CancellationToken cancellationToken = default)
+        where T : AlexaFunction, new()
     {
         var serializer = new JsonSerializer();
-        await using var function = new AlexaFunction();
+        await using var function = new T();
 
         using var bootstrap = LambdaBootstrapBuilder
             .Create<SkillRequest, SkillResponse>(function.HandlerAsync, serializer)
@@ -47,5 +49,5 @@ public static class FunctionEntrypoint
     /// A <see cref="Task"/> representing the asynchronous operation to run the custom runtime.
     /// </returns>
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    private static async Task Main() => await RunAsync();
+    private static async Task Main() => await RunAsync<AlexaFunction>();
 }

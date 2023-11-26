@@ -119,17 +119,20 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
         return result;
     }
 
-    private sealed class TestAlexaFunction(
-        HttpClientInterceptorOptions options,
-        ITestOutputHelper outputHelper) : AlexaFunction, ITestOutputHelperAccessor
+    protected class TestSettingsAlexaFunction() : AlexaFunction
     {
-        public ITestOutputHelper OutputHelper { get; set; } = outputHelper;
-
         protected override void Configure(ConfigurationBuilder builder)
         {
             base.Configure(builder);
             builder.AddJsonFile("testsettings.json");
         }
+    }
+
+    private sealed class TestAlexaFunction(
+        HttpClientInterceptorOptions options,
+        ITestOutputHelper outputHelper) : TestSettingsAlexaFunction, ITestOutputHelperAccessor
+    {
+        public ITestOutputHelper OutputHelper { get; set; } = outputHelper;
 
         protected override void ConfigureServices(IServiceCollection services)
         {
