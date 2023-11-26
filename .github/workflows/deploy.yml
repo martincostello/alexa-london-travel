@@ -29,7 +29,11 @@ jobs:
       environment-url: ${{ steps.set-outputs.outputs.environment-url }}
       function-architectures: ${{ steps.set-outputs.outputs.function-architectures }}
       function-description: ${{ steps.set-outputs.outputs.function-description }}
+      function-handler: ${{ steps.set-outputs.outputs.function-handler }}
+      function-memory: ${{ steps.set-outputs.outputs.function-memory }}
       function-name: ${{ steps.set-outputs.outputs.function-name }}
+      function-runtime: ${{ steps.set-outputs.outputs.function-runtime }}
+      function-timeout: ${{ steps.set-outputs.outputs.function-timeout }}
       ref: ${{ steps.set-outputs.outputs.ref }}
       workflow-url: ${{ steps.set-outputs.outputs.workflow-url }}
 
@@ -179,11 +183,7 @@ jobs:
         LAMBDA_ENVIRONMENT: ${{ steps.get-environment-name.outputs.result }}
       run: |
         environment_name="${LAMBDA_ENVIRONMENT}"
-        environment_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/deployments/${environment_name}"
-        function_architectures="$(unzip -p "${LAMBDA_ARTIFACT_PATH}/${LAMBDA_FUNCTION}.zip" LAMBDA_ARCHITECTURES)"
-        function_description="Deploy build ${LAMBDA_ARTIFACT_RUN_NUMBER} to AWS Lambda via GitHub Actions"
-        ref="${LAMBDA_ARTIFACT_REF}"
-        workflow_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+        lambda_config="$(unzip -p "${LAMBDA_ARTIFACT_PATH}/${LAMBDA_FUNCTION}.zip" aws-lambda-tools-defaults.json)"
 
         if [ "${environment_name}" == "production" ]
         then
@@ -194,12 +194,16 @@ jobs:
 
         {
           echo "environment-name=${environment_name}"
-          echo "environment-url=${environment_url}"
-          echo "function-architectures=${function_architectures}"
-          echo "function-description=${function_description}"
+          echo "environment-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/deployments/${environment_name}""
+          echo "function-architectures=$(echo "${lambda_config}" | jq -r '."function-architecture"')"
+          echo "function-description="Deploy build ${LAMBDA_ARTIFACT_RUN_NUMBER} to AWS Lambda via GitHub Actions""
+          echo "function-handler=$(echo "${lambda_config}" | jq -r '."function-handler"')"
+          echo "function-memory=$(echo "${lambda_config}" | jq -r '."function-memory-size"')"
           echo "function-name=${function_name}"
-          echo "ref=${ref}"
-          echo "workflow-url=${workflow_url}"
+          echo "function-runtime=$(echo "${lambda_config}" | jq -r '."function-runtime"')"
+          echo "function-timeout=$(echo "${lambda_config}" | jq -r '."function-timeout"')"
+          echo "ref="${LAMBDA_ARTIFACT_REF}""
+          echo "workflow-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}""
         } >> "$GITHUB_OUTPUT"
 
     - name: Post comment
@@ -238,11 +242,11 @@ jobs:
       FUNCTION_NAME: ${{ needs.setup.outputs.function-name }}
       LAMBDA_ARCHITECTURES: ${{ needs.setup.outputs.function-architectures }}
       LAMBDA_DESCRIPTION: ${{ needs.setup.outputs.function-description }}
-      LAMBDA_HANDLER: 'LondonTravel.Skill::MartinCostello.LondonTravel.Skill.AlexaFunctionHandler::HandleAsync'
-      LAMBDA_MEMORY: 192
+      LAMBDA_HANDLER: ${{ needs.setup.outputs.function-handler }}
+      LAMBDA_MEMORY: ${{ needs.setup.outputs.function-memory }}
       LAMBDA_ROLE: ${{ vars.AWS_LAMBDA_ROLE }}
-      LAMBDA_RUNTIME: 'provided.al2023'
-      LAMBDA_TIMEOUT: 10
+      LAMBDA_RUNTIME: ${{ needs.setup.outputs.function-runtime }}
+      LAMBDA_TIMEOUT: ${{ needs.setup.outputs.function-timeout }}
 
     environment:
       name: ${{ needs.setup.outputs.environment-name }}
