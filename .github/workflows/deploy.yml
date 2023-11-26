@@ -192,18 +192,27 @@ jobs:
           function_name="${LAMBDA_FUNCTION}-${environment_name}"
         fi
 
+        environment_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/deployments/${environment_name}"
+        function_architectures="$(echo "${lambda_config}" | jq -r '."function-architecture"')"
+        function_description="Deploy build ${LAMBDA_ARTIFACT_RUN_NUMBER} to AWS Lambda via GitHub Actions"
+        function_handler="$(echo "${lambda_config}" | jq -r '."function-handler"')"
+        function_memory="$(echo "${lambda_config}" | jq -r '."function-memory-size"')"
+        function_runtime="$(echo "${lambda_config}" | jq -r '."function-runtime"')"
+        function_timeout="$(echo "${lambda_config}" | jq -r '."function-timeout"')"
+        workflow_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
         {
           echo "environment-name=${environment_name}"
-          echo "environment-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/deployments/${environment_name}""
-          echo "function-architectures=$(echo "${lambda_config}" | jq -r '."function-architecture"')"
-          echo "function-description="Deploy build ${LAMBDA_ARTIFACT_RUN_NUMBER} to AWS Lambda via GitHub Actions""
-          echo "function-handler=$(echo "${lambda_config}" | jq -r '."function-handler"')"
-          echo "function-memory=$(echo "${lambda_config}" | jq -r '."function-memory-size"')"
+          echo "environment-url=${environment_url}"
+          echo "function-architectures=${function_architectures}"
+          echo "function-description=${function_description}"
+          echo "function-handler=${function_handler}"
+          echo "function-memory=${function_memory}"
           echo "function-name=${function_name}"
-          echo "function-runtime=$(echo "${lambda_config}" | jq -r '."function-runtime"')"
-          echo "function-timeout=$(echo "${lambda_config}" | jq -r '."function-timeout"')"
-          echo "ref="${LAMBDA_ARTIFACT_REF}""
-          echo "workflow-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}""
+          echo "function-runtime=${function_runtime}"
+          echo "function-timeout=${function_timeout}"
+          echo "ref=${LAMBDA_ARTIFACT_REF}"
+          echo "workflow-url=${workflow_url}"
         } >> "$GITHUB_OUTPUT"
 
     - name: Post comment
