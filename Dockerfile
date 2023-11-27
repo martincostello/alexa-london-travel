@@ -8,7 +8,7 @@ WORKDIR /source
 
 COPY . .
 
-RUN DOTNET_INSTALL_DIR="/usr/share/dotnet" && curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --jsonfile global.json --install-dir $DOTNET_INSTALL_DIR
+RUN DOTNET_INSTALL_DIR="/usr/share/dotnet" && curl -sSL https://raw.githubusercontent.com/dotnet/install-scripts/5b142a1e445a6f060d6430b661408989e9580b85/src/dotnet-install.sh | bash /dev/stdin --jsonfile global.json --install-dir $DOTNET_INSTALL_DIR
 
 RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
     dotnet publish ./src/LondonTravel.Skill --runtime linux-arm64 --self-contained true /p:AssemblyName=bootstrap /p:PublishAot=true /p:PublishReadyToRun=true
