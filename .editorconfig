@@ -56,12 +56,3 @@ csharp_new_line_before_finally = true
 csharp_new_line_before_open_brace = all
 csharp_new_line_before_members_in_anonymous_types = true
 csharp_new_line_before_members_in_object_initializers = true
-
-[*.{received,verified}.{json,txt,xml}]
-charset = "utf-8-bom"
-end_of_line = lf
-indent_size = unset
-indent_style = unset
-insert_final_newline = false
-tab_width = unset
-trim_trailing_whitespace = false

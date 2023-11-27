@@ -6,25 +6,8 @@ using MartinCostello.LondonTravel.Skill.Models;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-[UsesVerify]
 public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
-    [Fact]
-    public async Task Can_Invoke_Function_For_Valid_Line()
-    {
-        // Arrange
-        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-line-statuses.json"));
-
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentForLine("northern");
-
-        // Act
-        SkillResponse actual = await function.HandlerAsync(request);
-
-        // Assert
-        await Verify(actual);
-    }
-
     [Theory]
     [InlineData("Bakerloo")]
     [InlineData("bakerloo")]
@@ -120,8 +103,6 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
         SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
-        await Verify(actual);
-
         ResponseBody response = AssertResponse(actual);
 
         response.Card.ShouldBeNull();

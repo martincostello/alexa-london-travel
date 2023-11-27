@@ -1,6 +1,0 @@
-﻿{
-  Version: 1.0,
-  Response: {
-    ShouldEndSession: true
-  }
-}

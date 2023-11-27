@@ -10,7 +10,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AF3F738F-308E-4EB0-A9E3-CE43D407992F}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		.vsconfig = .vsconfig
 		build.ps1 = build.ps1

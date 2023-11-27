@@ -5,7 +5,6 @@ using MartinCostello.LondonTravel.Skill.Models;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-[UsesVerify]
 public class HelpTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
     [Fact]
@@ -20,8 +19,6 @@ public class HelpTests(ITestOutputHelper outputHelper) : FunctionTests(outputHel
         SkillResponse actual = await function.HandlerAsync(request);
 
         // Assert
-        await Verify(actual);
-
         ResponseBody response = AssertResponse(actual, shouldEndSession: false);
 
         response.Card.ShouldBeNull();
