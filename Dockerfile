@@ -7,6 +7,9 @@ RUN apt update && apt install --yes clang gcc-aarch64-linux-gnu llvm zlib1g-dev 
 WORKDIR /source
 
 COPY . .
+
+RUN DOTNET_INSTALL_DIR="/usr/share/dotnet" && curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --jsonfile global.json --install-dir $DOTNET_INSTALL_DIR
+
 RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
     dotnet publish ./src/LondonTravel.Skill --runtime linux-arm64 --self-contained true /p:AssemblyName=bootstrap /p:PublishAot=true /p:PublishReadyToRun=true
 
