@@ -8,7 +8,7 @@ namespace MartinCostello.LondonTravel.Skill.Clients;
 /// <summary>
 /// A class representing a line. This class cannot be inherited.
 /// </summary>
-internal sealed class Line
+public sealed class Line
 {
     /// <summary>
     /// Gets or sets the line's name.

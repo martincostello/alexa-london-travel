@@ -3,8 +3,10 @@
     <AWSProjectType>Lambda</AWSProjectType>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <InvariantGlobalization>true</InvariantGlobalization>
     <NoWarn>$(NoWarn);CA1822</NoWarn>
     <OutputType>Exe</OutputType>
+    <PublishAot>true</PublishAot>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>net8.0</TargetFramework>
     <TieredCompilation>false</TieredCompilation>
@@ -13,8 +15,7 @@
     <PackageReference Include="Alexa.NET" />
     <PackageReference Include="Amazon.Lambda.Core" />
     <PackageReference Include="Amazon.Lambda.RuntimeSupport" />
-    <PackageReference Include="Amazon.Lambda.Serialization.Json" />
-    <PackageReference Include="Microsoft.ApplicationInsights" />
+    <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
@@ -23,7 +24,6 @@
     <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" />
-    <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="Polly.Core" />
     <PackageReference Include="Polly.Extensions" />
     <PackageReference Include="Polly.RateLimiting" />
@@ -35,12 +35,4 @@
     <EmbeddedResource Update="Strings.*.resx" DependentUpon="Strings.resx" />
     <None Include="appsettings.json;aws-lambda-tools-defaults.json" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'linux-arm64' ">
-    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" />
-  </ItemGroup>
-  <Target Name="SetAppLocalIcuVersion" BeforeTargets="Compile" Condition=" '$(RuntimeIdentifier)' == 'linux-arm64' ">
-    <ItemGroup>
-      <RuntimeHostConfigurationOption Condition=" '%(PackageVersion.Identity)' == 'Microsoft.ICU.ICU4C.Runtime' " Include="System.Globalization.AppLocalIcu" Value="%(PackageVersion.Version)" />
-    </ItemGroup>
-  </Target>
 </Project>

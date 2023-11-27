@@ -1,9 +1,8 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using Alexa.NET.Request;
-using Alexa.NET.Response;
 using JustEat.HttpClientInterception;
+using MartinCostello.LondonTravel.Skill.Models;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -42,7 +41,7 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
     [InlineData("Waterloo")]
     [InlineData("Waterloo & City")]
     [InlineData("Waterloo and City")]
-    public async Task Can_Invoke_Function_For_Valid_Line(string id)
+    public async Task Can_Invoke_Function_For_Valid_Lines(string id)
     {
         // Arrange
         await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-line-statuses.json"));

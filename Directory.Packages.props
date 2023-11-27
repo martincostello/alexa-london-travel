@@ -6,7 +6,7 @@
     <PackageVersion Include="Alexa.NET" Version="1.22.0" />
     <PackageVersion Include="Amazon.Lambda.Core" Version="2.2.0" />
     <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.10.0" />
-    <PackageVersion Include="Amazon.Lambda.Serialization.Json" Version="2.1.1" />
+    <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.0" />
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="2.0.0" />
     <PackageVersion Include="AWSSDK.Lambda" Version="3.7.300.1" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.0" />
@@ -14,7 +14,6 @@
     <PackageVersion Include="JustEat.HttpClientInterception" Version="4.0.0" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.8.0" />
-    <PackageVersion Include="Microsoft.ApplicationInsights" Version="2.21.0" />
     <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
@@ -23,7 +22,6 @@
     <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Polly.Core" Version="$(PollyVersion)" />

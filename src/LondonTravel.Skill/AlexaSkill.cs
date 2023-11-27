@@ -4,7 +4,6 @@
 using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
-using Microsoft.ApplicationInsights;
 using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill;
@@ -16,11 +15,9 @@ namespace MartinCostello.LondonTravel.Skill;
 /// Initializes a new instance of the <see cref="AlexaSkill"/> class.
 /// </remarks>
 /// <param name="intentFactory">The factory to use for the skill intents.</param>
-/// <param name="telemetry">The telemetry client to use.</param>
 /// <param name="logger">The logger to use.</param>
 internal sealed class AlexaSkill(
     IntentFactory intentFactory,
-    TelemetryClient telemetry,
     ILogger<AlexaSkill> logger)
 {
     /// <summary>
@@ -57,8 +54,6 @@ internal sealed class AlexaSkill(
     {
         Log.HandlerException(logger, exception, session.SessionId);
 
-        TrackException(exception, session);
-
         return SkillResponseBuilder
             .Tell(Strings.InternalError)
             .Build();
@@ -75,8 +70,6 @@ internal sealed class AlexaSkill(
     /// </returns>
     public async Task<SkillResponse> OnIntentAsync(Intent intent, Session session)
     {
-        TrackEvent(intent.Name, session, intent);
-
         IIntent userIntent = intentFactory.Create(intent);
 
         return await userIntent.RespondAsync(intent, session);
@@ -91,7 +84,7 @@ internal sealed class AlexaSkill(
     /// </returns>
     public SkillResponse OnLaunch(Session session)
     {
-        TrackEvent("LaunchRequest", session);
+        Log.SessionLaunched(logger, session.User.UserId, session.SessionId);
 
         return SkillResponseBuilder
             .Tell(Strings.LaunchResponse)
@@ -108,45 +101,10 @@ internal sealed class AlexaSkill(
     /// </returns>
     public SkillResponse OnSessionEnded(Session session)
     {
-        TrackEvent("SessionEndedRequest", session);
+        Log.SessionEnded(logger, session.User.UserId, session.SessionId);
 
         return SkillResponseBuilder
             .Tell(Strings.SessionEndResponse)
             .Build();
-    }
-
-    private Dictionary<string, string> ToTelemetryProperties(Session session)
-    {
-        bool hasAccessToken = !string.IsNullOrEmpty(session.User?.AccessToken);
-
-#pragma warning disable CA1308
-        return new Dictionary<string, string>()
-        {
-            ["hasAccessToken"] = hasAccessToken.ToString(CultureInfo.InvariantCulture).ToLowerInvariant(),
-            ["sessionId"] = session.SessionId,
-            ["userId"] = session.User?.UserId,
-        };
-#pragma warning restore CA1308
-    }
-
-    private void TrackEvent(string eventName, Session session, Intent intent = null)
-    {
-        Dictionary<string, string> properties = ToTelemetryProperties(session);
-
-        if (intent?.Slots?.Count > 0)
-        {
-            foreach (var slot in intent.Slots.Values)
-            {
-                properties[$"slot:{slot.Name}"] = slot.Value;
-            }
-        }
-
-        telemetry.TrackEvent(eventName, properties);
-    }
-
-    private void TrackException(Exception exception, Session session)
-    {
-        Dictionary<string, string> properties = ToTelemetryProperties(session);
-        telemetry.TrackException(exception, properties);
     }
 }

@@ -8,7 +8,7 @@ namespace MartinCostello.LondonTravel.Skill.Clients;
 /// <summary>
 /// A class representing a service disruption. This class cannot be inherited.
 /// </summary>
-internal sealed class ServiceDisruption
+public sealed class ServiceDisruption
 {
     /// <summary>
     /// Gets or sets the description of the disruption.

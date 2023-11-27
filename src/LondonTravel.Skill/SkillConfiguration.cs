@@ -11,11 +11,6 @@ namespace MartinCostello.LondonTravel.Skill;
 public sealed class SkillConfiguration
 {
     /// <summary>
-    /// Gets or sets the ApplicationInsights connection string to use.
-    /// </summary>
-    public string ApplicationInsightsConnectionString { get; set; } = string.Empty;
-
-    /// <summary>
     /// Gets or sets the URL for the skill API.
     /// </summary>
     [Required]

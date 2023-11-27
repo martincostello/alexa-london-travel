@@ -30,4 +30,16 @@
     <ReportGenerator ReportFiles="@(CoverletReport)" ReportTypes="$(ReportGeneratorReportTypes)" Tag="$(Version)" TargetDirectory="$(ReportGeneratorTargetDirectory)" Title="$(AssemblyName)" VerbosityLevel="Warning" />
     <Exec Condition=" '$(ReportGeneratorOutputMarkdown)' == 'true' " Command="pwsh -Command %22('$(_MarkdownSummaryPrefix)' + [System.Environment]::NewLine + [System.Environment]::NewLine + (Get-Content $([System.IO.Path]::Combine($(ReportGeneratorTargetDirectory), 'SummaryGithub.md')) | Out-String) + [System.Environment]::NewLine + [System.Environment]::NewLine + '$(_MarkdownSummarySuffix)') >> $(GITHUB_STEP_SUMMARY)%22" />
   </Target>
+  <!--
+    HACK Workaround warnings from Microsoft.Extensions.Http.Resilience until dotnet/extensions#4622 is fixed in .NET 8.0.2(?)
+  -->
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);IL2026</NoWarn>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+  </PropertyGroup>
+  <Target Name="SuppressDotNetExtensionsWarnings" BeforeTargets="PrepareForILLink">
+    <ItemGroup>
+      <IlcArg Include="--singlewarnassembly:Microsoft.Extensions.Http.Resilience" />
+    </ItemGroup>
+  </Target>
 </Project>

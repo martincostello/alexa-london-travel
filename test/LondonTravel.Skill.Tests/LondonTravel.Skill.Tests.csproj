@@ -21,7 +21,7 @@
     <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="testsettings.json;xunit.runner.json;Bundles\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="testsettings.json;xunit.runner.json;Bundles\*.json;Samples\*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>

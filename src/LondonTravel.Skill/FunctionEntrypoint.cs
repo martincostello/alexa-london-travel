@@ -1,10 +1,9 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using Alexa.NET.Request;
-using Alexa.NET.Response;
 using Amazon.Lambda.RuntimeSupport;
-using Amazon.Lambda.Serialization.Json;
+using Amazon.Lambda.Serialization.SystemTextJson;
+using MartinCostello.LondonTravel.Skill.Models;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -30,7 +29,7 @@ public static class FunctionEntrypoint
         CancellationToken cancellationToken = default)
         where T : AlexaFunction, new()
     {
-        var serializer = new JsonSerializer();
+        var serializer = new SourceGeneratorLambdaJsonSerializer<AppJsonSerializerContext>();
         await using var function = new T();
 
         using var bootstrap = LambdaBootstrapBuilder

@@ -39,7 +39,7 @@ internal static class IHttpClientBuilderExtensions
     private static void ApplyDefaultConfiguration(HttpClient client)
     {
         client.DefaultRequestHeaders.UserAgent.Add(_userAgent.Value);
-        client.Timeout = TimeSpan.FromSeconds(5);
+        client.Timeout = TimeSpan.FromSeconds(7.5);
     }
 
     /// <summary>

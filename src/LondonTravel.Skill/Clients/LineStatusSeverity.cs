@@ -6,7 +6,7 @@ namespace MartinCostello.LondonTravel.Skill.Clients;
 /// <summary>
 /// An enumeration of line status severities.
 /// </summary>
-internal enum LineStatusSeverity
+public enum LineStatusSeverity
 {
     SpecialService = 0,
 
