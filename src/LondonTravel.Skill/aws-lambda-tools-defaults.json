@@ -3,7 +3,7 @@
   "region": "eu-west-1",
   "configuration": "Release",
   "framework": "net8.0",
-  "function-architecture": "x86_64",
+  "function-architecture": "arm64",
   "function-handler": "LondonTravel.Skill",
   "function-memory-size": 192,
   "function-runtime": "provided.al2023",
