@@ -52,6 +52,21 @@ jobs:
 
     steps:
 
+    - name: Setup arm64 support for native AoT
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        sudo dpkg --add-architecture arm64
+        sudo bash -c 'cat > /etc/apt/sources.list.d/arm64.list <<EOF
+        deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy main restricted
+        deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main restricted
+        deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-backports main restricted universe multiverse
+        EOF'
+        sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
+        sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
+        sudo apt update
+        sudo apt install --yes clang llvm binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu zlib1g-dev:arm64
+
     - name: Checkout code
       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -68,11 +83,6 @@ jobs:
         file: ./artifacts/coverage/coverage.cobertura.xml
         flags: ${{ matrix.os_name }}
 
-    - name: Build for arm64 with Docker
-      if: runner.os == 'Linux'
-      run: |
-        docker build --platform linux/arm64 --output . .
-
     - name: Publish artifacts
       uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
       with:
@@ -81,6 +91,7 @@ jobs:
 
     - name: Create Lambda ZIP file
       if: runner.os == 'Linux'
+      shell: bash
       run: |
         cd "./artifacts/publish/LondonTravel.Skill/release_linux-arm64" || exit
         if [ -f "./bootstrap" ]
@@ -115,6 +126,7 @@ jobs:
     steps:
 
     - name: Set function name
+      shell: bash
       run: |
         echo "FUNCTION_NAME=${LAMBDA_FUNCTION}-dev" >> "$GITHUB_ENV"
 
@@ -143,6 +155,7 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Update function code
+      shell: bash
       run: |
         aws lambda update-function-code \
           --function-name "${FUNCTION_NAME}" \
@@ -151,12 +164,14 @@ jobs:
           > /dev/null
 
     - name: Wait for function code update
+      shell: bash
       run: |
         aws lambda wait function-updated-v2 \
           --function-name "${FUNCTION_NAME}" \
           > /dev/null
 
     - name: Update function configuration
+      shell: bash
       run: |
         aws lambda update-function-configuration \
           --function-name "${FUNCTION_NAME}" \
@@ -169,6 +184,7 @@ jobs:
           > /dev/null
 
     - name: Wait for function configuration update
+      shell: bash
       run: |
         aws lambda wait function-updated-v2 \
           --function-name "${FUNCTION_NAME}" \
@@ -219,6 +235,7 @@ jobs:
     steps:
 
     - name: Set function name
+      shell: bash
       run: |
         echo "FUNCTION_NAME=${LAMBDA_FUNCTION}" >> "$GITHUB_ENV"
 
@@ -247,6 +264,7 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Update function code
+      shell: bash
       run: |
         aws lambda update-function-code \
           --function-name "${FUNCTION_NAME}" \
@@ -255,12 +273,14 @@ jobs:
           > /dev/null
 
     - name: Wait for function code update
+      shell: bash
       run: |
         aws lambda wait function-updated-v2 \
           --function-name "${FUNCTION_NAME}" \
           > /dev/null
 
     - name: Update function configuration
+      shell: bash
       run: |
         aws lambda update-function-configuration \
           --function-name "${FUNCTION_NAME}" \
@@ -273,6 +293,7 @@ jobs:
           > /dev/null
 
     - name: Wait for function configuration update
+      shell: bash
       run: |
         aws lambda wait function-updated-v2 \
           --function-name "${FUNCTION_NAME}" \

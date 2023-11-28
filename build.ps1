@@ -91,7 +91,7 @@ function DotNetPublish {
 
     if ($IsLinux -And (-Not $UseManagedRuntime)) {
         $additionalArgs += "--runtime"
-        $additionalArgs += "linux-x64"
+        $additionalArgs += "linux-arm64"
         $additionalArgs += "--self-contained"
         $additionalArgs += "true"
         $additionalArgs += "/p:AssemblyName=bootstrap"
