@@ -91,6 +91,7 @@ jobs:
 
     - name: Create Lambda ZIP file
       if: runner.os == 'Linux'
+      shell: bash
       run: |
         cd "./artifacts/publish/LondonTravel.Skill/release_linux-arm64" || exit
         if [ -f "./bootstrap" ]
@@ -125,6 +126,7 @@ jobs:
     steps:
 
     - name: Set function name
+      shell: bash
       run: |
         echo "FUNCTION_NAME=${LAMBDA_FUNCTION}-dev" >> "$GITHUB_ENV"
 
@@ -153,6 +155,7 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Update function code
+      shell: bash
       run: |
         aws lambda update-function-code \
           --function-name "${FUNCTION_NAME}" \
@@ -161,12 +164,14 @@ jobs:
           > /dev/null
 
     - name: Wait for function code update
+      shell: bash
       run: |
         aws lambda wait function-updated-v2 \
           --function-name "${FUNCTION_NAME}" \
           > /dev/null
 
     - name: Update function configuration
+      shell: bash
       run: |
         aws lambda update-function-configuration \
           --function-name "${FUNCTION_NAME}" \
@@ -179,6 +184,7 @@ jobs:
           > /dev/null
 
     - name: Wait for function configuration update
+      shell: bash
       run: |
         aws lambda wait function-updated-v2 \
           --function-name "${FUNCTION_NAME}" \
@@ -229,6 +235,7 @@ jobs:
     steps:
 
     - name: Set function name
+      shell: bash
       run: |
         echo "FUNCTION_NAME=${LAMBDA_FUNCTION}" >> "$GITHUB_ENV"
 
@@ -257,6 +264,7 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Update function code
+      shell: bash
       run: |
         aws lambda update-function-code \
           --function-name "${FUNCTION_NAME}" \
@@ -265,12 +273,14 @@ jobs:
           > /dev/null
 
     - name: Wait for function code update
+      shell: bash
       run: |
         aws lambda wait function-updated-v2 \
           --function-name "${FUNCTION_NAME}" \
           > /dev/null
 
     - name: Update function configuration
+      shell: bash
       run: |
         aws lambda update-function-configuration \
           --function-name "${FUNCTION_NAME}" \
@@ -283,6 +293,7 @@ jobs:
           > /dev/null
 
     - name: Wait for function configuration update
+      shell: bash
       run: |
         aws lambda wait function-updated-v2 \
           --function-name "${FUNCTION_NAME}" \
