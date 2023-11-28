@@ -1,13 +1,5 @@
 version: 2
 updates:
-- package-ecosystem: docker
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "05:30"
-    timezone: Europe/London
-  reviewers:
-    - "martincostello"
 - package-ecosystem: "github-actions"
   directory: "/"
   schedule:
