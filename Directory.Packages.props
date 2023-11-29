@@ -3,7 +3,6 @@
     <PollyVersion>8.2.0</PollyVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Alexa.NET" Version="1.22.0" />
     <PackageVersion Include="Amazon.Lambda.Core" Version="2.2.0" />
     <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.10.0" />
     <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.0" />

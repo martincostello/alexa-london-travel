@@ -5,9 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace MartinCostello.LondonTravel.Skill.Models;
 
-#pragma warning disable CA1724
-
-public sealed class Request
+public sealed class Request : IRequest, IIntentRequest, ISessionEndedRequest, ISystemExceptionRequest
 {
     [JsonPropertyName("type")]
     [JsonRequired]

@@ -1,8 +1,8 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using Alexa.NET.Request;
 using MartinCostello.LondonTravel.Skill.Intents;
+using MartinCostello.LondonTravel.Skill.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MartinCostello.LondonTravel.Skill;

@@ -1,9 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using Alexa.NET.Request;
-using Alexa.NET.Request.Type;
-using Alexa.NET.Response;
+using MartinCostello.LondonTravel.Skill.Models;
 using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill;
@@ -28,13 +26,13 @@ internal sealed class AlexaSkill(
     /// <returns>
     /// The <see cref="ResponseBody"/> to return from the skill.
     /// </returns>
-    public SkillResponse OnError(SystemExceptionRequest error, Session session)
+    public SkillResponse OnError(ISystemExceptionRequest error, Session session)
     {
         Log.SystemError(
             logger,
             session.SessionId,
             error.Error.Type.ToString(),
-            error.ErrorCause?.requestId,
+            error.ErrorCause?.RequestId,
             error.Error.Message);
 
         return SkillResponseBuilder
@@ -68,11 +66,10 @@ internal sealed class AlexaSkill(
     /// A <see cref="Task{TResult}"/> representing the asynchronous operation
     /// which returns the <see cref="ResponseBody"/> to return from the skill.
     /// </returns>
-    public async Task<SkillResponse> OnIntentAsync(Intent intent, Session session)
+    public async Task<SkillResponse> OnIntentAsync(IIntentRequest intent, Session session)
     {
-        IIntent userIntent = intentFactory.Create(intent);
-
-        return await userIntent.RespondAsync(intent, session);
+        IIntent handler = intentFactory.Create(intent.Intent);
+        return await handler.RespondAsync(intent.Intent, session);
     }
 
     /// <summary>

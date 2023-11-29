@@ -9,7 +9,7 @@ public sealed class SkillResponse
 {
     [JsonPropertyName("version")]
     [JsonRequired]
-    public string Version { get; set; }
+    public string Version { get; set; } = "1.0";
 
     [JsonPropertyName("response")]
     [JsonRequired]
