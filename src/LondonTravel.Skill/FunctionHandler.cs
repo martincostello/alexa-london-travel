@@ -1,9 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using Alexa.NET.Request;
-using Alexa.NET.Request.Type;
-using Alexa.NET.Response;
+using MartinCostello.LondonTravel.Skill.Models;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -51,21 +49,21 @@ internal sealed class FunctionHandler(AlexaSkill skill, SkillConfiguration confi
     {
         try
         {
-            if (request.Request is LaunchRequest)
+            if (request.Request.Type is RequestTypes.Launch)
             {
                 return skill.OnLaunch(request.Session);
             }
-            else if (request.Request is IntentRequest intent)
+            else if (request.Request.Type is RequestTypes.Intent)
             {
-                return await skill.OnIntentAsync(intent.Intent, request.Session);
+                return await skill.OnIntentAsync(request.Request, request.Session);
             }
-            else if (request.Request is SessionEndedRequest)
+            else if (request.Request.Type is RequestTypes.SessionEnded)
             {
                 return skill.OnSessionEnded(request.Session);
             }
-            else if (request.Request is SystemExceptionRequest error)
+            else if (request.Request.Type is RequestTypes.SystemException)
             {
-                return skill.OnError(error, request.Session);
+                return skill.OnError(request.Request, request.Session);
             }
             else
             {

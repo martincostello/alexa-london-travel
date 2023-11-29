@@ -1,27 +1,38 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using Alexa.NET;
-using Alexa.NET.Response;
-using Alexa.NET.Response.Ssml;
+using System.Diagnostics;
+using System.Xml.Linq;
+using MartinCostello.LondonTravel.Skill.Models;
 
 namespace MartinCostello.LondonTravel.Skill;
 
+#pragma warning disable SA1010
+
 internal sealed class SkillResponseBuilder
 {
-    private SkillResponseBuilder(Speech speech)
+    private SkillResponseBuilder(SpeechXml speech)
     {
         Speech = speech;
-        Response = ResponseBuilder.Tell(Speech);
+        Response = new()
+        {
+            Response = new()
+            {
+                OutputSpeech = new()
+                {
+                    Ssml = speech.ToXml(),
+                },
+            },
+        };
     }
 
-    private ICard Card { get; set; }
+    private Card Card { get; set; }
 
     private SkillResponse Response { get; }
 
     private bool ShouldEndSession { get; set; } = true;
 
-    private Speech Speech { get; }
+    private SpeechXml Speech { get; }
 
     public static SkillResponseBuilder Tell(params string[] paragraphs)
     {
@@ -30,7 +41,7 @@ internal sealed class SkillResponseBuilder
 
     public static SkillResponseBuilder Tell(ICollection<string> paragraphs)
     {
-        var rawText = new List<IParagraphSsml>(paragraphs.Count);
+        var rawText = new List<Ssml>(paragraphs.Count);
 
         foreach (string paragraph in paragraphs)
         {
@@ -38,7 +49,7 @@ internal sealed class SkillResponseBuilder
             rawText.Add(new PlainText(text));
         }
 
-        var elements = new List<ISsml>(rawText.Count);
+        var elements = new List<Ssml>(rawText.Count);
 
         if (rawText.Count == 1)
         {
@@ -52,7 +63,7 @@ internal sealed class SkillResponseBuilder
             }
         }
 
-        var speech = new Speech([.. elements]);
+        var speech = new SpeechXml(elements);
 
         return new SkillResponseBuilder(speech);
     }
@@ -90,7 +101,57 @@ internal sealed class SkillResponseBuilder
 
     public SkillResponseBuilder WithReprompt()
     {
-        Response.Response.Reprompt = new Reprompt(Speech);
+        Response.Response.Reprompt = new Reprompt()
+        {
+            OutputSpeech = new()
+            {
+                Ssml = Speech.ToXml(),
+            },
+        };
         return this;
+    }
+
+    private sealed class Paragraph(Ssml element) : Ssml
+    {
+        public override XNode ToXml()
+            => new XElement("p", [element.ToXml()]);
+    }
+
+    private sealed class PlainText(string text) : Ssml
+    {
+        public override XNode ToXml()
+            => new XText(text);
+    }
+
+    private sealed class SpeechXml(List<Ssml> elements)
+    {
+        public string ToXml()
+        {
+            Debug.Assert(elements.Count > 0, "No text available.");
+
+            var root = new XElement(
+                "speak",
+                new XAttribute(XNamespace.Xmlns + "amazon", "http://alexa.amazon.com"),
+                new XAttribute(XNamespace.Xmlns + "alexa", "http://alexaactual.amazon.com"));
+
+            root.Add(elements.Select((p) => p.ToXml()));
+
+            string xmlString = root.ToString(SaveOptions.DisableFormatting);
+
+            const string SpeakTag = "<speak>";
+
+            if (xmlString.StartsWith(SpeakTag, StringComparison.Ordinal))
+            {
+                return xmlString;
+            }
+
+            int endOfSpeakTag = xmlString.IndexOf('>');
+            return string.Concat(SpeakTag, xmlString.AsSpan(endOfSpeakTag + 1));
+        }
+    }
+
+    private abstract class Ssml
+    {
+        public abstract XNode ToXml();
     }
 }

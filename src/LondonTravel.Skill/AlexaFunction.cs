@@ -78,11 +78,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
 
         Log.InvokingSkillRequest(logger, request.Request.Type);
 
-        var converted = request.FromModel();
-
-        var response = await handler.HandleAsync(converted);
-
-        return response.ToModel();
+        return await handler.HandleAsync(request);
     }
 
     /// <summary>
