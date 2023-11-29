@@ -27,6 +27,34 @@ public static class SerializationTests
     }
 
     [Fact]
+    public static void Can_Serialize_Response_With_No_Card()
+    {
+        // Arrange
+        var response = new SkillResponse()
+        {
+            Response = new()
+            {
+                OutputSpeech = new()
+                {
+                    Ssml = "<p>Hello, world!</p>",
+                },
+            },
+        };
+
+        // Act
+        string actual = JsonSerializer.Serialize(response, AppJsonSerializerContext.Default.SkillResponse);
+
+        // Assert
+        actual.ShouldNotBeNull();
+        using var document = JsonDocument.Parse(actual);
+
+        document.RootElement
+            .GetProperty("response")
+            .TryGetProperty("card", out _)
+            .ShouldBeFalse();
+    }
+
+    [Fact]
     public static void Can_Serialize_Response_With_Link_Account_Card()
     {
         // Arrange
