@@ -76,6 +76,7 @@ internal static class Verbalizer
           .Replace("tfl", "T.F.L.", StringComparison.Ordinal)
           .Replace("TFL", "T.F.L.", StringComparison.Ordinal)
           .Replace("TfL", "T.F.L.", StringComparison.Ordinal)
-          .Replace(" & ", " and ", StringComparison.Ordinal);
+          .Replace(" & ", " and ", StringComparison.Ordinal)
+          .Replace(" Reading ", " Redding ", StringComparison.Ordinal);
     }
 }
