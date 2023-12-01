@@ -95,8 +95,7 @@ function DotNetPublish {
         $additionalArgs += "--self-contained"
         $additionalArgs += "true"
         $additionalArgs += "/p:AssemblyName=bootstrap"
-        $additionalArgs += "/p:PublishAot=true"
-        $additionalArgs += "/p:PublishReadyToRun=true"
+        $additionalArgs += "/p:IlcInstructionSet=armv8.2-a"
     }
 
     & $dotnet publish $Project $additionalArgs
