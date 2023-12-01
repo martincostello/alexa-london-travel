@@ -50,7 +50,7 @@ public class SkillTests(ITestOutputHelper outputHelper)
 
         var region = RegionEndpoint.GetBySystemName(regionName);
 
-        using var client = new AmazonLambdaClient(credentials, region);
+        using var lambdaClient = new AmazonLambdaClient(credentials, region);
 
         var request = new InvokeRequest()
         {
@@ -64,27 +64,43 @@ public class SkillTests(ITestOutputHelper outputHelper)
         outputHelper.WriteLine($"Payload: {request.Payload}");
 
         // Act
-        InvokeResponse response = await client.InvokeAsync(request);
+        InvokeResponse invocation = await lambdaClient.InvokeAsync(request);
 
-        using var reader = new StreamReader(response.Payload);
+        using var reader = new StreamReader(invocation.Payload);
         string responsePayload = await reader.ReadToEndAsync();
 
-        outputHelper.WriteLine($"ExecutedVersion: {response.ExecutedVersion}");
-        outputHelper.WriteLine($"FunctionError: {response.FunctionError}");
-        outputHelper.WriteLine($"HttpStatusCode: {response.HttpStatusCode}");
-        outputHelper.WriteLine($"RequestId: {response.ResponseMetadata.RequestId}");
-        outputHelper.WriteLine($"StatusCode: {response.StatusCode}");
+        outputHelper.WriteLine($"ExecutedVersion: {invocation.ExecutedVersion}");
+        outputHelper.WriteLine($"FunctionError: {invocation.FunctionError}");
+        outputHelper.WriteLine($"HttpStatusCode: {invocation.HttpStatusCode}");
+        outputHelper.WriteLine($"RequestId: {invocation.ResponseMetadata.RequestId}");
+        outputHelper.WriteLine($"StatusCode: {invocation.StatusCode}");
+        outputHelper.WriteLine($"Payload: {responsePayload}");
 
         // Assert
-        response.HttpStatusCode.ShouldBe(HttpStatusCode.OK);
-        response.StatusCode.ShouldBe(200);
-        response.FunctionError.ShouldBeNull();
-        response.ExecutedVersion.ShouldBe("$LATEST");
+        invocation.HttpStatusCode.ShouldBe(HttpStatusCode.OK);
+        invocation.StatusCode.ShouldBe(200);
+        invocation.FunctionError.ShouldBeNull();
+        invocation.ExecutedVersion.ShouldBe("$LATEST");
 
         using var document = JsonDocument.Parse(responsePayload);
 
         document.RootElement.ValueKind.ShouldBe(JsonValueKind.Object);
         document.RootElement.ToString().ShouldNotContain("Sorry, something went wrong.");
+
+        document.RootElement.TryGetProperty("version", out var version).ShouldBeTrue();
+        version.GetString().ShouldBe("1.0");
+
+        document.RootElement.TryGetProperty("response", out var response).ShouldBeTrue();
+        response.TryGetProperty("shouldEndSession", out _).ShouldBeTrue();
+
+        if (response.TryGetProperty("outputSpeech", out var speech))
+        {
+            speech.TryGetProperty("type", out var type).ShouldBeTrue();
+            type.GetString().ShouldBe("SSML");
+
+            speech.TryGetProperty("ssml", out var ssml).ShouldBeTrue();
+            ssml.GetString().ShouldNotBeNullOrWhiteSpace();
+        }
     }
 
     private static AWSCredentials GetAwsCredentials()
