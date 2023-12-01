@@ -28,7 +28,23 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
             regionName is not null &&
             credentials is not null)
         {
-            await Task.Delay(TimeSpan.FromSeconds(10));
+            var builder = new StringBuilder()
+                .AppendLine()
+                .AppendLine()
+                .AppendLine(CultureInfo.InvariantCulture, $"AWS Request ID(s) (Count = {RequestIds.Count}):")
+                .AppendLine();
+
+            foreach (var requestId in RequestIds)
+            {
+                builder.AppendLine(CultureInfo.InvariantCulture, $"  - {requestId}");
+            }
+
+            diagnosticMessageSink.OnMessage(new DiagnosticMessage(builder.ToString()));
+
+            var delay = TimeSpan.FromSeconds(10);
+
+            diagnosticMessageSink.OnMessage(new DiagnosticMessage($"Waiting {delay.Seconds} seconds for CloudWatch logs..."));
+            await Task.Delay(delay);
 
             string logGroupName = $"/aws/lambda/{functionName}";
             var region = RegionEndpoint.GetBySystemName(regionName);
@@ -63,14 +79,16 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
                 foreach (var @event in reports)
                 {
                     string[] split = @event.Message.Split('\t', StringSplitOptions.RemoveEmptyEntries);
-                    string requestId = split[0][ReportPrefix.Length..];
+                    string requestIdLine = split[0][ReportPrefix.Length..];
+                    string requestId = requestIdLine.Split(' ')[1];
 
-                    var builder = new StringBuilder()
+                    builder
+                        .Clear()
                         .AppendLine()
                         .AppendLine()
                         .AppendFormat(CultureInfo.InvariantCulture, $"Timestamp: {@event.Timestamp:u}")
                         .AppendLine()
-                        .AppendLine(requestId);
+                        .AppendLine(requestIdLine);
 
                     foreach (string value in split.Skip(1))
                     {
@@ -88,6 +106,8 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
                 .Where((p) => RequestIds.Contains(p.RequestId))
                 .OrderBy((p) => p.Timestamp)
                 .ToList();
+
+            diagnosticMessageSink.OnMessage(new DiagnosticMessage($"Found {events.Count} CloudWatch log events."));
 
             foreach (var (_, _, message) in events)
             {
