@@ -6,12 +6,12 @@ using System.Text.Json;
 using Amazon;
 using Amazon.Lambda;
 using Amazon.Lambda.Model;
-using Amazon.Runtime;
-using Environment = System.Environment;
+using LondonTravel.Skill.EndToEndTests;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-public class SkillTests(ITestOutputHelper outputHelper)
+[Collection(CloudWatchLogsFixtureCollection.Name)]
+public class SkillTests(CloudWatchLogsFixture fixture, ITestOutputHelper outputHelper)
 {
     public static IEnumerable<object[]> Payloads
     {
@@ -29,28 +29,22 @@ public class SkillTests(ITestOutputHelper outputHelper)
     [MemberData(nameof(Payloads))]
     public async Task Can_Invoke_Intent_Can_Get_Json_Response(string payloadName)
     {
-        var credentials = GetAwsCredentials();
+        var credentials = AwsConfiguration.GetCredentials();
 
         Skip.If(credentials is null, "No AWS credentials are configured.");
 
-        string functionName = Environment.GetEnvironmentVariable("LAMBDA_FUNCTION_NAME");
+        string functionName = AwsConfiguration.FunctionName;
+        string regionName = AwsConfiguration.RegionName;
 
-        Skip.If(
-            string.IsNullOrEmpty(functionName),
-            "No Lambda function name is configured.");
-
-        string regionName = Environment.GetEnvironmentVariable("AWS_REGION");
-
-        Skip.If(
-            string.IsNullOrEmpty(regionName),
-            "No AWS region name is configured.");
+        Skip.If(string.IsNullOrEmpty(functionName), "No Lambda function name is configured.");
+        Skip.If(string.IsNullOrEmpty(regionName), "No AWS region name is configured.");
 
         // Arrange
         string payload = await File.ReadAllTextAsync(Path.Combine("Payloads", $"{payloadName}.json"));
 
         var region = RegionEndpoint.GetBySystemName(regionName);
 
-        using var lambdaClient = new AmazonLambdaClient(credentials, region);
+        using var client = new AmazonLambdaClient(credentials, region);
 
         var request = new InvokeRequest()
         {
@@ -64,7 +58,13 @@ public class SkillTests(ITestOutputHelper outputHelper)
         outputHelper.WriteLine($"Payload: {request.Payload}");
 
         // Act
-        InvokeResponse invocation = await lambdaClient.InvokeAsync(request);
+        InvokeResponse invocation = await client.InvokeAsync(request);
+
+        // Assert
+        invocation.ShouldNotBeNull();
+        invocation.ResponseMetadata.ShouldNotBeNull();
+
+        fixture.RequestIds.Add(invocation.ResponseMetadata.RequestId);
 
         using var reader = new StreamReader(invocation.Payload);
         string responsePayload = await reader.ReadToEndAsync();
@@ -76,7 +76,6 @@ public class SkillTests(ITestOutputHelper outputHelper)
         outputHelper.WriteLine($"StatusCode: {invocation.StatusCode}");
         outputHelper.WriteLine($"Payload: {responsePayload}");
 
-        // Assert
         invocation.HttpStatusCode.ShouldBe(HttpStatusCode.OK);
         invocation.StatusCode.ShouldBe(200);
         invocation.FunctionError.ShouldBeNull();
@@ -100,27 +99,6 @@ public class SkillTests(ITestOutputHelper outputHelper)
 
             speech.TryGetProperty("ssml", out var ssml).ShouldBeTrue();
             ssml.GetString().ShouldNotBeNullOrWhiteSpace();
-        }
-    }
-
-    private static AWSCredentials GetAwsCredentials()
-    {
-        try
-        {
-            return new EnvironmentVariablesAWSCredentials();
-        }
-        catch (InvalidOperationException)
-        {
-            // Not configured
-        }
-
-        try
-        {
-            return AssumeRoleWithWebIdentityCredentials.FromEnvironmentVariables();
-        }
-        catch (ArgumentException)
-        {
-            return null;
         }
     }
 }
