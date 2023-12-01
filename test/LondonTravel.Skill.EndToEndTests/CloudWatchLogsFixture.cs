@@ -1,21 +1,25 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Net.Http.Json;
+using System.Reflection;
 using Amazon;
 using Amazon.CloudWatchLogs;
 using Xunit.Sdk;
 
 namespace LondonTravel.Skill.EndToEndTests;
 
+#pragma warning disable SA1010
+
 public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncLifetime
 {
     private readonly DateTime _started = TimeProvider.System.GetUtcNow().UtcDateTime;
 
-    public IList<string> RequestIds { get; } = new List<string>();
+    internal Dictionary<string, string> Requests { get; } = [];
 
     public async Task DisposeAsync()
     {
-        if (RequestIds.Count < 1)
+        if (Requests.Count < 1)
         {
             return;
         }
@@ -31,10 +35,10 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
             var builder = new StringBuilder()
                 .AppendLine()
                 .AppendLine()
-                .AppendLine(CultureInfo.InvariantCulture, $"AWS Request ID(s) (Count = {RequestIds.Count}):")
+                .AppendLine(CultureInfo.InvariantCulture, $"AWS Request ID(s) (Count = {Requests.Count}):")
                 .AppendLine();
 
-            foreach (var requestId in RequestIds)
+            foreach ((string requestId, _) in Requests)
             {
                 builder.AppendLine(CultureInfo.InvariantCulture, $"  - {requestId}");
             }
@@ -54,15 +58,20 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
             var groups = await logsClient.DescribeLogStreamsAsync(new()
             {
                 Descending = true,
-                Limit = Math.Max(5, RequestIds.Count),
+                Limit = Math.Max(5, Requests.Count),
                 LogGroupName = logGroupName,
                 OrderBy = OrderBy.LastEventTime,
             });
 
-            var logs = new List<(DateTime Timestamp, string RequestId, string Message)>();
+            var logs = new List<(LogEvent Event, string Message)>();
 
             foreach (var stream in groups.LogStreams)
             {
+                if (logs.Count >= Requests.Count)
+                {
+                    break;
+                }
+
                 var logEvents = await logsClient.GetLogEventsAsync(new()
                 {
                     LogGroupName = logGroupName,
@@ -82,6 +91,17 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
                     string requestIdLine = split[0][ReportPrefix.Length..];
                     string requestId = requestIdLine.Split(' ')[1];
 
+                    if (!Requests.TryGetValue(requestId, out string name))
+                    {
+                        continue;
+                    }
+
+                    var entry = new LogEvent(name)
+                    {
+                        RequestId = requestId,
+                        Timestamp = @event.Timestamp,
+                    };
+
                     builder
                         .Clear()
                         .AppendLine()
@@ -95,26 +115,125 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
                         if (value.Trim() is { Length: > 0 } trimmed)
                         {
                             builder.AppendLine(trimmed);
+
+                            string[] parts = trimmed.Split(": ");
+
+                            switch (parts[0])
+                            {
+                                case "Duration":
+                                    entry.Duration = parts[1];
+                                    break;
+
+                                case "Billed Duration":
+                                    entry.BilledDuration = parts[1];
+                                    break;
+
+                                case "Memory Size":
+                                    entry.MemorySize = parts[1];
+                                    break;
+
+                                case "Max Memory Used":
+                                    entry.MaxMemoryUsed = parts[1];
+                                    break;
+
+                                case "Init Duration":
+                                    entry.InitDuration = parts[1];
+                                    break;
+                            }
                         }
                     }
 
-                    logs.Add(new(@event.Timestamp, requestId, builder.ToString()));
+                    logs.Add(new(entry, builder.ToString()));
                 }
             }
 
+            var requestIds = Requests.Keys.ToList();
             var events = logs
-                .Where((p) => RequestIds.Contains(p.RequestId))
-                .OrderBy((p) => p.Timestamp)
+                .Where((p) => requestIds.Contains(p.Event.RequestId))
+                .OrderBy((p) => p.Event.Timestamp)
                 .ToList();
 
             diagnosticMessageSink.OnMessage(new DiagnosticMessage($"Found {events.Count} CloudWatch log events."));
 
-            foreach (var (_, _, message) in events)
+            foreach ((_, string message) in events)
             {
                 diagnosticMessageSink.OnMessage(new DiagnosticMessage(message));
             }
+
+            await TryPostLogsToPullRequestAsync(events.Select((p) => p.Event));
         }
     }
 
     public Task InitializeAsync() => Task.CompletedTask;
+
+    private static async Task TryPostLogsToPullRequestAsync(IEnumerable<LogEvent> events)
+    {
+        string apiUrl = Environment.GetEnvironmentVariable("GITHUB_API_URL");
+        string repository = Environment.GetEnvironmentVariable("GITHUB_REPOSITORY");
+        string token = Environment.GetEnvironmentVariable("GITHUB_TOKEN");
+        string issue = Environment.GetEnvironmentVariable("PULL_NUMBER");
+
+        if (string.IsNullOrEmpty(apiUrl) ||
+            string.IsNullOrEmpty(repository) ||
+            string.IsNullOrEmpty(issue) ||
+            string.IsNullOrEmpty(token) ||
+            !Uri.TryCreate(apiUrl, UriKind.Absolute, out var baseAddress))
+        {
+            return;
+        }
+
+        var comment = new StringBuilder()
+            .AppendLine("| **Payload** | **Duration** | **Billed Duration** | **Memory Size** | **Max Memory Used** | **Init Duration** |")
+            .AppendLine("|:------------|-------------:|--------------------:|----------------:|--------------------:|------------------:|");
+
+        foreach (var entry in events)
+        {
+            comment
+                .Append(CultureInfo.InvariantCulture, $"| `{entry.Name}` <!-- {entry.RequestId:u} {entry.Timestamp:u} -->")
+                .Append(CultureInfo.InvariantCulture, $" | {entry.Duration}")
+                .Append(CultureInfo.InvariantCulture, $" | {entry.BilledDuration}")
+                .Append(CultureInfo.InvariantCulture, $" | {entry.MemorySize}")
+                .Append(CultureInfo.InvariantCulture, $" | {entry.MaxMemoryUsed}")
+                .Append(CultureInfo.InvariantCulture, $" | {entry.InitDuration ?? "-"}")
+                .AppendLine(" |");
+        }
+
+        using var httpClient = new HttpClient()
+        {
+            BaseAddress = baseAddress,
+            DefaultRequestHeaders =
+            {
+                Accept = { new("application/vnd.github+json") },
+                Authorization = new("Bearer", token),
+                UserAgent = { new("LondonTravel.Skill.EndToEndTests", typeof(CloudWatchLogsFixture).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion) },
+            },
+        };
+
+        httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-GitHub-Api-Version", "2022-11-28");
+
+        using var response = await httpClient.PostAsJsonAsync(
+            $"repos/{repository}/issues/{Uri.EscapeDataString(issue)}/comments",
+            new { body = comment.ToString() });
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    private sealed class LogEvent(string name)
+    {
+        public string Name => name;
+
+        public DateTime Timestamp { get; set; }
+
+        public string RequestId { get; set; }
+
+        public string Duration { get; set; }
+
+        public string BilledDuration { get; set; }
+
+        public string MemorySize { get; set; }
+
+        public string MaxMemoryUsed { get; set; }
+
+        public string InitDuration { get; set; }
+    }
 }

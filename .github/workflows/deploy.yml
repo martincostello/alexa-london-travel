@@ -385,7 +385,9 @@ jobs:
       shell: pwsh
       run: dotnet test ./test/LondonTravel.Skill.EndToEndTests --configuration Release --logger "GitHubActions;report-warnings=false"
       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         LAMBDA_FUNCTION_NAME: ${{ needs.setup.outputs.function-name }}
+        PULL_NUMBER: ${{ github.event.issue.number }}
 
     - name: Post comment
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
