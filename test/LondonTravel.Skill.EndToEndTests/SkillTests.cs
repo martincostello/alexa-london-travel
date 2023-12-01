@@ -64,7 +64,7 @@ public class SkillTests(CloudWatchLogsFixture fixture, ITestOutputHelper outputH
         invocation.ShouldNotBeNull();
         invocation.ResponseMetadata.ShouldNotBeNull();
 
-        fixture.RequestIds.Add(invocation.ResponseMetadata.RequestId);
+        fixture.Requests[invocation.ResponseMetadata.RequestId] = payloadName;
 
         using var reader = new StreamReader(invocation.Payload);
         string responsePayload = await reader.ReadToEndAsync();

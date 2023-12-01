@@ -66,8 +66,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build.yml = .github\workflows\build.yml
 		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
-		.github\workflows\linter.yml = .github\workflows\linter.yml
-		.github\workflows\update-dotnet-sdk.yml = .github\workflows\update-dotnet-sdk.yml
+		.github\workflows\dependency-review.yml = .github\workflows\dependency-review.yml
+		.github\workflows\deploy.yml = .github\workflows\deploy.yml
+		.github\workflows\lint.yml = .github\workflows\lint.yml
+		.github\workflows\ossf-scorecard.yml = .github\workflows\ossf-scorecard.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Skill.EndToEndTests", "test\LondonTravel.Skill.EndToEndTests\LondonTravel.Skill.EndToEndTests.csproj", "{385B221D-16BF-4703-8105-C8622C188B1A}"
