@@ -15,6 +15,11 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
 
     public async Task DisposeAsync()
     {
+        if (RequestIds.Count < 1)
+        {
+            return;
+        }
+
         var credentials = AwsConfiguration.GetCredentials();
         string functionName = AwsConfiguration.FunctionName;
         string regionName = AwsConfiguration.RegionName;
