@@ -11,7 +11,7 @@ using LondonTravel.Skill.EndToEndTests;
 namespace MartinCostello.LondonTravel.Skill;
 
 [Collection(CloudWatchLogsFixtureCollection.Name)]
-public class SkillTests(CloudWatchLogsFixture fixture, ITestOutputHelper outputHelper)
+public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper outputHelper)
 {
     public static IEnumerable<object[]> Payloads
     {
@@ -29,12 +29,12 @@ public class SkillTests(CloudWatchLogsFixture fixture, ITestOutputHelper outputH
     [MemberData(nameof(Payloads))]
     public async Task Can_Invoke_Intent_Can_Get_Json_Response(string payloadName)
     {
-        var credentials = AwsConfiguration.GetCredentials();
+        var credentials = TestConfiguration.GetCredentials();
 
         Skip.If(credentials is null, "No AWS credentials are configured.");
 
-        string functionName = AwsConfiguration.FunctionName;
-        string regionName = AwsConfiguration.RegionName;
+        string functionName = TestConfiguration.FunctionName;
+        string regionName = TestConfiguration.RegionName;
 
         Skip.If(string.IsNullOrEmpty(functionName), "No Lambda function name is configured.");
         Skip.If(string.IsNullOrEmpty(regionName), "No AWS region name is configured.");
