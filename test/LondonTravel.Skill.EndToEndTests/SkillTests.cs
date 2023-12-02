@@ -176,6 +176,7 @@ public class SkillTests(ITestOutputHelper outputHelper)
         string stage,
         string content)
     {
+        // See https://developer.amazon.com/en-US/docs/alexa/smapi/skill-simulation-api.html#simulate-skill
         var request = new
         {
             session = new { mode = "DEFAULT" },
@@ -183,7 +184,6 @@ public class SkillTests(ITestOutputHelper outputHelper)
             device = new { locale = "en-GB" },
         };
 
-        // See https://developer.amazon.com/en-US/docs/alexa/smapi/skill-simulation-api.html#simulate-skill
         using var response = await client.PostAsJsonAsync($"v2/skills/{skillId}/stages/{stage}/simulations", request);
 
         string requestId = response.Headers.GetValues("x-amzn-requestid").FirstOrDefault();
