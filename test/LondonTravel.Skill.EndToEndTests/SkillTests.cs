@@ -149,7 +149,7 @@ public class SkillTests(ITestOutputHelper outputHelper)
             // Poll for a response to be available
             var delay = TimeSpan.FromSeconds(2);
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 10; i++)
             {
                 await Task.Delay(delay);
 
