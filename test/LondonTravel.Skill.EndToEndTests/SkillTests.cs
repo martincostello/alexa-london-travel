@@ -38,6 +38,7 @@ public class SkillTests(ITestOutputHelper outputHelper)
         // Assert
         simulation.ShouldNotBeNull();
         simulation.Result.ShouldNotBeNull();
+        simulation.Result.Error.ShouldBeNull(simulation.Result.Error?.Message);
         simulation.Result.SkillExecutionInfo.ShouldNotBeNull();
         simulation.Result.SkillExecutionInfo.Invocations.ShouldNotBeNull();
         simulation.Result.SkillExecutionInfo.Invocations.ShouldNotBeEmpty();
@@ -233,6 +234,18 @@ public class SkillTests(ITestOutputHelper outputHelper)
 
         [JsonPropertyName("skillExecutionInfo")]
         public SkillExecutionInfo SkillExecutionInfo { get; set; }
+
+        [JsonPropertyName("error")]
+        public SimulationError Error { get; set; }
+    }
+
+    private sealed class SimulationError
+    {
+        [JsonPropertyName("message")]
+        public string Message { get; set; }
+
+        [JsonPropertyName("code")]
+        public string Code { get; set; }
     }
 
     private sealed class SkillExecutionInfo
