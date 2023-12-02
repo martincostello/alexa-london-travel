@@ -1,0 +1,58 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "en-GB": {
+          "summary": "Find out the current status of public transport in London.",
+          "examplePhrases": [
+            "Alexa, ask London Travel what\u0027s the status of the Northern line",
+            "Alexa, ask London Travel are there any line closures",
+            "Alexa, ask London Travel about my commute"
+          ],
+          "keywords": [
+            "london",
+            "travel",
+            "tube",
+            "tfl",
+            "dlr",
+            "underground",
+            "overground"
+          ],
+          "name": "London Travel",
+          "description": "This skill allows you to ask Alexa for information about disruption on public transport in London.\n\nFor example, you can ask about disruption affecting London Underground, London Overground, the Docklands Light Railway (DLR) and TfL Rail as a whole, or you can ask for information about a specific line.\n\nIf you create an account with London Travel and link it with the Alexa app, you can also ask about your commute for your favourite lines. You can create an account with London Travel using a login for existing accounts with other services, such as Amazon, Facebook and Twitter.\n\nYou can manage your London Travel account and set up your preferences at https://londontravel.martincostello.com/.",
+          "smallIconUri": "file://icon-108x108.png",
+          "largeIconUri": "file://icon-512x512.png"
+        }
+      },
+      "isAvailableWorldwide": false,
+      "testingInstructions": "To create an account for testing account linking, you must have an existing account with any of the following services:\n\nAmazon\nFacebook\nMicrosoft\nTwitter\n\nGoogle can be used to create an account in the website, but it cannot be used to link an account from the skill due to Google restrictions on sign-in from in-app browsers.\n\nTo test the \"commute\" intent, you must have created an account, selected at least one favourite tube line, and linked it to the Alexa app.",
+      "category": "PUBLIC_TRANSPORTATION",
+      "distributionCountries": [
+        "GB"
+      ]
+    },
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": ""
+        },
+        "interfaces": []
+      }
+    },
+    "manifestVersion": "1.0",
+    "permissions": [],
+    "privacyAndCompliance": {
+      "allowsPurchases": false,
+      "locales": {
+        "en-GB": {
+          "termsOfUseUrl": "https://londontravel.martincostello.com/terms-of-service/",
+          "privacyPolicyUrl": "https://londontravel.martincostello.com/privacy-policy/"
+        }
+      },
+      "containsAds": false,
+      "isExportCompliant": true,
+      "isChildDirected": false,
+      "usesPersonalInfo": true
+    }
+  }
+}
