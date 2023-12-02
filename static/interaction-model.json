@@ -940,6 +940,62 @@
           ]
         }
       ]
+    },
+    "_nameFreeInteraction": {
+      "ingressPoints": [
+        {
+          "type": "INTENT",
+          "sampleUtterances": [
+            {
+              "format": "RAW_TEXT",
+              "value": "Are there any problems with London Underground"
+            },
+            {
+              "format": "RAW_TEXT",
+              "value": "Are there any engineering works on the tube today"
+            },
+            {
+              "format": "RAW_TEXT",
+              "value": "Are there delays on the underground right now"
+            },
+            {
+              "format": "RAW_TEXT",
+              "value": "Is there any disruption on the tube"
+            },
+            {
+              "format": "RAW_TEXT",
+              "value": "Tube delays"
+            }
+          ],
+          "name": "DisruptionIntent"
+        },
+        {
+          "type": "INTENT",
+          "sampleUtterances": [
+            {
+              "format": "RAW_TEXT",
+              "value": "Are there any delays on the Central Line"
+            },
+            {
+              "format": "RAW_TEXT",
+              "value": "Are there any engineering works on the Victoria Line this weekend"
+            },
+            {
+              "format": "RAW_TEXT",
+              "value": "Is the Northern Line suspended"
+            },
+            {
+              "format": "RAW_TEXT",
+              "value": "Is there any disruption on the District Line today"
+            },
+            {
+              "format": "RAW_TEXT",
+              "value": "What problems are there on the Piccadilly line"
+            }
+          ],
+          "name": "StatusIntent"
+        }
+      ]
     }
   }
 }
