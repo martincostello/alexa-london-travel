@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Net.Http.Json;
-using System.Reflection;
 using Amazon;
 using Amazon.CloudWatchLogs;
 using Xunit.Sdk;
@@ -205,7 +204,7 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
             {
                 Accept = { new("application/vnd.github+json") },
                 Authorization = new("Bearer", token),
-                UserAgent = { new("LondonTravel.Skill.EndToEndTests", typeof(CloudWatchLogsFixture).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion) },
+                UserAgent = { TestConfiguration.UserAgent },
             },
         };
 
