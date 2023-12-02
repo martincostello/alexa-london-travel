@@ -219,6 +219,11 @@ jobs:
       run: dotnet test ./test/LondonTravel.Skill.EndToEndTests --configuration Release --logger "GitHubActions;report-warnings=false"
       env:
         LAMBDA_FUNCTION_NAME: ${{ env.LAMBDA_FUNCTION }}-dev
+        LWA_CLIENT_ID: ${{ secrets.LWA_CLIENT_ID }}
+        LWA_CLIENT_SECRET: ${{ secrets.LWA_CLIENT_SECRET }}
+        LWA_REFRESH_TOKEN: ${{ secrets.LWA_REFRESH_TOKEN }}
+        SKILL_ID: ${{ secrets.SKILL_ID }}
+        SKILL_STAGE: development
 
   deploy-prod:
     name: production
@@ -327,3 +332,8 @@ jobs:
       run: dotnet test ./test/LondonTravel.Skill.EndToEndTests --configuration Release --logger "GitHubActions;report-warnings=false"
       env:
         LAMBDA_FUNCTION_NAME: ${{ env.LAMBDA_FUNCTION }}
+        LWA_CLIENT_ID: ${{ secrets.LWA_CLIENT_ID }}
+        LWA_CLIENT_SECRET: ${{ secrets.LWA_CLIENT_SECRET }}
+        LWA_REFRESH_TOKEN: ${{ secrets.LWA_REFRESH_TOKEN }}
+        SKILL_ID: ${{ secrets.SKILL_ID }}
+        SKILL_STAGE: live

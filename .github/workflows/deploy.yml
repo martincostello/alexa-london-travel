@@ -387,7 +387,12 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         LAMBDA_FUNCTION_NAME: ${{ needs.setup.outputs.function-name }}
+        LWA_CLIENT_ID: ${{ secrets.LWA_CLIENT_ID }}
+        LWA_CLIENT_SECRET: ${{ secrets.LWA_CLIENT_SECRET }}
+        LWA_REFRESH_TOKEN: ${{ secrets.LWA_REFRESH_TOKEN }}
         PULL_NUMBER: ${{ github.event.issue.number }}
+        SKILL_ID: ${{ secrets.SKILL_ID }}
+        SKILL_STAGE: development
 
     - name: Post comment
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1

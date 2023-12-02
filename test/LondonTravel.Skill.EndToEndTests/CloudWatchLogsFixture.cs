@@ -24,9 +24,9 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
             return;
         }
 
-        var credentials = AwsConfiguration.GetCredentials();
-        string functionName = AwsConfiguration.FunctionName;
-        string regionName = AwsConfiguration.RegionName;
+        var credentials = TestConfiguration.GetCredentials();
+        string functionName = TestConfiguration.FunctionName;
+        string regionName = TestConfiguration.RegionName;
 
         if (functionName is not null &&
             regionName is not null &&
