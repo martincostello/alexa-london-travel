@@ -81,6 +81,7 @@ public class SkillTests(ITestOutputHelper outputHelper)
         Skip.If(string.IsNullOrEmpty(clientSecret), "No client secret is configured.");
         Skip.If(string.IsNullOrEmpty(refreshToken), "No refresh token is configured.");
 
+        // See https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#using-refresh-tokens
         var parameters = new Dictionary<string, string>()
         {
             ["client_id"] = clientId,
