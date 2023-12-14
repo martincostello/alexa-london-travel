@@ -223,6 +223,7 @@ jobs:
     - name: Download artifacts
       uses: actions/download-artifact@7a1cd3216ca9260cd8022db641d960b1db4d1be4 # v4.0.0
       with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         name: ${{ env.ARTIFACT_NAME }}
         run-id: ${{ needs.setup.outputs.run-id }}
 
