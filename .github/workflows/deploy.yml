@@ -35,6 +35,7 @@ jobs:
       function-runtime: ${{ steps.set-outputs.outputs.function-runtime }}
       function-timeout: ${{ steps.set-outputs.outputs.function-timeout }}
       ref: ${{ steps.set-outputs.outputs.ref }}
+      run-id: ${{ steps.set-outputs.outputs.run-id }}
       workflow-url: ${{ steps.set-outputs.outputs.workflow-url }}
 
     permissions:
@@ -74,19 +75,16 @@ jobs:
           const environment = arguments[1].trim();
           return environment;
 
-    - name: 'Download artifact from #${{ github.event.issue.number }}'
+    - name: 'Find run for #${{ github.event.issue.number }}'
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-      id: download-artifact
+      id: get-run
       env:
-        DOWNLOAD_PATH: ${{ github.workspace }}
         PULL_NUMBER: ${{ github.event.issue.number }}
         WORKFLOW_NAME: 'build'
       with:
         script: |
-          const artifactName = process.env.ARTIFACT_NAME;
           const pull_number = process.env.PULL_NUMBER;
           const workflowName = process.env.WORKFLOW_NAME;
-          const workingDirectory = process.env.DOWNLOAD_PATH;
 
           const owner = context.repo.owner;
           const repo = context.repo.repo;
@@ -111,81 +109,33 @@ jobs:
             head_sha,
             status: 'success',
           });
-          const workflow = workflows.workflow_runs.find((run) => run.name === workflowName);
+          const run = workflows.workflow_runs.find((run) => run.name === workflowName);
 
-          if (!workflow) {
+          if (!run) {
             throw new Error(`No successful workflow run found for ${owner}/${repo}@${head_sha.slice(0, 7)} with name ${workflowName}.`);
           }
 
-          const run_id = workflow.id;
-          core.debug(`Getting artifacts for workflow run ${owner}/${repo} number ${run_id}`);
-          const { data: allArtifacts } = await github.rest.actions.listWorkflowRunArtifacts({
-            owner,
-            repo,
-            run_id,
-          });
-
-          core.debug(`Found ${allArtifacts.length} artifact(s)`);
-          const [artifact] = allArtifacts.artifacts.filter((artifact) => artifact.name === artifactName);
-          if (!artifact) {
-              throw new Error(`No ${artifactName} artifact found in workflow run with ID ${run_id}.`);
-          }
-
-          const artifact_id = artifact.id;
-          core.debug(`Downloading artifact ${artifactName} with ID ${artifact_id}`);
-          const { data: download } = await github.rest.actions.downloadArtifact({
-              owner,
-              repo,
-              artifact_id,
-              archive_format: 'zip',
-          });
-
-          const fs = require('fs');
-          const path = require('path');
-          const fileName = `${artifactName}.zip`;
-          if (!fs.existsSync(workingDirectory)) {
-            core.debug(`Creating working directory ${workingDirectory}`);
-            await fs.promises.mkdir(workingDirectory);
-          }
-
-          const downloadPath = path.join(workingDirectory, fileName);
-
-          core.debug(`Writing ZIP ${downloadPath} to disk`);
-          await fs.promises.writeFile(downloadPath, Buffer.from(download));
-
           core.setOutput('ref', head_sha);
-          core.setOutput('run-number', workflow.run_number);
-          core.setOutput('zip-path', downloadPath);
+          core.setOutput('run-id', run.id);
+          core.setOutput('run-number', run.run_number);
 
-    - name: Extract the artifact
-      id: extract-artifact
-      env:
-        ARTIFACT_PATH: ${{ steps.download-artifact.outputs.zip-path }}
-        STAGING_PATH: '${{ github.workspace }}/staging'
-      shell: bash
-      run: |
-        mkdir --parents "${STAGING_PATH}"
-        unzip -q "${ARTIFACT_PATH}" -d "${STAGING_PATH}"
-        echo "lambda-artifact-path=${STAGING_PATH}" >> "$GITHUB_OUTPUT"
-
-    - name: Publish deployment package
-      uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
+    - name: 'Download artifact from #${{ github.event.issue.number }}'
+      uses: actions/download-artifact@7a1cd3216ca9260cd8022db641d960b1db4d1be4 # v4.0.0
       with:
         name: ${{ env.ARTIFACT_NAME }}
-        path: ${{ steps.extract-artifact.outputs.lambda-artifact-path }}
-        if-no-files-found: error
+        run-id: ${{ steps.get-run.outputs.run-id }}
 
     - name: Set outputs
       id: set-outputs
       env:
-        LAMBDA_ARTIFACT_PATH: ${{ steps.extract-artifact.outputs.lambda-artifact-path }}
-        LAMBDA_ARTIFACT_REF: ${{ steps.download-artifact.outputs.ref }}
-        LAMBDA_ARTIFACT_RUN_NUMBER: ${{ steps.download-artifact.outputs.run-number }}
+        LAMBDA_ARTIFACT_REF: ${{ steps.get-run.outputs.ref }}
+        LAMBDA_ARTIFACT_RUN_ID: ${{ steps.get-run.outputs.run-id }}
+        LAMBDA_ARTIFACT_RUN_NUMBER: ${{ steps.get-run.outputs.run-number }}
         LAMBDA_ENVIRONMENT: ${{ steps.get-environment-name.outputs.result }}
       shell: bash
       run: |
         environment_name="${LAMBDA_ENVIRONMENT}"
-        lambda_config="$(unzip -p "${LAMBDA_ARTIFACT_PATH}/${LAMBDA_FUNCTION}.zip" aws-lambda-tools-defaults.json)"
+        lambda_config="$(unzip -p "${LAMBDA_FUNCTION}.zip" aws-lambda-tools-defaults.json)"
 
         if [ "${environment_name}" == "production" ]
         then
@@ -214,6 +164,7 @@ jobs:
           echo "function-runtime=${function_runtime}"
           echo "function-timeout=${function_timeout}"
           echo "ref=${LAMBDA_ARTIFACT_REF}"
+          echo "run-id=${LAMBDA_ARTIFACT_RUN_ID}"
           echo "workflow-url=${workflow_url}"
         } >> "$GITHUB_OUTPUT"
 
@@ -272,6 +223,7 @@ jobs:
       uses: actions/download-artifact@7a1cd3216ca9260cd8022db641d960b1db4d1be4 # v4.0.0
       with:
         name: ${{ env.ARTIFACT_NAME }}
+        run-id: ${{ needs.setup.outputs.run-id }}
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
