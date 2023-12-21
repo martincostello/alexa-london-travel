@@ -3,6 +3,8 @@
     <AWSProjectType>Lambda</AWSProjectType>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
+    <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
     <InvariantGlobalization>true</InvariantGlobalization>
     <NoWarn>$(NoWarn);CA1822</NoWarn>
     <OptimizationPreference>Speed</OptimizationPreference>
