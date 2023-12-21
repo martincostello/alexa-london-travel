@@ -7,8 +7,6 @@ using MartinCostello.LondonTravel.Skill.Models;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-#pragma warning disable SA1010
-
 internal sealed class SkillResponseBuilder
 {
     private SkillResponseBuilder(SpeechXml speech)

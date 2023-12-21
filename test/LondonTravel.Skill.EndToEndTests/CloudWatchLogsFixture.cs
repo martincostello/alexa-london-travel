@@ -8,8 +8,6 @@ using Xunit.Sdk;
 
 namespace LondonTravel.Skill.EndToEndTests;
 
-#pragma warning disable SA1010
-
 public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncLifetime
 {
     private readonly DateTime _started = TimeProvider.System.GetUtcNow().UtcDateTime;
