@@ -8,8 +8,6 @@ using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill.Intents;
 
-#pragma warning disable SA1010
-
 /// <summary>
 /// A class that handles the commute intent. This class cannot be inherited.
 /// </summary>

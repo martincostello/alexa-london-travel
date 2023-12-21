@@ -11,8 +11,6 @@ using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-#pragma warning disable SA1010
-
 public abstract class FunctionTests : ITestOutputHelperAccessor
 {
     protected FunctionTests(ITestOutputHelper outputHelper)
