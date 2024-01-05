@@ -13,16 +13,16 @@ namespace MartinCostello.LondonTravel.Skill;
 [Collection(CloudWatchLogsFixtureCollection.Name)]
 public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper outputHelper)
 {
-    public static IEnumerable<object[]> Payloads
+    public static TheoryData<string> Payloads()
     {
-        get
+        var payloads = new TheoryData<string>();
+
+        foreach (string path in Directory.GetFiles("Payloads").Select(Path.GetFileNameWithoutExtension).Order())
         {
-            return Directory.GetFiles("Payloads")
-                .Select(Path.GetFileNameWithoutExtension)
-                .Order()
-                .Select((p) => new object[] { p })
-                .ToArray();
+            payloads.Add(path);
         }
+
+        return payloads;
     }
 
     [SkippableTheory]
