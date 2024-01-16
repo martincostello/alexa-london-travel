@@ -14,9 +14,9 @@ namespace MartinCostello.LondonTravel.Skill.Extensions;
 internal static class IHttpClientBuilderExtensions
 {
     /// <summary>
-    /// The lazily-initialized User Agent to use for all requests. This field is read-only.
+    /// The User Agent to use for all requests. This field is read-only.
     /// </summary>
-    private static readonly Lazy<ProductInfoHeaderValue> _userAgent = new(CreateUserAgent);
+    private static readonly ProductInfoHeaderValue _userAgent = CreateUserAgent();
 
     /// <summary>
     /// Applies the default configuration to the <see cref="IHttpClientBuilder"/>.
@@ -27,33 +27,23 @@ internal static class IHttpClientBuilderExtensions
     /// </returns>
     public static IHttpClientBuilder ApplyDefaultConfiguration(this IHttpClientBuilder builder)
     {
-        return builder
-            .ConfigurePrimaryHttpMessageHandler(CreatePrimaryHttpHandler)
-            .ConfigureHttpClient(ApplyDefaultConfiguration);
-    }
+        builder
+            .ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                return new HttpClientHandler()
+                {
+                    AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
+                };
+            })
+            .ConfigureHttpClient((client) =>
+            {
+                client.DefaultRequestHeaders.UserAgent.Add(_userAgent);
+                client.Timeout = TimeSpan.FromSeconds(7.5);
+            });
 
-    /// <summary>
-    /// Applies the default configuration to <see cref="HttpClient"/> instances.
-    /// </summary>
-    /// <param name="client">The <see cref="HttpClient"/> to configure.</param>
-    private static void ApplyDefaultConfiguration(HttpClient client)
-    {
-        client.DefaultRequestHeaders.UserAgent.Add(_userAgent.Value);
-        client.Timeout = TimeSpan.FromSeconds(7.5);
-    }
+        builder.AddStandardResilienceHandler();
 
-    /// <summary>
-    /// Creates the primary HTTP message handler to use for all requests.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="HttpMessageHandler"/> to use as the primary message handler.
-    /// </returns>
-    private static HttpMessageHandler CreatePrimaryHttpHandler()
-    {
-        return new HttpClientHandler()
-        {
-            AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
-        };
+        return builder;
     }
 
     /// <summary>
