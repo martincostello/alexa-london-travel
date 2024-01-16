@@ -3,7 +3,6 @@
 
 using MartinCostello.LondonTravel.Skill.Clients;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace MartinCostello.LondonTravel.Skill.Extensions;
 
@@ -21,24 +20,16 @@ internal static class HttpServiceCollectionExtensions
     /// </returns>
     public static IServiceCollection AddHttpClients(this IServiceCollection services)
     {
-        services
-            .AddHttpClient(Options.DefaultName)
-            .ApplyDefaultConfiguration()
-            .AddStandardResilienceHandler();
+        services.AddHttpClient()
+                .ConfigureHttpClientDefaults((p) => p.ApplyDefaultConfiguration());
 
-        services
-            .AddHttpClient<SkillClient>((provider, client) =>
-            {
-                var config = provider.GetRequiredService<SkillConfiguration>();
-                client.BaseAddress = new Uri(config.SkillApiUrl, UriKind.Absolute);
-            })
-            .ApplyDefaultConfiguration()
-            .AddStandardResilienceHandler();
+        services.AddHttpClient<SkillClient>((provider, client) =>
+        {
+            var config = provider.GetRequiredService<SkillConfiguration>();
+            client.BaseAddress = new Uri(config.SkillApiUrl, UriKind.Absolute);
+        });
 
-        services
-            .AddHttpClient<TflClient>((p) => p.BaseAddress = new Uri("https://api.tfl.gov.uk/", UriKind.Absolute))
-            .ApplyDefaultConfiguration()
-            .AddStandardResilienceHandler();
+        services.AddHttpClient<TflClient>((p) => p.BaseAddress = new Uri("https://api.tfl.gov.uk/", UriKind.Absolute));
 
         return services;
     }
