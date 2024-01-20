@@ -147,6 +147,26 @@ jobs:
           echo "LAMBDA_TIMEOUT=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-timeout"')"
         } >> "$GITHUB_ENV"
 
+    - name: Get Lambda environment variables
+      env:
+        SKILL_API_URL: ${{ vars.SKILL_API_URL }}
+        SKILL_ID: ${{ secrets.SKILL_ID }}
+        TFL_APPLICATION_ID: ${{ secrets.TFL_APPLICATION_ID }}
+        TFL_APPLICATION_KEY: ${{ secrets.TFL_APPLICATION_KEY }}
+        VERIFY_SKILL_ID: "true"
+      shell: bash
+      run: |
+        lambda_vars="{\
+          \"Variables\": {\
+            \"Skill__SkillApiUrl\": \"${SKILL_API_URL}\",\
+            \"Skill__SkillId\": \"${SKILL_ID}\",\
+            \"Skill__TflApplicationId\": \"${TFL_APPLICATION_ID}\",\
+            \"Skill__TflApplicationKey\": \"${TFL_APPLICATION_KEY}\",\
+            \"Skill__VerifySkillId\": \"${VERIFY_SKILL_ID}\"\
+          }\
+        }"
+        echo "LAMBDA_ENVIRONMENT_VARIABLES=${lambda_vars}" >> "$GITHUB_ENV"
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
       with:
@@ -176,6 +196,7 @@ jobs:
         aws lambda update-function-configuration \
           --function-name "${FUNCTION_NAME}" \
           --description "${LAMBDA_DESCRIPTION}" \
+          --environment "${LAMBDA_ENVIRONMENT_VARIABLES}" \
           --handler "${LAMBDA_HANDLER}" \
           --memory-size "${LAMBDA_MEMORY}" \
           --role "${LAMBDA_ROLE}" \
@@ -261,6 +282,26 @@ jobs:
           echo "LAMBDA_TIMEOUT=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-timeout"')"
         } >> "$GITHUB_ENV"
 
+    - name: Get Lambda environment variables
+      env:
+        SKILL_API_URL: ${{ vars.SKILL_API_URL }}
+        SKILL_ID: ${{ secrets.SKILL_ID }}
+        TFL_APPLICATION_ID: ${{ secrets.TFL_APPLICATION_ID }}
+        TFL_APPLICATION_KEY: ${{ secrets.TFL_APPLICATION_KEY }}
+        VERIFY_SKILL_ID: "true"
+      shell: bash
+      run: |
+        lambda_vars="{\
+          \"Variables\": {\
+            \"Skill__SkillApiUrl\": \"${SKILL_API_URL}\",\
+            \"Skill__SkillId\": \"${SKILL_ID}\",\
+            \"Skill__TflApplicationId\": \"${TFL_APPLICATION_ID}\",\
+            \"Skill__TflApplicationKey\": \"${TFL_APPLICATION_KEY}\",\
+            \"Skill__VerifySkillId\": \"${VERIFY_SKILL_ID}\"\
+          }\
+        }"
+        echo "LAMBDA_ENVIRONMENT_VARIABLES=${lambda_vars}" >> "$GITHUB_ENV"
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
       with:
@@ -290,6 +331,7 @@ jobs:
         aws lambda update-function-configuration \
           --function-name "${FUNCTION_NAME}" \
           --description "${LAMBDA_DESCRIPTION}" \
+          --environment "${LAMBDA_ENVIRONMENT_VARIABLES}" \
           --handler "${LAMBDA_HANDLER}" \
           --memory-size "${LAMBDA_MEMORY}" \
           --role "${LAMBDA_ROLE}" \
