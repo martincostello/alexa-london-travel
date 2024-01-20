@@ -180,15 +180,13 @@ jobs:
         aws lambda update-function-code \
           --function-name "${FUNCTION_NAME}" \
           --architectures "${LAMBDA_ARCHITECTURES}" \
-          --zip-file "fileb://./${LAMBDA_FUNCTION}.zip" \
-          > /dev/null
+          --zip-file "fileb://./${LAMBDA_FUNCTION}.zip"
 
     - name: Wait for function code update
       shell: bash
       run: |
         aws lambda wait function-updated-v2 \
-          --function-name "${FUNCTION_NAME}" \
-          > /dev/null
+          --function-name "${FUNCTION_NAME}"
 
     - name: Update function configuration
       shell: bash
@@ -201,15 +199,13 @@ jobs:
           --memory-size "${LAMBDA_MEMORY}" \
           --role "${LAMBDA_ROLE}" \
           --runtime "${LAMBDA_RUNTIME}" \
-          --timeout "${LAMBDA_TIMEOUT}" \
-          > /dev/null
+          --timeout "${LAMBDA_TIMEOUT}"
 
     - name: Wait for function configuration update
       shell: bash
       run: |
         aws lambda wait function-updated-v2 \
-          --function-name "${FUNCTION_NAME}" \
-          > /dev/null
+          --function-name "${FUNCTION_NAME}"
 
   tests-dev:
     name: tests-dev
@@ -315,15 +311,13 @@ jobs:
         aws lambda update-function-code \
           --function-name "${FUNCTION_NAME}" \
           --architectures "${LAMBDA_ARCHITECTURES}" \
-          --zip-file "fileb://./${LAMBDA_FUNCTION}.zip" \
-          > /dev/null
+          --zip-file "fileb://./${LAMBDA_FUNCTION}.zip"
 
     - name: Wait for function code update
       shell: bash
       run: |
         aws lambda wait function-updated-v2 \
-          --function-name "${FUNCTION_NAME}" \
-          > /dev/null
+          --function-name "${FUNCTION_NAME}"
 
     - name: Update function configuration
       shell: bash
@@ -336,15 +330,13 @@ jobs:
           --memory-size "${LAMBDA_MEMORY}" \
           --role "${LAMBDA_ROLE}" \
           --runtime "${LAMBDA_RUNTIME}" \
-          --timeout "${LAMBDA_TIMEOUT}" \
-          > /dev/null
+          --timeout "${LAMBDA_TIMEOUT}"
 
     - name: Wait for function configuration update
       shell: bash
       run: |
         aws lambda wait function-updated-v2 \
-          --function-name "${FUNCTION_NAME}" \
-          > /dev/null
+          --function-name "${FUNCTION_NAME}"
 
   tests-prod:
     needs: deploy-prod
