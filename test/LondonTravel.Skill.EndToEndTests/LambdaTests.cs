@@ -15,14 +15,21 @@ public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper output
 {
     public static TheoryData<string> Payloads()
     {
-        var payloads = new TheoryData<string>();
+        var payloads = new List<string>()
+        {
+            "Disruption",
+            "Status",
+        };
 
         foreach (string path in Directory.GetFiles("Payloads").Select(Path.GetFileNameWithoutExtension).Order())
         {
-            payloads.Add(path);
+            if (!payloads.Contains(path))
+            {
+                payloads.Add(path);
+            }
         }
 
-        return payloads;
+        return new(payloads);
     }
 
     [SkippableTheory]
