@@ -21,14 +21,6 @@ public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper output
             "Status",
         };
 
-        foreach (string path in Directory.GetFiles("Payloads").Select(Path.GetFileNameWithoutExtension).Order())
-        {
-            if (!payloads.Contains(path))
-            {
-                payloads.Add(path);
-            }
-        }
-
         return new(payloads);
     }
 
