@@ -190,16 +190,21 @@ jobs:
 
     - name: Update function configuration
       shell: bash
+      env:
+        LAMBDA_LAYERS: ${{ vars.AWS_LAMBDA_LAYERS }}
+        LAMBDA_TRACING_MODE: ${{ vars.AWS_TRACING_MODE }}
       run: |
         aws lambda update-function-configuration \
           --function-name "${FUNCTION_NAME}" \
           --description "${LAMBDA_DESCRIPTION}" \
           --environment "${LAMBDA_ENVIRONMENT_VARIABLES}" \
           --handler "${LAMBDA_HANDLER}" \
+          --layers "${LAMBDA_LAYERS}" \
           --memory-size "${LAMBDA_MEMORY}" \
           --role "${LAMBDA_ROLE}" \
           --runtime "${LAMBDA_RUNTIME}" \
-          --timeout "${LAMBDA_TIMEOUT}"
+          --timeout "${LAMBDA_TIMEOUT}" \
+          --tracing-config "Mode=${LAMBDA_TRACING_MODE}"
 
     - name: Wait for function configuration update
       shell: bash
@@ -321,16 +326,21 @@ jobs:
 
     - name: Update function configuration
       shell: bash
+      env:
+        LAMBDA_LAYERS: ${{ vars.AWS_LAMBDA_LAYERS }}
+        LAMBDA_TRACING_MODE: ${{ vars.AWS_TRACING_MODE }}
       run: |
         aws lambda update-function-configuration \
           --function-name "${FUNCTION_NAME}" \
           --description "${LAMBDA_DESCRIPTION}" \
           --environment "${LAMBDA_ENVIRONMENT_VARIABLES}" \
           --handler "${LAMBDA_HANDLER}" \
+          --layers "${LAMBDA_LAYERS}" \
           --memory-size "${LAMBDA_MEMORY}" \
           --role "${LAMBDA_ROLE}" \
           --runtime "${LAMBDA_RUNTIME}" \
-          --timeout "${LAMBDA_TIMEOUT}"
+          --timeout "${LAMBDA_TIMEOUT}" \
+          --tracing-config "Mode=${LAMBDA_TRACING_MODE}"
 
     - name: Wait for function configuration update
       shell: bash
