@@ -65,7 +65,7 @@ internal static class Lines
     /// <returns>
     /// The id for the specified line, if valid; otherwise <see langword="null"/>.
     /// </returns>
-    public static string MapNameToId(string line)
+    public static string? MapNameToId(string? line)
     {
 #pragma warning disable CA1308
         string normalized = (line ?? string.Empty).ToLowerInvariant();

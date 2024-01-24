@@ -8,8 +8,8 @@ namespace MartinCostello.LondonTravel.Skill.Models;
 public sealed class User
 {
     [JsonPropertyName("userId")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
 
     [JsonPropertyName("accessToken")]
-    public string AccessToken { get; set; }
+    public string AccessToken { get; set; } = default!;
 }

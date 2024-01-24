@@ -25,7 +25,7 @@ public static class FunctionEntrypoint
     /// A <see cref="Task"/> representing the asynchronous operation to run the function.
     /// </returns>
     public static async Task RunAsync<T>(
-        HttpClient httpClient = null,
+        HttpClient? httpClient = null,
         CancellationToken cancellationToken = default)
         where T : AlexaFunction, new()
     {

@@ -14,11 +14,11 @@ public sealed class SkillUserPreferences
     /// Gets or sets the user's favorite lines.
     /// </summary>
     [JsonPropertyName("favoriteLines")]
-    public IList<string> FavoriteLines { get; set; }
+    public IList<string> FavoriteLines { get; set; } = default!;
 
     /// <summary>
     /// Gets or sets the user's Id.
     /// </summary>
     [JsonPropertyName("userId")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
 }

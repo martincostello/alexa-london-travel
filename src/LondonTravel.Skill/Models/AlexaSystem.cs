@@ -8,17 +8,17 @@ namespace MartinCostello.LondonTravel.Skill.Models;
 public sealed class AlexaSystem
 {
     [JsonPropertyName("apiAccessToken")]
-    public string ApiAccessToken { get; set; }
+    public string ApiAccessToken { get; set; } = default!;
 
     [JsonPropertyName("apiEndpoint")]
-    public string ApiEndpoint { get; set; }
+    public string ApiEndpoint { get; set; } = default!;
 
     [JsonPropertyName("application")]
-    public Application Application { get; set; }
+    public Application Application { get; set; } = default!;
 
     [JsonPropertyName("user")]
-    public User User { get; set; }
+    public User User { get; set; } = default!;
 
     [JsonPropertyName("device")]
-    public Device Device { get; set; }
+    public Device Device { get; set; } = default!;
 }

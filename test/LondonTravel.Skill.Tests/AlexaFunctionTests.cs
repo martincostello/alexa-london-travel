@@ -30,13 +30,13 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
     [InlineData(" ")]
     [InlineData("____")]
     [InlineData("qps-Ploc")]
-    public async Task Can_Invoke_Function_If_Locale_Is_Invalid(string locale)
+    public async Task Can_Invoke_Function_If_Locale_Is_Invalid(string? locale)
     {
         // Arrange
         AlexaFunction function = await CreateFunctionAsync();
 
         SkillRequest request = CreateIntentRequest("AMAZON.HelpIntent");
-        request.Request.Locale = locale;
+        request.Request.Locale = locale!;
 
         // Act
         SkillResponse actual = await function.HandlerAsync(request);

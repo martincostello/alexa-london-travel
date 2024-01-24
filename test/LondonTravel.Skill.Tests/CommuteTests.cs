@@ -163,7 +163,7 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
         card.Content.ShouldBe(expectedCardContent);
     }
 
-    private SkillRequest CreateIntentRequestWithToken(string accessToken = null, string locale = null)
+    private SkillRequest CreateIntentRequestWithToken(string? accessToken = null, string? locale = null)
     {
         var request = CreateIntentRequest("CommuteIntent");
 

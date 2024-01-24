@@ -30,14 +30,14 @@ internal sealed class CommuteIntent(
     /// <inheritdoc />
     public async Task<SkillResponse> RespondAsync(Intent intent, Session session)
     {
-        string accessToken = session?.User?.AccessToken;
+        string? accessToken = session.User?.AccessToken;
 
         if (string.IsNullOrEmpty(accessToken))
         {
             return NotLinked(session);
         }
 
-        ICollection<string> favoriteLines = await GetFavoriteLinesAsync(accessToken);
+        ICollection<string>? favoriteLines = await GetFavoriteLinesAsync(accessToken);
 
         if (favoriteLines == null)
         {
@@ -80,7 +80,7 @@ internal sealed class CommuteIntent(
             .Build();
     }
 
-    private async Task<ICollection<string>> GetFavoriteLinesAsync(string accessToken)
+    private async Task<ICollection<string>?> GetFavoriteLinesAsync(string accessToken)
     {
         try
         {

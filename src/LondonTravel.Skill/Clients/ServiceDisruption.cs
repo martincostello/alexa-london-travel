@@ -14,5 +14,5 @@ public sealed class ServiceDisruption
     /// Gets or sets the description of the disruption.
     /// </summary>
     [JsonPropertyName("description")]
-    public string Description { get; set; }
+    public string Description { get; set; } = default!;
 }

@@ -8,8 +8,8 @@ namespace MartinCostello.LondonTravel.Skill.Models;
 public sealed class Intent
 {
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [JsonPropertyName("slots")]
-    public Dictionary<string, Slot> Slots { get; set; }
+    public Dictionary<string, Slot>? Slots { get; set; }
 }

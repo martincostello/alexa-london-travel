@@ -13,7 +13,7 @@ internal sealed class CustomStringEnumConverter<[DynamicallyAccessedMembers(Dyna
     : JsonStringEnumConverter<TEnum>(namingPolicy: ResolveNamingPolicy())
     where TEnum : struct, Enum
 {
-    private static EnumMemberNamingPolicy ResolveNamingPolicy()
+    private static EnumMemberNamingPolicy? ResolveNamingPolicy()
     {
         var map = typeof(TEnum).GetFields(BindingFlags.Public | BindingFlags.Static)
             .Select((p) => (p.Name, AttributeName: p.GetCustomAttribute<EnumMemberAttribute>()?.Value))
@@ -23,9 +23,9 @@ internal sealed class CustomStringEnumConverter<[DynamicallyAccessedMembers(Dyna
         return map.Count > 0 ? new EnumMemberNamingPolicy(map) : null;
     }
 
-    private sealed class EnumMemberNamingPolicy(Dictionary<string, string> map) : JsonNamingPolicy
+    private sealed class EnumMemberNamingPolicy(Dictionary<string, string?> map) : JsonNamingPolicy
     {
         public override string ConvertName(string name)
-            => map.TryGetValue(name, out string overriden) ? overriden : name;
+            => map.TryGetValue(name, out string? overriden) && overriden is not null ? overriden : name;
     }
 }

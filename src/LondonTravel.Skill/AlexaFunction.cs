@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Diagnostics.CodeAnalysis;
 using MartinCostello.LondonTravel.Skill.Extensions;
 using MartinCostello.LondonTravel.Skill.Intents;
 using MartinCostello.LondonTravel.Skill.Models;
@@ -16,22 +17,8 @@ namespace MartinCostello.LondonTravel.Skill;
 /// </summary>
 public class AlexaFunction : IAsyncDisposable, IDisposable
 {
-    /// <summary>
-    /// Whether the instance has been disposed.
-    /// </summary>
     private bool _disposed;
-
-    /// <summary>
-    /// The <see cref="ServiceProvider"/> to use.
-    /// </summary>
-    private ServiceProvider _serviceProvider;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="AlexaFunction"/> class.
-    /// </summary>
-    public AlexaFunction()
-    {
-    }
+    private ServiceProvider? _serviceProvider;
 
     /// <summary>
     /// Finalizes an instance of the <see cref="AlexaFunction"/> class.
@@ -53,7 +40,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     {
         if (!_disposed)
         {
-            if (_serviceProvider is not null)
+            if (_serviceProvider is { })
             {
                 await _serviceProvider.DisposeAsync();
             }
@@ -73,8 +60,12 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     /// </returns>
     public async Task<SkillResponse> HandlerAsync(SkillRequest request)
     {
+        EnsureInitialized();
+
         var handler = _serviceProvider.GetRequiredService<FunctionHandler>();
         var logger = _serviceProvider.GetRequiredService<ILogger<AlexaFunction>>();
+
+        using var activity = SkillTelemetry.ActivitySource.StartActivity("Skill Request");
 
         Log.InvokingSkillRequest(logger, request.Request.Type);
 
@@ -87,6 +78,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     /// <returns>
     /// A <see cref="Task{TResult}"/> representing the asynchronous operation to initialize the skill.
     /// </returns>
+    [MemberNotNull(nameof(_serviceProvider))]
     public Task<bool> InitializeAsync()
     {
         _serviceProvider ??= CreateServiceProvider();
@@ -168,5 +160,14 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         ConfigureServices(services);
 
         return services.BuildServiceProvider();
+    }
+
+    [MemberNotNull(nameof(_serviceProvider))]
+    private void EnsureInitialized()
+    {
+        if (_serviceProvider is null)
+        {
+            throw new InvalidOperationException($"The function has not been initialized.");
+        }
     }
 }

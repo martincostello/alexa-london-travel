@@ -9,23 +9,23 @@ namespace LondonTravel.Skill.EndToEndTests;
 
 internal static class TestConfiguration
 {
-    public static string AlexaClientId => Environment.GetEnvironmentVariable("LWA_CLIENT_ID");
+    public static string? AlexaClientId => Environment.GetEnvironmentVariable("LWA_CLIENT_ID");
 
-    public static string AlexaClientSecret => Environment.GetEnvironmentVariable("LWA_CLIENT_SECRET");
+    public static string? AlexaClientSecret => Environment.GetEnvironmentVariable("LWA_CLIENT_SECRET");
 
-    public static string AlexaRefreshToken => Environment.GetEnvironmentVariable("LWA_REFRESH_TOKEN");
+    public static string? AlexaRefreshToken => Environment.GetEnvironmentVariable("LWA_REFRESH_TOKEN");
 
-    public static string FunctionName => Environment.GetEnvironmentVariable("LAMBDA_FUNCTION_NAME");
+    public static string? FunctionName => Environment.GetEnvironmentVariable("LAMBDA_FUNCTION_NAME");
 
-    public static string RegionName => Environment.GetEnvironmentVariable("AWS_REGION");
+    public static string? RegionName => Environment.GetEnvironmentVariable("AWS_REGION");
 
-    public static string SkillId => Environment.GetEnvironmentVariable("SKILL_ID");
+    public static string? SkillId => Environment.GetEnvironmentVariable("SKILL_ID");
 
-    public static string SkillStage => Environment.GetEnvironmentVariable("SKILL_STAGE");
+    public static string? SkillStage => Environment.GetEnvironmentVariable("SKILL_STAGE");
 
-    public static ProductInfoHeaderValue UserAgent { get; } = new("LondonTravel.Skill.EndToEndTests", typeof(TestConfiguration).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
+    public static ProductInfoHeaderValue UserAgent { get; } = new("LondonTravel.Skill.EndToEndTests", typeof(TestConfiguration).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion);
 
-    public static AWSCredentials GetCredentials()
+    public static AWSCredentials? GetCredentials()
     {
         try
         {

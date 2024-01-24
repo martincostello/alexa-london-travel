@@ -9,8 +9,8 @@ public sealed class AlexaError
 {
     [JsonConverter(typeof(CustomStringEnumConverter<AlexaErrorType>))]
     [JsonPropertyName("type")]
-    public AlexaErrorType Type { get; set; }
+    public AlexaErrorType Type { get; set; } = default!;
 
     [JsonPropertyName("message")]
-    public string Message { get; set; }
+    public string Message { get; set; } = default!;
 }

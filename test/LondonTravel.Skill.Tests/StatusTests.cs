@@ -61,7 +61,7 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
     [InlineData("")]
     [InlineData("  ")]
     [InlineData("not a tube line")]
-    public async Task Can_Invoke_Function_For_Invalid_Line(string id)
+    public async Task Can_Invoke_Function_For_Invalid_Line(string? id)
     {
         // Arrange
         AlexaFunction function = await CreateFunctionAsync();
@@ -150,9 +150,9 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
 
     private void AssertLineResponse(
         SkillResponse actual,
-        string expectedSsml = null,
-        string expectedCardTitle = null,
-        string expectedCardContent = null)
+        string? expectedSsml = null,
+        string? expectedCardTitle = null,
+        string? expectedCardContent = null)
     {
         ResponseBody response = AssertResponse(actual);
 
@@ -183,10 +183,10 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
         }
     }
 
-    private SkillRequest CreateIntentForLine(string id)
+    private SkillRequest CreateIntentForLine(string? id)
     {
         return CreateIntentRequest(
             "StatusIntent",
-            new Slot() { Name = "LINE", Value = id });
+            new Slot() { Name = "LINE", Value = id! });
     }
 }

@@ -8,14 +8,14 @@ namespace MartinCostello.LondonTravel.Skill.Models;
 public sealed class SkillRequest
 {
     [JsonPropertyName("version")]
-    public string Version { get; set; }
+    public string Version { get; set; } = default!;
 
     [JsonPropertyName("session")]
-    public Session Session { get; set; }
+    public Session Session { get; set; } = default!;
 
     [JsonPropertyName("context")]
-    public Context Context { get; set; }
+    public Context Context { get; set; } = default!;
 
     [JsonPropertyName("request")]
-    public Request Request { get; set; }
+    public Request Request { get; set; } = default!;
 }

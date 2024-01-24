@@ -8,5 +8,5 @@ namespace MartinCostello.LondonTravel.Skill.Models;
 public sealed class AlexaErrorCause
 {
     [JsonPropertyName("requestId")]
-    public string RequestId { get; set; }
+    public string RequestId { get; set; } = default!;
 }
