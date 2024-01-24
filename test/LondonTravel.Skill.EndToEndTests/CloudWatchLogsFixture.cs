@@ -136,6 +136,10 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
                                 case "Init Duration":
                                     entry.InitDuration = parts[1];
                                     break;
+
+                                case "XRAY TraceId":
+                                    entry.TraceId = parts[1];
+                                    break;
                             }
                         }
                     }
@@ -166,6 +170,7 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
     private static async Task TryPostLogsToPullRequestAsync(IEnumerable<LogEvent> events)
     {
         string? apiUrl = Environment.GetEnvironmentVariable("GITHUB_API_URL");
+        string? awsRegion = Environment.GetEnvironmentVariable("AWS_REGION");
         string? repository = Environment.GetEnvironmentVariable("GITHUB_REPOSITORY");
         string? token = Environment.GetEnvironmentVariable("GITHUB_TOKEN");
         string? issue = Environment.GetEnvironmentVariable("PULL_NUMBER");
@@ -180,8 +185,8 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
         }
 
         var comment = new StringBuilder()
-            .AppendLine("| **Payload** | **Duration** | **Billed Duration** | **Memory Size** | **Max Memory Used** | **Init Duration** |")
-            .AppendLine("|:------------|-------------:|--------------------:|----------------:|--------------------:|------------------:|");
+            .AppendLine("| **Payload** | **Duration** | **Billed Duration** | **Memory Size** | **Max Memory Used** | **Init Duration** | **Trace** |")
+            .AppendLine("|:------------|-------------:|--------------------:|----------------:|--------------------:|------------------:|:----------|");
 
         foreach (var entry in events)
         {
@@ -192,6 +197,7 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
                 .Append(CultureInfo.InvariantCulture, $" | {entry.MemorySize}")
                 .Append(CultureInfo.InvariantCulture, $" | {entry.MaxMemoryUsed}")
                 .Append(CultureInfo.InvariantCulture, $" | {entry.InitDuration ?? "-"}")
+                .Append(CultureInfo.InvariantCulture, $" | {TraceUrl(entry.TraceId, awsRegion)}")
                 .AppendLine(" |");
         }
 
@@ -213,6 +219,16 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
             new { body = comment.ToString() });
 
         response.EnsureSuccessStatusCode();
+
+        static string TraceUrl(string? traceId, string? region)
+        {
+            if (string.IsNullOrEmpty(traceId))
+            {
+                return "-";
+            }
+
+            return $"[:link:](https://{region}.console.aws.amazon.com/cloudwatch/home?region={region}#xray:traces/{traceId})";
+        }
     }
 
     private sealed class LogEvent(string name)
@@ -231,6 +247,8 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
 
         public string MaxMemoryUsed { get; set; } = default!;
 
-        public string InitDuration { get; set; } = default!;
+        public string? InitDuration { get; set; }
+
+        public string? TraceId { get; set; }
     }
 }
