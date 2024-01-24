@@ -20,14 +20,14 @@ internal sealed class StatusIntent(TflClient tflClient, SkillConfiguration confi
     /// <inheritdoc />
     public async Task<SkillResponse> RespondAsync(Intent intent, Session session)
     {
-        string rawLineName = null;
+        string? rawLineName = null;
 
-        if (intent.Slots.TryGetValue("LINE", out Slot slot))
+        if (intent.Slots?.TryGetValue("LINE", out Slot? slot) is true)
         {
             rawLineName = slot.Value;
         }
 
-        string id = Lines.MapNameToId(rawLineName);
+        string? id = Lines.MapNameToId(rawLineName);
         SkillResponseBuilder builder;
 
         if (string.IsNullOrEmpty(id))

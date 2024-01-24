@@ -13,5 +13,5 @@ public sealed class SsmlOutputSpeech
 
     [JsonPropertyName("ssml")]
     [JsonRequired]
-    public string Ssml { get; set; }
+    public string Ssml { get; set; } = default!;
 }

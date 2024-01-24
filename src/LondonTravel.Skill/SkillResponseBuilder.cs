@@ -24,7 +24,7 @@ internal sealed class SkillResponseBuilder
         };
     }
 
-    private Card Card { get; set; }
+    private Card? Card { get; set; }
 
     private SkillResponse Response { get; }
 

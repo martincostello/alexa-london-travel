@@ -8,5 +8,5 @@ namespace MartinCostello.LondonTravel.Skill.Models;
 public sealed class Context
 {
     [JsonPropertyName("System")]
-    public AlexaSystem System { get; set; }
+    public AlexaSystem System { get; set; } = default!;
 }

@@ -8,5 +8,5 @@ namespace MartinCostello.LondonTravel.Skill.Models;
 public sealed class Application
 {
     [JsonPropertyName("applicationId")]
-    public string ApplicationId { get; set; }
+    public string ApplicationId { get; set; } = default!;
 }

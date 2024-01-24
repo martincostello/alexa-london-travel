@@ -23,6 +23,6 @@ internal sealed class SkillClient(HttpClient httpClient)
         CancellationToken cancellationToken = default)
     {
         httpClient.DefaultRequestHeaders.Authorization = new("Bearer", authorization);
-        return await httpClient.GetFromJsonAsync("/api/preferences", AppJsonSerializerContext.Default.SkillUserPreferences, cancellationToken);
+        return await httpClient.GetFromJsonAsync("/api/preferences", AppJsonSerializerContext.Default.SkillUserPreferences, cancellationToken) ?? new();
     }
 }

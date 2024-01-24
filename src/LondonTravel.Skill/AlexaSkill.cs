@@ -48,7 +48,7 @@ internal sealed class AlexaSkill(
     /// <returns>
     /// The <see cref="ResponseBody"/> to return from the skill.
     /// </returns>
-    public SkillResponse OnError(Exception exception, Session session)
+    public SkillResponse OnError(Exception? exception, Session session)
     {
         Log.HandlerException(logger, exception, session.SessionId);
 

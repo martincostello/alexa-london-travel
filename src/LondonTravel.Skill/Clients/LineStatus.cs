@@ -14,11 +14,11 @@ public sealed class LineStatus
     /// Gets or sets the status severity.
     /// </summary>
     [JsonPropertyName("statusSeverity")]
-    public LineStatusSeverity StatusSeverity { get; set; }
+    public LineStatusSeverity StatusSeverity { get; set; } = default!;
 
     /// <summary>
     /// Gets or sets status reason.
     /// </summary>
     [JsonPropertyName("reason")]
-    public string Reason { get; set; }
+    public string Reason { get; set; } = default!;
 }

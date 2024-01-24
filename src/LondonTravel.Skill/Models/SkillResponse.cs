@@ -13,5 +13,5 @@ public sealed class SkillResponse
 
     [JsonPropertyName("response")]
     [JsonRequired]
-    public ResponseBody Response { get; set; }
+    public ResponseBody Response { get; set; } = default!;
 }

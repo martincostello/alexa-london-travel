@@ -3,7 +3,6 @@
 
 using System.Net;
 using System.Net.Http.Headers;
-using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MartinCostello.LondonTravel.Skill.Extensions;
@@ -54,10 +53,7 @@ internal static class IHttpClientBuilderExtensions
     /// </returns>
     private static ProductInfoHeaderValue CreateUserAgent()
     {
-        string productVersion = typeof(AlexaFunction)
-            .Assembly
-            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-            .InformationalVersion;
+        string productVersion = SkillTelemetry.ServiceVersion;
 
         // Truncate the Git commit SHA to 7 characters, if present
         int indexOfPlus = productVersion.IndexOf('+', StringComparison.Ordinal);

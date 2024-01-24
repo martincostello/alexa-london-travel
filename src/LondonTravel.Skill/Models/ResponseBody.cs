@@ -9,15 +9,15 @@ public sealed class ResponseBody
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("outputSpeech")]
-    public SsmlOutputSpeech OutputSpeech { get; set; }
+    public SsmlOutputSpeech OutputSpeech { get; set; } = default!;
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("card")]
-    public Card Card { get; set; }
+    public Card? Card { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("reprompt")]
-    public Reprompt Reprompt { get; set; }
+    public Reprompt? Reprompt { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("shouldEndSession")]

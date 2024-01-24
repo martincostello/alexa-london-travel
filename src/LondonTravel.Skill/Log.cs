@@ -15,7 +15,7 @@ internal static partial class Log
         EventId = 1,
         Level = LogLevel.Error,
         Message = "Failed to handle request for session {SessionId}.")]
-    public static partial void HandlerException(ILogger logger, Exception exception, string sessionId);
+    public static partial void HandlerException(ILogger logger, Exception? exception, string sessionId);
 
     [LoggerMessage(
         EventId = 2,
@@ -25,14 +25,14 @@ internal static partial class Log
         ILogger logger,
         string sessionId,
         string errorType,
-        string errorCause,
+        string? errorCause,
         string errorMessage);
 
     [LoggerMessage(
         EventId = 3,
         Level = LogLevel.Information,
         Message = "User with Id {UserId} has not linked account.")]
-    public static partial void AccountNotLinked(ILogger logger, string userId);
+    public static partial void AccountNotLinked(ILogger logger, string? userId);
 
     [LoggerMessage(
         EventId = 4,

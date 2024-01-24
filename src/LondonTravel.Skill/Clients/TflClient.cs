@@ -29,7 +29,7 @@ internal sealed class TflClient(HttpClient httpClient)
         CancellationToken cancellationToken = default)
     {
         string requestUrl = GetRequestUrl($"/Line/Mode/{Uri.EscapeDataString(modes)}/Disruption", applicationId, applicationKey);
-        return await httpClient.GetFromJsonAsync(requestUrl, AppJsonSerializerContext.Default.IListServiceDisruption, cancellationToken);
+        return await httpClient.GetFromJsonAsync(requestUrl, AppJsonSerializerContext.Default.IListServiceDisruption, cancellationToken) ?? [];
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ internal sealed class TflClient(HttpClient httpClient)
         CancellationToken cancellationToken = default)
     {
         string requestUrl = GetRequestUrl($"/Line/{Uri.EscapeDataString(ids)}/Status", applicationId, applicationKey);
-        return await httpClient.GetFromJsonAsync(requestUrl, AppJsonSerializerContext.Default.IListLine, cancellationToken);
+        return await httpClient.GetFromJsonAsync(requestUrl, AppJsonSerializerContext.Default.IListLine, cancellationToken) ?? [];
     }
 
     private static string GetRequestUrl(
@@ -58,10 +58,10 @@ internal sealed class TflClient(HttpClient httpClient)
         string applicationId,
         string applicationKey)
     {
-        KeyValuePair<string, string>[] parameters =
+        KeyValuePair<string, string?>[] parameters =
         [
-            KeyValuePair.Create("app_id", applicationId),
-            KeyValuePair.Create("app_key", applicationKey),
+            KeyValuePair.Create<string, string?>("app_id", applicationId),
+            KeyValuePair.Create<string, string?>("app_key", applicationKey),
         ];
 
         return QueryHelpers.AddQueryString(uri, parameters);

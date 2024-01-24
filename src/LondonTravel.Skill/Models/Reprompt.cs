@@ -9,5 +9,5 @@ public sealed class Reprompt
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("outputSpeech")]
-    public SsmlOutputSpeech OutputSpeech { get; set; }
+    public SsmlOutputSpeech OutputSpeech { get; set; } = default!;
 }

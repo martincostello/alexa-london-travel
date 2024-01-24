@@ -19,7 +19,7 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
         Interceptor = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
     }
 
-    public ITestOutputHelper OutputHelper { get; set; }
+    public ITestOutputHelper? OutputHelper { get; set; }
 
     protected HttpClientInterceptorOptions Interceptor { get; }
 
@@ -65,7 +65,7 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
         return CreateRequest("IntentRequest", request);
     }
 
-    protected virtual SkillRequest CreateRequest(string type, Request request = null)
+    protected virtual SkillRequest CreateRequest(string type, Request? request = null)
     {
         var application = new Application()
         {
@@ -122,9 +122,9 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
 
     private sealed class TestAlexaFunction(
         HttpClientInterceptorOptions options,
-        ITestOutputHelper outputHelper) : TestSettingsAlexaFunction, ITestOutputHelperAccessor
+        ITestOutputHelper? outputHelper) : TestSettingsAlexaFunction, ITestOutputHelperAccessor
     {
-        public ITestOutputHelper OutputHelper { get; set; } = outputHelper;
+        public ITestOutputHelper? OutputHelper { get; set; } = outputHelper;
 
         protected override void ConfigureServices(IServiceCollection services)
         {

@@ -17,10 +17,10 @@ public class SkillTests(ITestOutputHelper outputHelper)
     public async Task Can_Invoke_Skill_And_Get_Valid_Response(string content)
     {
         // Arrange
-        string functionName = TestConfiguration.FunctionName;
-        string regionName = TestConfiguration.RegionName;
-        string skillId = TestConfiguration.SkillId;
-        string stage = TestConfiguration.SkillStage;
+        string? functionName = TestConfiguration.FunctionName;
+        string? regionName = TestConfiguration.RegionName;
+        string? skillId = TestConfiguration.SkillId;
+        string? stage = TestConfiguration.SkillStage;
 
         Skip.If(string.IsNullOrEmpty(functionName), "No Lambda function name is configured.");
         Skip.If(string.IsNullOrEmpty(regionName), "No AWS region name is configured.");
@@ -50,7 +50,8 @@ public class SkillTests(ITestOutputHelper outputHelper)
         invocation.InvocationRequest.RootElement.TryGetProperty("body", out _).ShouldBeTrue();
         invocation.InvocationRequest.RootElement.TryGetProperty("endpoint", out var endpoint).ShouldBeTrue();
 
-        string endpointValue = endpoint.GetString();
+        string? endpointValue = endpoint.GetString();
+        endpointValue.ShouldNotBeNull();
         endpointValue.ShouldStartWith($"arn:aws:lambda:{regionName}:");
         endpointValue.ShouldEndWith($":function:{functionName}");
 
@@ -63,7 +64,7 @@ public class SkillTests(ITestOutputHelper outputHelper)
         speechType.GetString().ShouldBe("SSML");
 
         outputSpeech.TryGetProperty("ssml", out var ssml).ShouldBeTrue();
-        string speech = ssml.GetString();
+        string? speech = ssml.GetString();
 
         speech.ShouldNotBeNullOrWhiteSpace();
         speech.ShouldStartWith("<speak>");
@@ -74,9 +75,9 @@ public class SkillTests(ITestOutputHelper outputHelper)
     {
         // To generate a new refresh token, run the following command:
         // npm install -g ask-cli && ask util generate-lwa-tokens --client-id $CLIENT_ID --client-confirmation $CLIENT_SECRET --scopes "alexa::ask:skills:readwrite alexa::ask:skills:test"
-        string clientId = TestConfiguration.AlexaClientId;
-        string clientSecret = TestConfiguration.AlexaClientSecret;
-        string refreshToken = TestConfiguration.AlexaRefreshToken;
+        string? clientId = TestConfiguration.AlexaClientId;
+        string? clientSecret = TestConfiguration.AlexaClientSecret;
+        string? refreshToken = TestConfiguration.AlexaRefreshToken;
 
         Skip.If(string.IsNullOrEmpty(clientId), "No client ID is configured.");
         Skip.If(string.IsNullOrEmpty(clientSecret), "No client secret is configured.");
@@ -105,7 +106,7 @@ public class SkillTests(ITestOutputHelper outputHelper)
         response.EnsureSuccessStatusCode();
 
         using var tokens = await response.Content.ReadFromJsonAsync<JsonDocument>();
-        return tokens.RootElement.GetProperty("access_token").GetString();
+        return tokens!.RootElement.GetProperty("access_token").GetString() ?? string.Empty;
     }
 
     private static async Task<HttpClient> CreateHttpClientAsync()
@@ -140,7 +141,7 @@ public class SkillTests(ITestOutputHelper outputHelper)
         string stage,
         SimulationResponse simulation)
     {
-        string simulationId = simulation.Id;
+        string simulationId = simulation.Id!;
 
         const string InProgress = "IN_PROGRESS";
 
@@ -154,8 +155,10 @@ public class SkillTests(ITestOutputHelper outputHelper)
                 await Task.Delay(delay);
 
                 // See https://developer.amazon.com/en-US/docs/alexa/smapi/skill-simulation-api.html#get-simulation-result
-                simulation = await client.GetFromJsonAsync<SimulationResponse>($"v2/skills/{skillId}/stages/{stage}/simulations/{simulationId}");
-                simulation.ShouldNotBeNull();
+                var result = await client.GetFromJsonAsync<SimulationResponse>($"v2/skills/{skillId}/stages/{stage}/simulations/{simulationId}");
+                result.ShouldNotBeNull();
+
+                simulation = result;
 
                 if (simulation.Status is not InProgress)
                 {
@@ -187,7 +190,7 @@ public class SkillTests(ITestOutputHelper outputHelper)
 
         using var response = await client.PostAsJsonAsync($"v2/skills/{skillId}/stages/{stage}/simulations", request);
 
-        string requestId = response.Headers.GetValues("x-amzn-requestid").FirstOrDefault();
+        string? requestId = response.Headers.GetValues("x-amzn-requestid").FirstOrDefault();
         outputHelper.WriteLine($"Request Id: {requestId}");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
@@ -203,63 +206,63 @@ public class SkillTests(ITestOutputHelper outputHelper)
 
     private sealed class SimulationRequest
     {
-        public string Content { get; set; }
+        public string? Content { get; set; }
 
-        public string Locale { get; set; }
+        public string? Locale { get; set; }
 
-        public string SkillId { get; set; }
+        public string? SkillId { get; set; }
 
-        public string Stage { get; set; }
+        public string? Stage { get; set; }
     }
 
     private sealed class SimulationResponse
     {
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         [JsonPropertyName("status")]
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         [JsonPropertyName("result")]
-        public SimulationResult Result { get; set; }
+        public SimulationResult? Result { get; set; }
     }
 
     private sealed class SimulationResult
     {
         [JsonPropertyName("message")]
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
         [JsonPropertyName("code")]
-        public string Code { get; set; }
+        public string? Code { get; set; }
 
         [JsonPropertyName("skillExecutionInfo")]
-        public SkillExecutionInfo SkillExecutionInfo { get; set; }
+        public SkillExecutionInfo? SkillExecutionInfo { get; set; }
 
         [JsonPropertyName("error")]
-        public SimulationError Error { get; set; }
+        public SimulationError? Error { get; set; }
     }
 
     private sealed class SimulationError
     {
         [JsonPropertyName("message")]
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
         [JsonPropertyName("code")]
-        public string Code { get; set; }
+        public string? Code { get; set; }
     }
 
     private sealed class SkillExecutionInfo
     {
         [JsonPropertyName("invocations")]
-        public IList<SkillInvocation> Invocations { get; set; }
+        public IList<SkillInvocation>? Invocations { get; set; }
     }
 
     private sealed class SkillInvocation
     {
         [JsonPropertyName("invocationRequest")]
-        public JsonDocument InvocationRequest { get; set; }
+        public JsonDocument? InvocationRequest { get; set; }
 
         [JsonPropertyName("invocationResponse")]
-        public JsonDocument InvocationResponse { get; set; }
+        public JsonDocument? InvocationResponse { get; set; }
     }
 }

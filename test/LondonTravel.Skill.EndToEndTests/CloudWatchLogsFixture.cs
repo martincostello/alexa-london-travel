@@ -22,8 +22,8 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
         }
 
         var credentials = TestConfiguration.GetCredentials();
-        string functionName = TestConfiguration.FunctionName;
-        string regionName = TestConfiguration.RegionName;
+        string? functionName = TestConfiguration.FunctionName;
+        string? regionName = TestConfiguration.RegionName;
 
         if (functionName is not null &&
             regionName is not null &&
@@ -88,7 +88,7 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
                     string requestIdLine = split[0][ReportPrefix.Length..];
                     string requestId = requestIdLine.Split(' ')[1];
 
-                    if (!Requests.TryGetValue(requestId, out string name))
+                    if (!Requests.TryGetValue(requestId, out string? name))
                     {
                         continue;
                     }
@@ -165,10 +165,10 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
 
     private static async Task TryPostLogsToPullRequestAsync(IEnumerable<LogEvent> events)
     {
-        string apiUrl = Environment.GetEnvironmentVariable("GITHUB_API_URL");
-        string repository = Environment.GetEnvironmentVariable("GITHUB_REPOSITORY");
-        string token = Environment.GetEnvironmentVariable("GITHUB_TOKEN");
-        string issue = Environment.GetEnvironmentVariable("PULL_NUMBER");
+        string? apiUrl = Environment.GetEnvironmentVariable("GITHUB_API_URL");
+        string? repository = Environment.GetEnvironmentVariable("GITHUB_REPOSITORY");
+        string? token = Environment.GetEnvironmentVariable("GITHUB_TOKEN");
+        string? issue = Environment.GetEnvironmentVariable("PULL_NUMBER");
 
         if (string.IsNullOrEmpty(apiUrl) ||
             string.IsNullOrEmpty(repository) ||
@@ -221,16 +221,16 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
 
         public DateTime Timestamp { get; set; }
 
-        public string RequestId { get; set; }
+        public string RequestId { get; set; } = default!;
 
-        public string Duration { get; set; }
+        public string Duration { get; set; } = default!;
 
-        public string BilledDuration { get; set; }
+        public string BilledDuration { get; set; } = default!;
 
-        public string MemorySize { get; set; }
+        public string MemorySize { get; set; } = default!;
 
-        public string MaxMemoryUsed { get; set; }
+        public string MaxMemoryUsed { get; set; } = default!;
 
-        public string InitDuration { get; set; }
+        public string InitDuration { get; set; } = default!;
     }
 }

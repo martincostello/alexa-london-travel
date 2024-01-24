@@ -9,13 +9,13 @@ public sealed class Request : IRequest, IIntentRequest, ISessionEndedRequest, IS
 {
     [JsonPropertyName("type")]
     [JsonRequired]
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
 
     [JsonPropertyName("requestId")]
-    public string RequestId { get; set; }
+    public string RequestId { get; set; } = default!;
 
     [JsonPropertyName("locale")]
-    public string Locale { get; set; }
+    public string Locale { get; set; } = default!;
 
     [JsonConverter(typeof(MixedDateTimeConverter))]
     [JsonPropertyName("timestamp")]
@@ -24,10 +24,10 @@ public sealed class Request : IRequest, IIntentRequest, ISessionEndedRequest, IS
     //// Properties for "IntentRequest"
 
     [JsonPropertyName("dialogState")]
-    public string DialogState { get; set; }
+    public string DialogState { get; set; } = default!;
 
     [JsonPropertyName("intent")]
-    public Intent Intent { get; set; }
+    public Intent Intent { get; set; } = default!;
 
     //// Properties for "SessionEndedRequest"
 
@@ -38,11 +38,11 @@ public sealed class Request : IRequest, IIntentRequest, ISessionEndedRequest, IS
     //// Properties for "System.ExceptionEncountered"
 
     [JsonPropertyName("cause")]
-    public AlexaErrorCause ErrorCause { get; set; }
+    public AlexaErrorCause ErrorCause { get; set; } = default!;
 
     //// Properties for "SessionEndedRequest" and "System.ExceptionEncountered"
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("error")]
-    public AlexaError Error { get; set; }
+    public AlexaError Error { get; set; } = default!;
 }

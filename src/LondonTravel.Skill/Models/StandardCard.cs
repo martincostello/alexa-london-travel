@@ -13,9 +13,9 @@ public sealed class StandardCard : Card
 
     [JsonPropertyName("title")]
     [JsonRequired]
-    public string Title { get; set; }
+    public string Title { get; set; } = default!;
 
     [JsonPropertyName("text")]
     [JsonRequired]
-    public string Content { get; set; }
+    public string Content { get; set; } = default!;
 }

@@ -11,14 +11,14 @@ public sealed class Session
     public bool New { get; set; }
 
     [JsonPropertyName("sessionId")]
-    public string SessionId { get; set; }
+    public string SessionId { get; set; } = default!;
 
     [JsonPropertyName("attributes")]
-    public Dictionary<string, object> Attributes { get; set; }
+    public Dictionary<string, object> Attributes { get; set; } = default!;
 
     [JsonPropertyName("application")]
-    public Application Application { get; set; }
+    public Application Application { get; set; } = default!;
 
     [JsonPropertyName("user")]
-    public User User { get; set; }
+    public User User { get; set; } = default!;
 }

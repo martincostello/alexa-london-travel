@@ -14,11 +14,11 @@ public sealed class Line
     /// Gets or sets the line's name.
     /// </summary>
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     /// <summary>
     /// Gets or sets the statuses for the line.
     /// </summary>
     [JsonPropertyName("lineStatuses")]
-    public IList<LineStatus> LineStatuses { get; set; }
+    public IList<LineStatus> LineStatuses { get; set; } = default!;
 }

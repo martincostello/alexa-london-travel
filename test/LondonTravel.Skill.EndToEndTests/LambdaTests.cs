@@ -17,7 +17,7 @@ public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper output
     {
         var payloads = new TheoryData<string>();
 
-        foreach (string path in Directory.GetFiles("Payloads").Select(Path.GetFileNameWithoutExtension).Order())
+        foreach (string path in Directory.GetFiles("Payloads").Select(Path.GetFileNameWithoutExtension).Cast<string>().Order())
         {
             payloads.Add(path);
         }
@@ -33,8 +33,8 @@ public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper output
 
         Skip.If(credentials is null, "No AWS credentials are configured.");
 
-        string functionName = TestConfiguration.FunctionName;
-        string regionName = TestConfiguration.RegionName;
+        string? functionName = TestConfiguration.FunctionName;
+        string? regionName = TestConfiguration.RegionName;
 
         Skip.If(string.IsNullOrEmpty(functionName), "No Lambda function name is configured.");
         Skip.If(string.IsNullOrEmpty(regionName), "No AWS region name is configured.");

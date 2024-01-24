@@ -8,12 +8,12 @@ namespace MartinCostello.LondonTravel.Skill.Models;
 public sealed class Device
 {
     [JsonPropertyName("deviceId")]
-    public string DeviceId { get; set; }
+    public string? DeviceId { get; set; }
 
     [JsonPropertyName("supportedInterfaces")]
-    public Dictionary<string, object> SupportedInterfaces { get; set; }
+    public Dictionary<string, object>? SupportedInterfaces { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("persistentEndpointId")]
-    public string PersistentEndpointId { get; set; }
+    public string? PersistentEndpointId { get; set; }
 }
