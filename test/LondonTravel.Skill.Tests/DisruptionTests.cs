@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using Amazon.Lambda.TestUtilities;
 using JustEat.HttpClientInterception;
 using MartinCostello.LondonTravel.Skill.Models;
 
@@ -16,9 +17,10 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequest();
+        TestLambdaContext context = new();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request);
+        SkillResponse actual = await function.HandlerAsync(request, context);
 
         // Assert
         AssertResponse(
@@ -35,9 +37,10 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequest();
+        TestLambdaContext context = new();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request);
+        SkillResponse actual = await function.HandlerAsync(request, context);
 
         // Assert
         AssertResponse(
@@ -54,9 +57,10 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
 
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequest();
+        TestLambdaContext context = new();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request);
+        SkillResponse actual = await function.HandlerAsync(request, context);
 
         // Assert
         AssertResponse(
@@ -71,9 +75,10 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
         // Arrange
         AlexaFunction function = await CreateFunctionAsync();
         SkillRequest request = CreateIntentRequest();
+        TestLambdaContext context = new();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request);
+        SkillResponse actual = await function.HandlerAsync(request, context);
 
         // Assert
         ResponseBody response = AssertResponse(actual);
