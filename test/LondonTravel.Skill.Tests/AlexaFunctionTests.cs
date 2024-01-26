@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using Amazon.Lambda.TestUtilities;
 using MartinCostello.LondonTravel.Skill.Models;
 
 namespace MartinCostello.LondonTravel.Skill;
@@ -12,13 +13,14 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
     {
         // Arrange
         AlexaFunction function = await CreateFunctionAsync();
+        TestLambdaContext context = new();
 
         SkillRequest request = CreateIntentRequest("AMAZON.HelpIntent");
         request.Session.Application.ApplicationId = "not-my-skill-id";
 
         // Act
-        InvalidOperationException exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            () => function.HandlerAsync(request));
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(
+            () => function.HandlerAsync(request, context));
 
         // Assert
         exception.Message.ShouldBe("Request application Id 'not-my-skill-id' and configured skill Id 'my-skill-id' mismatch.");
@@ -34,12 +36,13 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
     {
         // Arrange
         AlexaFunction function = await CreateFunctionAsync();
+        TestLambdaContext context = new();
 
         SkillRequest request = CreateIntentRequest("AMAZON.HelpIntent");
         request.Request.Locale = locale!;
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request);
+        SkillResponse actual = await function.HandlerAsync(request, context);
 
         // Assert
         ResponseBody response = AssertResponse(actual, shouldEndSession: false);
@@ -53,6 +56,7 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
     {
         // Arrange
         AlexaFunction function = await CreateFunctionAsync();
+        TestLambdaContext context = new();
 
         var error = new Request()
         {
@@ -70,7 +74,7 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
         var request = CreateRequest("System.ExceptionEncountered", error);
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request);
+        SkillResponse actual = await function.HandlerAsync(request, context);
 
         // Assert
         ResponseBody response = AssertResponse(actual);

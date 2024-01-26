@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Diagnostics.CodeAnalysis;
+using Amazon.Lambda.Core;
 using MartinCostello.LondonTravel.Skill.Extensions;
 using MartinCostello.LondonTravel.Skill.Intents;
 using MartinCostello.LondonTravel.Skill.Models;
@@ -9,6 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using OpenTelemetry.Instrumentation.AWSLambda;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -55,21 +60,15 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     /// Handles a request to the skill as an asynchronous operation.
     /// </summary>
     /// <param name="request">The skill request.</param>
+    /// <param name="context">The Lamda request context.</param>
     /// <returns>
     /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the skill's response.
     /// </returns>
-    public async Task<SkillResponse> HandlerAsync(SkillRequest request)
+    public async Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
     {
         EnsureInitialized();
-
-        var handler = _serviceProvider.GetRequiredService<FunctionHandler>();
-        var logger = _serviceProvider.GetRequiredService<ILogger<AlexaFunction>>();
-
-        using var activity = SkillTelemetry.ActivitySource.StartActivity("Skill Request");
-
-        Log.InvokingSkillRequest(logger, request.Request.Type);
-
-        return await handler.HandleAsync(request);
+        var tracerProvider = _serviceProvider.GetRequiredService<TracerProvider>();
+        return await AWSLambdaWrapper.TraceAsync(tracerProvider, HandlerCoreAsync, request, context);
     }
 
     /// <summary>
@@ -132,6 +131,21 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         services.AddTransient<CommuteIntent>();
         services.AddTransient<DisruptionIntent>();
         services.AddTransient<StatusIntent>();
+
+        services.AddSingleton((_) => SkillTelemetry.ActivitySource);
+        services.AddOpenTelemetry()
+                .ConfigureResource((builder) => builder.AddService(SkillTelemetry.ServiceName, serviceVersion: SkillTelemetry.ServiceVersion))
+                .WithTracing((builder) =>
+                {
+                    builder.AddHttpClientInstrumentation((p) => p.RecordException = true)
+                           .AddSource(SkillTelemetry.ServiceName);
+
+                    if (IsRunningInAwsLambda())
+                    {
+                        builder.AddAWSLambdaConfigurations()
+                               .AddOtlpExporter();
+                    }
+                });
     }
 
     protected virtual void Dispose(bool disposing)
@@ -147,12 +161,22 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         }
     }
 
-    /// <summary>
-    /// Creates the <see cref="ServiceProvider"/> to use.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="ServiceProvider"/> to use.
-    /// </returns>
+    private static bool IsRunningInAwsLambda()
+        => Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") is { Length: > 0 } &&
+           Environment.GetEnvironmentVariable("AWS_REGION") is { Length: > 0 };
+
+    private async Task<SkillResponse> HandlerCoreAsync(SkillRequest request, ILambdaContext context)
+    {
+        var handler = _serviceProvider!.GetRequiredService<FunctionHandler>();
+        var logger = _serviceProvider!.GetRequiredService<ILogger<AlexaFunction>>();
+
+        using var activity = SkillTelemetry.ActivitySource.StartActivity("Skill Request");
+
+        Log.InvokingSkillRequest(logger, request.Request.Type);
+
+        return await handler.HandleAsync(request);
+    }
+
     private ServiceProvider CreateServiceProvider()
     {
         var services = new ServiceCollection();
