@@ -158,6 +158,7 @@ jobs:
       run: |
         lambda_vars="{\
           \"Variables\": {\
+            \"SSL_CERT_FILE\": \"/tmp/noop\",\
             \"Skill__SkillApiUrl\": \"${SKILL_API_URL}\",\
             \"Skill__SkillId\": \"${SKILL_ID}\",\
             \"Skill__TflApplicationId\": \"${TFL_APPLICATION_ID}\",\
@@ -294,6 +295,7 @@ jobs:
       run: |
         lambda_vars="{\
           \"Variables\": {\
+            \"SSL_CERT_FILE\": \"/tmp/noop\",\
             \"Skill__SkillApiUrl\": \"${SKILL_API_URL}\",\
             \"Skill__SkillId\": \"${SKILL_ID}\",\
             \"Skill__TflApplicationId\": \"${TFL_APPLICATION_ID}\",\
