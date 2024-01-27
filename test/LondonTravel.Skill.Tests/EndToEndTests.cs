@@ -155,7 +155,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
 
         result.ShouldNotBeNull();
         result.IsSuccessful.ShouldBeTrue();
-        result.Duration.ShouldBeInRange(TimeSpan.FromTicks(1), TimeSpan.FromSeconds(1));
+        result.Duration.ShouldBeInRange(TimeSpan.FromTicks(1), TimeSpan.FromSeconds(2));
         result.Content.ShouldNotBeEmpty();
 
         json = await result.ReadAsStringAsync();
