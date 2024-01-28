@@ -10,10 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using OpenTelemetry.Instrumentation.AWSLambda;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -67,8 +63,11 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     public async Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
     {
         EnsureInitialized();
-        var tracerProvider = _serviceProvider.GetRequiredService<TracerProvider>();
-        return await AWSLambdaWrapper.TraceAsync(tracerProvider, HandlerCoreAsync, request, context);
+        return await OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.TraceAsync(
+            _serviceProvider.GetRequiredService<OpenTelemetry.Trace.TracerProvider>(),
+            HandlerCoreAsync,
+            request,
+            context);
     }
 
     /// <summary>
@@ -116,6 +115,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         });
 
         services.AddHttpClients();
+        services.AddTelemetry();
 
         services.AddSingleton<AlexaSkill>();
         services.AddSingleton<FunctionHandler>();
@@ -131,21 +131,6 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         services.AddTransient<CommuteIntent>();
         services.AddTransient<DisruptionIntent>();
         services.AddTransient<StatusIntent>();
-
-        services.AddSingleton((_) => SkillTelemetry.ActivitySource);
-        services.AddOpenTelemetry()
-                .ConfigureResource((builder) => builder.AddService(SkillTelemetry.ServiceName, serviceVersion: SkillTelemetry.ServiceVersion))
-                .WithTracing((builder) =>
-                {
-                    builder.AddHttpClientInstrumentation((p) => p.RecordException = true)
-                           .AddSource(SkillTelemetry.ServiceName);
-
-                    if (IsRunningInAwsLambda())
-                    {
-                        builder.AddAWSLambdaConfigurations()
-                               .AddOtlpExporter();
-                    }
-                });
     }
 
     protected virtual void Dispose(bool disposing)
@@ -160,10 +145,6 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
             _disposed = true;
         }
     }
-
-    private static bool IsRunningInAwsLambda()
-        => Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") is { Length: > 0 } &&
-           Environment.GetEnvironmentVariable("AWS_REGION") is { Length: > 0 };
 
     private async Task<SkillResponse> HandlerCoreAsync(SkillRequest request, ILambdaContext context)
     {
