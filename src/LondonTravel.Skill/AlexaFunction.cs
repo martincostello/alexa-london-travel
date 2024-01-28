@@ -135,6 +135,15 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         services.AddSingleton((_) => SkillTelemetry.ActivitySource);
         services.AddOpenTelemetry()
                 .ConfigureResource((builder) => builder.AddService(SkillTelemetry.ServiceName, serviceVersion: SkillTelemetry.ServiceVersion))
+                .WithMetrics((builder) =>
+                {
+                    builder.AddHttpClientInstrumentation();
+
+                    if (IsRunningInAwsLambda())
+                    {
+                        builder.AddOtlpExporter();
+                    }
+                })
                 .WithTracing((builder) =>
                 {
                     builder.AddHttpClientInstrumentation((p) => p.RecordException = true)
