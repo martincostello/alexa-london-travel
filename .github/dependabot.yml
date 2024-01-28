@@ -28,7 +28,19 @@ updates:
     - "martincostello"
   open-pull-requests-limit: 99
   ignore:
-    - dependency-name: "AWSSDK.CloudWatchLogs"
-      update-types: ["version-update:semver-patch"]
-    - dependency-name: "AWSSDK.Lambda"
-      update-types: ["version-update:semver-patch"]
+    - dependency-name: "AWSSDK*"
+- package-ecosystem: nuget
+  directory: "/"
+  groups:
+    awssdk:
+      patterns:
+        - AWSSDK*
+  schedule:
+    interval: monthly
+    time: "05:30"
+    timezone: Europe/London
+  reviewers:
+    - "martincostello"
+  open-pull-requests-limit: 99
+  allow:
+    - dependency-name: "AWSSDK*"
