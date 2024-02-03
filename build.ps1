@@ -96,6 +96,7 @@ function DotNetPublish {
         $additionalArgs += "true"
         $additionalArgs += "/p:AssemblyName=bootstrap"
         $additionalArgs += "/p:IlcInstructionSet=armv8.2-a"
+        $additionalArgs += "/p:StripSymbols=true"
     }
 
     & $dotnet publish $Project $additionalArgs
