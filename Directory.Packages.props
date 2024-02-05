@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <PollyVersion>8.2.1</PollyVersion>
+    <PollyVersion>8.3.0</PollyVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Amazon.Lambda.Core" Version="2.2.0" />
