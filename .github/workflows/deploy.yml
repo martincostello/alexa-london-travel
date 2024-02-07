@@ -249,7 +249,7 @@ jobs:
         echo "LAMBDA_ENVIRONMENT_VARIABLES=${lambda_vars}" >> "$GITHUB_ENV"
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
+      uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
       with:
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-deploy
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-${{ needs.setup.outputs.environment-name }}
@@ -352,7 +352,7 @@ jobs:
       uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
+      uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
       with:
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-test
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-tests-${{ needs.setup.outputs.environment-name }}
