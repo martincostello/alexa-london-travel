@@ -29,7 +29,11 @@ internal static class HttpServiceCollectionExtensions
             client.BaseAddress = config.SkillApiUrl;
         });
 
-        services.AddHttpClient<TflClient>((p) => p.BaseAddress = new Uri("https://api.tfl.gov.uk/", UriKind.Absolute));
+        services.AddHttpClient<TflClient>((provider, client) =>
+        {
+            var config = provider.GetRequiredService<SkillConfiguration>();
+            client.BaseAddress = config.TflApiUrl;
+        });
 
         return services;
     }

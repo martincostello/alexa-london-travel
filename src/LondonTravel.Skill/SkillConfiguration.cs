@@ -22,6 +22,12 @@ public sealed class SkillConfiguration
     public string SkillId { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets the URL for the TfL API.
+    /// </summary>
+    [Required]
+    public Uri TflApiUrl { get; set; } = default!;
+
+    /// <summary>
     /// Gets or sets the TfL API application Id.
     /// </summary>
     [Required]
