@@ -26,7 +26,7 @@ internal static class HttpServiceCollectionExtensions
         services.AddHttpClient<SkillClient>((provider, client) =>
         {
             var config = provider.GetRequiredService<SkillConfiguration>();
-            client.BaseAddress = new Uri(config.SkillApiUrl, UriKind.Absolute);
+            client.BaseAddress = config.SkillApiUrl;
         });
 
         services.AddHttpClient<TflClient>((p) => p.BaseAddress = new Uri("https://api.tfl.gov.uk/", UriKind.Absolute));
