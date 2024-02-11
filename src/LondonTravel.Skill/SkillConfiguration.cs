@@ -14,7 +14,7 @@ public sealed class SkillConfiguration
     /// Gets or sets the URL for the skill API.
     /// </summary>
     [Required]
-    public string SkillApiUrl { get; set; } = string.Empty;
+    public Uri SkillApiUrl { get; set; } = default!;
 
     /// <summary>
     /// Gets or sets the skill's ID.
