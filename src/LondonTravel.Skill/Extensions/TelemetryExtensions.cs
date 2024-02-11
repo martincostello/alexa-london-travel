@@ -79,7 +79,7 @@ internal static class TelemetryExtensions
         mappings[options.TflApiUrl.Host] = "TfL API";
 
         if (configuration["AWS_LAMBDA_RUNTIME_API"] is { Length: > 0 } url &&
-            Uri.TryCreate(url, UriKind.Absolute, out var uri))
+            Uri.TryCreate($"http://{url}", UriKind.Absolute, out var uri))
         {
             mappings[uri.Host] = "AWS Lambda Runtime API";
         }
