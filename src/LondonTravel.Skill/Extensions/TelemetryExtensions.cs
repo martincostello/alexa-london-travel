@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +15,7 @@ namespace MartinCostello.LondonTravel.Skill.Extensions;
 
 internal static class TelemetryExtensions
 {
-    private static readonly Dictionary<string, string> ServiceMap = new(StringComparer.OrdinalIgnoreCase);
+    private static readonly ConcurrentDictionary<string, string> ServiceMap = new(StringComparer.OrdinalIgnoreCase);
 
     public static IServiceCollection AddTelemetry(this IServiceCollection services)
     {
@@ -70,7 +71,7 @@ internal static class TelemetryExtensions
             => tags.FirstOrDefault((p) => p.Key == name).Value;
     }
 
-    private static void AddServiceMappings(Dictionary<string, string> mappings, IServiceProvider serviceProvider)
+    private static void AddServiceMappings(ConcurrentDictionary<string, string> mappings, IServiceProvider serviceProvider)
     {
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
         var options = serviceProvider.GetRequiredService<IOptions<SkillConfiguration>>().Value;
