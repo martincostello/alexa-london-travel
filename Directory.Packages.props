@@ -9,7 +9,7 @@
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="2.0.0" />
     <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="3.7.303.8" />
     <PackageVersion Include="AWSSDK.Lambda" Version="3.7.303.37" />
-    <PackageVersion Include="coverlet.msbuild" Version="6.0.0" />
+    <PackageVersion Include="coverlet.msbuild" Version="6.0.1" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.3" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="4.2.0" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
