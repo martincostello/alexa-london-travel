@@ -11,17 +11,11 @@ using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-public abstract class FunctionTests : ITestOutputHelperAccessor
+public abstract class FunctionTests(ITestOutputHelper outputHelper) : ITestOutputHelperAccessor
 {
-    protected FunctionTests(ITestOutputHelper outputHelper)
-    {
-        OutputHelper = outputHelper;
-        Interceptor = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
-    }
+    public ITestOutputHelper? OutputHelper { get; set; } = outputHelper;
 
-    public ITestOutputHelper? OutputHelper { get; set; }
-
-    protected HttpClientInterceptorOptions Interceptor { get; }
+    protected HttpClientInterceptorOptions Interceptor { get; } = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
 
     protected virtual ResponseBody AssertResponse(SkillResponse actual, bool? shouldEndSession = true)
     {
@@ -44,7 +38,7 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
 
     protected virtual SkillRequest CreateIntentRequest(string name, params Slot[] slots)
     {
-        var request = new Request()
+        var request = new IntentRequest()
         {
             Intent = new Intent()
             {
@@ -62,10 +56,11 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
             }
         }
 
-        return CreateRequest("IntentRequest", request);
+        return CreateRequest(request);
     }
 
-    protected virtual SkillRequest CreateRequest(string type, Request? request = null)
+    protected virtual SkillRequest CreateRequest<T>(T? request = null)
+        where T : Request, new()
     {
         var application = new Application()
         {
@@ -94,7 +89,7 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
                     User = user,
                 },
             },
-            Request = request ?? new(),
+            Request = request ?? new T(),
             Session = new()
             {
                 Application = application,
@@ -105,7 +100,6 @@ public abstract class FunctionTests : ITestOutputHelperAccessor
             Version = "1.0",
         };
 
-        result.Request.Type = type;
         result.Request.Locale = "en-GB";
 
         return result;
