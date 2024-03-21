@@ -120,7 +120,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
     public async Task Alexa_Function_Can_Process_Launch_Request()
     {
         // Arrange
-        var request = CreateRequest("LaunchRequest");
+        var request = CreateRequest<LaunchRequest>();
 
         // Act
         var actual = await ProcessRequestAsync(request);
@@ -140,7 +140,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
     public async Task Alexa_Function_Can_Process_Session_Ended_Request()
     {
         // Arrange
-        var session = new Request()
+        var session = new SessionEndedRequest()
         {
             Reason = Reason.ExceededMaxReprompts,
             Error = new()
@@ -150,7 +150,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
             },
         };
 
-        var request = CreateRequest("SessionEndedRequest", session);
+        var request = CreateRequest(session);
 
         // Act
         var actual = await ProcessRequestAsync(request);
@@ -170,7 +170,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
     public async Task Alexa_Function_Can_Process_System_Exception_Request()
     {
         // Arrange
-        var exception = new Request()
+        var exception = new SystemExceptionRequest()
         {
             Error = new()
             {
@@ -183,7 +183,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
             },
         };
 
-        var request = CreateRequest("System.ExceptionEncountered", exception);
+        var request = CreateRequest(exception);
 
         // Act
         var actual = await ProcessRequestAsync(request);
