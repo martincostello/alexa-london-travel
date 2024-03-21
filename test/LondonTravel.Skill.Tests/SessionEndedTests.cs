@@ -14,7 +14,7 @@ public class SessionEndedTests(ITestOutputHelper outputHelper) : FunctionTests(o
         // Arrange
         var function = await CreateFunctionAsync();
 
-        var request = CreateRequest("SessionEndedRequest");
+        var request = CreateRequest<SessionEndedRequest>();
         var context = new TestLambdaContext();
 
         // Act
