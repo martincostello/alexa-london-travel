@@ -5,11 +5,15 @@ using System.Text.Json.Serialization;
 
 namespace MartinCostello.LondonTravel.Skill.Models;
 
-public sealed class Request : IRequest, IIntentRequest, ISessionEndedRequest, ISystemExceptionRequest
+[JsonDerivedType(typeof(IntentRequest), "IntentRequest")]
+[JsonDerivedType(typeof(LaunchRequest), "LaunchRequest")]
+[JsonDerivedType(typeof(SessionEndedRequest), "SessionEndedRequest")]
+[JsonDerivedType(typeof(SystemExceptionRequest), "System.ExceptionEncountered")]
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+public class Request
 {
-    [JsonPropertyName("type")]
-    [JsonRequired]
-    public string Type { get; set; } = default!;
+    [JsonIgnore]
+    public virtual string Type { get; } = default!;
 
     [JsonPropertyName("requestId")]
     public string RequestId { get; set; } = default!;
@@ -20,29 +24,4 @@ public sealed class Request : IRequest, IIntentRequest, ISessionEndedRequest, IS
     [JsonConverter(typeof(MixedDateTimeConverter))]
     [JsonPropertyName("timestamp")]
     public DateTime Timestamp { get; set; }
-
-    //// Properties for "IntentRequest"
-
-    [JsonPropertyName("dialogState")]
-    public string DialogState { get; set; } = default!;
-
-    [JsonPropertyName("intent")]
-    public Intent Intent { get; set; } = default!;
-
-    //// Properties for "SessionEndedRequest"
-
-    [JsonConverter(typeof(CustomStringEnumConverter<Reason>))]
-    [JsonPropertyName("reason")]
-    public Reason Reason { get; set; }
-
-    //// Properties for "System.ExceptionEncountered"
-
-    [JsonPropertyName("cause")]
-    public AlexaErrorCause ErrorCause { get; set; } = default!;
-
-    //// Properties for "SessionEndedRequest" and "System.ExceptionEncountered"
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("error")]
-    public AlexaError Error { get; set; } = default!;
 }

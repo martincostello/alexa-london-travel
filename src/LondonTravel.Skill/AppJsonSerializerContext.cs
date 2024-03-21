@@ -14,12 +14,14 @@ namespace MartinCostello.LondonTravel.Skill;
 [ExcludeFromCodeCoverage]
 [JsonSerializable(typeof(IList<Line>))]
 [JsonSerializable(typeof(IList<ServiceDisruption>))]
+[JsonSerializable(typeof(IntentRequest))]
+[JsonSerializable(typeof(LaunchRequest))]
 [JsonSerializable(typeof(LinkAccountCard))]
 [JsonSerializable(typeof(SkillRequest))]
 [JsonSerializable(typeof(SkillResponse))]
 [JsonSerializable(typeof(SkillUserPreferences))]
 [JsonSerializable(typeof(StandardCard))]
-[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+[JsonSourceGenerationOptions(AllowOutOfOrderMetadataProperties = true, PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 public sealed partial class AppJsonSerializerContext : JsonSerializerContext
 {
 }

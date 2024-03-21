@@ -26,7 +26,7 @@ internal sealed class AlexaSkill(
     /// <returns>
     /// The <see cref="ResponseBody"/> to return from the skill.
     /// </returns>
-    public SkillResponse OnError(ISystemExceptionRequest error, Session session)
+    public SkillResponse OnError(SystemExceptionRequest error, Session session)
     {
         Log.SystemError(
             logger,
@@ -66,7 +66,7 @@ internal sealed class AlexaSkill(
     /// A <see cref="Task{TResult}"/> representing the asynchronous operation
     /// which returns the <see cref="ResponseBody"/> to return from the skill.
     /// </returns>
-    public async Task<SkillResponse> OnIntentAsync(IIntentRequest intent, Session session)
+    public async Task<SkillResponse> OnIntentAsync(IntentRequest intent, Session session)
     {
         IIntent handler = intentFactory.Create(intent.Intent);
         return await handler.RespondAsync(intent.Intent, session);
