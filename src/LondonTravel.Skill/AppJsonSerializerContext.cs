@@ -19,5 +19,5 @@ namespace MartinCostello.LondonTravel.Skill;
 [JsonSerializable(typeof(SkillResponse))]
 [JsonSerializable(typeof(SkillUserPreferences))]
 [JsonSerializable(typeof(StandardCard))]
-[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+[JsonSourceGenerationOptions(AllowOutOfOrderMetadataProperties = true, PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 public sealed partial class AppJsonSerializerContext : JsonSerializerContext;
