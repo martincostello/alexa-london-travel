@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Text.Json;
+using Amazon.Lambda.Serialization.SystemTextJson;
 using MartinCostello.LondonTravel.Skill.Models;
 
 namespace MartinCostello.LondonTravel.Skill;
@@ -20,6 +21,26 @@ public static class SerializationTests
 
         // Act
         var actual = JsonSerializer.Deserialize(json, AppJsonSerializerContext.Default.SkillRequest);
+
+        // Assert
+        actual.ShouldNotBeNull();
+        actual.Request.ShouldNotBeNull();
+        actual.Request.ShouldBeOfType(expectedType);
+    }
+
+    [Theory]
+    [InlineData("IntentRequest", typeof(IntentRequest))]
+    [InlineData("LaunchRequest", typeof(LaunchRequest))]
+    [InlineData("LaunchRequestWithEpochTimestamp", typeof(LaunchRequest))]
+    [InlineData("SessionEndedRequest", typeof(SessionEndedRequest))]
+    public static void Can_Deserialize_Request_With_Lambda_Serializer(string name, Type expectedType)
+    {
+        // Arrange
+        var serializer = new SourceGeneratorLambdaJsonSerializer<AppJsonSerializerContext>();
+        using var stream = File.OpenRead(Path.Combine("Samples", $"{name}.json"));
+
+        // Act
+        var actual = serializer.Deserialize<SkillRequest>(stream);
 
         // Assert
         actual.ShouldNotBeNull();
