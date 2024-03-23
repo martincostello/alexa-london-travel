@@ -37,7 +37,7 @@ internal sealed class CommuteIntent(
             return NotLinked(session);
         }
 
-        ICollection<string>? favoriteLines = await GetFavoriteLinesAsync(accessToken);
+        var favoriteLines = await GetFavoriteLinesAsync(accessToken);
 
         if (favoriteLines == null)
         {
@@ -63,7 +63,7 @@ internal sealed class CommuteIntent(
 
         foreach (Line line in lines.OrderBy((p) => p.Name, StringComparer.Ordinal))
         {
-            string text = StatusIntent.GenerateResponse(new[] { line });
+            string text = StatusIntent.GenerateResponse([line]);
 
             if (hasMultipleStatuses)
             {
@@ -80,7 +80,7 @@ internal sealed class CommuteIntent(
             .Build();
     }
 
-    private async Task<ICollection<string>?> GetFavoriteLinesAsync(string accessToken)
+    private async Task<IList<string>?> GetFavoriteLinesAsync(string accessToken)
     {
         try
         {
