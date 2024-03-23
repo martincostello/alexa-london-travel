@@ -40,7 +40,8 @@ internal static class IHttpClientBuilderExtensions
                 client.Timeout = TimeSpan.FromSeconds(7.5);
             });
 
-        builder.AddStandardResilienceHandler();
+        //// HACK Disable resilience due to https://github.com/dotnet/extensions/issues/5062
+        ////builder.AddStandardResilienceHandler();
 
         return builder;
     }
