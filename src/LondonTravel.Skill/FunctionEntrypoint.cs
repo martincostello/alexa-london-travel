@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
 using MartinCostello.LondonTravel.Skill.Models;
@@ -29,7 +30,7 @@ public static class FunctionEntrypoint
         CancellationToken cancellationToken = default)
         where T : AlexaFunction, new()
     {
-        var serializer = new SourceGeneratorLambdaJsonSerializer<AppJsonSerializerContext>();
+        var serializer = new LoggingSerializer();
         await using var function = new T();
 
         using var bootstrap = LambdaBootstrapBuilder
@@ -49,4 +50,28 @@ public static class FunctionEntrypoint
     /// </returns>
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     private static async Task Main() => await RunAsync<AlexaFunction>();
+
+    private sealed class LoggingSerializer : ILambdaSerializer
+    {
+        private readonly SourceGeneratorLambdaJsonSerializer<AppJsonSerializerContext> _inner = new();
+
+        public T Deserialize<T>(Stream requestStream)
+        {
+            using var copy = new MemoryStream();
+            requestStream.CopyTo(copy);
+
+            using (var reader = new StreamReader(copy, leaveOpen: true))
+            {
+                copy.Seek(0, SeekOrigin.Begin);
+                Console.WriteLine(reader.ReadToEnd());
+            }
+
+            copy.Seek(0, SeekOrigin.Begin);
+
+            return _inner.Deserialize<T>(copy);
+        }
+
+        public void Serialize<T>(T response, Stream responseStream)
+            => _inner.Serialize(response, responseStream);
+    }
 }
