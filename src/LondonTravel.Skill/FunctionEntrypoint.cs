@@ -30,6 +30,8 @@ public static class FunctionEntrypoint
         CancellationToken cancellationToken = default)
         where T : AlexaFunction, new()
     {
+        Environment.SetEnvironmentVariable("LAMBDA_NET_SERIALIZER_DEBUG", bool.TrueString);
+
         var serializer = new LoggingSerializer();
         await using var function = new T();
 
