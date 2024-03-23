@@ -55,7 +55,7 @@ public static class FunctionEntrypoint
 
     private sealed class LoggingSerializer : ILambdaSerializer
     {
-        private readonly SourceGeneratorLambdaJsonSerializer<AppJsonSerializerContext> _inner = new();
+        private readonly SourceGeneratorLambdaJsonSerializer<AppJsonSerializerContext> _inner = new((p) => p.AllowOutOfOrderMetadataProperties = true);
 
         public T Deserialize<T>(Stream requestStream)
         {
