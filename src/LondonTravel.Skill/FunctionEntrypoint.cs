@@ -30,8 +30,6 @@ public static class FunctionEntrypoint
         CancellationToken cancellationToken = default)
         where T : AlexaFunction, new()
     {
-        Environment.SetEnvironmentVariable("LAMBDA_NET_SERIALIZER_DEBUG", bool.TrueString);
-
         var serializer = new LoggingSerializer();
         await using var function = new T();
 
@@ -65,7 +63,9 @@ public static class FunctionEntrypoint
             using (var reader = new StreamReader(copy, leaveOpen: true))
             {
                 copy.Seek(0, SeekOrigin.Begin);
-                Console.WriteLine(reader.ReadToEnd());
+
+                string json = reader.ReadToEnd().ReplaceLineEndings(string.Empty);
+                Console.WriteLine(json);
             }
 
             copy.Seek(0, SeekOrigin.Begin);
