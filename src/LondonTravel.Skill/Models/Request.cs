@@ -5,15 +5,15 @@ using System.Text.Json.Serialization;
 
 namespace MartinCostello.LondonTravel.Skill.Models;
 
-[JsonDerivedType(typeof(IntentRequest), "IntentRequest")]
-[JsonDerivedType(typeof(LaunchRequest), "LaunchRequest")]
-[JsonDerivedType(typeof(SessionEndedRequest), "SessionEndedRequest")]
-[JsonDerivedType(typeof(SystemExceptionRequest), "System.ExceptionEncountered")]
+[JsonDerivedType(typeof(IntentRequest), RequestTypes.Intent)]
+[JsonDerivedType(typeof(LaunchRequest), RequestTypes.Launch)]
+[JsonDerivedType(typeof(SessionEndedRequest), RequestTypes.SessionEnded)]
+[JsonDerivedType(typeof(SystemExceptionRequest), RequestTypes.SystemException)]
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-public class Request
+public abstract class Request
 {
     [JsonIgnore]
-    public virtual string Type { get; } = default!;
+    public abstract string Type { get; }
 
     [JsonPropertyName("requestId")]
     public string RequestId { get; set; } = default!;
