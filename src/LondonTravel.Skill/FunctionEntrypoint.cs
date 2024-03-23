@@ -29,7 +29,7 @@ public static class FunctionEntrypoint
         CancellationToken cancellationToken = default)
         where T : AlexaFunction, new()
     {
-        var serializer = new SourceGeneratorLambdaJsonSerializer<AppJsonSerializerContext>();
+        var serializer = new SourceGeneratorLambdaJsonSerializer<AppJsonSerializerContext>((p) => p.AllowOutOfOrderMetadataProperties = true);
         await using var function = new T();
 
         using var bootstrap = LambdaBootstrapBuilder
