@@ -24,7 +24,7 @@ internal sealed class DisruptionIntent(TflClient tflClient, SkillConfiguration c
     /// <inheritdoc />
     public async Task<SkillResponse> RespondAsync(Intent intent, Session session)
     {
-        ICollection<string> sentences = await GetRawDisruptionsAsync();
+        var sentences = await GetRawDisruptionsAsync();
         string cardContent;
 
         if (sentences.Count > 0)
@@ -46,7 +46,7 @@ internal sealed class DisruptionIntent(TflClient tflClient, SkillConfiguration c
             .Build();
     }
 
-    private async Task<ICollection<ServiceDisruption>> GetDisruptionAsync()
+    private async Task<IList<ServiceDisruption>> GetDisruptionAsync()
     {
         return await tflClient.GetDisruptionAsync(
             SupportedModes,
@@ -54,9 +54,9 @@ internal sealed class DisruptionIntent(TflClient tflClient, SkillConfiguration c
             config.TflApplicationKey);
     }
 
-    private async Task<IList<string>> GetRawDisruptionsAsync()
+    private async Task<List<string>> GetRawDisruptionsAsync()
     {
-        ICollection<ServiceDisruption> disruptions = await GetDisruptionAsync();
+        var disruptions = await GetDisruptionAsync();
 
         var descriptions = new List<string>(disruptions.Count);
 
@@ -67,9 +67,10 @@ internal sealed class DisruptionIntent(TflClient tflClient, SkillConfiguration c
 
         // Deduplicate any status descriptions. For example, if a tube line
         // has a planned closure and severe delays, the message will appear twice.
-        return descriptions
+        var distinct = descriptions
             .Distinct(StringComparer.OrdinalIgnoreCase)
-            .Order(StringComparer.OrdinalIgnoreCase)
-            .ToList();
+            .Order(StringComparer.OrdinalIgnoreCase);
+
+        return [..distinct];
     }
 }
