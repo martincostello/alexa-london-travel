@@ -11,17 +11,11 @@ using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-public abstract class FunctionTests : ITestOutputHelperAccessor
+public abstract class FunctionTests(ITestOutputHelper outputHelper) : ITestOutputHelperAccessor
 {
-    protected FunctionTests(ITestOutputHelper outputHelper)
-    {
-        OutputHelper = outputHelper;
-        Interceptor = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
-    }
+    public ITestOutputHelper? OutputHelper { get; set; } = outputHelper;
 
-    public ITestOutputHelper? OutputHelper { get; set; }
-
-    protected HttpClientInterceptorOptions Interceptor { get; }
+    protected HttpClientInterceptorOptions Interceptor { get; } = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
 
     protected virtual ResponseBody AssertResponse(SkillResponse actual, bool? shouldEndSession = true)
     {

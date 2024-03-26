@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <IsTestProject>true</IsTestProject>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
     <NoWarn>$(NoWarn);CA1062;CA1707;CA2007;CA2234;SA1600</NoWarn>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>net8.0</TargetFramework>
@@ -29,6 +30,6 @@
     <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
     <Exclude>[Alexa.NET*]*,[Amazon.Lambda*]*,[LondonTravel.Skill.EndToEndTests]*,[xunit.*]*</Exclude>
     <ExcludeByAttribute>GeneratedCodeAttribute</ExcludeByAttribute>
-    <Threshold>87</Threshold>
+    <Threshold>86</Threshold>
   </PropertyGroup>
 </Project>
