@@ -13,13 +13,16 @@ public static class SerializationTests
     [InlineData("LaunchRequest")]
     [InlineData("LaunchRequestWithEpochTimestamp")]
     [InlineData("SessionEndedRequest")]
-    public static async Task Can_Deserialize_Request(string name)
+    public static void Can_Deserialize_Request(string name)
     {
         // Arrange
-        string json = await File.ReadAllTextAsync(Path.Combine("Samples", $"{name}.json"));
+        JsonSerializer.IsReflectionEnabledByDefault.ShouldBeFalse();
+
+        var serializer = new AppLambdaSerializer();
+        using var stream = File.OpenRead(Path.Combine("Samples", $"{name}.json"));
 
         // Act
-        var actual = JsonSerializer.Deserialize(json, AppJsonSerializerContext.Default.SkillRequest);
+        var actual = serializer.Deserialize<SkillRequest>(stream);
 
         // Assert
         actual.ShouldNotBeNull();

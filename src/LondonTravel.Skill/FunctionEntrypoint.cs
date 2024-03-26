@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using Amazon.Lambda.RuntimeSupport;
-using Amazon.Lambda.Serialization.SystemTextJson;
 using MartinCostello.LondonTravel.Skill.Models;
 
 namespace MartinCostello.LondonTravel.Skill;
@@ -29,7 +28,7 @@ public static class FunctionEntrypoint
         CancellationToken cancellationToken = default)
         where T : AlexaFunction, new()
     {
-        var serializer = new SourceGeneratorLambdaJsonSerializer<AppJsonSerializerContext>();
+        var serializer = new AppLambdaSerializer();
         await using var function = new T();
 
         using var bootstrap = LambdaBootstrapBuilder

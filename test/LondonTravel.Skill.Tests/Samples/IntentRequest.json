@@ -21,11 +21,11 @@
   },
   "context": null,
   "request": {
-    "type": "IntentRequest",
-    "dialogState": "IN_PROGRESS",
-    "requestId": " amzn1.echo-api.request.0000000-0000-0000-0000-00000000000",
+    "locale": "en-US",
     "timestamp": "2015-05-13T12:34:56Z",
-    "locale": null,
+    "type": "IntentRequest",
+    "requestId": " amzn1.echo-api.request.0000000-0000-0000-0000-00000000000",
+    "dialogState": "IN_PROGRESS",
     "intent": {
       "name": "GetZodiacHoroscopeIntent",
       "confirmationStatus": "DENIED",
