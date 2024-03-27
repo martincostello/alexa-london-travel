@@ -1,0 +1,5 @@
+<linker>
+  <assembly fullname="Microsoft.Extensions.Http.Resilience">
+    <type fullname="Microsoft.Extensions.Http.Resilience.Internal.HttpKey" preserve="all" />
+  </assembly>
+</linker>
