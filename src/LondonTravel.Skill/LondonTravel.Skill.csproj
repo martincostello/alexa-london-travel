@@ -45,4 +45,8 @@
     <EmbeddedResource Update="Strings.*.resx" DependentUpon="Strings.resx" />
     <None Include="appsettings.json;aws-lambda-tools-defaults.json" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
+  <!-- HACK Workaround for https://github.com/dotnet/extensions/issues/5062 -->
+  <ItemGroup>
+    <TrimmerRootDescriptor Include="TrimmerRoots.xml" />
+  </ItemGroup>
 </Project>
