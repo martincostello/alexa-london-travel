@@ -15,12 +15,17 @@ public class UnknownRequestTests(ITestOutputHelper outputHelper) : FunctionTests
         AlexaFunction function = await CreateFunctionAsync();
         TestLambdaContext context = new();
 
-        SkillRequest request = CreateRequest("Unknown");
+        SkillRequest request = CreateRequest<UnknownRequest>();
 
         // Act
         SkillResponse actual = await function.HandlerAsync(request, context);
 
         // Assert
         AssertResponse(actual);
+    }
+
+    private sealed class UnknownRequest : Request
+    {
+        public override string Type => "Unknown";
     }
 }

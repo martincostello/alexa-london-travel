@@ -49,26 +49,14 @@ internal sealed class FunctionHandler(AlexaSkill skill, SkillConfiguration confi
     {
         try
         {
-            if (request.Request.Type is RequestTypes.Launch)
+            return request.Request switch
             {
-                return skill.OnLaunch(request.Session);
-            }
-            else if (request.Request.Type is RequestTypes.Intent)
-            {
-                return await skill.OnIntentAsync(request.Request, request.Session);
-            }
-            else if (request.Request.Type is RequestTypes.SessionEnded)
-            {
-                return skill.OnSessionEnded(request.Session);
-            }
-            else if (request.Request.Type is RequestTypes.SystemException)
-            {
-                return skill.OnError(request.Request, request.Session);
-            }
-            else
-            {
-                return skill.OnError(null as Exception, request.Session);
-            }
+                IntentRequest intent => await skill.OnIntentAsync(intent, request.Session),
+                LaunchRequest => skill.OnLaunch(request.Session),
+                SessionEndedRequest => skill.OnSessionEnded(request.Session),
+                SystemExceptionRequest exception => skill.OnError(exception, request.Session),
+                _ => skill.OnError(null as Exception, request.Session),
+            };
         }
 #pragma warning disable CA1031
         catch (Exception ex)
