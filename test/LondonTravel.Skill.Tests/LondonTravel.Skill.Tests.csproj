@@ -11,7 +11,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.TestUtilities" />
-    <PackageReference Include="GitHubActionsTestLogger" />
+    <PackageReference Include="GitHubActionsTestLogger" NoWarn="RT0003" />
     <PackageReference Include="JustEat.HttpClientInterception" />
     <PackageReference Include="MartinCostello.Logging.XUnit" />
     <PackageReference Include="MartinCostello.Testing.AwsLambdaTestServer" />
