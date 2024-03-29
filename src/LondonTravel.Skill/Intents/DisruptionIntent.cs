@@ -71,6 +71,6 @@ internal sealed class DisruptionIntent(TflClient tflClient, SkillConfiguration c
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .Order(StringComparer.OrdinalIgnoreCase);
 
-        return [..distinct];
+        return [.. distinct];
     }
 }

@@ -140,6 +140,9 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
                                 case "XRAY TraceId":
                                     entry.TraceId = parts[1];
                                     break;
+
+                                default:
+                                    break;
                             }
                         }
                     }

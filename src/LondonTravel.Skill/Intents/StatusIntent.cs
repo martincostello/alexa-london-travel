@@ -22,7 +22,7 @@ internal sealed class StatusIntent(TflClient tflClient, SkillConfiguration confi
     {
         string? rawLineName = null;
 
-        if (intent.Slots?.TryGetValue("LINE", out Slot? slot) is true)
+        if (intent.Slots?.TryGetValue("LINE", out var slot) is true)
         {
             rawLineName = slot.Value;
         }
@@ -38,7 +38,7 @@ internal sealed class StatusIntent(TflClient tflClient, SkillConfiguration confi
         }
         else
         {
-            IList<Line> statuses = await GetStatusesAsync(id);
+            var statuses = await GetStatusesAsync(id);
 
             string cardTitle = Lines.ToCardTitle(statuses[0]?.Name ?? string.Empty);
             string text = GenerateResponse(statuses);
@@ -60,11 +60,11 @@ internal sealed class StatusIntent(TflClient tflClient, SkillConfiguration confi
     /// </returns>
     internal static string GenerateResponse(IList<Line> lines)
     {
-        Line line = lines[0];
+        var line = lines[0];
 
         if (line.LineStatuses.Count == 1)
         {
-            LineStatus lineStatus = line.LineStatuses[0];
+            var lineStatus = line.LineStatuses[0];
 
             bool includeDetail = !ShouldStatusUseCustomResponse(lineStatus.StatusSeverity);
 
@@ -163,7 +163,7 @@ internal sealed class StatusIntent(TflClient tflClient, SkillConfiguration confi
         else
         {
             Debug.Assert(
-                status.StatusSeverity == LineStatusSeverity.GoodService || status.StatusSeverity == LineStatusSeverity.NoIssues,
+                status.StatusSeverity is LineStatusSeverity.GoodService or LineStatusSeverity.NoIssues,
                 $"'{status.StatusSeverity}' is not supported for a summary response.");
 
             format = Strings.StatusIntentGoodServiceFormat;

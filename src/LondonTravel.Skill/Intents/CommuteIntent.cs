@@ -16,7 +16,6 @@ namespace MartinCostello.LondonTravel.Skill.Intents;
 /// </remarks>
 /// <param name="skillClient">The skill client to use.</param>
 /// <param name="tflClient">The TfL API client to use.</param>
-/// <param name="contextAccessor">The AWS Lambda context accessor to use.</param>
 /// <param name="config">The skill configuration to use.</param>
 /// <param name="logger">The logger to use.</param>
 internal sealed class CommuteIntent(
@@ -55,13 +54,13 @@ internal sealed class CommuteIntent(
 
     private async Task<SkillResponse> CommuteAsync(ICollection<string> favoriteLines)
     {
-        IList<Line> lines = await GetStatusesAsync(string.Join(',', favoriteLines));
+        var lines = await GetStatusesAsync(string.Join(',', favoriteLines));
 
         var paragraphs = new List<string>(lines.Count);
 
         bool hasMultipleStatuses = lines.Count > 1;
 
-        foreach (Line line in lines.OrderBy((p) => p.Name, StringComparer.Ordinal))
+        foreach (var line in lines.OrderBy((p) => p.Name, StringComparer.Ordinal))
         {
             string text = StatusIntent.GenerateResponse([line]);
 
@@ -84,7 +83,7 @@ internal sealed class CommuteIntent(
     {
         try
         {
-            SkillUserPreferences preferences = await skillClient.GetPreferencesAsync(accessToken);
+            var preferences = await skillClient.GetPreferencesAsync(accessToken);
             return preferences.FavoriteLines ?? [];
         }
         catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
