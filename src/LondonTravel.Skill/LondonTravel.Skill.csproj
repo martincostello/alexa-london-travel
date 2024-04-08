@@ -13,6 +13,9 @@
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
     <TieredCompilation>false</TieredCompilation>
+    <!-- HACK Workaround for https://github.com/open-telemetry/opentelemetry-dotnet/issues/5518 -->
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+    <PublishAot>false</PublishAot>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(PublishForAWSLambda)' == 'true' ">
     <AssemblyName>bootstrap</AssemblyName>
