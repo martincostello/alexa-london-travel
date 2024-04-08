@@ -34,7 +34,6 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.AWS" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AWSLambda" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
-    <PackageReference Include="Polly.Core" />
     <PackageReference Include="Polly.Extensions" />
     <PackageReference Include="Polly.RateLimiting" />
     <PackageReference Include="System.Text.Json" />
