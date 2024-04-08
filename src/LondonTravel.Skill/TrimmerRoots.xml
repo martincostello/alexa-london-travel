@@ -1,8 +1,0 @@
-<linker>
-  <assembly fullname="Microsoft.Extensions.Http.Resilience">
-    <type fullname="Microsoft.Extensions.Http.Resilience.Internal.HttpKey" preserve="all" />
-  </assembly>
-  <assembly fullname="Polly.Core">
-    <type fullname="Polly.Registry.ResiliencePipelineRegistryOptions`1" preserve="all" />
-  </assembly>
-</linker>
