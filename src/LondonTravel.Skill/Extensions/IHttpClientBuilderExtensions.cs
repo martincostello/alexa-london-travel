@@ -41,7 +41,7 @@ internal static class IHttpClientBuilderExtensions
             });
 
         //// HACK Workaround for https://github.com/dotnet/extensions/issues/5062
-        ////builder.AddStandardResilienceHandler();
+        builder.AddStandardResilienceHandler();
 
         return builder;
     }
