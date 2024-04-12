@@ -109,7 +109,8 @@ $testProjects = @(
 )
 
 $publishProjects = @(
-    (Join-Path $solutionPath "src" "LondonTravel.Skill" "LondonTravel.Skill.csproj")
+    (Join-Path $solutionPath "src" "LondonTravel.Skill" "LondonTravel.Skill.csproj"),
+    (Join-Path $solutionPath "test" "LondonTravel.Skill.NativeAotTests" "LondonTravel.Skill.NativeAotTests.csproj")
 )
 
 Write-Host "Publishing solution..." -ForegroundColor Green
@@ -121,3 +122,7 @@ Write-Host "Testing $($testProjects.Count) project(s)..." -ForegroundColor Green
 ForEach ($project in $testProjects) {
     DotNetTest $project
 }
+
+Write-Host "Running native AoT tests..." -ForegroundColor Green
+$aotTests = (Join-Path "." "artifacts" "publish" "LondonTravel.Skill.NativeAotTests" $Configuration.ToLowerInvariant() "LondonTravel.Skill.NativeAotTests")
+& $aotTests
