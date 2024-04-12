@@ -1,0 +1,25 @@
+<Project Sdk="MSTest.Sdk/3.3.1">
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);CA1062;CA1707;CA2007;CA2234;SA1600</NoWarn>
+    <PublishAot>true</PublishAot>
+    <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\LondonTravel.Skill\LondonTravel.Skill.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.TestUtilities" />
+    <PackageReference Include="GitHubActionsTestLogger" NoWarn="RT0003" />
+    <PackageReference Include="JustEat.HttpClientInterception" />
+    <PackageReference Include="MartinCostello.Logging.XUnit" />
+    <PackageReference Include="MartinCostello.Testing.AwsLambdaTestServer" />
+    <PackageReference Include="Shouldly" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="testsettings.json;Bundles\*.json;Samples\*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+</Project>

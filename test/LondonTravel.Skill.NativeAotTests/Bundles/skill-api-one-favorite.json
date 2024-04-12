@@ -1,0 +1,24 @@
+{
+  "$schema": "https://raw.githubusercontent.com/justeat/httpclient-interception/main/src/HttpClientInterception/Bundles/http-request-bundle-schema.json",
+  "id": "tfl",
+  "version": 1,
+  "comment": "HTTP bundle for the skill's API for one favorite line.",
+  "items": [
+    {
+      "comment": "Response for an access token with one favorite line.",
+      "uri": "https://londontravel.martincostello.local/api/preferences",
+      "requestHeaders": {
+        "Authorization": [
+          "Bearer token-for-one-favorite"
+        ]
+      },
+      "contentFormat": "json",
+      "contentJson": {
+        "favoriteLines": [
+          "district"
+        ],
+        "userId": "0475b259-ef18-49ad-b7f7-c5af71674da5"
+      }
+    }
+  ]
+}

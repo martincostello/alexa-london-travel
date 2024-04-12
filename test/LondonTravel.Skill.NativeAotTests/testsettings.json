@@ -1,0 +1,18 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Polly": "Warning",
+      "System": "Warning"
+    }
+  },
+  "Skill": {
+    "SkillApiUrl": "https://londontravel.martincostello.local/",
+    "SkillId": "my-skill-id",
+    "TflApiUrl": "https://api.tfl.gov.uk/",
+    "TflApplicationId": "my-tfl-app-id",
+    "TflApplicationKey": "my-tfl-app-key",
+    "VerifySkillId": true
+  }
+}

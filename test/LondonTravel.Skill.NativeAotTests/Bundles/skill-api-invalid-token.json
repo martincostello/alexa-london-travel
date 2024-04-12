@@ -1,0 +1,27 @@
+{
+  "$schema": "https://raw.githubusercontent.com/justeat/httpclient-interception/main/src/HttpClientInterception/Bundles/http-request-bundle-schema.json",
+  "id": "skill-invalid-token",
+  "version": 1,
+  "comment": "HTTP bundle for the skill's API when the token is invalid.",
+  "items": [
+    {
+      "comment": "Response for an unvalid access token.",
+      "uri": "https://londontravel.martincostello.local/api/preferences",
+      "requestHeaders": {
+        "Authorization": [
+          "Bearer invalid-access-token"
+        ]
+      },
+      "contentFormat": "json",
+      "status": "401",
+      "contentJson": {
+        "statusCode": 401,
+        "message": "Unauthorized.",
+        "requestId": "0HKT0TM6UJASI",
+        "details": [
+          "A valid access token was not provided."
+        ]
+      }
+    }
+  ]
+}

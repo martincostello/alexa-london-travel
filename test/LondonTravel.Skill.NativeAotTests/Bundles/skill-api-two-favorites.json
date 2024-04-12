@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/justeat/httpclient-interception/main/src/HttpClientInterception/Bundles/http-request-bundle-schema.json",
+  "id": "tfl",
+  "version": 1,
+  "comment": "HTTP bundle for the skill's API for two favorite lines.",
+  "items": [
+    {
+      "comment": "Response for an access token with two favorite lines.",
+      "uri": "https://londontravel.martincostello.local/api/preferences",
+      "requestHeaders": {
+        "Authorization": [
+          "Bearer token-for-two-favorites"
+        ]
+      },
+      "contentFormat": "json",
+      "contentJson": {
+        "favoriteLines": [
+          "northern",
+          "victoria"
+        ],
+        "userId": "d62892bd-cfa8-4e03-8481-8f0118874c19"
+      }
+    }
+  ]
+}
