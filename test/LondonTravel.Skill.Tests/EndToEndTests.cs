@@ -45,9 +45,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
 
         response.OutputSpeech.ShouldNotBeNull();
         response.OutputSpeech.Type.ShouldBe("SSML");
-
-        var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
-        ssml.Ssml.ShouldBe("<speak>Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground, the D.L.R. or the Elizabeth line.</speak>");
+        response.OutputSpeech.Ssml.ShouldBe("<speak>Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground, the D.L.R. or the Elizabeth line.</speak>");
     }
 
     [xRetry.RetryFact]
@@ -77,9 +75,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
 
         response.OutputSpeech.ShouldNotBeNull();
         response.OutputSpeech.Type.ShouldBe("SSML");
-
-        var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
-        ssml.Ssml.ShouldBe("<speak>Goodbye.</speak>");
+        response.OutputSpeech.Ssml.ShouldBe("<speak>Goodbye.</speak>");
     }
 
     [xRetry.RetryFact]
@@ -112,9 +108,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
 
         response.OutputSpeech.ShouldNotBeNull();
         response.OutputSpeech.Type.ShouldBe("SSML");
-
-        var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
-        ssml.Ssml.ShouldBe("<speak>Sorry, something went wrong.</speak>");
+        response.OutputSpeech.Ssml.ShouldBe("<speak>Sorry, something went wrong.</speak>");
     }
 
     private async Task<SkillResponse> ProcessRequestAsync(SkillRequest request)

@@ -89,9 +89,7 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
         foreach (var speech in speeches)
         {
             speech.Type.ShouldBe("SSML");
-
-            var ssml = speech.ShouldBeOfType<SsmlOutputSpeech>();
-            ssml.Ssml.ShouldBe("<speak>Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground, the D.L.R. or the Elizabeth line.</speak>");
+            speech.Ssml.ShouldBe("<speak>Sorry, I am not sure what line you said. You can ask about the status of any tube line, London Overground, the D.L.R. or the Elizabeth line.</speak>");
         }
     }
 
@@ -114,9 +112,7 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
 
         response.OutputSpeech.ShouldNotBeNull();
         response.OutputSpeech.Type.ShouldBe("SSML");
-
-        var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
-        ssml.Ssml.ShouldBe("<speak>Sorry, something went wrong.</speak>");
+        response.OutputSpeech.Ssml.ShouldBe("<speak>Sorry, something went wrong.</speak>");
     }
 
     [Theory]
@@ -168,8 +164,7 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
 
         if (expectedSsml != null)
         {
-            var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
-            ssml.Ssml.ShouldBe(expectedSsml);
+            response.OutputSpeech.Ssml.ShouldBe(expectedSsml);
         }
 
         response.Card.ShouldNotBeNull();

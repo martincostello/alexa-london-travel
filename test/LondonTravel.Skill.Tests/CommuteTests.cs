@@ -30,9 +30,7 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
 
         response.OutputSpeech.ShouldNotBeNull();
         response.OutputSpeech.Type.ShouldBe("SSML");
-
-        var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
-        ssml.Ssml.ShouldBe("<speak>You need to link your account to be able to ask me about your commute.</speak>");
+        response.OutputSpeech.Ssml.ShouldBe("<speak>You need to link your account to be able to ask me about your commute.</speak>");
     }
 
     [Fact]
@@ -58,9 +56,7 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
 
         response.OutputSpeech.ShouldNotBeNull();
         response.OutputSpeech.Type.ShouldBe("SSML");
-
-        var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
-        ssml.Ssml.ShouldBe("<speak>It looks like you've disabled account linking. You need to re-link your account to be able to ask me about your commute.</speak>");
+        response.OutputSpeech.Ssml.ShouldBe("<speak>It looks like you've disabled account linking. You need to re-link your account to be able to ask me about your commute.</speak>");
     }
 
     [Fact]
@@ -82,9 +78,7 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
 
         response.OutputSpeech.ShouldNotBeNull();
         response.OutputSpeech.Type.ShouldBe("SSML");
-
-        var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
-        ssml.Ssml.ShouldBe("<speak>Sorry, something went wrong.</speak>");
+        response.OutputSpeech.Ssml.ShouldBe("<speak>Sorry, something went wrong.</speak>");
     }
 
     [Fact]
@@ -158,9 +152,7 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
 
         response.OutputSpeech.ShouldNotBeNull();
         response.OutputSpeech.Type.ShouldBe("SSML");
-
-        var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
-        ssml.Ssml.ShouldBe(expectedSsml);
+        response.OutputSpeech.Ssml.ShouldBe(expectedSsml);
 
         response.Card.ShouldNotBeNull();
         var card = response.Card.ShouldBeOfType<StandardCard>();

@@ -84,8 +84,6 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
 
         response.OutputSpeech.ShouldNotBeNull();
         response.OutputSpeech.Type.ShouldBe("SSML");
-
-        var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
-        ssml.Ssml.ShouldBe("<speak>Sorry, something went wrong.</speak>");
+        response.OutputSpeech.Ssml.ShouldBe("<speak>Sorry, something went wrong.</speak>");
     }
 }

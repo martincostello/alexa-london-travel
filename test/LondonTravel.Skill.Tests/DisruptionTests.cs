@@ -88,9 +88,7 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
 
         response.OutputSpeech.ShouldNotBeNull();
         response.OutputSpeech.Type.ShouldBe("SSML");
-
-        var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
-        ssml.Ssml.ShouldBe("<speak>Sorry, something went wrong.</speak>");
+        response.OutputSpeech.Ssml.ShouldBe("<speak>Sorry, something went wrong.</speak>");
     }
 
     private void AssertResponse(SkillResponse actual, string expectedSsml, string expectedCardContent)
@@ -101,9 +99,7 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
 
         response.OutputSpeech.ShouldNotBeNull();
         response.OutputSpeech.Type.ShouldBe("SSML");
-
-        var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
-        ssml.Ssml.ShouldBe(expectedSsml);
+        response.OutputSpeech.Ssml.ShouldBe(expectedSsml);
 
         response.Card.ShouldNotBeNull();
         var card = response.Card.ShouldBeOfType<StandardCard>();
