@@ -28,8 +28,6 @@ public class UnknownIntentTests(ITestOutputHelper outputHelper) : FunctionTests(
 
         response.OutputSpeech.ShouldNotBeNull();
         response.OutputSpeech.Type.ShouldBe("SSML");
-
-        var ssml = response.OutputSpeech.ShouldBeOfType<SsmlOutputSpeech>();
-        ssml.Ssml.ShouldBe("<speak>Sorry, I don't understand how to do that.</speak>");
+        response.OutputSpeech.Ssml.ShouldBe("<speak>Sorry, I don't understand how to do that.</speak>");
     }
 }
