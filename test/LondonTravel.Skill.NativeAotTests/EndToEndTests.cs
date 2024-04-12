@@ -2,9 +2,11 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Text.Json;
+using JustEat.HttpClientInterception;
 using MartinCostello.LondonTravel.Skill.Models;
 using MartinCostello.Testing.AwsLambdaTestServer;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill;
@@ -13,15 +15,12 @@ namespace MartinCostello.LondonTravel.Skill;
 public class EndToEndTests : FunctionTests
 {
     [TestMethod]
-    public async Task Alexa_Function_Can_Process_Intent_Request()
+    [DataRow("AMAZON.CancelIntent")]
+    [DataRow("AMAZON.StopIntent")]
+    public async Task Alexa_Function_Can_Process_Intent_Request(string name)
     {
         // Arrange
-        var intent = new IntentRequest()
-        {
-            Intent = new() { Name = "AMAZON.CancelIntent" },
-        };
-
-        var request = CreateRequest(intent);
+        var request = CreateIntentRequest(name);
 
         // Act
         var actual = await ProcessRequestAsync(request);
@@ -32,6 +31,80 @@ public class EndToEndTests : FunctionTests
         Assert.IsNull(response.Card);
         Assert.IsNull(response.OutputSpeech);
         Assert.IsNull(response.Reprompt);
+    }
+
+    [TestMethod]
+    public async Task Alexa_Function_Can_Process_Intent_Request_For_Help()
+    {
+        // Arrange
+        var request = CreateIntentRequest("AMAZON.HelpIntent");
+
+        // Act
+        var actual = await ProcessRequestAsync(request);
+
+        // Assert
+        var response = AssertResponse(actual, shouldEndSession: false);
+
+        Assert.IsNull(response.Card);
+        Assert.IsNull(response.Reprompt);
+        Assert.IsNotNull(response.OutputSpeech);
+        Assert.AreEqual("<speak><p>This skill allows you to check for the status of a specific line, or for disruption in general. You can ask about any London Underground line, London Overground, the Docklands Light Railway or the Elizabeth line.</p><p>Asking about disruption in general provides information about any lines that are currently experiencing issues, such as any delays or planned closures.</p><p>Asking for the status for a specific line provides a summary of the current service, such as whether there is a good service or if there are any delays.</p><p>If you link your account and setup your preferences in the London Travel website, you can ask about your commute to quickly find out the status of the lines you frequently use.</p></speak>", response.OutputSpeech.Ssml);
+    }
+
+    [TestMethod]
+    public async Task Alexa_Function_Can_Process_Intent_Request_With_Unknown_Intent()
+    {
+        // Arrange
+        var request = CreateIntentRequest("FooIntent");
+
+        // Act
+        var actual = await ProcessRequestAsync(request);
+
+        // Assert
+        var response = AssertResponse(actual, shouldEndSession: true);
+
+        Assert.IsNull(response.Card);
+        Assert.IsNull(response.Reprompt);
+        Assert.IsNotNull(response.OutputSpeech);
+        Assert.AreEqual("<speak>Sorry, I don't understand how to do that.</speak>", response.OutputSpeech.Ssml);
+    }
+
+    [TestMethod]
+    public async Task Alexa_Function_Can_Process_Intent_Request_For_Disruption()
+    {
+        // Arrange
+        var request = CreateIntentRequest("DisruptionIntent");
+
+        // Act
+        var actual = await ProcessRequestAsync(request);
+
+        // Assert
+        var response = AssertResponse(actual, shouldEndSession: true);
+
+        Assert.IsNotNull(response.Card);
+        Assert.IsNull(response.Reprompt);
+        Assert.IsNotNull(response.OutputSpeech);
+        Assert.AreEqual("<speak>There is currently no disruption on the tube, London Overground, the D.L.R. or the Elizabeth line.</speak>", response.OutputSpeech.Ssml);
+    }
+
+    [TestMethod]
+    public async Task Alexa_Function_Can_Process_Intent_Request_For_Line_Status()
+    {
+        // Arrange
+        var request = CreateIntentRequest(
+            "StatusIntent",
+            new Slot() { Name = "LINE", Value = "Northern" });
+
+        // Act
+        var actual = await ProcessRequestAsync(request);
+
+        // Assert
+        var response = AssertResponse(actual, shouldEndSession: true);
+
+        Assert.IsNotNull(response.Card);
+        Assert.IsNull(response.Reprompt);
+        Assert.IsNotNull(response.OutputSpeech);
+        Assert.AreEqual("<speak>There is a good service on the Northern line.</speak>", response.OutputSpeech.Ssml);
     }
 
     [TestMethod]
@@ -117,14 +190,16 @@ public class EndToEndTests : FunctionTests
         Assert.AreEqual("<speak>Sorry, something went wrong.</speak>", response.OutputSpeech.Ssml);
     }
 
-    private static async Task<SkillResponse> ProcessRequestAsync(SkillRequest request)
+    private async Task<SkillResponse> ProcessRequestAsync(SkillRequest request)
     {
         // Arrange
         string json = JsonSerializer.Serialize(request, AppJsonSerializerContext.Default.SkillRequest);
 
-        static void Configure(IServiceCollection services)
+        void Configure(IServiceCollection services)
         {
             services.AddLogging((builder) => builder.AddConsole());
+            services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
+                (_) => new HttpRequestInterceptionFilter(Interceptor));
         }
 
         using var server = new LambdaTestServer(Configure);
@@ -148,7 +223,7 @@ public class EndToEndTests : FunctionTests
         using var httpClient = server.CreateClient();
 
         // Act
-        await FunctionEntrypoint.RunAsync<TestSettingsAlexaFunction>(httpClient, cancellationTokenSource.Token);
+        await FunctionEntrypoint.RunAsync<TestAlexaFunction>(httpClient, cancellationTokenSource.Token);
 
         // Assert
         Assert.IsTrue(context.Response.TryRead(out var result));
@@ -166,5 +241,25 @@ public class EndToEndTests : FunctionTests
         Assert.IsNotNull(actual);
 
         return actual;
+    }
+
+    private sealed class TestAlexaFunction : TestSettingsAlexaFunction
+    {
+        protected override void ConfigureServices(IServiceCollection services)
+        {
+            services.AddLogging((builder) => builder.AddConsole());
+            services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
+                (_) =>
+                {
+                    var options = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
+
+                    options.RegisterBundle(Path.Combine(AppContext.BaseDirectory, "Bundles", "tfl-line-statuses.json"));
+                    options.RegisterBundle(Path.Combine(AppContext.BaseDirectory, "Bundles", "tfl-no-disruptions.json"));
+
+                    return new HttpRequestInterceptionFilter(options);
+                });
+
+            base.ConfigureServices(services);
+        }
     }
 }

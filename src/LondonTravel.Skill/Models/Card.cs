@@ -5,9 +5,11 @@ using System.Text.Json.Serialization;
 
 namespace MartinCostello.LondonTravel.Skill.Models;
 
-[JsonDerivedType(typeof(LinkAccountCard))]
-[JsonDerivedType(typeof(StandardCard))]
+[JsonDerivedType(typeof(LinkAccountCard), "LinkAccount")]
+[JsonDerivedType(typeof(StandardCard), "Standard")]
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 public abstract class Card
 {
-    public abstract string Type { get; set; }
+    [JsonIgnore]
+    public abstract string Type { get; }
 }

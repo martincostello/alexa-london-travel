@@ -1,7 +1,8 @@
 <Project Sdk="MSTest.Sdk/3.3.1">
   <PropertyGroup>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
     <NoWarn>$(NoWarn);CA1062;CA1707;CA2007;CA2234;SA1600</NoWarn>
-    <PublishAot>true</PublishAot>
+    <PublishAot>!$([MSBuild]::ValueOrDefault('$(BuildingInsideVisualStudio)', 'false'))</PublishAot>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
@@ -17,7 +18,7 @@
     <PackageReference Include="Shouldly" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="testsettings.json;Bundles\*.json;Samples\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="testsettings.json;Bundles\*.json;Samples\*.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
