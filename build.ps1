@@ -87,16 +87,13 @@ function DotNetPublish {
 
     $additionalArgs = @()
 
-    if ($IsLinux -And (-Not $UseManagedRuntime)) {
+    if (($IsLinux -And (-Not $UseManagedRuntime)) -And (-Not $Project.Contains("test"))) {
         $additionalArgs += "--runtime"
         $additionalArgs += "linux-arm64"
         $additionalArgs += "--self-contained"
         $additionalArgs += "true"
+        $additionalArgs += "/p:AssemblyName=bootstrap"
         $additionalArgs += "/p:IlcInstructionSet=armv8.2-a"
-
-        if (-Not $Project.Contains("test")) {
-            $additionalArgs += "/p:AssemblyName=bootstrap"
-        }
     }
 
     & $dotnet publish $Project $additionalArgs
