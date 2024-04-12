@@ -92,8 +92,11 @@ function DotNetPublish {
         $additionalArgs += "linux-arm64"
         $additionalArgs += "--self-contained"
         $additionalArgs += "true"
-        $additionalArgs += "/p:AssemblyName=bootstrap"
         $additionalArgs += "/p:IlcInstructionSet=armv8.2-a"
+
+        if (-Not $Project.Contains("test")) {
+            $additionalArgs += "/p:AssemblyName=bootstrap"
+        }
     }
 
     & $dotnet publish $Project $additionalArgs
