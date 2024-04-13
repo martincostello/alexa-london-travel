@@ -15,13 +15,13 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
     public async Task Alexa_Function_Can_Process_Intent_Request()
     {
         // Arrange
-        SkillRequest request = CreateIntentRequest("AMAZON.CancelIntent");
+        var request = CreateIntentRequest("AMAZON.CancelIntent");
 
         // Act
         var actual = await ProcessRequestAsync(request);
 
         // Assert
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         response.Card.ShouldBeNull();
         response.OutputSpeech.ShouldBeNull();
@@ -32,13 +32,13 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
     public async Task Alexa_Function_Can_Process_Launch_Request()
     {
         // Arrange
-        SkillRequest request = CreateRequest("LaunchRequest");
+        var request = CreateRequest("LaunchRequest");
 
         // Act
         var actual = await ProcessRequestAsync(request);
 
         // Assert
-        ResponseBody response = AssertResponse(actual, shouldEndSession: false);
+        var response = AssertResponse(actual, shouldEndSession: false);
 
         response.Card.ShouldBeNull();
         response.Reprompt.ShouldBeNull();
@@ -62,12 +62,12 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
             },
         };
 
-        SkillRequest request = CreateRequest("SessionEndedRequest", session);
+        var request = CreateRequest("SessionEndedRequest", session);
 
         // Act
         var actual = await ProcessRequestAsync(request);
 
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         // Assert
         response.Card.ShouldBeNull();
@@ -95,12 +95,12 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
             },
         };
 
-        SkillRequest request = CreateRequest("System.ExceptionEncountered", exception);
+        var request = CreateRequest("System.ExceptionEncountered", exception);
 
         // Act
         var actual = await ProcessRequestAsync(request);
 
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         // Assert
         response.Card.ShouldBeNull();
@@ -126,7 +126,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
 
         await server.StartAsync(cancellationTokenSource.Token);
 
-        LambdaTestContext context = await server.EnqueueAsync(json);
+        var context = await server.EnqueueAsync(json);
 
         // Queue a task to stop the Lambda function as soon as the response is processed
         _ = Task.Run(async () =>
