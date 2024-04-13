@@ -50,7 +50,9 @@ public sealed class EndToEndTests
 
         Assert.IsNull(response.Card);
         Assert.IsNull(response.Reprompt);
+
         Assert.IsNotNull(response.OutputSpeech);
+        Assert.AreEqual("SSML", response.OutputSpeech.Type);
         Assert.AreEqual("<speak><p>This skill allows you to check for the status of a specific line, or for disruption in general. You can ask about any London Underground line, London Overground, the Docklands Light Railway or the Elizabeth line.</p><p>Asking about disruption in general provides information about any lines that are currently experiencing issues, such as any delays or planned closures.</p><p>Asking for the status for a specific line provides a summary of the current service, such as whether there is a good service or if there are any delays.</p><p>If you link your account and setup your preferences in the London Travel website, you can ask about your commute to quickly find out the status of the lines you frequently use.</p></speak>", response.OutputSpeech.Ssml);
     }
 
@@ -68,7 +70,9 @@ public sealed class EndToEndTests
 
         Assert.IsNull(response.Card);
         Assert.IsNull(response.Reprompt);
+
         Assert.IsNotNull(response.OutputSpeech);
+        Assert.AreEqual("SSML", response.OutputSpeech.Type);
         Assert.AreEqual("<speak>Sorry, I don't understand how to do that.</speak>", response.OutputSpeech.Ssml);
     }
 
@@ -85,8 +89,11 @@ public sealed class EndToEndTests
         var response = AssertResponse(actual, shouldEndSession: true);
 
         Assert.IsNotNull(response.Card);
+        Assert.IsInstanceOfType<StandardCard>(response.Card);
         Assert.IsNull(response.Reprompt);
+
         Assert.IsNotNull(response.OutputSpeech);
+        Assert.AreEqual("SSML", response.OutputSpeech.Type);
         Assert.AreEqual("<speak>There is currently no disruption on the tube, London Overground, the D.L.R. or the Elizabeth line.</speak>", response.OutputSpeech.Ssml);
     }
 
@@ -105,8 +112,11 @@ public sealed class EndToEndTests
         var response = AssertResponse(actual, shouldEndSession: true);
 
         Assert.IsNotNull(response.Card);
+        Assert.IsInstanceOfType<StandardCard>(response.Card);
         Assert.IsNull(response.Reprompt);
+
         Assert.IsNotNull(response.OutputSpeech);
+        Assert.AreEqual("SSML", response.OutputSpeech.Type);
         Assert.AreEqual("<speak>There is a good service on the Northern line.</speak>", response.OutputSpeech.Ssml);
     }
 
