@@ -7,9 +7,8 @@ namespace MartinCostello.LondonTravel.Skill.Models;
 
 public sealed class StandardCard : Card
 {
-    [JsonPropertyName("type")]
-    [JsonRequired]
-    public override string Type { get; set; } = "Standard";
+    [JsonIgnore]
+    public override string Type => CardTypes.Standard;
 
     [JsonPropertyName("title")]
     [JsonRequired]
