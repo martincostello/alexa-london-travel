@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using Amazon.Lambda.TestUtilities;
-using JustEat.HttpClientInterception;
 using MartinCostello.LondonTravel.Skill.Models;
 
 namespace MartinCostello.LondonTravel.Skill;
@@ -13,14 +12,14 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
     public async Task Can_Invoke_Function_When_There_Are_No_Disruptions()
     {
         // Arrange
-        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-no-disruptions.json"));
+        await Interceptor.RegisterBundleFromResourceStreamAsync<DisruptionTests>("tfl-no-disruptions.json");
 
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentRequest();
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var request = CreateIntentRequest();
+        var context = new TestLambdaContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
         AssertResponse(
@@ -33,14 +32,14 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
     public async Task Can_Invoke_Function_When_There_Is_One_Disruption()
     {
         // Arrange
-        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-one-disruption.json"));
+        await Interceptor.RegisterBundleFromResourceStreamAsync<DisruptionTests>("tfl-one-disruption.json");
 
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentRequest();
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var request = CreateIntentRequest();
+        var context = new TestLambdaContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
         AssertResponse(
@@ -53,14 +52,14 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
     public async Task Can_Invoke_Function_When_There_Are_Multiple_Disruptions()
     {
         // Arrange
-        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-multiple-disruptions.json"));
+        await Interceptor.RegisterBundleFromResourceStreamAsync<DisruptionTests>("tfl-multiple-disruptions.json");
 
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentRequest();
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var request = CreateIntentRequest();
+        var context = new TestLambdaContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
         AssertResponse(
@@ -73,15 +72,15 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
     public async Task Can_Invoke_Function_When_The_Api_Fails()
     {
         // Arrange
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentRequest();
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var request = CreateIntentRequest();
+        var context = new TestLambdaContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         response.Card.ShouldBeNull();
         response.Reprompt.ShouldBeNull();
@@ -93,7 +92,7 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
 
     private void AssertResponse(SkillResponse actual, string expectedSsml, string expectedCardContent)
     {
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         response.Reprompt.ShouldBeNull();
 

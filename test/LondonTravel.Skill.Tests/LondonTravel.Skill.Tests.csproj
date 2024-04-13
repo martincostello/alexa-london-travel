@@ -24,7 +24,8 @@
     <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="testsettings.json;xunit.runner.json;Bundles\*.json;Samples\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="testsettings.json;xunit.runner.json;Samples\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <EmbeddedResource Include="..\LondonTravel.Skill.Tests\Bundles\*.json" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Shouldly" />

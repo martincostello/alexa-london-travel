@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using Amazon.Lambda.TestUtilities;
-using JustEat.HttpClientInterception;
 using MartinCostello.LondonTravel.Skill.Models;
 
 namespace MartinCostello.LondonTravel.Skill;
@@ -45,14 +44,14 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
     public async Task Can_Invoke_Function_For_Valid_Lines(string id)
     {
         // Arrange
-        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-line-statuses.json"));
+        await Interceptor.RegisterBundleFromResourceStreamAsync<StatusTests>("tfl-line-statuses.json");
 
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentForLine(id);
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var request = CreateIntentForLine(id);
+        var context = new TestLambdaContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
         AssertLineResponse(actual);
@@ -66,15 +65,15 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
     public async Task Can_Invoke_Function_For_Invalid_Line(string? id)
     {
         // Arrange
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentForLine(id);
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var request = CreateIntentForLine(id);
+        var context = new TestLambdaContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         response.Card.ShouldBeNull();
         response.OutputSpeech.ShouldNotBeNull();
@@ -97,15 +96,15 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
     public async Task Can_Invoke_Function_When_The_Api_Fails()
     {
         // Arrange
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentForLine("district");
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var request = CreateIntentForLine("district");
+        var context = new TestLambdaContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         response.Card.ShouldBeNull();
         response.Reprompt.ShouldBeNull();
@@ -136,14 +135,14 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
         string expected)
     {
         // Arrange
-        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-line-severities.json"));
+        await Interceptor.RegisterBundleFromResourceStreamAsync<StatusTests>("tfl-line-severities.json");
 
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentForLine(id);
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var request = CreateIntentForLine(id);
+        var context = new TestLambdaContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
         AssertLineResponse(actual, expectedSsml: "<speak>" + expected + "</speak>");
@@ -155,7 +154,7 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
         string? expectedCardTitle = null,
         string? expectedCardContent = null)
     {
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         response.Reprompt.ShouldBeNull();
 
