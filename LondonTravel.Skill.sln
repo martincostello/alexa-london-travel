@@ -74,6 +74,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Skill.EndToEndTests", "test\LondonTravel.Skill.EndToEndTests\LondonTravel.Skill.EndToEndTests.csproj", "{385B221D-16BF-4703-8105-C8622C188B1A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Skill.NativeAotTests", "test\LondonTravel.Skill.NativeAotTests\LondonTravel.Skill.NativeAotTests.csproj", "{190897E1-65DA-47E5-B960-674057F0F8EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,10 @@ Global
 		{385B221D-16BF-4703-8105-C8622C188B1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{385B221D-16BF-4703-8105-C8622C188B1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{385B221D-16BF-4703-8105-C8622C188B1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{190897E1-65DA-47E5-B960-674057F0F8EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{190897E1-65DA-47E5-B960-674057F0F8EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{190897E1-65DA-47E5-B960-674057F0F8EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{190897E1-65DA-47E5-B960-674057F0F8EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,6 +111,7 @@ Global
 		{24473A89-5428-4E9E-8F55-661BBDBA8C31} = {27EF9EE1-288D-4AFD-9006-D7CE61B642DF}
 		{6F8B120B-EE10-459D-A59D-3FC0E8D59058} = {791C7C14-F862-41ED-9D92-12F844223C1B}
 		{385B221D-16BF-4703-8105-C8622C188B1A} = {27EF9EE1-288D-4AFD-9006-D7CE61B642DF}
+		{190897E1-65DA-47E5-B960-674057F0F8EF} = {27EF9EE1-288D-4AFD-9006-D7CE61B642DF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7E57D002-B20B-49BE-AD07-7FC61C2A764B}

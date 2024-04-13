@@ -105,6 +105,10 @@ $testProjects = @(
     (Join-Path $solutionPath "test" "LondonTravel.Skill.EndToEndTests" "LondonTravel.Skill.EndToEndTests.csproj")
 )
 
+$testProjectsForAot = @(
+    (Join-Path $solutionPath "test" "LondonTravel.Skill.NativeAotTests" "LondonTravel.Skill.NativeAotTests.csproj")
+)
+
 $publishProjects = @(
     (Join-Path $solutionPath "src" "LondonTravel.Skill" "LondonTravel.Skill.csproj")
 )
@@ -118,4 +122,19 @@ ForEach ($project in $publishProjects) {
 Write-Host "Testing $($testProjects.Count) project(s)..." -ForegroundColor Green
 ForEach ($project in $testProjects) {
     DotNetTest $project
+}
+
+Write-Host "Testing $($testProjectsForAot.Count) project(s) for native AoT..." -ForegroundColor Green
+ForEach ($project in $testProjectsForAot) {
+    DotNetPublish $project
+
+    $projectName = [System.IO.Path]::GetDirectoryName($project)
+    $projectName = [System.IO.Path]::GetFileName($projectName)
+    $testBinary = (Join-Path $solutionPath "artifacts" "publish" $projectName $Configuration.ToLowerInvariant() $projectName)
+
+    & $testBinary
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "Native AoT tests for $projectName failed with exit code $LASTEXITCODE"
+    }
 }
