@@ -1,0 +1,24 @@
+<Project Sdk="MSTest.Sdk/3.3.1">
+  <PropertyGroup>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+    <NoWarn>$(NoWarn);CA1062;CA1707;CA2007;CA2234;SA1600</NoWarn>
+    <PublishAot>!$([MSBuild]::ValueOrDefault('$(BuildingInsideVisualStudio)', 'false'))</PublishAot>
+    <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\LondonTravel.Skill\LondonTravel.Skill.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="JustEat.HttpClientInterception" />
+    <PackageReference Include="MartinCostello.Testing.AwsLambdaTestServer" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\LondonTravel.Skill.Tests\HttpRequestInterceptionFilter.cs" Link="HttpRequestInterceptionFilter.cs" />
+    <Content Include="..\LondonTravel.Skill.Tests\testsettings.json" Link="testsettings.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <EmbeddedResource Include="..\LondonTravel.Skill.Tests\Bundles\*.json" LinkBase="Bundles" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+</Project>
