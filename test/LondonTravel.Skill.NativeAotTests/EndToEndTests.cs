@@ -339,16 +339,10 @@ public sealed class EndToEndTests
             services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
                 (_) =>
                 {
-                    var options = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
-
-                    var type = typeof(EndToEndTests);
-                    var assembly = type.Assembly;
-
-                    using var disruption = assembly.GetManifestResourceStream($"{type.Namespace}.Bundles.tfl-no-disruptions.json")!;
-                    using var statuses = assembly.GetManifestResourceStream($"{type.Namespace}.Bundles.tfl-line-statuses.json")!;
-
-                    options.RegisterBundleFromStream(disruption);
-                    options.RegisterBundleFromStream(statuses);
+                    var options = new HttpClientInterceptorOptions()
+                        .ThrowsOnMissingRegistration()
+                        .RegisterBundleFromResourceStream<EndToEndTests>("tfl-no-disruptions.json")
+                        .RegisterBundleFromResourceStream<EndToEndTests>("tfl-line-statuses.json");
 
                     return new HttpRequestInterceptionFilter(options);
                 });

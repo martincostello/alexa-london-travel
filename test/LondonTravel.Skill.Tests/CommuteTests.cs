@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using Amazon.Lambda.TestUtilities;
-using JustEat.HttpClientInterception;
 using MartinCostello.LondonTravel.Skill.Models;
 
 namespace MartinCostello.LondonTravel.Skill;
@@ -13,15 +12,15 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
     public async Task Can_Invoke_Function_When_The_Skill_Is_Not_Linked()
     {
         // Arrange
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentRequestWithToken(accessToken: null);
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var request = CreateIntentRequestWithToken(accessToken: null);
+        var context = new TestLambdaContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         response.Card.ShouldNotBeNull();
         response.Card.ShouldBeOfType<LinkAccountCard>();
@@ -37,17 +36,17 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
     public async Task Can_Invoke_Function_When_The_Skill_Token_Is_Invalid()
     {
         // Arrange
-        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "skill-api-invalid-token.json"));
+        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("skill-api-invalid-token.json");
 
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentRequestWithToken(accessToken: "invalid-access-token");
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var request = CreateIntentRequestWithToken(accessToken: "invalid-access-token");
+        var context = new TestLambdaContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         response.Card.ShouldNotBeNull();
         response.Card.ShouldBeOfType<LinkAccountCard>();
@@ -63,15 +62,15 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
     public async Task Can_Invoke_Function_When_The_Skill_Api_Fails()
     {
         // Arrange
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentRequestWithToken(accessToken: "random-access-token");
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var request = CreateIntentRequestWithToken(accessToken: "random-access-token");
+        var context = new TestLambdaContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         response.Card.ShouldBeNull();
         response.Reprompt.ShouldBeNull();
@@ -85,15 +84,15 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
     public async Task Can_Invoke_Function_When_The_Skill_Is_Linked_And_Has_No_Favorite_Lines()
     {
         // Arrange
-        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "skill-api-no-favorites.json"));
-        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-line-statuses.json"));
+        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("skill-api-no-favorites.json");
+        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("tfl-line-statuses.json");
 
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentRequestWithToken(accessToken: "token-for-no-favorites");
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var request = CreateIntentRequestWithToken(accessToken: "token-for-no-favorites");
+        var context = new TestLambdaContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
         AssertResponse(
@@ -106,15 +105,15 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
     public async Task Can_Invoke_Function_When_The_Skill_Is_Linked_And_Has_One_Favorite_Line()
     {
         // Arrange
-        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "skill-api-one-favorite.json"));
-        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-line-statuses.json"));
+        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("skill-api-one-favorite.json");
+        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("tfl-line-statuses.json");
 
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentRequestWithToken(accessToken: "token-for-one-favorite");
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var request = CreateIntentRequestWithToken(accessToken: "token-for-one-favorite");
+        var context = new TestLambdaContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
         AssertResponse(
@@ -127,15 +126,15 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
     public async Task Can_Invoke_Function_When_The_Skill_Is_Linked_And_Has_Two_Favorite_Lines()
     {
         // Arrange
-        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "skill-api-two-favorites.json"));
-        await Interceptor.RegisterBundleAsync(Path.Combine("Bundles", "tfl-line-statuses.json"));
+        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("skill-api-two-favorites.json");
+        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("tfl-line-statuses.json");
 
-        AlexaFunction function = await CreateFunctionAsync();
-        SkillRequest request = CreateIntentRequestWithToken(accessToken: "token-for-two-favorites");
+        var function = await CreateFunctionAsync();
+        var request = CreateIntentRequestWithToken(accessToken: "token-for-two-favorites");
         TestLambdaContext context = new();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
         AssertResponse(
@@ -146,7 +145,7 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
 
     private void AssertResponse(SkillResponse actual, string expectedSsml, string expectedCardContent)
     {
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         response.Reprompt.ShouldBeNull();
 
