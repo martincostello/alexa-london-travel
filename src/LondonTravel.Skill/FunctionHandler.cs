@@ -26,7 +26,7 @@ internal sealed class FunctionHandler(AlexaSkill skill, SkillConfiguration confi
     {
         VerifySkillId(request);
 
-        CultureInfo previousCulture = SetLocale(request);
+        var previousCulture = SetLocale(request);
 
         try
         {
@@ -49,26 +49,14 @@ internal sealed class FunctionHandler(AlexaSkill skill, SkillConfiguration confi
     {
         try
         {
-            if (request.Request.Type is RequestTypes.Launch)
+            return request.Request.Type switch
             {
-                return skill.OnLaunch(request.Session);
-            }
-            else if (request.Request.Type is RequestTypes.Intent)
-            {
-                return await skill.OnIntentAsync(request.Request, request.Session);
-            }
-            else if (request.Request.Type is RequestTypes.SessionEnded)
-            {
-                return skill.OnSessionEnded(request.Session);
-            }
-            else if (request.Request.Type is RequestTypes.SystemException)
-            {
-                return skill.OnError(request.Request, request.Session);
-            }
-            else
-            {
-                return skill.OnError(null as Exception, request.Session);
-            }
+                RequestTypes.Intent => await skill.OnIntentAsync(request.Request, request.Session),
+                RequestTypes.Launch => skill.OnLaunch(request.Session),
+                RequestTypes.SessionEnded => skill.OnSessionEnded(request.Session),
+                RequestTypes.SystemException => skill.OnError(request.Request, request.Session),
+                _ => skill.OnError(null as Exception, request.Session),
+            };
         }
 #pragma warning disable CA1031
         catch (Exception ex)
