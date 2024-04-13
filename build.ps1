@@ -85,17 +85,12 @@ function DotNetTest {
 }
 
 function DotNetPublish {
-    param([string]$Project)
+    param([string]$Project, [bool]$PublishForAWSLambda = $false)
 
     $additionalArgs = @()
 
-    if ($IsLinux -And (-Not $UseManagedRuntime)) {
-        $additionalArgs += "--runtime"
-        $additionalArgs += "linux-arm64"
-        $additionalArgs += "--self-contained"
-        $additionalArgs += "true"
-        $additionalArgs += "/p:AssemblyName=bootstrap"
-        $additionalArgs += "/p:IlcInstructionSet=armv8.2-a"
+    if ($PublishForAWSLambda) {
+        $additionalArgs += "/p:PublishForAWSLambda=true"
     }
 
     & $dotnet publish $Project $additionalArgs
@@ -115,8 +110,9 @@ $publishProjects = @(
 )
 
 Write-Host "Publishing solution..." -ForegroundColor Green
+$publishForAWSLambda = $IsLinux -And (-Not $UseManagedRuntime)
 ForEach ($project in $publishProjects) {
-    DotNetPublish $project
+    DotNetPublish $project $publishForAWSLambda
 }
 
 Write-Host "Testing $($testProjects.Count) project(s)..." -ForegroundColor Green
