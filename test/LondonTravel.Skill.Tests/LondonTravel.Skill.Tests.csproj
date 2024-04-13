@@ -11,11 +11,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.TestUtilities" />
+    <PackageReference Include="coverlet.msbuild" />
     <PackageReference Include="GitHubActionsTestLogger" NoWarn="RT0003" />
     <PackageReference Include="JustEat.HttpClientInterception" />
     <PackageReference Include="MartinCostello.Logging.XUnit" />
     <PackageReference Include="MartinCostello.Testing.AwsLambdaTestServer" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="ReportGenerator" />
     <PackageReference Include="Shouldly" />
     <PackageReference Include="xRetry" />
     <PackageReference Include="xunit" />
@@ -23,6 +25,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="testsettings.json;xunit.runner.json;Bundles\*.json;Samples\*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Shouldly" />
+    <Using Include="Xunit" />
+    <Using Include="Xunit.Abstractions" />
   </ItemGroup>
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>

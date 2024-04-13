@@ -18,4 +18,9 @@
   <ItemGroup>
     <Content Include="xunit.runner.json;Payloads\*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+  <ItemGroup>
+    <Using Include="Shouldly" />
+    <Using Include="Xunit" />
+    <Using Include="Xunit.Abstractions" />
+  </ItemGroup>
 </Project>
