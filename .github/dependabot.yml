@@ -14,6 +14,10 @@ updates:
     awssdk:
       patterns:
         - AWSSDK*
+    mstest:
+      patterns:
+        - MSTest.Sdk
+        - MSTest.TestFramework
     opentelemetry:
       patterns:
         - OpenTelemetry*

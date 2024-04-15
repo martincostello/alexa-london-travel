@@ -3,5 +3,8 @@
     "version": "8.0.204",
     "allowPrerelease": false,
     "rollForward": "latestMajor"
+  },
+  "msbuild-sdks": {
+    "MSTest.Sdk": "3.3.1"
   }
 }
