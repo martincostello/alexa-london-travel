@@ -39,12 +39,13 @@ internal sealed class SkillResponseBuilder
 
     public static SkillResponseBuilder Tell(ICollection<string> paragraphs)
     {
+        ArgumentNullException.ThrowIfNull(paragraphs);
+
         var rawText = new List<Ssml>(paragraphs.Count);
 
-        foreach (string paragraph in paragraphs)
+        foreach (var text in paragraphs.Select(Verbalizer.Verbalize).Select((p) => new PlainText(p)))
         {
-            string text = Verbalizer.Verbalize(paragraph);
-            rawText.Add(new PlainText(text));
+            rawText.Add(text);
         }
 
         var elements = new List<Ssml>(rawText.Count);

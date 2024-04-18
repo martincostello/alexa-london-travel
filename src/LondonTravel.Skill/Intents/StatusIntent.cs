@@ -111,14 +111,9 @@ internal sealed class StatusIntent(TflClient tflClient, SkillConfiguration confi
     /// </returns>
     private static string GenerateResponseForSingleStatus(string name, LineStatus status, bool includeDetail)
     {
-        if (includeDetail)
-        {
-            return GenerateDetailedResponse(status);
-        }
-        else
-        {
-            return GenerateSummaryResponse(name, status);
-        }
+        return includeDetail ?
+            GenerateDetailedResponse(status) :
+            GenerateSummaryResponse(name, status);
     }
 
     /// <summary>
