@@ -138,20 +138,13 @@ internal static class Lines
     /// </returns>
     public static string ToCardTitle(string name)
     {
-        string suffix;
-
-        if (IsDlr(name) ||
+        bool isNameWithoutLine =
+            IsDlr(name) ||
             IsElizabethLine(name) ||
             IsOverground(name) ||
-            IsTfLRail(name))
-        {
-            suffix = string.Empty;
-        }
-        else
-        {
-            suffix = Strings.LineSuffixUpper;
-        }
+            IsTfLRail(name);
 
+        string suffix = isNameWithoutLine ? Strings.LineSuffixUpper : string.Empty;
         return string.Format(CultureInfo.CurrentCulture, StatusIntentCardTitleFormat, name, suffix);
     }
 }
