@@ -95,8 +95,14 @@ internal static class Lines
             case "elizabeth line":
                 return "elizabeth";
 
+            case "liberty":
+            case "lioness":
             case "london overground":
+            case "mildmay":
             case "overground":
+            case "suffragette":
+            case "weaver":
+            case "windrush":
                 return "london-overground";
 
             case "met":
@@ -146,5 +152,57 @@ internal static class Lines
 
         string suffix = isNameWithoutLine ? Strings.LineSuffixUpper : string.Empty;
         return string.Format(CultureInfo.CurrentCulture, StatusIntentCardTitleFormat, name, suffix);
+    }
+
+    /// <summary>
+    /// Returns the spoken version of the specified line name.
+    /// </summary>
+    /// <param name="name">The name of the line as reported from the TfL API.</param>
+    /// <param name="asTitleCase">Whether to format in title case.</param>
+    /// <returns>
+    /// The spoken name of the line.
+    /// </returns>
+    public static string LineName(string name, bool asTitleCase = false)
+    {
+        // TODO Move into Verbalizer
+        string prefix = string.Empty;
+        string suffix = string.Empty;
+        string spokenName;
+
+        if (IsDlr(name))
+        {
+            prefix = Strings.ThePrefix;
+            spokenName = Verbalizer.Verbalize("DLR");
+        }
+        else if (IsElizabethLine(name))
+        {
+            prefix = Strings.ThePrefix;
+            spokenName = name;
+        }
+        else if (IsOverground(name))
+        {
+            spokenName = name;
+        }
+        else if (IsTfLRail(name))
+        {
+            spokenName = Verbalizer.Verbalize("TfL Rail");
+        }
+        else
+        {
+            prefix = Strings.ThePrefix;
+            spokenName = name;
+            suffix = asTitleCase ? Strings.LineSuffixUpper : Strings.LineSuffixLower;
+        }
+
+        // Update verbalization for the new lines
+        if (new[] { "liberty", "lioness", "mildmay", "suffragette", "weaver", "windrush" }.Contains(name.ToLowerInvariant()))
+        {
+            spokenName = name;
+        }
+
+        return
+            asTitleCase ?
+            string.Format(CultureInfo.CurrentCulture, Verbalizer.LineNameWithoutPrefixFormat, spokenName, suffix) :
+            string.Format(CultureInfo.CurrentCulture, Verbalizer.LineNameWithPrefixFormat, prefix, spokenName, suffix);
     }
 }

@@ -90,6 +90,33 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
         response.OutputSpeech.Ssml.ShouldBe("<speak>Sorry, something went wrong.</speak>");
     }
 
+    // Add unit tests for querying disruptions on the new TfL lines
+    [Theory]
+    [InlineData("Liberty")]
+    [InlineData("Lioness")]
+    [InlineData("Mildmay")]
+    [InlineData("Suffragette")]
+    [InlineData("Weaver")]
+    [InlineData("Windrush")]
+    public async Task Can_Invoke_Function_For_New_Lines(string lineName)
+    {
+        // Arrange
+        await Interceptor.RegisterBundleFromResourceStreamAsync<DisruptionTests>("tfl-no-disruptions.json");
+
+        var function = await CreateFunctionAsync();
+        var request = CreateIntentRequestForLine(lineName);
+        var context = new TestLambdaContext();
+
+        // Act
+        var actual = await function.HandlerAsync(request, context);
+
+        // Assert
+        AssertResponse(
+            actual,
+            "<speak>There is currently no disruption on the tube, London Overground, the D.L.R. or the Elizabeth line.</speak>",
+            "There is currently no disruption on the tube, London Overground, the DLR or the Elizabeth line.");
+    }
+
     private void AssertResponse(SkillResponse actual, string expectedSsml, string expectedCardContent)
     {
         var response = AssertResponse(actual);
