@@ -6,7 +6,7 @@ namespace LondonTravel.Skill.EndToEndTests;
 /// <summary>
 /// See https://docs.aws.amazon.com/lambda/latest/dg/telemetry-schema-reference.html#platform-telemetrySubscription.
 /// </summary>
-internal sealed class PlatformTelemetrySubscriptionEvent : PlatformEvent
+internal sealed class PlatformEmptyEvent : PlatformEvent
 {
-    public override string Type => PlatformEventType.TelemetrySubscription;
+    public override string Type => string.Empty;
 }
