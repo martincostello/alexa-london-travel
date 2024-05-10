@@ -4,8 +4,8 @@
     <GlobalPackageReference Include="ReferenceTrimmer" Version="3.3.6" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Amazon.Lambda.Core" Version="2.2.0" />
-    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.10.0" />
+    <PackageVersion Include="Amazon.Lambda.Core" Version="2.2.1000" />
+    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.10.1000" />
     <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.3" />
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="2.0.0" />
     <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="3.7.303.8" />
