@@ -8,9 +8,13 @@ namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 /// </summary>
 internal static class PlatformEventType
 {
+    public const string Extension = "platform.extension";
+
     public const string Initialize = "platform.initStart";
 
     public const string Report = "platform.report";
 
     public const string Start = "platform.start";
+
+    public const string TelemetrySubscription = "platform.telemetrySubscription";
 }
