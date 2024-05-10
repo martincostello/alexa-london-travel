@@ -10,9 +10,6 @@ namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 /// </summary>
 internal sealed class PlatformReport
 {
-    [JsonPropertyName("errorType")]
-    public string? ErrorType { get; set; }
-
     [JsonPropertyName("requestId")]
     public string RequestId { get; set; } = default!;
 

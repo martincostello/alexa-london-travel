@@ -8,14 +8,9 @@ namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 /// <summary>
 /// See https://docs.aws.amazon.com/lambda/latest/dg/telemetry-schema-reference.html#telemetry-api-events.
 /// </summary>
-[JsonDerivedType(typeof(PlatformExtensionEvent), PlatformEventType.Extension)]
 [JsonDerivedType(typeof(PlatformInitEvent), PlatformEventType.Initialize)]
-[JsonDerivedType(typeof(PlatformInitReportEvent), PlatformEventType.InitializeReport)]
-[JsonDerivedType(typeof(PlatformInitRuntimeDoneEvent), PlatformEventType.InitializeRuntimeDone)]
 [JsonDerivedType(typeof(PlatformReportEvent), PlatformEventType.Report)]
-[JsonDerivedType(typeof(PlatformRuntimeDoneEvent), PlatformEventType.RuntimeDone)]
 [JsonDerivedType(typeof(PlatformStartEvent), PlatformEventType.Start)]
-[JsonDerivedType(typeof(PlatformTelemetrySubscriptionEvent), PlatformEventType.TelemetrySubscription)]
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 internal abstract class PlatformEvent
 {
