@@ -11,6 +11,7 @@ namespace LondonTravel.Skill.EndToEndTests;
 [JsonDerivedType(typeof(PlatformInitEvent), PlatformEventType.Initialize)]
 [JsonDerivedType(typeof(PlatformReportEvent), PlatformEventType.Report)]
 [JsonDerivedType(typeof(PlatformStartEvent), PlatformEventType.Start)]
+[JsonDerivedType(typeof(PlatformTelemetrySubscriptionEvent), PlatformEventType.TelemetrySubscription)]
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 internal abstract class PlatformEvent
 {
