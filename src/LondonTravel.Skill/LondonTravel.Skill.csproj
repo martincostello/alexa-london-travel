@@ -19,6 +19,7 @@
     <IlcInstructionSet>armv8.2-a</IlcInstructionSet>
     <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
     <SelfContained>true</SelfContained>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.Core" />
