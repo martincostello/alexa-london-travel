@@ -10,7 +10,9 @@ internal static class PlatformEventType
 {
     public const string Initialize = "platform.initStart";
 
+    public const string Report = "platform.report";
+
     public const string Start = "platform.start";
 
-    public const string Report = "platform.report";
+    public const string TelemetrySubscription = "platform.telemetrySubscription";
 }
