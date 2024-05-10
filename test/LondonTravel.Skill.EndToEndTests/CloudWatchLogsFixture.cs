@@ -2,8 +2,10 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Net.Http.Json;
+using System.Text.Json;
 using Amazon;
 using Amazon.CloudWatchLogs;
+using Amazon.CloudWatchLogs.Model;
 using Xunit.Sdk;
 
 namespace LondonTravel.Skill.EndToEndTests;
@@ -75,79 +77,16 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
                     LogStreamName = stream.LogStreamName,
                 });
 
-                const string ReportPrefix = "REPORT ";
-
                 var reports = logEvents.Events
                     .Where((p) => p.Timestamp >= _started)
-                    .Where((p) => p.Message.StartsWith(ReportPrefix, StringComparison.Ordinal))
                     .ToList();
 
                 foreach (var @event in reports)
                 {
-                    string[] split = @event.Message.Split('\t', StringSplitOptions.RemoveEmptyEntries);
-                    string requestIdLine = split[0][ReportPrefix.Length..];
-                    string requestId = requestIdLine.Split(' ')[1];
-
-                    if (!Requests.TryGetValue(requestId, out string? name))
+                    if (TryParseEvent(@event, out var entry))
                     {
-                        continue;
+                        logs.Add(entry);
                     }
-
-                    var entry = new LogEvent(name)
-                    {
-                        RequestId = requestId,
-                        Timestamp = @event.Timestamp,
-                    };
-
-                    builder
-                        .Clear()
-                        .AppendLine()
-                        .AppendLine()
-                        .AppendFormat(CultureInfo.InvariantCulture, $"Timestamp: {@event.Timestamp:u}")
-                        .AppendLine()
-                        .AppendLine(requestIdLine);
-
-                    foreach (string value in split.Skip(1))
-                    {
-                        if (value.Trim() is { Length: > 0 } trimmed)
-                        {
-                            builder.AppendLine(trimmed);
-
-                            string[] parts = trimmed.Split(": ");
-
-                            switch (parts[0])
-                            {
-                                case "Duration":
-                                    entry.Duration = parts[1];
-                                    break;
-
-                                case "Billed Duration":
-                                    entry.BilledDuration = parts[1];
-                                    break;
-
-                                case "Memory Size":
-                                    entry.MemorySize = parts[1];
-                                    break;
-
-                                case "Max Memory Used":
-                                    entry.MaxMemoryUsed = parts[1];
-                                    break;
-
-                                case "Init Duration":
-                                    entry.InitDuration = parts[1];
-                                    break;
-
-                                case "XRAY TraceId":
-                                    entry.TraceId = parts[1];
-                                    break;
-
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-
-                    logs.Add(new(entry, builder.ToString()));
                 }
             }
 
@@ -232,6 +171,168 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
 
             return $"[:link:](https://{region}.console.aws.amazon.com/cloudwatch/home?region={region}#xray:traces/{traceId})";
         }
+    }
+
+    private bool TryParseEvent(
+        OutputLogEvent @event,
+        out (LogEvent Event, string Message) entry)
+    {
+        return
+            @event.Message.Length > 0 && @event.Message[0] == '{' ?
+            TryParseEventAsJson(@event, out entry) :
+            TryParseEventAsText(@event, out entry);
+    }
+
+    private bool TryParseEventAsJson(
+        OutputLogEvent log,
+        out (LogEvent Event, string Message) parsed)
+    {
+        parsed = default;
+
+        if (JsonSerializer.Deserialize(log.Message, PlatformJsonSerializationContext.Default.PlatformEvent) is not { } @event ||
+            @event.Type is not PlatformEventType.Report ||
+            @event.Record is not { } record ||
+            record.Metrics is not { } metrics ||
+            record.RequestId is not { Length: > 0 } requestId)
+        {
+            return false;
+        }
+
+        if (!Requests.TryGetValue(requestId, out string? name))
+        {
+            return false;
+        }
+
+        var entry = new LogEvent(name)
+        {
+            BilledDuration = metrics.BilledDurationMs.ToString(CultureInfo.InvariantCulture),
+            Duration = metrics.DurationMs.ToString(CultureInfo.InvariantCulture),
+            MaxMemoryUsed = metrics.MaxMemoryUsedMB.ToString(CultureInfo.InvariantCulture),
+            MemorySize = metrics.MemorySizeMB.ToString(CultureInfo.InvariantCulture),
+            RequestId = requestId,
+            Timestamp = @event.Timestamp,
+        };
+
+        var builder = new StringBuilder()
+            .AppendLine()
+            .AppendLine()
+            .AppendFormat(CultureInfo.InvariantCulture, $"Timestamp: {log.Timestamp:u}")
+            .AppendLine()
+            .AppendFormat(CultureInfo.InvariantCulture, $"Request ID: {requestId}")
+            .AppendLine()
+            .AppendFormat(CultureInfo.InvariantCulture, $"Duration: {metrics.DurationMs}")
+            .AppendLine()
+            .AppendFormat(CultureInfo.InvariantCulture, $"Billed Duration: {metrics.BilledDurationMs}")
+            .AppendLine()
+            .AppendFormat(CultureInfo.InvariantCulture, $"Memory Size: {metrics.MemorySizeMB}")
+            .AppendLine()
+            .AppendFormat(CultureInfo.InvariantCulture, $"Max Memory Used: {metrics.MaxMemoryUsedMB}")
+            .AppendLine();
+
+        if (metrics.InitDurationMs is { } initDurationMs)
+        {
+            entry.InitDuration = initDurationMs.ToString(CultureInfo.InvariantCulture);
+
+            builder.AppendFormat(CultureInfo.InvariantCulture, $"Init Duration: {initDurationMs}")
+                   .AppendLine();
+        }
+
+        if (record.Tracing?.Value is { Length: > 0 } traceValue &&
+            traceValue.Split(';') is { Length: > 0 } values)
+        {
+            const string RootPrefix = "Root=";
+            string? root = values.FirstOrDefault((p) => p.StartsWith(RootPrefix, StringComparison.Ordinal));
+
+            if (root is not null)
+            {
+                entry.TraceId = root[RootPrefix.Length..];
+
+                builder.AppendFormat(CultureInfo.InvariantCulture, $"XRAY TraceId: {entry.TraceId}")
+                        .AppendLine();
+            }
+        }
+
+        parsed = (entry, builder.ToString());
+        return true;
+    }
+
+    private bool TryParseEventAsText(
+        OutputLogEvent @event,
+        out (LogEvent Event, string Message) parsed)
+    {
+        parsed = default;
+
+        const string ReportPrefix = "REPORT ";
+
+        if (!@event.Message.StartsWith(ReportPrefix, StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        string[] split = @event.Message.Split('\t', StringSplitOptions.RemoveEmptyEntries);
+        string requestIdLine = split[0][ReportPrefix.Length..];
+        string requestId = requestIdLine.Split(' ')[1];
+
+        if (!Requests.TryGetValue(requestId, out string? name))
+        {
+            return false;
+        }
+
+        var entry = new LogEvent(name)
+        {
+            RequestId = requestId,
+            Timestamp = @event.Timestamp,
+        };
+
+        var builder = new StringBuilder()
+            .AppendLine()
+            .AppendLine()
+            .AppendFormat(CultureInfo.InvariantCulture, $"Timestamp: {@event.Timestamp:u}")
+            .AppendLine()
+            .AppendLine(requestIdLine);
+
+        foreach (string value in split.Skip(1))
+        {
+            if (value.Trim() is { Length: > 0 } trimmed)
+            {
+                builder.AppendLine(trimmed);
+
+                string[] parts = trimmed.Split(": ");
+
+                switch (parts[0])
+                {
+                    case "Duration":
+                        entry.Duration = parts[1];
+                        break;
+
+                    case "Billed Duration":
+                        entry.BilledDuration = parts[1];
+                        break;
+
+                    case "Memory Size":
+                        entry.MemorySize = parts[1];
+                        break;
+
+                    case "Max Memory Used":
+                        entry.MaxMemoryUsed = parts[1];
+                        break;
+
+                    case "Init Duration":
+                        entry.InitDuration = parts[1];
+                        break;
+
+                    case "XRAY TraceId":
+                        entry.TraceId = parts[1];
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+
+        parsed = (entry, builder.ToString());
+        return true;
     }
 
     private sealed class LogEvent(string name)
