@@ -6,5 +6,5 @@ using System.Text.Json.Serialization;
 namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 
 [JsonSerializable(typeof(PlatformEvent))]
-[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+[JsonSourceGenerationOptions(AllowOutOfOrderMetadataProperties = true, PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 internal sealed partial class PlatformJsonSerializationContext : JsonSerializerContext;
