@@ -189,8 +189,19 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
     {
         parsed = default;
 
-        if (JsonSerializer.Deserialize(log.Message, PlatformJsonSerializationContext.Default.PlatformEvent) is not { } @event ||
-            @event is not PlatformReportEvent report ||
+        PlatformEvent? @event;
+
+        try
+        {
+            @event = JsonSerializer.Deserialize(log.Message, PlatformJsonSerializationContext.Default.PlatformEvent);
+        }
+        catch (NotSupportedException)
+        {
+            // Missing the type discriminator, so not a platform event
+            return false;
+        }
+
+        if (@event is not PlatformReportEvent report ||
             report.Record.Metrics is not { } metrics ||
             report.Record.RequestId is not { Length: > 0 } requestId)
         {
