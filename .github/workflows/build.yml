@@ -195,6 +195,7 @@ jobs:
       shell: bash
       env:
         LAMBDA_LAYERS: ${{ vars.AWS_LAMBDA_LAYERS }}
+        LAMBDA_LOGGING_CONFIG: ${{ vars.AWS_LAMBDA_LOGGING_CONFIG }}
         LAMBDA_TRACING_MODE: ${{ vars.AWS_TRACING_MODE }}
       run: |
         aws lambda update-function-configuration \
@@ -203,6 +204,7 @@ jobs:
           --environment "${LAMBDA_ENVIRONMENT_VARIABLES}" \
           --handler "${LAMBDA_HANDLER}" \
           --layers "${LAMBDA_LAYERS}" \
+          --logging-config "${LAMBDA_LOGGING_CONFIG}" \
           --memory-size "${LAMBDA_MEMORY}" \
           --role "${LAMBDA_ROLE}" \
           --runtime "${LAMBDA_RUNTIME}" \
@@ -332,6 +334,7 @@ jobs:
       shell: bash
       env:
         LAMBDA_LAYERS: ${{ vars.AWS_LAMBDA_LAYERS }}
+        LAMBDA_LOGGING_CONFIG: ${{ vars.AWS_LAMBDA_LOGGING_CONFIG }}
         LAMBDA_TRACING_MODE: ${{ vars.AWS_TRACING_MODE }}
       run: |
         aws lambda update-function-configuration \
@@ -340,6 +343,7 @@ jobs:
           --environment "${LAMBDA_ENVIRONMENT_VARIABLES}" \
           --handler "${LAMBDA_HANDLER}" \
           --layers "${LAMBDA_LAYERS}" \
+          --logging-config "${LAMBDA_LOGGING_CONFIG}" \
           --memory-size "${LAMBDA_MEMORY}" \
           --role "${LAMBDA_ROLE}" \
           --runtime "${LAMBDA_RUNTIME}" \
