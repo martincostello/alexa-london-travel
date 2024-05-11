@@ -39,6 +39,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20
 
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
+
     strategy:
       fail-fast: false
       matrix:
@@ -101,6 +106,15 @@ jobs:
           chmod +x ./bootstrap
         fi
         zip -r "../../../${LAMBDA_FUNCTION}.zip" . || exit 1
+
+    - name: Attest artifacts
+      uses: actions/attest-build-provenance@951c0c5f8e375ad4efad33405ab77f7ded2358e4 # v1.1.1
+      if: |
+        runner.os == 'Linux' &&
+        github.event.repository.fork == false &&
+        github.ref_name == github.event.repository.default_branch
+      with:
+        subject-path: ./artifacts/${{ env.LAMBDA_FUNCTION }}.zip
 
     - name: Publish deployment package
       uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3

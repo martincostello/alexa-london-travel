@@ -19,6 +19,7 @@ PublishProfiles
 TestResults
 UpgradeLog*.htm
 UpgradeLog*.XML
+*.binlog
 *.coverage
 *.DotSettings
 *.log
