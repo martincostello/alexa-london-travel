@@ -12,16 +12,16 @@ public class CancelTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
     public async Task Can_Invoke_Function()
     {
         // Arrange
-        AlexaFunction function = await CreateFunctionAsync();
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var context = new TestLambdaContext();
 
-        SkillRequest request = CreateIntentRequest("AMAZON.CancelIntent");
+        var request = CreateIntentRequest("AMAZON.CancelIntent");
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         response.Card.ShouldBeNull();
         response.OutputSpeech.ShouldBeNull();

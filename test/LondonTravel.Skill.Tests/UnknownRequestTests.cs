@@ -12,13 +12,13 @@ public class UnknownRequestTests(ITestOutputHelper outputHelper) : FunctionTests
     public async Task Can_Invoke_Function()
     {
         // Arrange
-        AlexaFunction function = await CreateFunctionAsync();
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var context = new TestLambdaContext();
 
-        SkillRequest request = CreateRequest("Unknown");
+        var request = CreateRequest("Unknown");
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
         AssertResponse(actual);

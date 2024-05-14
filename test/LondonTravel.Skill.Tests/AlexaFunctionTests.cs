@@ -12,8 +12,8 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
     public async Task Cannot_Invoke_Function_If_Application_Id_Incorrect()
     {
         // Arrange
-        AlexaFunction function = await CreateFunctionAsync();
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var context = new TestLambdaContext();
 
         SkillRequest request = CreateIntentRequest("AMAZON.HelpIntent");
         request.Session.Application.ApplicationId = "not-my-skill-id";
