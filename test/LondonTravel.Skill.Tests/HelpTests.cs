@@ -12,16 +12,16 @@ public class HelpTests(ITestOutputHelper outputHelper) : FunctionTests(outputHel
     public async Task Can_Invoke_Function()
     {
         // Arrange
-        AlexaFunction function = await CreateFunctionAsync();
+        var function = await CreateFunctionAsync();
 
-        SkillRequest request = CreateIntentRequest("AMAZON.HelpIntent");
-        TestLambdaContext context = new();
+        var request = CreateIntentRequest("AMAZON.HelpIntent");
+        var context = new TestLambdaContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
-        ResponseBody response = AssertResponse(actual, shouldEndSession: false);
+        var response = AssertResponse(actual, shouldEndSession: false);
 
         response.Card.ShouldBeNull();
         response.Reprompt.ShouldBeNull();

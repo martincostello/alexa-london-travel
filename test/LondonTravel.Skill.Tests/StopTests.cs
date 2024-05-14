@@ -12,16 +12,16 @@ public class StopTests(ITestOutputHelper outputHelper) : FunctionTests(outputHel
     public async Task Can_Invoke_Function()
     {
         // Arrange
-        AlexaFunction function = await CreateFunctionAsync();
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var context = new TestLambdaContext();
 
-        SkillRequest request = CreateIntentRequest("AMAZON.StopIntent");
+        var request = CreateIntentRequest("AMAZON.StopIntent");
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         response.Card.ShouldBeNull();
         response.OutputSpeech.ShouldBeNull();

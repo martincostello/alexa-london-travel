@@ -12,16 +12,16 @@ public class SessionEndedTests(ITestOutputHelper outputHelper) : FunctionTests(o
     public async Task Can_Invoke_Function()
     {
         // Arrange
-        AlexaFunction function = await CreateFunctionAsync();
+        var function = await CreateFunctionAsync();
 
-        SkillRequest request = CreateRequest("SessionEndedRequest");
-        TestLambdaContext context = new();
+        var request = CreateRequest("SessionEndedRequest");
+        var context = new TestLambdaContext();
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         response.Card.ShouldBeNull();
         response.Reprompt.ShouldBeNull();
