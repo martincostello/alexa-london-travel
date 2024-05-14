@@ -15,7 +15,7 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
         var function = await CreateFunctionAsync();
         var context = new TestLambdaContext();
 
-        SkillRequest request = CreateIntentRequest("AMAZON.HelpIntent");
+        var request = CreateIntentRequest("AMAZON.HelpIntent");
         request.Session.Application.ApplicationId = "not-my-skill-id";
 
         // Act
@@ -35,17 +35,17 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
     public async Task Can_Invoke_Function_If_Locale_Is_Invalid(string? locale)
     {
         // Arrange
-        AlexaFunction function = await CreateFunctionAsync();
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var context = new TestLambdaContext();
 
-        SkillRequest request = CreateIntentRequest("AMAZON.HelpIntent");
+        var request = CreateIntentRequest("AMAZON.HelpIntent");
         request.Request.Locale = locale!;
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
-        ResponseBody response = AssertResponse(actual, shouldEndSession: false);
+        var response = AssertResponse(actual, shouldEndSession: false);
 
         response.OutputSpeech.ShouldNotBeNull();
         response.OutputSpeech.Type.ShouldBe("SSML");
@@ -55,8 +55,8 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
     public async Task Cannot_Invoke_Function_With_System_Failure()
     {
         // Arrange
-        AlexaFunction function = await CreateFunctionAsync();
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var context = new TestLambdaContext();
 
         var error = new Request()
         {
@@ -74,10 +74,10 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
         var request = CreateRequest("System.ExceptionEncountered", error);
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         response.Card.ShouldBeNull();
         response.Reprompt.ShouldBeNull();
