@@ -204,12 +204,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         // Arrange
         string json = JsonSerializer.Serialize(request, AppJsonSerializerContext.Default.SkillRequest);
 
-        void Configure(IServiceCollection services)
-        {
-            services.AddLogging((builder) => builder.AddXUnit(this));
-        }
-
-        using var server = new LambdaTestServer(Configure);
+        using var server = new LambdaTestServer((services) => services.AddLogging((builder) => builder.AddXUnit(this)));
         using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(2));
 
         await server.StartAsync(cancellationTokenSource.Token);
