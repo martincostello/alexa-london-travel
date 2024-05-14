@@ -68,7 +68,7 @@ internal sealed class AlexaSkill(
     /// </returns>
     public async Task<SkillResponse> OnIntentAsync(IIntentRequest intent, Session session)
     {
-        IIntent handler = intentFactory.Create(intent.Intent);
+        var handler = intentFactory.Create(intent.Intent);
         return await handler.RespondAsync(intent.Intent, session);
     }
 
