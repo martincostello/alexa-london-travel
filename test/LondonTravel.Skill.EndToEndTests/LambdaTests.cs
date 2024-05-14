@@ -58,7 +58,7 @@ public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper output
         outputHelper.WriteLine($"Payload: {request.Payload}");
 
         // Act
-        InvokeResponse invocation = await client.InvokeAsync(request);
+        var invocation = await client.InvokeAsync(request);
 
         // Assert
         invocation.ShouldNotBeNull();
