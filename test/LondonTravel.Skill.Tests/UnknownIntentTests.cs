@@ -12,16 +12,16 @@ public class UnknownIntentTests(ITestOutputHelper outputHelper) : FunctionTests(
     public async Task Can_Invoke_Function()
     {
         // Arrange
-        AlexaFunction function = await CreateFunctionAsync();
-        TestLambdaContext context = new();
+        var function = await CreateFunctionAsync();
+        var context = new TestLambdaContext();
 
-        SkillRequest request = CreateIntentRequest("FooIntent");
+        var request = CreateIntentRequest("FooIntent");
 
         // Act
-        SkillResponse actual = await function.HandlerAsync(request, context);
+        var actual = await function.HandlerAsync(request, context);
 
         // Assert
-        ResponseBody response = AssertResponse(actual);
+        var response = AssertResponse(actual);
 
         response.Card.ShouldBeNull();
         response.Reprompt.ShouldBeNull();
