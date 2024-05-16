@@ -21,6 +21,8 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>$(NoWarn);CA1515;CS1591</NoWarn>
+    <!-- HACK Workaround Microsoft.Extensions preview.4 packages referencing preview.5 -->
+    <NoWarn>$(NoWarn);NU1605</NoWarn>
     <Nullable>enable</Nullable>
     <PackageIcon></PackageIcon>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
