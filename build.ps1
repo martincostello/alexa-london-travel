@@ -1,6 +1,7 @@
 #! /usr/bin/env pwsh
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
+    [Parameter(Mandatory = $false)][switch] $SkipTests,
     [Parameter(Mandatory = $false)][switch] $UseManagedRuntime
 )
 
@@ -119,22 +120,24 @@ ForEach ($project in $publishProjects) {
     DotNetPublish $project $publishForAWSLambda
 }
 
-Write-Host "Testing $($testProjects.Count) project(s)..." -ForegroundColor Green
-ForEach ($project in $testProjects) {
-    DotNetTest $project
-}
+if (-Not $SkipTests) {
+    Write-Host "Testing $($testProjects.Count) project(s)..." -ForegroundColor Green
+    ForEach ($project in $testProjects) {
+        DotNetTest $project
+    }
 
-Write-Host "Testing $($testProjectsForAot.Count) project(s) for native AoT..." -ForegroundColor Green
-ForEach ($project in $testProjectsForAot) {
-    DotNetPublish $project
+    Write-Host "Testing $($testProjectsForAot.Count) project(s) for native AoT..." -ForegroundColor Green
+    ForEach ($project in $testProjectsForAot) {
+        DotNetPublish $project
 
-    $projectName = [System.IO.Path]::GetDirectoryName($project)
-    $projectName = [System.IO.Path]::GetFileName($projectName)
-    $testBinary = (Join-Path $solutionPath "artifacts" "publish" $projectName $Configuration.ToLowerInvariant() $projectName)
+        $projectName = [System.IO.Path]::GetDirectoryName($project)
+        $projectName = [System.IO.Path]::GetFileName($projectName)
+        $testBinary = (Join-Path $solutionPath "artifacts" "publish" $projectName $Configuration.ToLowerInvariant() $projectName)
 
-    & $testBinary
+        & $testBinary
 
-    if ($LASTEXITCODE -ne 0) {
-        throw "Native AoT tests for $projectName failed with exit code $LASTEXITCODE"
+        if ($LASTEXITCODE -ne 0) {
+            throw "Native AoT tests for $projectName failed with exit code $LASTEXITCODE"
+        }
     }
 }
