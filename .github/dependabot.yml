@@ -11,17 +11,20 @@ updates:
 - package-ecosystem: nuget
   directory: "/"
   groups:
-    awssdk:
+    AWSSDK:
       patterns:
         - AWSSDK*
-    mstest:
+    Microsoft.Extensions:
+      patterns:
+        - Microsoft.Extensions.*
+    MSTest:
       patterns:
         - MSTest.Sdk
         - MSTest.TestFramework
-    opentelemetry:
+    OpenTelemetry:
       patterns:
         - OpenTelemetry*
-    polly:
+    Polly:
       patterns:
         - Polly*
     xunit:
