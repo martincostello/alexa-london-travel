@@ -93,13 +93,17 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         response.OutputSpeech.Ssml.ShouldBe("<speak>There is currently no disruption on the tube, London Overground, the D.L.R. or the Elizabeth line.</speak>");
     }
 
-    [xRetry.RetryFact]
-    public async Task Alexa_Function_Can_Process_Intent_Request_For_Line_Status()
+    [xRetry.RetryTheory]
+    [InlineData("Northern", "There is a good service on the Northern line.")]
+    [InlineData("Windrush", "Sunday 20 October, no service between Sydenham and Crystal Palace. Use local London Buses connections. Replacement buses also operate between Balham and West Croydon calling at Streatham Hill, West Norwood, Gipsy Hill, Crystal Palace, Norwood Junction and Selhurst.")]
+    public async Task Alexa_Function_Can_Process_Intent_Request_For_Line_Status(
+        string line,
+        string expected)
     {
         // Arrange
         var request = CreateIntentRequest(
             "StatusIntent",
-            new Slot() { Name = "LINE", Value = "Northern" });
+            new Slot() { Name = "LINE", Value = line });
 
         // Act
         var actual = await ProcessRequestAsync(request);
@@ -113,7 +117,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
 
         response.OutputSpeech.ShouldNotBeNull();
         response.OutputSpeech.Type.ShouldBe("SSML");
-        response.OutputSpeech.Ssml.ShouldBe("<speak>There is a good service on the Northern line.</speak>");
+        response.OutputSpeech.Ssml.ShouldBe($"<speak>{expected}</speak>");
     }
 
     [xRetry.RetryFact]

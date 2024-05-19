@@ -97,6 +97,12 @@ internal static class Lines
 
             case "london overground":
             case "overground":
+            case "liberty":
+            case "lioness":
+            case "mildmay":
+            case "suffragette":
+            case "weaver":
+            case "windrush":
                 return "london-overground";
 
             case "met":
