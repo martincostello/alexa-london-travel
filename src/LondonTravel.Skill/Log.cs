@@ -14,8 +14,12 @@ internal static partial class Log
     [LoggerMessage(
         EventId = 1,
         Level = LogLevel.Error,
-        Message = "Failed to handle request for session {SessionId}.")]
-    public static partial void HandlerException(ILogger logger, Exception? exception, string sessionId);
+        Message = "Failed to handle request for session {SessionId} for request of type {RequestType}.")]
+    public static partial void HandlerException(
+        ILogger logger,
+        Exception? exception,
+        string sessionId,
+        string requestType);
 
     [LoggerMessage(
         EventId = 2,
