@@ -18,7 +18,7 @@ public class SkillTests(ITestOutputHelper outputHelper)
     [InlineData("Alexa, ask London Travel about London Overground.")]
     [InlineData("Alexa, ask London Travel about TfL Rail.")]
     [InlineData("Alexa, ask London Travel about the Victoria line.")]
-    [InlineData("Alexa, ask London Travel about the Windrush Line.")]
+    [InlineData("Alexa, ask London Travel about the Windrush line.")]
     public async Task Can_Invoke_Skill_And_Get_Valid_Response(string content)
     {
         // Arrange
