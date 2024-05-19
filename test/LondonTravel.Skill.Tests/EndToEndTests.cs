@@ -13,7 +13,9 @@ namespace MartinCostello.LondonTravel.Skill;
 
 public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outputHelper)
 {
-    [xRetry.RetryTheory]
+    private const int TimeoutMilliseconds = 15_000;
+
+    [xRetry.RetryTheory(Timeout = TimeoutMilliseconds)]
     [InlineData("AMAZON.CancelIntent")]
     [InlineData("AMAZON.StopIntent")]
     public async Task Alexa_Function_Can_Process_Intent_Request(string name)
@@ -32,7 +34,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         response.Reprompt.ShouldBeNull();
     }
 
-    [xRetry.RetryFact]
+    [xRetry.RetryFact(Timeout = TimeoutMilliseconds)]
     public async Task Alexa_Function_Can_Process_Intent_Request_For_Help()
     {
         // Arrange
@@ -52,7 +54,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         response.OutputSpeech.Ssml.ShouldBe("<speak><p>This skill allows you to check for the status of a specific line, or for disruption in general. You can ask about any London Underground line, London Overground, the Docklands Light Railway or the Elizabeth line.</p><p>Asking about disruption in general provides information about any lines that are currently experiencing issues, such as any delays or planned closures.</p><p>Asking for the status for a specific line provides a summary of the current service, such as whether there is a good service or if there are any delays.</p><p>If you link your account and setup your preferences in the London Travel website, you can ask about your commute to quickly find out the status of the lines you frequently use.</p></speak>");
     }
 
-    [xRetry.RetryFact]
+    [xRetry.RetryFact(Timeout = TimeoutMilliseconds)]
     public async Task Alexa_Function_Can_Process_Intent_Request_With_Unknown_Intent()
     {
         // Arrange
@@ -72,7 +74,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         response.OutputSpeech.Ssml.ShouldBe("<speak>Sorry, I don't understand how to do that.</speak>");
     }
 
-    [xRetry.RetryFact]
+    [xRetry.RetryFact(Timeout = TimeoutMilliseconds)]
     public async Task Alexa_Function_Can_Process_Intent_Request_For_Disruption()
     {
         // Arrange
@@ -93,7 +95,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         response.OutputSpeech.Ssml.ShouldBe("<speak>There is currently no disruption on the tube, London Overground, the D.L.R. or the Elizabeth line.</speak>");
     }
 
-    [xRetry.RetryTheory]
+    [xRetry.RetryTheory(Timeout = TimeoutMilliseconds)]
     [InlineData("Northern", "There is a good service on the Northern line.")]
     [InlineData("Windrush", "Sunday 20 October, no service between Sydenham and Crystal Palace. Use local London Buses connections. Replacement buses also operate between Balham and West Croydon calling at Streatham Hill, West Norwood, Gipsy Hill, Crystal Palace, Norwood Junction and Selhurst.")]
     public async Task Alexa_Function_Can_Process_Intent_Request_For_Line_Status(
@@ -120,7 +122,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         response.OutputSpeech.Ssml.ShouldBe($"<speak>{expected}</speak>");
     }
 
-    [xRetry.RetryFact]
+    [xRetry.RetryFact(Timeout = TimeoutMilliseconds)]
     public async Task Alexa_Function_Can_Process_Launch_Request()
     {
         // Arrange
@@ -140,7 +142,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         response.OutputSpeech.Ssml.ShouldBe("<speak>Welcome to London Travel. You can ask me about disruption or for the status of any tube line, London Overground, the D.L.R. or the Elizabeth line.</speak>");
     }
 
-    [xRetry.RetryFact]
+    [xRetry.RetryFact(Timeout = TimeoutMilliseconds)]
     public async Task Alexa_Function_Can_Process_Session_Ended_Request()
     {
         // Arrange
@@ -170,7 +172,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         response.OutputSpeech.Ssml.ShouldBe("<speak>Goodbye.</speak>");
     }
 
-    [xRetry.RetryFact]
+    [xRetry.RetryFact(Timeout = TimeoutMilliseconds)]
     public async Task Alexa_Function_Can_Process_System_Exception_Request()
     {
         // Arrange
@@ -209,9 +211,11 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         string json = JsonSerializer.Serialize(request, AppJsonSerializerContext.Default.SkillRequest);
 
         using var server = new LambdaTestServer((services) => services.AddLogging((builder) => builder.AddXUnit(this)));
-        using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+        using var cancellationTokenSource = new CancellationTokenSource();
 
         await server.StartAsync(cancellationTokenSource.Token);
+
+        cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(2));
 
         var context = await server.EnqueueAsync(json);
 

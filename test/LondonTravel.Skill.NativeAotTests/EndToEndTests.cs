@@ -305,9 +305,11 @@ public sealed class EndToEndTests
         }
 
         using var server = new LambdaTestServer(Configure);
-        using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+        using var cancellationTokenSource = new CancellationTokenSource();
 
         await server.StartAsync(cancellationTokenSource.Token);
+
+        cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(2));
 
         var context = await server.EnqueueAsync(json);
 
