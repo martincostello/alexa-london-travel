@@ -13,7 +13,12 @@ public class SkillTests(ITestOutputHelper outputHelper)
 {
     [SkippableTheory]
     [InlineData("Alexa, ask London Travel if there is any disruption today.")]
+    [InlineData("Alexa, ask London Travel about the DLR.")]
+    [InlineData("Alexa, ask London Travel about the Elizabeth line.")]
+    [InlineData("Alexa, ask London Travel about London Overground.")]
+    [InlineData("Alexa, ask London Travel about TfL Rail.")]
     [InlineData("Alexa, ask London Travel about the Victoria line.")]
+    [InlineData("Alexa, ask London Travel about the Windrush Line.")]
     public async Task Can_Invoke_Skill_And_Get_Valid_Response(string content)
     {
         // Arrange
