@@ -508,42 +508,6 @@
       ]
     },
     {
-      "uri": "https://api.tfl.gov.uk/Line/tfl-rail/Status?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
-      "contentFormat": "json",
-      "contentJson": [
-        {
-          "$type": "Tfl.Api.Presentation.Entities.Line, Tfl.Api.Presentation.Entities",
-          "id": "tfl-rail",
-          "name": "TfL Rail",
-          "modeName": "tflrail",
-          "disruptions": [],
-          "created": "2019-10-17T12:58:58.107Z",
-          "modified": "2019-10-17T12:58:58.107Z",
-          "lineStatuses": [
-            {
-              "$type": "Tfl.Api.Presentation.Entities.LineStatus, Tfl.Api.Presentation.Entities",
-              "id": 0,
-              "statusSeverity": 10,
-              "statusSeverityDescription": "Good Service",
-              "created": "0001-01-01T00:00:00",
-              "validityPeriods": []
-            }
-          ],
-          "routeSections": [],
-          "serviceTypes": [
-            {
-              "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
-              "name": "Regular",
-              "uri": "/Line/Route?ids=TfL Rail&serviceTypes=Regular"
-            }
-          ],
-          "crowding": {
-            "$type": "Tfl.Api.Presentation.Entities.Crowding, Tfl.Api.Presentation.Entities"
-          }
-        }
-      ]
-    },
-    {
       "uri": "https://api.tfl.gov.uk/Line/victoria/Status?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
       "contentFormat": "json",
       "contentJson": [

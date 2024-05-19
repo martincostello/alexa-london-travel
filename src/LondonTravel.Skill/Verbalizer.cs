@@ -39,10 +39,6 @@ internal static class Verbalizer
         {
             spokenName = name;
         }
-        else if (Lines.IsTfLRail(name))
-        {
-            spokenName = Verbalize("TfL Rail");
-        }
         else
         {
             prefix = Strings.ThePrefix;

@@ -47,18 +47,6 @@ internal static class Lines
     }
 
     /// <summary>
-    /// Returns whether the specified line name refers to TfL Rail.
-    /// </summary>
-    /// <param name="name">The name of the line as reported from the TfL API.</param>
-    /// <returns>
-    /// A boolean indicating whether the line is TfL Rail.
-    /// </returns>
-    public static bool IsTfLRail(string name)
-    {
-        return name.Contains("tfl", StringComparison.OrdinalIgnoreCase);
-    }
-
-    /// <summary>
     /// Maps the specified line name to a TfL API line Id.
     /// </summary>
     /// <param name="line">The line name.</param>
@@ -126,9 +114,6 @@ internal static class Lines
             case "waterloo & city":
                 return "waterloo-city";
 
-            case "tfl rail":
-                return "tfl-rail";
-
             default:
                 return null;
         }
@@ -147,8 +132,7 @@ internal static class Lines
         bool isNameWithoutLine =
             IsDlr(name) ||
             IsElizabethLine(name) ||
-            IsOverground(name) ||
-            IsTfLRail(name);
+            IsOverground(name);
 
         string suffix = isNameWithoutLine ? Strings.LineSuffixUpper : string.Empty;
         return string.Format(CultureInfo.CurrentCulture, StatusIntentCardTitleFormat, name, suffix);
