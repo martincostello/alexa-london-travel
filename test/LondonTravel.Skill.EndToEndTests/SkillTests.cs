@@ -64,6 +64,8 @@ public class SkillTests(ITestOutputHelper outputHelper)
         body.TryGetProperty("response", out var skillResponse).ShouldBeTrue();
         skillResponse.TryGetProperty("outputSpeech", out var outputSpeech).ShouldBeTrue();
 
+        outputHelper.WriteLine($"Output speech: {outputSpeech}");
+
         outputSpeech.TryGetProperty("type", out var speechType).ShouldBeTrue();
         speechType.GetString().ShouldBe("SSML");
 
