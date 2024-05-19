@@ -55,14 +55,14 @@ internal sealed class FunctionHandler(AlexaSkill skill, SkillConfiguration confi
                 RequestTypes.Launch => skill.OnLaunch(request.Session),
                 RequestTypes.SessionEnded => skill.OnSessionEnded(request.Session),
                 RequestTypes.SystemException => skill.OnError(request.Request, request.Session),
-                _ => skill.OnError(null as Exception, request.Session),
+                _ => skill.OnError(null, request.Session, request.Request.Type),
             };
         }
 #pragma warning disable CA1031
         catch (Exception ex)
 #pragma warning restore CA1031
         {
-            return skill.OnError(ex, request.Session);
+            return skill.OnError(ex, request.Session, request.Request.Type);
         }
     }
 

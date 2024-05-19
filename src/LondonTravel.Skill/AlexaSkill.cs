@@ -45,12 +45,13 @@ internal sealed class AlexaSkill(
     /// </summary>
     /// <param name="exception">The exception that occurred, if any.</param>
     /// <param name="session">The Alexa session.</param>
+    /// <param name="requestType">The request type.</param>
     /// <returns>
     /// The <see cref="ResponseBody"/> to return from the skill.
     /// </returns>
-    public SkillResponse OnError(Exception? exception, Session session)
+    public SkillResponse OnError(Exception? exception, Session session, string requestType)
     {
-        Log.HandlerException(logger, exception, session.SessionId);
+        Log.HandlerException(logger, exception, session.SessionId, requestType);
 
         return SkillResponseBuilder
             .Tell(Strings.InternalError)

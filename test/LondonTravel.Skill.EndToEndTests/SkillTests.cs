@@ -13,7 +13,11 @@ public class SkillTests(ITestOutputHelper outputHelper)
 {
     [SkippableTheory]
     [InlineData("Alexa, ask London Travel if there is any disruption today.")]
+    [InlineData("Alexa, ask London Travel about the DLR.")]
+    [InlineData("Alexa, ask London Travel about the Elizabeth line.")]
+    [InlineData("Alexa, ask London Travel about London Overground.")]
     [InlineData("Alexa, ask London Travel about the Victoria line.")]
+    [InlineData("Alexa, ask London Travel about the Windrush line.")]
     public async Task Can_Invoke_Skill_And_Get_Valid_Response(string content)
     {
         // Arrange
@@ -59,6 +63,8 @@ public class SkillTests(ITestOutputHelper outputHelper)
         invocation.InvocationResponse.RootElement.TryGetProperty("body", out var body).ShouldBeTrue();
         body.TryGetProperty("response", out var skillResponse).ShouldBeTrue();
         skillResponse.TryGetProperty("outputSpeech", out var outputSpeech).ShouldBeTrue();
+
+        outputHelper.WriteLine($"Output speech: {outputSpeech}");
 
         outputSpeech.TryGetProperty("type", out var speechType).ShouldBeTrue();
         speechType.GetString().ShouldBe("SSML");

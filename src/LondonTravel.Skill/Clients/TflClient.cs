@@ -3,13 +3,14 @@
 
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill.Clients;
 
 /// <summary>
 /// Defines an HTTP client for the TfL API.
 /// </summary>
-internal sealed class TflClient(HttpClient httpClient)
+internal sealed partial class TflClient(HttpClient httpClient, ILogger<TflClient> logger)
 {
     /// <summary>
     /// Gets the disruption for the specified modes of travel as an asynchronous operation.
@@ -29,7 +30,16 @@ internal sealed class TflClient(HttpClient httpClient)
         CancellationToken cancellationToken = default)
     {
         string requestUrl = GetRequestUrl($"/Line/Mode/{Uri.EscapeDataString(modes)}/Disruption", applicationId, applicationKey);
-        return await httpClient.GetFromJsonAsync(requestUrl, AppJsonSerializerContext.Default.IListServiceDisruption, cancellationToken) ?? [];
+
+        try
+        {
+            return await httpClient.GetFromJsonAsync(requestUrl, AppJsonSerializerContext.Default.IListServiceDisruption, cancellationToken) ?? [];
+        }
+        catch (Exception ex)
+        {
+            Log.GetDisruptionFailed(logger, ex, modes);
+            throw;
+        }
     }
 
     /// <summary>
@@ -50,7 +60,16 @@ internal sealed class TflClient(HttpClient httpClient)
         CancellationToken cancellationToken = default)
     {
         string requestUrl = GetRequestUrl($"/Line/{Uri.EscapeDataString(ids)}/Status", applicationId, applicationKey);
-        return await httpClient.GetFromJsonAsync(requestUrl, AppJsonSerializerContext.Default.IListLine, cancellationToken) ?? [];
+
+        try
+        {
+            return await httpClient.GetFromJsonAsync(requestUrl, AppJsonSerializerContext.Default.IListLine, cancellationToken) ?? [];
+        }
+        catch (Exception ex)
+        {
+            Log.GetLineStatusFailed(logger, ex, ids);
+            throw;
+        }
     }
 
     private static string GetRequestUrl(
@@ -65,5 +84,27 @@ internal sealed class TflClient(HttpClient httpClient)
         ];
 
         return QueryHelpers.AddQueryString(uri, parameters);
+    }
+
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    private static partial class Log
+    {
+        [LoggerMessage(
+            EventId = 1,
+            Level = LogLevel.Warning,
+            Message = "Failed to get disruption for modes {Modes}.")]
+        public static partial void GetDisruptionFailed(
+            ILogger logger,
+            Exception exception,
+            string modes);
+
+        [LoggerMessage(
+            EventId = 2,
+            Level = LogLevel.Warning,
+            Message = "Failed to get line status for line Ids {Ids}.")]
+        public static partial void GetLineStatusFailed(
+            ILogger logger,
+            Exception exception,
+            string ids);
     }
 }
