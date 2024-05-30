@@ -11,7 +11,7 @@
     <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="3.7.303.8" />
     <PackageVersion Include="AWSSDK.Lambda" Version="3.7.303.37" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.2" />
-    <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.3" />
+    <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="4.3.0" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.8.0" />
