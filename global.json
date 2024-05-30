@@ -5,6 +5,6 @@
     "rollForward": "latestMajor"
   },
   "msbuild-sdks": {
-    "MSTest.Sdk": "3.4.1"
+    "MSTest.Sdk": "3.4.2"
   }
 }
