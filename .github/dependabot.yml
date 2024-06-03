@@ -11,6 +11,9 @@ updates:
 - package-ecosystem: nuget
   directory: "/"
   groups:
+    Amazon.Lambda:
+      patterns:
+        - Amazon.Lambda.*
     AWSSDK:
       patterns:
         - AWSSDK*
