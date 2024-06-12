@@ -38,7 +38,6 @@
     <PackageVersion Include="Polly.RateLimiting" Version="8.4.0" />
     <PackageVersion Include="ReportGenerator" Version="5.3.6" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
-    <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
     <PackageVersion Include="System.Text.Json" Version="9.0.0-preview.6.24307.2" />
     <PackageVersion Include="xRetry" Version="1.9.0" />
     <PackageVersion Include="xunit" Version="2.8.1" />
