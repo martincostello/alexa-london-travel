@@ -37,7 +37,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     }
 
     /// <inheritdoc/>
-    public async virtual ValueTask DisposeAsync()
+    public virtual async ValueTask DisposeAsync()
     {
         if (!_disposed)
         {
