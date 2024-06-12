@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using Amazon.Runtime;
 
-namespace LondonTravel.Skill.EndToEndTests;
+namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 
 internal static class TestConfiguration
 {
