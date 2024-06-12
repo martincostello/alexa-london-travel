@@ -8,7 +8,7 @@ using Amazon.CloudWatchLogs;
 using Amazon.CloudWatchLogs.Model;
 using Xunit.Sdk;
 
-namespace LondonTravel.Skill.EndToEndTests;
+namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 
 public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncLifetime
 {

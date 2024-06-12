@@ -3,7 +3,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace LondonTravel.Skill.EndToEndTests;
+namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 
 [JsonSerializable(typeof(PlatformEvent))]
 [JsonSourceGenerationOptions(AllowOutOfOrderMetadataProperties = true, PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]

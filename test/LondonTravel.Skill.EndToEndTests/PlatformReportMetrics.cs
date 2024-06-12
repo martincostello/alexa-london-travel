@@ -3,7 +3,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace LondonTravel.Skill.EndToEndTests;
+namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 
 /// <summary>
 /// See https://docs.aws.amazon.com/lambda/latest/dg/telemetry-schema-reference.html#ReportMetrics.

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <IsTestProject>true</IsTestProject>
     <NoWarn>$(NoWarn);CA1707;CA1711;SA1600;SA1601</NoWarn>
-    <RootNamespace>LondonTravel.Skill.EndToEndTests</RootNamespace>
+    <RootNamespace>MartinCostello.LondonTravel.Skill.EndToEndTests</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
