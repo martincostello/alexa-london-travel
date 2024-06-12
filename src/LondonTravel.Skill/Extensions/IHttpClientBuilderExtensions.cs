@@ -41,7 +41,7 @@ internal static class IHttpClientBuilderExtensions
             });
 
         // HACK Disable resilience if using AoT due to https://github.com/dotnet/extensions/issues/5062
-        if (System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported)
+        ////if (System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported)
         {
             builder.AddStandardResilienceHandler();
         }
