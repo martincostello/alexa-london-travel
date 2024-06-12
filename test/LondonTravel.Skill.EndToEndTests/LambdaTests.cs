@@ -6,9 +6,8 @@ using System.Text.Json;
 using Amazon;
 using Amazon.Lambda;
 using Amazon.Lambda.Model;
-using LondonTravel.Skill.EndToEndTests;
 
-namespace MartinCostello.LondonTravel.Skill;
+namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 
 [Collection(CloudWatchLogsFixtureCollection.Name)]
 public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper outputHelper)
