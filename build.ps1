@@ -71,7 +71,11 @@ if ($installDotNetSdk -eq $true) {
 function DotNetTest {
     param([string]$Project)
 
-    $additionalArgs = @()
+    $additionalArgs = @(
+      "--blame-hang",
+      "--blame-hang-timeout",
+      "60s"
+    )
 
     if (![string]::IsNullOrEmpty($env:GITHUB_SHA)) {
         $additionalArgs += "--logger"
