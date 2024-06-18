@@ -10,7 +10,7 @@ namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 
 public class SkillTests(ITestOutputHelper outputHelper)
 {
-    [SkippableTheory]
+    [SkippableTheory(Skip = "Simulator appears to be having issues.")]
     [InlineData("Alexa, ask London Travel if there is any disruption today.")]
     [InlineData("Alexa, ask London Travel about the DLR.")]
     [InlineData("Alexa, ask London Travel about the Elizabeth line.")]
