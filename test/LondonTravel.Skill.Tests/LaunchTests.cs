@@ -14,7 +14,7 @@ public class LaunchTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
         // Arrange
         var function = await CreateFunctionAsync();
 
-        var request = CreateRequest("LaunchRequest");
+        var request = CreateRequest<LaunchRequest>();
         var context = new TestLambdaContext();
 
         // Act

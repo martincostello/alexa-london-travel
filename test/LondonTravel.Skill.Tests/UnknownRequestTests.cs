@@ -15,12 +15,17 @@ public class UnknownRequestTests(ITestOutputHelper outputHelper) : FunctionTests
         var function = await CreateFunctionAsync();
         var context = new TestLambdaContext();
 
-        var request = CreateRequest("Unknown");
+        var request = CreateRequest<UnknownRequest>();
 
         // Act
         var actual = await function.HandlerAsync(request, context);
 
         // Assert
         AssertResponse(actual);
+    }
+
+    private sealed class UnknownRequest : Request
+    {
+        public override string Type => "Unknown";
     }
 }

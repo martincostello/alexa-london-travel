@@ -40,7 +40,11 @@ internal static class IHttpClientBuilderExtensions
                 client.Timeout = TimeSpan.FromSeconds(7.5);
             });
 
-        builder.AddStandardResilienceHandler();
+        // HACK Disable resilience if using AoT due to https://github.com/dotnet/extensions/issues/5062
+        if (System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported)
+        {
+            builder.AddStandardResilienceHandler();
+        }
 
         return builder;
     }
