@@ -138,7 +138,15 @@ if (-Not $SkipTests) {
         $projectName = [System.IO.Path]::GetFileName($projectName)
         $testBinary = (Join-Path $solutionPath "artifacts" "publish" $projectName $Configuration.ToLowerInvariant() $projectName)
 
-        & $testBinary
+        $additionalArgs = @(
+            "--hangdump",
+            "--hangdump-filename",
+            "$projectName.${env:GITHUB_RUN_NUMBER}.${env:GITHUB_RUN_ATTEMPT}.hang.dmp",
+            "--hangdump-timeout",
+            "60s"
+        )
+
+        & $testBinary $additionalArgs
 
         if ($LASTEXITCODE -ne 0) {
             throw "Native AoT tests for $projectName failed with exit code $LASTEXITCODE"
