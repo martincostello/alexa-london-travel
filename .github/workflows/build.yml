@@ -90,7 +90,7 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
 
     - name: Publish artifacts
-      uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+      uses: actions/upload-artifact@89ef406dd8d7e03cfd12d9e0a4a378f454709029 # v4.3.5
       with:
         name: artifacts-${{ matrix.os_name }}
         path: ./artifacts
@@ -116,7 +116,7 @@ jobs:
         subject-path: ./artifacts/${{ env.LAMBDA_FUNCTION }}.zip
 
     - name: Publish deployment package
-      uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+      uses: actions/upload-artifact@89ef406dd8d7e03cfd12d9e0a4a378f454709029 # v4.3.5
       if: runner.os == 'Linux' && success()
       with:
         name: ${{ env.ARTIFACT_NAME }}
