@@ -17,7 +17,6 @@
   <ItemGroup>
     <Compile Include="..\LondonTravel.Skill.Tests\HttpClientInterceptorOptionsExtensions.cs" Link="HttpClientInterceptorOptionsExtensions.cs" />
     <Compile Include="..\LondonTravel.Skill.Tests\HttpRequestInterceptionFilter.cs" Link="HttpRequestInterceptionFilter.cs" />
-    <Content Include="..\LondonTravel.Skill.Tests\testsettings.json" Link="testsettings.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <EmbeddedResource Include="..\LondonTravel.Skill.Tests\Bundles\*.json" LinkBase="Bundles" />
   </ItemGroup>
   <ItemGroup>
