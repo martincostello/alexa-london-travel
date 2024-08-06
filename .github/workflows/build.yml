@@ -47,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-latest, ubuntu-latest, windows-latest ]
+        os: [ ubuntu-latest ]
         include:
           #- os: macos-latest
           #  os_name: macos
