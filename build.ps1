@@ -138,6 +138,9 @@ if (-Not $SkipTests) {
         $projectName = [System.IO.Path]::GetFileName($projectName)
         $testBinary = (Join-Path $solutionPath "artifacts" "publish" $projectName $Configuration.ToLowerInvariant() $projectName)
 
+        Copy-Item /usr/share/dotnet/shared/Microsoft.NETCore.App/8.0.7/createdump /home/runner/work/alexa-london-travel/alexa-london-travel/artifacts/publish/LondonTravel.Skill.NativeAotTests/release/createdump
+        chmod +x /home/runner/work/alexa-london-travel/alexa-london-travel/artifacts/publish/LondonTravel.Skill.NativeAotTests/release/createdump
+
         while ($True) {
 
             $process = Start-Process -FilePath $testBinary -PassThru
