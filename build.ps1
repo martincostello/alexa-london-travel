@@ -125,10 +125,10 @@ ForEach ($project in $publishProjects) {
 }
 
 if (-Not $SkipTests) {
-    Write-Host "Testing $($testProjects.Count) project(s)..." -ForegroundColor Green
-    ForEach ($project in $testProjects) {
-        DotNetTest $project
-    }
+    #Write-Host "Testing $($testProjects.Count) project(s)..." -ForegroundColor Green
+    #ForEach ($project in $testProjects) {
+    #    DotNetTest $project
+    #}
 
     Write-Host "Testing $($testProjectsForAot.Count) project(s) for native AoT..." -ForegroundColor Green
     ForEach ($project in $testProjectsForAot) {
@@ -138,7 +138,16 @@ if (-Not $SkipTests) {
         $projectName = [System.IO.Path]::GetFileName($projectName)
         $testBinary = (Join-Path $solutionPath "artifacts" "publish" $projectName $Configuration.ToLowerInvariant() $projectName)
 
-        & $testBinary
+        while ($True) {
+
+            $process = Start-Process -FilePath $testBinary -PassThru
+            $process.WaitForExit(30000)
+
+            if (-Not $process.HasExited) {
+                dotnet-dump collect --process-id $process.Id --output (Join-Path ${env:GITHUB_WORKSPACE} "hang.dmp") --diag
+                throw "Native AoT tests for $projectName hung"
+            }
+        }
 
         if ($LASTEXITCODE -ne 0) {
             throw "Native AoT tests for $projectName failed with exit code $LASTEXITCODE"

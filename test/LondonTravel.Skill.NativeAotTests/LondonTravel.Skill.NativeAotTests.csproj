@@ -1,5 +1,6 @@
 <Project Sdk="MSTest.Sdk">
   <PropertyGroup>
+    <EventSourceSupport>true</EventSourceSupport>
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
     <NoWarn>$(NoWarn);CA1062;CA1707;CA2007;CA2234;SA1600</NoWarn>
     <PublishAot>!$([MSBuild]::ValueOrDefault('$(BuildingInsideVisualStudio)', 'false'))</PublishAot>
