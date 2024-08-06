@@ -82,6 +82,9 @@ jobs:
     - name: Install dotnet-dump
       run: dotnet tool install --global dotnet-dump
 
+    - name: Find createdump
+      run: find /usr/share/dotnet -name createdump
+
     - name: Build, Test and Package
       id: build
       shell: pwsh
