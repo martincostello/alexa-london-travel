@@ -147,6 +147,7 @@ if (-Not $SkipTests) {
             $process.WaitForExit(30000)
 
             if (-Not $process.HasExited) {
+                dotnet-stack report --process-id $process.Id
                 dotnet-dump collect --process-id $process.Id --output (Join-Path ${env:GITHUB_WORKSPACE} "hang.dmp") --diag
                 throw "Native AoT tests for $projectName hung"
             }
