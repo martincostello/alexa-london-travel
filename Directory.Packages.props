@@ -8,8 +8,8 @@
     <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.10.0" />
     <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.3" />
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="2.0.0" />
-    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="3.7.303.8" />
-    <PackageVersion Include="AWSSDK.Lambda" Version="3.7.303.37" />
+    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="3.7.401.1" />
+    <PackageVersion Include="AWSSDK.Lambda" Version="3.7.400.3" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.2" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="4.3.0" />
