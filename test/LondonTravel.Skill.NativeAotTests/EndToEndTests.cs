@@ -357,7 +357,6 @@ public sealed class EndToEndTests
 
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddLogging((builder) => builder.AddConsole());
             services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
                 (_) =>
                 {
