@@ -299,7 +299,7 @@ public sealed class EndToEndTests
 
         void Configure(IServiceCollection services)
         {
-            services.AddLogging((builder) => builder.AddConsole());
+            services.AddLogging((builder) => builder.AddConsole().SetMinimumLevel(LogLevel.Warning));
             services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
                 (_) => new HttpRequestInterceptionFilter(Interceptor));
         }
@@ -352,22 +352,32 @@ public sealed class EndToEndTests
         protected override void Configure(ConfigurationBuilder builder)
         {
             base.Configure(builder);
-            builder.AddJsonFile("testsettings.json");
+
+            var config = new Dictionary<string, string?>()
+            {
+                ["Logging:LogLevel:Default"] = "Warning",
+                ["Skill:SkillApiUrl"] = "https://londontravel.martincostello.local/",
+                ["Skill:SkillId"] = "my-skill-id",
+                ["Skill:TflApiUrl"] = "https://api.tfl.gov.uk/",
+                ["Skill:TflApplicationId"] = "my-tfl-app-id",
+                ["Skill:TflApplicationKey"] = "my-tfl-app-key",
+                ["Skill:VerifySkillId"] = "true",
+            };
+
+            builder.AddInMemoryCollection(config);
         }
 
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddLogging((builder) => builder.AddConsole());
-            services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
-                (_) =>
-                {
-                    var options = new HttpClientInterceptorOptions()
-                        .ThrowsOnMissingRegistration()
-                        .RegisterBundleFromResourceStream<EndToEndTests>("tfl-no-disruptions.json")
-                        .RegisterBundleFromResourceStream<EndToEndTests>("tfl-line-statuses.json");
+            services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>((_) =>
+            {
+                var options = new HttpClientInterceptorOptions()
+                    .ThrowsOnMissingRegistration()
+                    .RegisterBundleFromResourceStream<EndToEndTests>("tfl-no-disruptions.json")
+                    .RegisterBundleFromResourceStream<EndToEndTests>("tfl-line-statuses.json");
 
-                    return new HttpRequestInterceptionFilter(options);
-                });
+                return new HttpRequestInterceptionFilter(options);
+            });
 
             base.ConfigureServices(services);
         }
