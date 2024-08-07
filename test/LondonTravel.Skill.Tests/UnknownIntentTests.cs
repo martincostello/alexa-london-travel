@@ -30,4 +30,9 @@ public class UnknownIntentTests(ITestOutputHelper outputHelper) : FunctionTests(
         response.OutputSpeech.Type.ShouldBe("SSML");
         response.OutputSpeech.Ssml.ShouldBe("<speak>Sorry, I don't understand how to do that.</speak>");
     }
+
+    private sealed class UnknownRequest : Request
+    {
+        public override string Type => "Unknown";
+    }
 }

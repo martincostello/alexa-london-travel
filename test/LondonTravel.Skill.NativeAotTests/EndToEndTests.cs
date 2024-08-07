@@ -132,7 +132,7 @@ public sealed class EndToEndTests
     public async Task Alexa_Function_Can_Process_Launch_Request()
     {
         // Arrange
-        var request = CreateRequest("LaunchRequest");
+        var request = CreateRequest<LaunchRequest>();
 
         // Act
         var actual = await ProcessRequestAsync(request);
@@ -153,7 +153,7 @@ public sealed class EndToEndTests
     public async Task Alexa_Function_Can_Process_Session_Ended_Request()
     {
         // Arrange
-        var session = new Request()
+        var session = new SessionEndedRequest()
         {
             Reason = Reason.ExceededMaxReprompts,
             Error = new()
@@ -163,7 +163,7 @@ public sealed class EndToEndTests
             },
         };
 
-        var request = CreateRequest("SessionEndedRequest", session);
+        var request = CreateRequest(session);
 
         // Act
         var actual = await ProcessRequestAsync(request);
@@ -184,7 +184,7 @@ public sealed class EndToEndTests
     public async Task Alexa_Function_Can_Process_System_Exception_Request()
     {
         // Arrange
-        var exception = new Request()
+        var exception = new SystemExceptionRequest()
         {
             Error = new()
             {
@@ -197,7 +197,7 @@ public sealed class EndToEndTests
             },
         };
 
-        var request = CreateRequest("System.ExceptionEncountered", exception);
+        var request = CreateRequest(exception);
 
         // Act
         var actual = await ProcessRequestAsync(request);
@@ -215,7 +215,7 @@ public sealed class EndToEndTests
 
     private static SkillRequest CreateIntentRequest(string name, params Slot[] slots)
     {
-        var request = new Request()
+        var request = new IntentRequest()
         {
             Intent = new Intent()
             {
@@ -233,10 +233,11 @@ public sealed class EndToEndTests
             }
         }
 
-        return CreateRequest("IntentRequest", request);
+        return CreateRequest(request);
     }
 
-    private static SkillRequest CreateRequest(string type, Request? request = null)
+    private static SkillRequest CreateRequest<T>(T? request = null)
+        where T : Request, new()
     {
         var application = new Application()
         {
@@ -265,7 +266,7 @@ public sealed class EndToEndTests
                     User = user,
                 },
             },
-            Request = request ?? new(),
+            Request = request ?? new T(),
             Session = new()
             {
                 Application = application,
@@ -276,7 +277,6 @@ public sealed class EndToEndTests
             Version = "1.0",
         };
 
-        result.Request.Type = type;
         result.Request.Locale = "en-GB";
 
         return result;

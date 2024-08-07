@@ -49,12 +49,12 @@ internal sealed class FunctionHandler(AlexaSkill skill, SkillConfiguration confi
     {
         try
         {
-            return request.Request.Type switch
+            return request.Request switch
             {
-                RequestTypes.Intent => await skill.OnIntentAsync(request.Request, request.Session),
-                RequestTypes.Launch => skill.OnLaunch(request.Session),
-                RequestTypes.SessionEnded => skill.OnSessionEnded(request.Session),
-                RequestTypes.SystemException => skill.OnError(request.Request, request.Session),
+                IntentRequest intent => await skill.OnIntentAsync(intent, request.Session),
+                LaunchRequest => skill.OnLaunch(request.Session),
+                SessionEndedRequest => skill.OnSessionEnded(request.Session),
+                SystemExceptionRequest exception => skill.OnError(exception, request.Session),
                 _ => skill.OnError(null, request.Session, request.Request.Type),
             };
         }
