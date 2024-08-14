@@ -10,7 +10,7 @@ public sealed class SessionEndedRequest : Request
     [JsonIgnore]
     public override string Type => "SessionEndedRequest";
 
-    [JsonConverter(typeof(StringEnumConverter<Reason>))]
+    [JsonConverter(typeof(StringEnumConverter))]
     [JsonPropertyName("reason")]
     public Reason Reason { get; set; }
 

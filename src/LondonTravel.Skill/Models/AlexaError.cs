@@ -7,7 +7,7 @@ namespace MartinCostello.LondonTravel.Skill.Models;
 
 public sealed class AlexaError
 {
-    [JsonConverter(typeof(StringEnumConverter<AlexaErrorType>))]
+    [JsonConverter(typeof(StringEnumConverter))]
     [JsonPropertyName("type")]
     public AlexaErrorType Type { get; set; } = default!;
 
