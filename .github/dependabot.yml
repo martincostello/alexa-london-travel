@@ -20,10 +20,6 @@ updates:
     Microsoft.Extensions:
       patterns:
         - Microsoft.Extensions.*
-    MSTest:
-      patterns:
-        - MSTest.Sdk
-        - MSTest.TestFramework
     OpenTelemetry:
       patterns:
         - OpenTelemetry*
