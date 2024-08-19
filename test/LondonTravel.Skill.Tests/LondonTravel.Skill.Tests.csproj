@@ -10,6 +10,7 @@
     <ProjectReference Include="..\..\src\LondonTravel.Skill\LondonTravel.Skill.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.Core" />
     <PackageReference Include="Amazon.Lambda.TestUtilities" />
     <PackageReference Include="coverlet.msbuild" />
     <PackageReference Include="GitHubActionsTestLogger" NoWarn="RT0003" />
