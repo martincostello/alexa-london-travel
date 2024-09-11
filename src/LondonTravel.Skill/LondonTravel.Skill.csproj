@@ -9,7 +9,7 @@
     <NoWarn>$(NoWarn);CA1822</NoWarn>
     <OptimizationPreference>Speed</OptimizationPreference>
     <OutputType>Exe</OutputType>
-    <PublishAot>true</PublishAot>
+    <PublishAot>false</PublishAot>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
     <TieredCompilation>false</TieredCompilation>
