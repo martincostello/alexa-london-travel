@@ -112,7 +112,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         services.AddLogging((builder) =>
         {
             builder.AddConfiguration(configuration.GetSection("Logging"));
-            ////builder.AddJsonConsole();
+            builder.AddJsonConsole();
         });
 
         services.AddHttpClients();
