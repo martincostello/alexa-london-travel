@@ -12,6 +12,8 @@ internal static class PlatformEventType
 
     public const string Initialize = "platform.initStart";
 
+    public const string InitializeReport = "platform.initReport";
+
     public const string InitializeRuntimeDone = "platform.initRuntimeDone";
 
     public const string Report = "platform.report";

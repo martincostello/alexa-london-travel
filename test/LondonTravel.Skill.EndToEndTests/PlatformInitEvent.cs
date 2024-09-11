@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 
 /// <summary>
-/// See https://docs.aws.amazon.com/lambda/latest/dg/telemetry-schema-reference.html#platform-initReport.
+/// See https://docs.aws.amazon.com/lambda/latest/dg/telemetry-schema-reference.html#platform-initStart.
 /// </summary>
 internal sealed class PlatformInitEvent : PlatformEvent
 {
