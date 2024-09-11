@@ -31,7 +31,7 @@ public sealed class Request : IRequest, IIntentRequest, ISessionEndedRequest, IS
 
     //// Properties for "SessionEndedRequest"
 
-    [JsonConverter(typeof(CustomStringEnumConverter<Reason>))]
+    [JsonConverter(typeof(JsonStringEnumConverter<Reason>))]
     [JsonPropertyName("reason")]
     public Reason Reason { get; set; }
 
