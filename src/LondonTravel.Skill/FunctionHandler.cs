@@ -24,6 +24,8 @@ internal sealed class FunctionHandler(AlexaSkill skill, SkillConfiguration confi
     /// </returns>
     public async Task<SkillResponse> HandleAsync(SkillRequest request)
     {
+        Console.WriteLine("FunctionHandler.HandleAsync()");
+
         VerifySkillId(request);
 
         var previousCulture = SetLocale(request);

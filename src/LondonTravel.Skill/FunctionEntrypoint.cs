@@ -28,6 +28,8 @@ public static class FunctionEntrypoint
         CancellationToken cancellationToken = default)
         where T : AlexaFunction, new()
     {
+        Console.WriteLine("RunAsync()");
+
         var serializer = new AppLambdaSerializer();
         await using var function = new T();
 
@@ -36,6 +38,8 @@ public static class FunctionEntrypoint
             .UseBootstrapHandler(function.InitializeAsync)
             .UseHttpClient(httpClient)
             .Build();
+
+        Console.WriteLine("Created LambdaBootstrap.");
 
         await bootstrap.RunAsync(cancellationToken);
     }
@@ -47,5 +51,9 @@ public static class FunctionEntrypoint
     /// A <see cref="Task"/> representing the asynchronous operation to run the custom runtime.
     /// </returns>
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    private static async Task Main() => await RunAsync<AlexaFunction>();
+    private static async Task Main()
+    {
+        Console.WriteLine("Main()");
+        await RunAsync<AlexaFunction>();
+    }
 }

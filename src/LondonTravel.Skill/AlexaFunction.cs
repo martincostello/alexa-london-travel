@@ -62,6 +62,8 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     /// </returns>
     public async Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
     {
+        Console.WriteLine("AlexaFunction.HandlerAsync().");
+
         EnsureInitialized();
         return await OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.TraceAsync(
             _serviceProvider.GetRequiredService<OpenTelemetry.Trace.TracerProvider>(),
@@ -79,6 +81,8 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     [MemberNotNull(nameof(_serviceProvider))]
     public Task<bool> InitializeAsync()
     {
+        Console.WriteLine("AlexaFunction.InitializeAsync().");
+
         _serviceProvider ??= CreateServiceProvider();
         return Task.FromResult(true);
     }
@@ -89,6 +93,8 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     /// <param name="builder">The configuration builder to configure.</param>
     protected virtual void Configure(ConfigurationBuilder builder)
     {
+        Console.WriteLine("AlexaFunction.Configure().");
+
         builder.AddJsonFile("appsettings.json", optional: true)
                .AddJsonFile("appsettings.Production.json", optional: true)
                .AddEnvironmentVariables();
@@ -100,6 +106,8 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     /// <param name="services">The service collection to configure.</param>
     protected virtual void ConfigureServices(IServiceCollection services)
     {
+        Console.WriteLine("AlexaFunction.ConfigureServices().");
+
         var builder = new ConfigurationBuilder();
 
         Configure(builder);
@@ -149,6 +157,8 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
 
     private async Task<SkillResponse> HandlerCoreAsync(SkillRequest request, ILambdaContext context)
     {
+        Console.WriteLine("AlexaFunction.HandlerCoreAsync().");
+
         var handler = _serviceProvider!.GetRequiredService<FunctionHandler>();
         var logger = _serviceProvider!.GetRequiredService<ILogger<AlexaFunction>>();
 
@@ -161,6 +171,8 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
 
     private ServiceProvider CreateServiceProvider()
     {
+        Console.WriteLine("AlexaFunction.CreateServiceProvider().");
+
         var services = new ServiceCollection();
 
         ConfigureServices(services);
