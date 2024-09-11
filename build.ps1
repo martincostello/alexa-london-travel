@@ -109,7 +109,6 @@ $testProjects = @(
 )
 
 $testProjectsForAot = @(
-    (Join-Path $solutionPath "test" "LondonTravel.Skill.NativeAotTests" "LondonTravel.Skill.NativeAotTests.csproj")
 )
 
 $publishProjects = @(
