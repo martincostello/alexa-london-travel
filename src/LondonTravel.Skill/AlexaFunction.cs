@@ -90,6 +90,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     protected virtual void Configure(ConfigurationBuilder builder)
     {
         builder.AddJsonFile("appsettings.json", optional: true)
+               .AddJsonFile("appsettings.Production.json", optional: true)
                .AddEnvironmentVariables();
     }
 
