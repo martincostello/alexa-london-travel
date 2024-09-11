@@ -8,16 +8,20 @@ namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 /// <summary>
 /// See https://docs.aws.amazon.com/lambda/latest/dg/telemetry-schema-reference.html#telemetry-api-events.
 /// </summary>
-//// TODO Make polymorphic for .NET 9 with AllowOutOfOrderMetadataProperties = true
-////[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-internal sealed class PlatformEvent
+[JsonDerivedType(typeof(PlatformExtensionEvent), PlatformEventType.Extension)]
+[JsonDerivedType(typeof(PlatformInitEvent), PlatformEventType.Initialize)]
+[JsonDerivedType(typeof(PlatformInitReportEvent), PlatformEventType.InitializeReport)]
+[JsonDerivedType(typeof(PlatformInitRuntimeDoneEvent), PlatformEventType.InitializeRuntimeDone)]
+[JsonDerivedType(typeof(PlatformReportEvent), PlatformEventType.Report)]
+[JsonDerivedType(typeof(PlatformRuntimeDoneEvent), PlatformEventType.RuntimeDone)]
+[JsonDerivedType(typeof(PlatformStartEvent), PlatformEventType.Start)]
+[JsonDerivedType(typeof(PlatformTelemetrySubscriptionEvent), PlatformEventType.TelemetrySubscription)]
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+internal abstract class PlatformEvent
 {
     [JsonPropertyName("time")]
     public DateTime Timestamp { get; set; }
 
-    [JsonPropertyName("type")]
-    public string Type { get; set; } = default!;
-
-    [JsonPropertyName("record")]
-    public PlatformLogRecord? Record { get; set; }
+    [JsonIgnore]
+    public abstract string Type { get; }
 }
