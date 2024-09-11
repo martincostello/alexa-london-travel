@@ -6,12 +6,12 @@ using System.Text.Json.Serialization;
 namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 
 /// <summary>
-/// See https://docs.aws.amazon.com/lambda/latest/dg/telemetry-schema-reference.html#platform-initStart.
+/// See https://docs.aws.amazon.com/lambda/latest/dg/telemetry-schema-reference.html#platform-initReport.
 /// </summary>
-internal sealed class PlatformInitEvent : PlatformEvent
+internal sealed class PlatformInitReportEvent : PlatformEvent
 {
-    public override string Type => PlatformEventType.Initialize;
+    public override string Type => PlatformEventType.InitializeReport;
 
     [JsonPropertyName("record")]
-    public PlatformInitStart Record { get; set; } = default!;
+    public PlatformInitReport Record { get; set; } = default!;
 }
