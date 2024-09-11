@@ -16,6 +16,8 @@ internal static class PlatformEventType
 
     public const string Report = "platform.report";
 
+    public const string RuntimeDone = "platform.runtimeDone";
+
     public const string Start = "platform.start";
 
     public const string TelemetrySubscription = "platform.telemetrySubscription";
