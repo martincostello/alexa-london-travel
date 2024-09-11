@@ -10,6 +10,7 @@ namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 /// </summary>
 [JsonDerivedType(typeof(PlatformExtensionEvent), PlatformEventType.Extension)]
 [JsonDerivedType(typeof(PlatformInitEvent), PlatformEventType.Initialize)]
+[JsonDerivedType(typeof(PlatformInitRuntimeDoneEvent), PlatformEventType.InitializeRuntimeDone)]
 [JsonDerivedType(typeof(PlatformReportEvent), PlatformEventType.Report)]
 [JsonDerivedType(typeof(PlatformStartEvent), PlatformEventType.Start)]
 [JsonDerivedType(typeof(PlatformTelemetrySubscriptionEvent), PlatformEventType.TelemetrySubscription)]
