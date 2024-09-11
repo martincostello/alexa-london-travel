@@ -189,11 +189,21 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
     {
         parsed = default;
 
-        if (JsonSerializer.Deserialize(log.Message, PlatformJsonSerializationContext.Default.PlatformEvent) is not { } @event ||
-            @event.Type is not PlatformEventType.Report ||
-            @event.Record is not { } record ||
-            record.Metrics is not { } metrics ||
-            record.RequestId is not { Length: > 0 } requestId)
+        PlatformEvent? @event;
+
+        try
+        {
+            @event = JsonSerializer.Deserialize(log.Message, PlatformJsonSerializationContext.Default.PlatformEvent);
+        }
+        catch (NotSupportedException)
+        {
+            // Missing the type discriminator, so not a platform event
+            return false;
+        }
+
+        if (@event is not PlatformReportEvent report ||
+            report.Record.Metrics is not { } metrics ||
+            report.Record.RequestId is not { Length: > 0 } requestId)
         {
             return false;
         }
@@ -237,7 +247,7 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
                    .AppendLine();
         }
 
-        if (record.Tracing?.Value is { Length: > 0 } traceValue &&
+        if (report.Record.Tracing?.Value is { Length: > 0 } traceValue &&
             traceValue.Split(';') is { Length: > 0 } values)
         {
             const string RootPrefix = "Root=";
