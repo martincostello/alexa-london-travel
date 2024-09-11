@@ -7,16 +7,20 @@
     <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
     <InvariantGlobalization>true</InvariantGlobalization>
     <NoWarn>$(NoWarn);CA1822</NoWarn>
+    <!--
     <OptimizationPreference>Speed</OptimizationPreference>
+    -->
     <OutputType>Exe</OutputType>
-    <PublishAot>false</PublishAot>
+    <PublishAot>true</PublishAot>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
     <TieredCompilation>false</TieredCompilation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(PublishForAWSLambda)' == 'true' ">
     <AssemblyName>bootstrap</AssemblyName>
+    <!--
     <IlcInstructionSet>armv8.2-a</IlcInstructionSet>
+    -->
     <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
     <SelfContained>true</SelfContained>
   </PropertyGroup>
