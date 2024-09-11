@@ -62,8 +62,6 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     /// </returns>
     public async Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
     {
-        Console.WriteLine("AlexaFunction.HandlerAsync()");
-
         EnsureInitialized();
         return await OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.TraceAsync(
             _serviceProvider.GetRequiredService<OpenTelemetry.Trace.TracerProvider>(),
@@ -81,16 +79,8 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     [MemberNotNull(nameof(_serviceProvider))]
     public Task<bool> InitializeAsync()
     {
-        Console.WriteLine("AlexaFunction.InitializeAsync()::Start");
-        try
-        {
-            _serviceProvider ??= CreateServiceProvider();
-            return Task.FromResult(true);
-        }
-        finally
-        {
-            Console.WriteLine("AlexaFunction.InitializeAsync()::End");
-        }
+        _serviceProvider ??= CreateServiceProvider();
+        return Task.FromResult(true);
     }
 
     /// <summary>
@@ -99,17 +89,9 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     /// <param name="builder">The configuration builder to configure.</param>
     protected virtual void Configure(ConfigurationBuilder builder)
     {
-        Console.WriteLine("AlexaFunction.Configure()::Start");
-        try
-        {
-            builder.AddJsonFile("appsettings.json", optional: true)
-                   .AddJsonFile("appsettings.Production.json", optional: true)
-                   .AddEnvironmentVariables();
-        }
-        finally
-        {
-            Console.WriteLine("AlexaFunction.Configure()::End");
-        }
+        builder.AddJsonFile("appsettings.json", optional: true)
+               .AddJsonFile("appsettings.Production.json", optional: true)
+               .AddEnvironmentVariables();
     }
 
     /// <summary>
@@ -118,61 +100,37 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     /// <param name="services">The service collection to configure.</param>
     protected virtual void ConfigureServices(IServiceCollection services)
     {
-        Console.WriteLine("AlexaFunction.ConfigureServices()::Start");
+        var builder = new ConfigurationBuilder();
 
-        try
+        Configure(builder);
+
+        var configuration = builder.Build();
+
+        services.AddOptions();
+        services.Configure<SkillConfiguration>(configuration.GetSection("Skill"));
+
+        services.AddLogging((builder) =>
         {
-            var builder = new ConfigurationBuilder();
+            builder.AddConfiguration(configuration.GetSection("Logging"));
+            builder.AddJsonConsole();
+        });
 
-            Configure(builder);
+        services.AddHttpClients();
+        services.AddTelemetry();
 
-            Console.WriteLine("AlexaFunction.ConfigureServices()::1");
+        services.AddSingleton<AlexaSkill>();
+        services.AddSingleton<FunctionHandler>();
+        services.AddSingleton<IntentFactory>();
+        services.AddSingleton<IValidateOptions<SkillConfiguration>, ValidateSkillConfiguration>();
+        services.AddSingleton((p) => p.GetRequiredService<IOptions<SkillConfiguration>>().Value);
 
-            var configuration = builder.Build();
+        services.AddSingleton<EmptyIntent>();
+        services.AddSingleton<HelpIntent>();
+        services.AddSingleton<UnknownIntent>();
 
-            Console.WriteLine("AlexaFunction.ConfigureServices()::2");
-
-            services.AddOptions();
-            services.Configure<SkillConfiguration>(configuration.GetSection("Skill"));
-
-            Console.WriteLine("AlexaFunction.ConfigureServices()::3");
-
-            services.AddLogging((builder) =>
-            {
-                builder.AddConfiguration(configuration.GetSection("Logging"));
-                builder.AddJsonConsole();
-            });
-
-            Console.WriteLine("AlexaFunction.ConfigureServices()::4");
-
-            services.AddHttpClients();
-            services.AddTelemetry();
-
-            Console.WriteLine("AlexaFunction.ConfigureServices()::5");
-
-            services.AddSingleton<AlexaSkill>();
-            services.AddSingleton<FunctionHandler>();
-            services.AddSingleton<IntentFactory>();
-            services.AddSingleton<IValidateOptions<SkillConfiguration>, ValidateSkillConfiguration>();
-            services.AddSingleton((p) => p.GetRequiredService<IOptions<SkillConfiguration>>().Value);
-            services.AddSingleton(configuration);
-
-            Console.WriteLine("AlexaFunction.ConfigureServices()::6");
-
-            services.AddSingleton<EmptyIntent>();
-            services.AddSingleton<HelpIntent>();
-            services.AddSingleton<UnknownIntent>();
-
-            services.AddTransient<CommuteIntent>();
-            services.AddTransient<DisruptionIntent>();
-            services.AddTransient<StatusIntent>();
-
-            Console.WriteLine("AlexaFunction.ConfigureServices()::7");
-        }
-        finally
-        {
-            Console.WriteLine("AlexaFunction.ConfigureServices()::End");
-        }
+        services.AddTransient<CommuteIntent>();
+        services.AddTransient<DisruptionIntent>();
+        services.AddTransient<StatusIntent>();
     }
 
     protected virtual void Dispose(bool disposing)
@@ -190,41 +148,23 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
 
     private async Task<SkillResponse> HandlerCoreAsync(SkillRequest request, ILambdaContext context)
     {
-        Console.WriteLine("AlexaFunction.HandlerCoreAsync()::Start");
+        var handler = _serviceProvider!.GetRequiredService<FunctionHandler>();
+        var logger = _serviceProvider!.GetRequiredService<ILogger<AlexaFunction>>();
 
-        try
-        {
-            var handler = _serviceProvider!.GetRequiredService<FunctionHandler>();
-            var logger = _serviceProvider!.GetRequiredService<ILogger<AlexaFunction>>();
+        using var activity = SkillTelemetry.ActivitySource.StartActivity("Skill Request");
 
-            using var activity = SkillTelemetry.ActivitySource.StartActivity("Skill Request");
+        Log.InvokingSkillRequest(logger, request.Request.Type);
 
-            Log.InvokingSkillRequest(logger, request.Request.Type);
-
-            return await handler.HandleAsync(request);
-        }
-        finally
-        {
-            Console.WriteLine("AlexaFunction.HandlerCoreAsync()::End");
-        }
+        return await handler.HandleAsync(request);
     }
 
     private ServiceProvider CreateServiceProvider()
     {
-        Console.WriteLine("AlexaFunction.CreateServiceProvider()::Start");
+        var services = new ServiceCollection();
 
-        try
-        {
-            var services = new ServiceCollection();
+        ConfigureServices(services);
 
-            ConfigureServices(services);
-
-            return services.BuildServiceProvider();
-        }
-        finally
-        {
-            Console.WriteLine("AlexaFunction.CreateServiceProvider()::End");
-        }
+        return services.BuildServiceProvider();
     }
 
     [MemberNotNull(nameof(_serviceProvider))]
