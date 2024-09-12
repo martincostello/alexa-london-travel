@@ -15,12 +15,16 @@ public sealed class AppLambdaSerializer() : SourceGeneratorLambdaJsonSerializer<
     {
         try
         {
-            Console.WriteLine(Convert.ToBase64String(utf8Json));
-            return base.InternalDeserialize<T>(utf8Json);
+            Console.WriteLine($"Request: {Convert.ToBase64String(utf8Json)}");
+            var result = base.InternalDeserialize<T>(utf8Json);
+
+            Console.WriteLine($"Request: {result.GetType()}");
+
+            return result;
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.ToString());
+            Console.WriteLine(ex);
             throw;
         }
     }
@@ -29,21 +33,23 @@ public sealed class AppLambdaSerializer() : SourceGeneratorLambdaJsonSerializer<
     {
         try
         {
+            Console.WriteLine($"Response: {response.GetType()}");
+
             using (var stream = new MemoryStream())
             {
                 using var writer2 = new Utf8JsonWriter(stream, WriterOptions);
                 base.InternalSerialize(writer2, response);
                 stream.Position = 0L;
-
-                Console.WriteLine(Convert.ToBase64String(stream.ToArray()));
+                Console.WriteLine($"Response: {Convert.ToBase64String(stream.ToArray())}");
             }
 
-            Console.WriteLine(response.GetType().ToString());
             base.InternalSerialize(writer, response);
+
+            Console.WriteLine("Response serialized");
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.ToString());
+            Console.WriteLine(ex);
             throw;
         }
     }
