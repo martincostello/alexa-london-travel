@@ -43,6 +43,7 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
     <PackageReference Include="Polly.Extensions" />
     <PackageReference Include="Polly.RateLimiting" />
+    <PackageReference Include="runtime.linux-x64.Microsoft.DotNet.ILCompiler" />
     <PackageReference Include="System.Text.Json" />
   </ItemGroup>
   <ItemGroup>
