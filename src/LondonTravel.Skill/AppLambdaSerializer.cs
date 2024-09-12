@@ -10,4 +10,19 @@ public sealed class AppLambdaSerializer() : SourceGeneratorLambdaJsonSerializer<
 {
     protected override JsonSerializerOptions CreateDefaultJsonSerializationOptions()
         => new(AppJsonSerializerContext.Default.Options);
+
+    protected override T InternalDeserialize<T>(byte[] utf8Json)
+    {
+        using var document = JsonDocument.Parse(utf8Json);
+
+        Console.WriteLine(document.RootElement.ToString());
+
+        return base.InternalDeserialize<T>(utf8Json);
+    }
+
+    protected override void InternalSerialize<T>(Utf8JsonWriter writer, T response)
+    {
+        Console.WriteLine(response.GetType().ToString());
+        base.InternalSerialize(writer, response);
+    }
 }
