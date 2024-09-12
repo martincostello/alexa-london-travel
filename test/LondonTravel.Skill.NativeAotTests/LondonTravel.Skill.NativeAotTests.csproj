@@ -12,6 +12,8 @@
   <ItemGroup>
     <PackageReference Include="JustEat.HttpClientInterception" />
     <PackageReference Include="MartinCostello.Testing.AwsLambdaTestServer" />
+    <PackageReference Include="Microsoft.Dotnet.ILCompiler" />
+    <PackageReference Include="runtime.linux-x64.Microsoft.DotNet.ILCompiler" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\LondonTravel.Skill.Tests\HttpClientInterceptorOptionsExtensions.cs" Link="HttpClientInterceptorOptionsExtensions.cs" />
