@@ -60,10 +60,10 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     /// <returns>
     /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the skill's response.
     /// </returns>
-    public SkillResponse HandlerAsync(SkillRequest request, ILambdaContext context)
+    public async Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
     {
         EnsureInitialized();
-        return OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.Trace(
+        return await OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.Trace(
             _serviceProvider.GetRequiredService<OpenTelemetry.Trace.TracerProvider>(),
             HandlerCoreAsync,
             request,
@@ -113,7 +113,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         services.AddLogging((builder) =>
         {
             builder.AddConfiguration(configuration.GetSection("Logging"));
-            ////builder.AddJsonConsole();
+            builder.AddJsonConsole();
         });
 
         services.AddHttpClients();
@@ -148,7 +148,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         }
     }
 
-    private SkillResponse HandlerCoreAsync(SkillRequest request, ILambdaContext context)
+    private async Task<SkillResponse> HandlerCoreAsync(SkillRequest request, ILambdaContext context)
     {
         var handler = _serviceProvider!.GetRequiredService<FunctionHandler>();
         var logger = _serviceProvider!.GetRequiredService<ILogger<AlexaFunction>>();
@@ -157,7 +157,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
 
         Log.InvokingSkillRequest(logger, request.Request.Type);
 
-        return handler.HandleAsync(request).GetAwaiter().GetResult();
+        return await handler.HandleAsync(request);
     }
 
     private ServiceProvider CreateServiceProvider()
