@@ -13,10 +13,7 @@ public sealed class AppLambdaSerializer() : SourceGeneratorLambdaJsonSerializer<
 
     protected override T InternalDeserialize<T>(byte[] utf8Json)
     {
-        using var document = JsonDocument.Parse(utf8Json);
-
-        Console.WriteLine(document.RootElement.ToString());
-
+        Console.WriteLine(Convert.ToBase64String(utf8Json));
         return base.InternalDeserialize<T>(utf8Json);
     }
 
