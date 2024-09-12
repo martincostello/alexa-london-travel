@@ -79,9 +79,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     [MemberNotNull(nameof(_serviceProvider))]
     public Task<bool> InitializeAsync()
     {
-        Console.WriteLine("InitializeAsync() Start");
         _serviceProvider ??= CreateServiceProvider();
-        Console.WriteLine("InitializeAsync() End");
         return Task.FromResult(true);
     }
 
@@ -113,7 +111,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         services.AddLogging((builder) =>
         {
             builder.AddConfiguration(configuration.GetSection("Logging"));
-            ////builder.AddJsonConsole();
+            builder.AddJsonConsole();
         });
 
         services.AddHttpClients();
