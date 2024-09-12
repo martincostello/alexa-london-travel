@@ -79,9 +79,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     [MemberNotNull(nameof(_serviceProvider))]
     public Task<bool> InitializeAsync()
     {
-        Console.WriteLine("InitializeAsync() Start");
         _serviceProvider ??= CreateServiceProvider();
-        Console.WriteLine("InitializeAsync() End");
         return Task.FromResult(true);
     }
 

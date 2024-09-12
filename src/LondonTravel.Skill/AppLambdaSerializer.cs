@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using Amazon.Lambda.Serialization.SystemTextJson;
 
 namespace MartinCostello.LondonTravel.Skill;
@@ -16,7 +17,13 @@ public sealed class AppLambdaSerializer() : SourceGeneratorLambdaJsonSerializer<
         try
         {
             Console.WriteLine($"Request: {Convert.ToBase64String(utf8Json)}");
-            var result = base.InternalDeserialize<T>(utf8Json);
+
+            if (AppJsonSerializerContext.Default.GetTypeInfo(typeof(T)) is not JsonTypeInfo<T> jsonTypeInfo)
+            {
+                throw new JsonSerializerException($"No JsonTypeInfo registered in  for type {typeof(T).FullName}.");
+            }
+
+            var result = JsonSerializer.Deserialize(utf8Json, jsonTypeInfo)!;
 
             Console.WriteLine($"Request: {result.GetType()}");
 
@@ -43,7 +50,12 @@ public sealed class AppLambdaSerializer() : SourceGeneratorLambdaJsonSerializer<
                 Console.WriteLine($"Response: {Convert.ToBase64String(stream.ToArray())}");
             }
 
-            base.InternalSerialize(writer, response);
+            if (AppJsonSerializerContext.Default.GetTypeInfo(typeof(T)) is not JsonTypeInfo<T> jsonTypeInfo)
+            {
+                throw new JsonSerializerException($"No JsonTypeInfo registered for type {typeof(T).FullName}.");
+            }
+
+            JsonSerializer.Serialize(writer, response, jsonTypeInfo);
 
             Console.WriteLine("Response serialized");
         }
