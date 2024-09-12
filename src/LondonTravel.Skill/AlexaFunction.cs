@@ -60,20 +60,14 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     /// <returns>
     /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the skill's response.
     /// </returns>
-    public Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
+    public async Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
     {
-        Console.WriteLine("HandlerAsync() Start");
-
         EnsureInitialized();
-        var result = OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.TraceAsync(
+        return await OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.TraceAsync(
             _serviceProvider.GetRequiredService<OpenTelemetry.Trace.TracerProvider>(),
             HandlerCoreAsync,
             request,
             context);
-
-        Console.WriteLine("HandlerAsync() End");
-
-        return result;
     }
 
     /// <summary>
@@ -119,7 +113,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         services.AddLogging((builder) =>
         {
             builder.AddConfiguration(configuration.GetSection("Logging"));
-            builder.AddJsonConsole();
+            ////builder.AddJsonConsole();
         });
 
         services.AddHttpClients();
