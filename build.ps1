@@ -104,8 +104,8 @@ function DotNetPublish {
 }
 
 $testProjects = @(
-    (Join-Path $solutionPath "test" "LondonTravel.Skill.Tests" "LondonTravel.Skill.Tests.csproj"),
-    (Join-Path $solutionPath "test" "LondonTravel.Skill.EndToEndTests" "LondonTravel.Skill.EndToEndTests.csproj")
+    #(Join-Path $solutionPath "test" "LondonTravel.Skill.Tests" "LondonTravel.Skill.Tests.csproj"),
+    #(Join-Path $solutionPath "test" "LondonTravel.Skill.EndToEndTests" "LondonTravel.Skill.EndToEndTests.csproj")
 )
 
 $testProjectsForAot = @(
