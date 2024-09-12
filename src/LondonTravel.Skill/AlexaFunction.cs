@@ -63,7 +63,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     public async Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
     {
         EnsureInitialized();
-        return await OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.Trace(
+        return await OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.TraceAsync(
             _serviceProvider.GetRequiredService<OpenTelemetry.Trace.TracerProvider>(),
             HandlerCoreAsync,
             request,
