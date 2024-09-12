@@ -62,12 +62,18 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     /// </returns>
     public async Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
     {
+        Console.WriteLine("HandlerAsync() Start");
+
         EnsureInitialized();
-        return await OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.TraceAsync(
+        var result = await OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.TraceAsync(
             _serviceProvider.GetRequiredService<OpenTelemetry.Trace.TracerProvider>(),
             HandlerCoreAsync,
             request,
             context);
+
+        Console.WriteLine("HandlerAsync() End");
+
+        return result;
     }
 
     /// <summary>
@@ -79,7 +85,9 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     [MemberNotNull(nameof(_serviceProvider))]
     public Task<bool> InitializeAsync()
     {
+        Console.WriteLine("InitializeAsync() Start");
         _serviceProvider ??= CreateServiceProvider();
+        Console.WriteLine("InitializeAsync() End");
         return Task.FromResult(true);
     }
 
