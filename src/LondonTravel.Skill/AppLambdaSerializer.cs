@@ -20,7 +20,7 @@ public sealed class AppLambdaSerializer() : SourceGeneratorLambdaJsonSerializer<
 
             if (AppJsonSerializerContext.Default.GetTypeInfo(typeof(T)) is not JsonTypeInfo<T> jsonTypeInfo)
             {
-                throw new JsonSerializerException($"No JsonTypeInfo registered in  for type {typeof(T).FullName}.");
+                throw new JsonSerializerException($"No JsonTypeInfo registered for type {typeof(T).FullName}.");
             }
 
             var result = JsonSerializer.Deserialize(utf8Json, jsonTypeInfo)!;
