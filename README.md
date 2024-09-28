@@ -26,7 +26,7 @@ Any feedback or issues can be added to the issues for this project in [GitHub](h
 
 ## Repository
 
-The repository is hosted in [GitHub](https://github.com/martincostello/alexa-london-travel): [https://github.com/martincostello/alexa-london-travel.git](https://github.com/martincostello/alexa-london-travel.git)
+The repository is hosted in [GitHub](https://github.com/martincostello/alexa-london-travel): <https://github.com/martincostello/alexa-london-travel.git>
 
 ## Building and Testing
 
@@ -38,7 +38,7 @@ This project is licensed under the [Apache 2.0](http://www.apache.org/licenses/L
 
 ## Copyright and Trademarks
 
-The London Travel skill is copyright (&copy;) Martin Costello 2017.
+The London Travel skill is copyright (&copy;) Martin Costello 2017-2024.
 
 Amazon Alexa is a trademark of Amazon.com, Inc.
 
