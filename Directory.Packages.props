@@ -1,15 +1,15 @@
 <Project>
   <ItemGroup>
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="All" />
-    <GlobalPackageReference Include="ReferenceTrimmer" Version="3.3.6" />
+    <GlobalPackageReference Include="ReferenceTrimmer" Version="3.3.10" />
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="Amazon.Lambda.Core" Version="2.3.0" />
     <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.11.0" />
     <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.3" />
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="2.0.0" />
-    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="3.7.403.11" />
-    <PackageVersion Include="AWSSDK.Lambda" Version="3.7.405" />
+    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="3.7.403.13" />
+    <PackageVersion Include="AWSSDK.Lambda" Version="3.7.405.2" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.2" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="4.3.0" />
@@ -35,7 +35,7 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.9.0" />
     <PackageVersion Include="Polly.Extensions" Version="8.4.2" />
     <PackageVersion Include="Polly.RateLimiting" Version="8.4.2" />
-    <PackageVersion Include="ReportGenerator" Version="5.3.9" />
+    <PackageVersion Include="ReportGenerator" Version="5.3.10" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
     <PackageVersion Include="System.Text.Json" Version="9.0.0-rc.1.24431.7" />
