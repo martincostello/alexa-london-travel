@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LondonTravel.Skill.Benchmarks": {
+      "commandName": "Project",
+      "commandLineArgs": ""
+    }
+  }
+}
