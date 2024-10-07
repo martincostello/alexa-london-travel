@@ -10,7 +10,7 @@ namespace MartinCostello.LondonTravel.Skill.Benchmarks;
 [MemoryDiagnoser]
 public class AppBenchmarks : IDisposable
 {
-    private readonly Dictionary<string, byte[]> _payloads = GetPayloads();
+    private static readonly Dictionary<string, byte[]> _payloads = GetPayloads();
     private AppServer? _app = new();
     private bool _disposed;
 
