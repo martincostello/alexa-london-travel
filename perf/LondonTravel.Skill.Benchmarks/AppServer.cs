@@ -51,7 +51,7 @@ internal sealed class AppServer : IDisposable
         _disposed = true;
     }
 
-    private sealed class LondonTravelSkill() : LambdaTestServer(new LambdaTestServerOptions() { DisableMemoryLimitCheck = true }) // HACK Workaround until cause for "memory leak" determined
+    private sealed class LondonTravelSkill : LambdaTestServer
     {
         protected override void ConfigureServices(IServiceCollection services)
         {
