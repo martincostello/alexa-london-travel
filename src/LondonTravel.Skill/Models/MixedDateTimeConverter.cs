@@ -13,11 +13,7 @@ public sealed class MixedDateTimeConverter : JsonConverter<DateTime>
         return reader.TokenType switch
         {
             JsonTokenType.Number => DateTime.UnixEpoch.AddMilliseconds(reader.GetInt64()),
-            JsonTokenType.String => reader.GetString() switch
-            {
-                { Length: > 0 } value => DateTime.Parse(value, CultureInfo.InvariantCulture),
-                _ => throw new JsonException($"Unable to deserialize token of type {reader.TokenType} to a {nameof(DateTime)} value."),
-            },
+            JsonTokenType.String => reader.GetDateTime(),
             _ => throw new JsonException($"Unable to deserialize token of type {reader.TokenType} to a {nameof(DateTime)} value."),
         };
     }

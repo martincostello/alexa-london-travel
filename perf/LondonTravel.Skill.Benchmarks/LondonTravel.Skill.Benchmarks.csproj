@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Benchmarks for LondonTravel.Skill.</Description>
+    <NoWarn>$(NoWarn);CA2234</NoWarn>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MartinCostello.LondonTravel.Skill.Benchmarks</RootNamespace>
+    <Summary>$(Description)</Summary>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\LondonTravel.Skill\LondonTravel.Skill.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\test\LondonTravel.Skill.EndToEndTests\Payloads\*.json" LinkBase="Payloads" />
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="BenchmarkDotNet" />
+    <PackageReference Include="MartinCostello.Testing.AwsLambdaTestServer" />
+  </ItemGroup>
+</Project>

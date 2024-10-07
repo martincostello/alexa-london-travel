@@ -11,17 +11,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
+		.markdownlint.json = .markdownlint.json
 		.vsconfig = .vsconfig
+		benchmark.ps1 = benchmark.ps1
 		build.ps1 = build.ps1
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		Directory.Packages.props = Directory.Packages.props
+		exclusion.dic = exclusion.dic
 		global.json = global.json
 		LICENSE = LICENSE
 		LondonTravel.Skill.ruleset = LondonTravel.Skill.ruleset
 		NuGet.config = NuGet.config
 		README.md = README.md
+		SECURITY.md = SECURITY.md
+		startvs.cmd = startvs.cmd
+		startvscode.cmd = startvscode.cmd
 		stylecop.json = stylecop.json
 	EndProjectSection
 EndProject
@@ -64,6 +70,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Skill.Tests", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{6F8B120B-EE10-459D-A59D-3FC0E8D59058}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\benchmark.yml = .github\workflows\benchmark.yml
 		.github\workflows\build.yml = .github\workflows\build.yml
 		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
 		.github\workflows\dependency-review.yml = .github\workflows\dependency-review.yml
@@ -75,6 +82,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Skill.EndToEndTests", "test\LondonTravel.Skill.EndToEndTests\LondonTravel.Skill.EndToEndTests.csproj", "{385B221D-16BF-4703-8105-C8622C188B1A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Skill.NativeAotTests", "test\LondonTravel.Skill.NativeAotTests\LondonTravel.Skill.NativeAotTests.csproj", "{190897E1-65DA-47E5-B960-674057F0F8EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "perf", "perf", "{C7B81695-42DA-4416-B34C-6912DD089865}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Skill.Benchmarks", "perf\LondonTravel.Skill.Benchmarks\LondonTravel.Skill.Benchmarks.csproj", "{D5741BE6-0B73-43AB-AAC3-9F18427D7E06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,6 +109,10 @@ Global
 		{190897E1-65DA-47E5-B960-674057F0F8EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{190897E1-65DA-47E5-B960-674057F0F8EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{190897E1-65DA-47E5-B960-674057F0F8EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5741BE6-0B73-43AB-AAC3-9F18427D7E06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5741BE6-0B73-43AB-AAC3-9F18427D7E06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5741BE6-0B73-43AB-AAC3-9F18427D7E06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5741BE6-0B73-43AB-AAC3-9F18427D7E06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,6 +127,7 @@ Global
 		{6F8B120B-EE10-459D-A59D-3FC0E8D59058} = {791C7C14-F862-41ED-9D92-12F844223C1B}
 		{385B221D-16BF-4703-8105-C8622C188B1A} = {27EF9EE1-288D-4AFD-9006-D7CE61B642DF}
 		{190897E1-65DA-47E5-B960-674057F0F8EF} = {27EF9EE1-288D-4AFD-9006-D7CE61B642DF}
+		{D5741BE6-0B73-43AB-AAC3-9F18427D7E06} = {C7B81695-42DA-4416-B34C-6912DD089865}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7E57D002-B20B-49BE-AD07-7FC61C2A764B}
