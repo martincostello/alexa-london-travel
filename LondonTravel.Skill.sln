@@ -11,17 +11,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
+		.markdownlint.json = .markdownlint.json
 		.vsconfig = .vsconfig
+		benchmark.ps1 = benchmark.ps1
 		build.ps1 = build.ps1
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		Directory.Packages.props = Directory.Packages.props
+		exclusion.dic = exclusion.dic
 		global.json = global.json
 		LICENSE = LICENSE
 		LondonTravel.Skill.ruleset = LondonTravel.Skill.ruleset
 		NuGet.config = NuGet.config
 		README.md = README.md
+		SECURITY.md = SECURITY.md
+		startvs.cmd = startvs.cmd
+		startvscode.cmd = startvscode.cmd
 		stylecop.json = stylecop.json
 	EndProjectSection
 EndProject
@@ -79,7 +85,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Skill.NativeAo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "perf", "perf", "{C7B81695-42DA-4416-B34C-6912DD089865}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LondonTravel.Skill.Benchmarks", "perf\LondonTravel.Skill.Benchmarks\LondonTravel.Skill.Benchmarks.csproj", "{D5741BE6-0B73-43AB-AAC3-9F18427D7E06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Skill.Benchmarks", "perf\LondonTravel.Skill.Benchmarks\LondonTravel.Skill.Benchmarks.csproj", "{D5741BE6-0B73-43AB-AAC3-9F18427D7E06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
