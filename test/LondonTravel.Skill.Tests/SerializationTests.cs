@@ -9,11 +9,11 @@ namespace MartinCostello.LondonTravel.Skill;
 public static class SerializationTests
 {
     [Theory]
-    [InlineData("IntentRequest")]
-    [InlineData("LaunchRequest")]
-    [InlineData("LaunchRequestWithEpochTimestamp")]
-    [InlineData("SessionEndedRequest")]
-    public static void Can_Deserialize_Request(string name)
+    [InlineData("IntentRequest", typeof(IntentRequest))]
+    [InlineData("LaunchRequest", typeof(LaunchRequest))]
+    [InlineData("LaunchRequestWithEpochTimestamp", typeof(LaunchRequest))]
+    [InlineData("SessionEndedRequest", typeof(SessionEndedRequest))]
+    public static void Can_Deserialize_Request(string name, Type expectedType)
     {
         // Arrange
         JsonSerializer.IsReflectionEnabledByDefault.ShouldBeFalse();
@@ -27,6 +27,7 @@ public static class SerializationTests
         // Assert
         actual.ShouldNotBeNull();
         actual.Request.ShouldNotBeNull();
+        actual.Request.ShouldBeOfType(expectedType);
     }
 
     [Fact]
