@@ -36,7 +36,7 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.9.0" />
     <PackageVersion Include="Polly.Extensions" Version="8.4.2" />
     <PackageVersion Include="Polly.RateLimiting" Version="8.4.2" />
-    <PackageVersion Include="ReportGenerator" Version="5.3.10" />
+    <PackageVersion Include="ReportGenerator" Version="5.3.11" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
     <PackageVersion Include="System.Text.Json" Version="9.0.0-rc.2.24473.5" />
