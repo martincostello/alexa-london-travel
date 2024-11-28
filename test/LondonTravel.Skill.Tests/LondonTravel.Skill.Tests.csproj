@@ -26,7 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="testsettings.json;xunit.runner.json;Samples\*.json" CopyToOutputDirectory="PreserveNewest" />
-    <EmbeddedResource Include="..\LondonTravel.Skill.Tests\Bundles\*.json" />
+    <EmbeddedResource Include="..\LondonTravel.Skill.Tests\Bundles\*.json;..\..\static\interaction-model.json" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Shouldly" />
