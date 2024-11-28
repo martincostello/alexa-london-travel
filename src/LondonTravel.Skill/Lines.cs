@@ -35,18 +35,6 @@ internal static class Lines
     }
 
     /// <summary>
-    /// Returns whether the specified line name refers to the London Overground.
-    /// </summary>
-    /// <param name="name">The name of the line as reported from the TfL API.</param>
-    /// <returns>
-    /// A boolean indicating whether the line is the London Overground.
-    /// </returns>
-    public static bool IsOverground(string name)
-    {
-        return name.Contains("overground", StringComparison.OrdinalIgnoreCase);
-    }
-
-    /// <summary>
     /// Maps the specified line name to a TfL API line Id.
     /// </summary>
     /// <param name="line">The line name.</param>
@@ -69,29 +57,29 @@ internal static class Lines
             case "dlr":
             case "hammersmith-city":
             case "jubilee":
+            case "liberty":
+            case "lioness":
             case "london-overground":
             case "metropolitan":
+            case "mildmay":
             case "northern":
             case "piccadilly":
+            case "suffragette":
             case "tfl-rail":
             case "victoria":
             case "waterloo-city":
+            case "weaver":
+            case "windrush":
                 return normalized;
 
             case "crossrail":
             case "elizabeth":
             case "elizabeth line":
+            case "liz":
+            case "liz line":
+            case "lizzy":
+            case "lizzy line":
                 return "elizabeth";
-
-            case "london overground":
-            case "overground":
-            case "liberty":
-            case "lioness":
-            case "mildmay":
-            case "suffragette":
-            case "weaver":
-            case "windrush":
-                return "london-overground";
 
             case "met":
                 return "metropolitan";
@@ -114,6 +102,8 @@ internal static class Lines
             case "waterloo & city":
                 return "waterloo-city";
 
+            case "london overground":
+            case "overground":
             default:
                 return null;
         }
@@ -131,8 +121,7 @@ internal static class Lines
     {
         bool isNameWithoutLine =
             IsDlr(name) ||
-            IsElizabethLine(name) ||
-            IsOverground(name);
+            IsElizabethLine(name);
 
         string suffix = isNameWithoutLine ? Strings.LineSuffixUpper : string.Empty;
         return string.Format(CultureInfo.CurrentCulture, StatusIntentCardTitleFormat, name, suffix);
