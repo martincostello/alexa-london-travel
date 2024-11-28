@@ -875,7 +875,11 @@
                 "value": "elizabeth",
                 "synonyms": [
                   "crossrail",
-                  "elizabeth line"
+                  "elizabeth line",
+                  "liz",
+                  "liz line",
+                  "lizzie",
+                  "lizzie line"
                 ]
               }
             },
@@ -894,15 +898,19 @@
             },
             {
               "name": {
+                "value": "liberty"
+              }
+            },
+            {
+              "name": {
+                "value": "lioness"
+              }
+            },
+            {
+              "name": {
                 "value": "london overground",
                 "synonyms": [
-                  "liberty",
-                  "lioness",
-                  "overground",
-                  "mildmay",
-                  "suffragette",
-                  "weaver",
-                  "windrush"
+                  "overground"
                 ]
               }
             },
@@ -912,6 +920,11 @@
                 "synonyms": [
                   "met"
                 ]
+              }
+            },
+            {
+              "name": {
+                "value": "mildmay"
               }
             },
             {
@@ -926,6 +939,11 @@
             },
             {
               "name": {
+                "value": "suffragette"
+              }
+            },
+            {
+              "name": {
                 "value": "victoria"
               }
             },
@@ -936,6 +954,16 @@
                   "city",
                   "waterloo"
                 ]
+              }
+            },
+            {
+              "name": {
+                "value": "weaver"
+              }
+            },
+            {
+              "name": {
+                "value": "windrush"
               }
             }
           ]

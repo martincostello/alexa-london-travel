@@ -31,8 +31,6 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
     [InlineData("Jubilee")]
     [InlineData("Liberty")]
     [InlineData("Lioness")]
-    [InlineData("London Overground")]
-    [InlineData("Overground")]
     [InlineData("Met")]
     [InlineData("Metropolitan")]
     [InlineData("Mildmay")]
@@ -67,6 +65,8 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
     [InlineData("")]
     [InlineData("  ")]
     [InlineData("not a tube line")]
+    [InlineData("London Overground")]
+    [InlineData("Overground")]
     public async Task Can_Invoke_Function_For_Invalid_Line(string? id)
     {
         // Arrange
@@ -128,18 +128,17 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
     [InlineData("Elizabeth line", "There is a good service on the Elizabeth line.")]
     [InlineData("Hammersmith & City", "There is a good service on the Hammersmith and City line.")]
     [InlineData("Jubilee", "There is a good service on the Jubilee line.")]
-    [InlineData("Liberty", "There is a good service on London Overground.")]
-    [InlineData("Lioness", "There is a good service on London Overground.")]
-    [InlineData("London Overground", "There is a good service on London Overground.")]
+    [InlineData("Liberty", "There is a good service on the Liberty line.")]
+    [InlineData("Lioness", "There is a good service on the Lioness line.")]
     [InlineData("Metropolitan", "There is a good service on the Metropolitan line.")]
-    [InlineData("Mildmay", "There is a good service on London Overground.")]
+    [InlineData("Mildmay", "There is a good service on the Mildmay line.")]
     [InlineData("Northern", "There is a good service on the Northern line.")]
     [InlineData("Piccadilly", "There is a good service on the Piccadilly line.")]
-    [InlineData("Suffragette", "There is a good service on London Overground.")]
+    [InlineData("Suffragette", "There is a good service on the Suffragette line.")]
     [InlineData("Victoria", "There is a good service on the Victoria line.")]
     [InlineData("Waterloo & City", "There is a good service on the Waterloo and City line.")]
-    [InlineData("Weaver", "There is a good service on London Overground.")]
-    [InlineData("Windrush", "There is a good service on London Overground.")]
+    [InlineData("Weaver", "There is a good service on the Weaver line.")]
+    [InlineData("Windrush", "There is a good service on the Windrush line.")]
     public async Task Can_Invoke_Function_For_Different_Severities(
         string id,
         string expected)

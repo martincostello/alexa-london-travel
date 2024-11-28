@@ -380,13 +380,13 @@
       ]
     },
     {
-      "uri": "https://api.tfl.gov.uk/Line/london-overground/Status?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
+      "uri": "https://api.tfl.gov.uk/Line/liberty/Status?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
       "contentFormat": "json",
       "contentJson": [
         {
           "$type": "Tfl.Api.Presentation.Entities.Line, Tfl.Api.Presentation.Entities",
-          "id": "london-overground",
-          "name": "London Overground",
+          "id": "liberty",
+          "name": "Liberty",
           "modeName": "overground",
           "disruptions": [],
           "created": "2019-10-17T12:58:58.107Z",
@@ -395,29 +395,10 @@
             {
               "$type": "Tfl.Api.Presentation.Entities.LineStatus, Tfl.Api.Presentation.Entities",
               "id": 0,
-              "lineId": "london-overground",
-              "statusSeverity": 5,
-              "statusSeverityDescription": "Part Closure",
-              "reason": "LONDON OVERGROUND: Sunday 20 October, no service between Sydenham and Crystal Palace. Use local London Buses connections. Replacement buses also operate between Balham and West Croydon calling at Streatham Hill, West Norwood, Gipsy Hill, Crystal Palace, Norwood Junction and Selhurst.",
+              "statusSeverity": 10,
+              "statusSeverityDescription": "Good Service",
               "created": "0001-01-01T00:00:00",
-              "validityPeriods": [
-                {
-                  "$type": "Tfl.Api.Presentation.Entities.ValidityPeriod, Tfl.Api.Presentation.Entities",
-                  "fromDate": "2019-10-20T04:30:00Z",
-                  "toDate": "2019-10-21T01:29:00Z",
-                  "isNow": false
-                }
-              ],
-              "disruption": {
-                "$type": "Tfl.Api.Presentation.Entities.Disruption, Tfl.Api.Presentation.Entities",
-                "category": "PlannedWork",
-                "categoryDescription": "PlannedWork",
-                "description": "LONDON OVERGROUND: Sunday 20 October, no service between Sydenham and Crystal Palace. Use local London Buses connections. Replacement buses also operate between Balham and West Croydon calling at Streatham Hill, West Norwood, Gipsy Hill, Crystal Palace, Norwood Junction and Selhurst.",
-                "created": "2019-09-23T09:46:00Z",
-                "affectedRoutes": [],
-                "affectedStops": [],
-                "closureText": "partClosure"
-              }
+              "validityPeriods": []
             }
           ],
           "routeSections": [],
@@ -425,12 +406,53 @@
             {
               "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
               "name": "Regular",
-              "uri": "/Line/Route?ids=London Overground&serviceTypes=Regular"
+              "uri": "/Line/Route?ids=Liberty&serviceTypes=Regular"
             },
             {
               "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
               "name": "Night",
-              "uri": "/Line/Route?ids=London Overground&serviceTypes=Night"
+              "uri": "/Line/Route?ids=Liberty&serviceTypes=Night"
+            }
+          ],
+          "crowding": {
+            "$type": "Tfl.Api.Presentation.Entities.Crowding, Tfl.Api.Presentation.Entities"
+          }
+        }
+      ]
+    },
+    {
+      "uri": "https://api.tfl.gov.uk/Line/lioness/Status?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
+      "contentFormat": "json",
+      "contentJson": [
+        {
+          "$type": "Tfl.Api.Presentation.Entities.Line, Tfl.Api.Presentation.Entities",
+          "id": "lioness",
+          "name": "Lioness",
+          "modeName": "overground",
+          "disruptions": [],
+          "created": "2019-10-17T12:58:58.107Z",
+          "modified": "2019-10-17T12:58:58.107Z",
+          "lineStatuses": [
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineStatus, Tfl.Api.Presentation.Entities",
+              "id": 0,
+              "statusSeverity": 10,
+              "statusSeverityDescription": "Good Service",
+              "created": "0001-01-01T00:00:00",
+              "validityPeriods": []
+            }
+          ],
+          "routeSections": [],
+          "serviceTypes": [
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
+              "name": "Regular",
+              "uri": "/Line/Route?ids=Lioness&serviceTypes=Regular"
+            },
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
+              "name": "Night",
+              "uri": "/Line/Route?ids=Lioness&serviceTypes=Night"
             }
           ],
           "crowding": {
@@ -467,6 +489,47 @@
               "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
               "name": "Regular",
               "uri": "/Line/Route?ids=Metropolitan&serviceTypes=Regular"
+            }
+          ],
+          "crowding": {
+            "$type": "Tfl.Api.Presentation.Entities.Crowding, Tfl.Api.Presentation.Entities"
+          }
+        }
+      ]
+    },
+    {
+      "uri": "https://api.tfl.gov.uk/Line/mildmay/Status?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
+      "contentFormat": "json",
+      "contentJson": [
+        {
+          "$type": "Tfl.Api.Presentation.Entities.Line, Tfl.Api.Presentation.Entities",
+          "id": "mildmay",
+          "name": "Mildmay",
+          "modeName": "overground",
+          "disruptions": [],
+          "created": "2019-10-17T12:58:58.107Z",
+          "modified": "2019-10-17T12:58:58.107Z",
+          "lineStatuses": [
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineStatus, Tfl.Api.Presentation.Entities",
+              "id": 0,
+              "statusSeverity": 10,
+              "statusSeverityDescription": "Good Service",
+              "created": "0001-01-01T00:00:00",
+              "validityPeriods": []
+            }
+          ],
+          "routeSections": [],
+          "serviceTypes": [
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
+              "name": "Regular",
+              "uri": "/Line/Route?ids=Mildmay&serviceTypes=Regular"
+            },
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
+              "name": "Night",
+              "uri": "/Line/Route?ids=Mildmay&serviceTypes=Night"
             }
           ],
           "crowding": {
@@ -549,6 +612,47 @@
               "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
               "name": "Night",
               "uri": "/Line/Route?ids=Piccadilly&serviceTypes=Night"
+            }
+          ],
+          "crowding": {
+            "$type": "Tfl.Api.Presentation.Entities.Crowding, Tfl.Api.Presentation.Entities"
+          }
+        }
+      ]
+    },
+    {
+      "uri": "https://api.tfl.gov.uk/Line/suffragette/Status?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
+      "contentFormat": "json",
+      "contentJson": [
+        {
+          "$type": "Tfl.Api.Presentation.Entities.Line, Tfl.Api.Presentation.Entities",
+          "id": "suffragette",
+          "name": "Suffragette",
+          "modeName": "overground",
+          "disruptions": [],
+          "created": "2019-10-17T12:58:58.107Z",
+          "modified": "2019-10-17T12:58:58.107Z",
+          "lineStatuses": [
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineStatus, Tfl.Api.Presentation.Entities",
+              "id": 0,
+              "statusSeverity": 10,
+              "statusSeverityDescription": "Good Service",
+              "created": "0001-01-01T00:00:00",
+              "validityPeriods": []
+            }
+          ],
+          "routeSections": [],
+          "serviceTypes": [
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
+              "name": "Regular",
+              "uri": "/Line/Route?ids=Suffragette&serviceTypes=Regular"
+            },
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
+              "name": "Night",
+              "uri": "/Line/Route?ids=Suffragette&serviceTypes=Night"
             }
           ],
           "crowding": {
@@ -644,6 +748,88 @@
               "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
               "name": "Regular",
               "uri": "/Line/Route?ids=Waterloo & City&serviceTypes=Regular"
+            }
+          ],
+          "crowding": {
+            "$type": "Tfl.Api.Presentation.Entities.Crowding, Tfl.Api.Presentation.Entities"
+          }
+        }
+      ]
+    },
+    {
+      "uri": "https://api.tfl.gov.uk/Line/weaver/Status?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
+      "contentFormat": "json",
+      "contentJson": [
+        {
+          "$type": "Tfl.Api.Presentation.Entities.Line, Tfl.Api.Presentation.Entities",
+          "id": "weaver",
+          "name": "Weaver",
+          "modeName": "overground",
+          "disruptions": [],
+          "created": "2019-10-17T12:58:58.107Z",
+          "modified": "2019-10-17T12:58:58.107Z",
+          "lineStatuses": [
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineStatus, Tfl.Api.Presentation.Entities",
+              "id": 0,
+              "statusSeverity": 10,
+              "statusSeverityDescription": "Good Service",
+              "created": "0001-01-01T00:00:00",
+              "validityPeriods": []
+            }
+          ],
+          "routeSections": [],
+          "serviceTypes": [
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
+              "name": "Regular",
+              "uri": "/Line/Route?ids=Weaver&serviceTypes=Regular"
+            },
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
+              "name": "Night",
+              "uri": "/Line/Route?ids=Weaver&serviceTypes=Night"
+            }
+          ],
+          "crowding": {
+            "$type": "Tfl.Api.Presentation.Entities.Crowding, Tfl.Api.Presentation.Entities"
+          }
+        }
+      ]
+    },
+    {
+      "uri": "https://api.tfl.gov.uk/Line/windrush/Status?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
+      "contentFormat": "json",
+      "contentJson": [
+        {
+          "$type": "Tfl.Api.Presentation.Entities.Line, Tfl.Api.Presentation.Entities",
+          "id": "windrush",
+          "name": "Windrush",
+          "modeName": "overground",
+          "disruptions": [],
+          "created": "2019-10-17T12:58:58.107Z",
+          "modified": "2019-10-17T12:58:58.107Z",
+          "lineStatuses": [
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineStatus, Tfl.Api.Presentation.Entities",
+              "id": 0,
+              "statusSeverity": 10,
+              "statusSeverityDescription": "Good Service",
+              "created": "0001-01-01T00:00:00",
+              "validityPeriods": []
+            }
+          ],
+          "routeSections": [],
+          "serviceTypes": [
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
+              "name": "Regular",
+              "uri": "/Line/Route?ids=Windrush&serviceTypes=Regular"
+            },
+            {
+              "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
+              "name": "Night",
+              "uri": "/Line/Route?ids=Windrush&serviceTypes=Night"
             }
           ],
           "crowding": {

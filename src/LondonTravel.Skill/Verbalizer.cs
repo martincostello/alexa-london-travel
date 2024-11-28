@@ -21,27 +21,20 @@ internal static class Verbalizer
     /// </returns>
     internal static string LineName(string name, bool asTitleCase = false)
     {
-        string prefix = string.Empty;
+        string prefix = Strings.ThePrefix;
         string suffix = string.Empty;
         string spokenName;
 
         if (Lines.IsDlr(name))
         {
-            prefix = Strings.ThePrefix;
             spokenName = Verbalize("DLR");
         }
         else if (Lines.IsElizabethLine(name))
-        {
-            prefix = Strings.ThePrefix;
-            spokenName = name;
-        }
-        else if (Lines.IsOverground(name))
         {
             spokenName = name;
         }
         else
         {
-            prefix = Strings.ThePrefix;
             spokenName = name;
             suffix = asTitleCase ? Strings.LineSuffixUpper : Strings.LineSuffixLower;
         }
