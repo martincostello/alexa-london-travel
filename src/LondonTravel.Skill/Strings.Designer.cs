@@ -167,7 +167,16 @@ namespace MartinCostello.LondonTravel.Skill {
                 return ResourceManager.GetString("HelpIntentParagraph4", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to What would you like to do?.
+        /// </summary>
+        internal static string HelpIntentParagraph5 {
+            get {
+                return ResourceManager.GetString("HelpIntentParagraph5", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Sorry, something went wrong..
         /// </summary>
