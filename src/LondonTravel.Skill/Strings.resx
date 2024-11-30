@@ -153,6 +153,9 @@
   <data name="HelpIntentParagraph4" xml:space="preserve">
     <value>If you link your account and setup your preferences in the London Travel website, you can ask about your commute to quickly find out the status of the lines you frequently use.</value>
   </data>
+  <data name="HelpIntentParagraph5" xml:space="preserve">
+    <value>What would you like to do?</value>
+  </data>
   <data name="InternalError" xml:space="preserve">
     <value>Sorry, something went wrong.</value>
   </data>

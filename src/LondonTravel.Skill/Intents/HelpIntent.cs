@@ -19,6 +19,7 @@ internal sealed class HelpIntent : IIntent
             Strings.HelpIntentParagraph2,
             Strings.HelpIntentParagraph3,
             Strings.HelpIntentParagraph4,
+            Strings.HelpIntentParagraph5,
         ];
 
         var result = SkillResponseBuilder
