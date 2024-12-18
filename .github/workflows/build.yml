@@ -60,10 +60,10 @@ jobs:
       if: runner.os == 'Linux'
       shell: bash
       run: |
+        apt_sources=/etc/apt/sources.list.d/ubuntu.sources
         codename=$(lsb_release -c | awk '{print $2}')
         sudo dpkg --add-architecture arm64
-        sudo mkdir -p /etc/apt/sources.list.d/
-        sudo bash -c "cat > /etc/apt/sources.list.d/ubuntu.sources <<EOF
+        sudo bash -c "cat > ${apt_sources} <<EOF
         Types: deb
         URIs: http://archive.ubuntu.com/ubuntu/
         Suites: ${codename}
@@ -94,8 +94,8 @@ jobs:
         Components: main restricted multiverse universe
         Architectures: arm64
         EOF"
-        sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list.d/ubuntu.sources
-        sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list.d/ubuntu.sources
+        sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' "${apt_sources}"
+        sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' "${apt_sources}"
         sudo apt update
         sudo apt install --yes clang llvm binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu linux-libc-dev:arm64 zlib1g-dev:arm64
 
