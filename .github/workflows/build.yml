@@ -61,7 +61,7 @@ jobs:
       shell: bash
       run: |
         #codename=$(lsb_release -c | awk '{print $2}')
-        #sudo dpkg --add-architecture arm64
+        sudo dpkg --add-architecture arm64
         #sudo bash -c "cat > /etc/apt/sources.list.d/arm64.list <<EOF
         #deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ \"${codename}\" main restricted
         #deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ \"${codename}-updates\" main restricted
