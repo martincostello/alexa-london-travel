@@ -60,14 +60,42 @@ jobs:
       if: runner.os == 'Linux'
       shell: bash
       run: |
+        apt_sources=/etc/apt/sources.list.d/ubuntu.sources
+        codename=$(lsb_release -c | awk '{print $2}')
         sudo dpkg --add-architecture arm64
-        sudo bash -c 'cat > /etc/apt/sources.list.d/arm64.list <<EOF
-        deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy main restricted
-        deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main restricted
-        deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-backports main restricted universe multiverse
-        EOF'
-        sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
-        sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
+        sudo bash -c "cat > ${apt_sources} <<EOF
+        Types: deb
+        URIs: http://archive.ubuntu.com/ubuntu/
+        Suites: ${codename}
+        Components: main restricted universe
+        Architectures: amd64
+
+        Types: deb
+        URIs: http://security.ubuntu.com/ubuntu/
+        Suites: ${codename}-security 
+        Components: main restricted universe
+        Architectures: amd64
+
+        Types: deb
+        URIs: http://archive.ubuntu.com/ubuntu/
+        Suites: ${codename}-updates
+        Components: main restricted universe
+        Architectures: amd64
+
+        Types: deb
+        URIs: http://ports.ubuntu.com/ubuntu-ports/
+        Suites: ${codename}
+        Components: main restricted multiverse universe
+        Architectures: arm64
+
+        Types: deb
+        URIs: http://ports.ubuntu.com/ubuntu-ports/
+        Suites: ${codename}-updates
+        Components: main restricted multiverse universe
+        Architectures: arm64
+        EOF"
+        sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' "${apt_sources}"
+        sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' "${apt_sources}"
         sudo apt update
         sudo apt install --yes clang llvm binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu linux-libc-dev:arm64 zlib1g-dev:arm64
 
@@ -89,7 +117,7 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
 
     - name: Publish artifacts
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+      uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
       with:
         name: artifacts-${{ matrix.os_name }}
         path: ./artifacts
@@ -115,7 +143,7 @@ jobs:
         subject-path: ./artifacts/${{ env.LAMBDA_FUNCTION }}.zip
 
     - name: Publish deployment package
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+      uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
       if: runner.os == 'Linux' && success()
       with:
         name: ${{ env.ARTIFACT_NAME }}
