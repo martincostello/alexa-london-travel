@@ -60,15 +60,15 @@ jobs:
       if: runner.os == 'Linux'
       shell: bash
       run: |
-        codename=$(lsb_release -c | awk '{print $2}')
-        sudo dpkg --add-architecture arm64
-        sudo bash -c "cat > /etc/apt/sources.list.d/arm64.list <<EOF
-        deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ \"${codename}\" main restricted
-        deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ \"${codename}-updates\" main restricted
-        deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ \"${codename}-backports\" main restricted universe multiverse
-        EOF"
-        sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
-        sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
+        #codename=$(lsb_release -c | awk '{print $2}')
+        #sudo dpkg --add-architecture arm64
+        #sudo bash -c "cat > /etc/apt/sources.list.d/arm64.list <<EOF
+        #deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ \"${codename}\" main restricted
+        #deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ \"${codename}-updates\" main restricted
+        #deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ \"${codename}-backports\" main restricted universe multiverse
+        #EOF"
+        #sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
+        #sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
         sudo apt update
         sudo apt install --yes clang llvm binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu linux-libc-dev:arm64 zlib1g-dev:arm64
 
