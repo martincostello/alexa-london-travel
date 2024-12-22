@@ -47,7 +47,9 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
     public async Task Can_Invoke_Function_For_Valid_Lines(string id)
     {
         // Arrange
-        await Interceptor.RegisterBundleFromResourceStreamAsync<StatusTests>("tfl-line-statuses.json");
+        await Interceptor.RegisterBundleFromResourceStreamAsync<StatusTests>(
+            "tfl-line-statuses.json",
+            cancellationToken: TestContext.Current.CancellationToken);
 
         var function = await CreateFunctionAsync();
         var request = CreateIntentForLine(id);
@@ -144,7 +146,9 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
         string expected)
     {
         // Arrange
-        await Interceptor.RegisterBundleFromResourceStreamAsync<StatusTests>("tfl-line-severities.json");
+        await Interceptor.RegisterBundleFromResourceStreamAsync<StatusTests>(
+            "tfl-line-severities.json",
+            cancellationToken: TestContext.Current.CancellationToken);
 
         var function = await CreateFunctionAsync();
         var request = CreateIntentForLine(id);

@@ -36,7 +36,9 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
     public async Task Can_Invoke_Function_When_The_Skill_Token_Is_Invalid()
     {
         // Arrange
-        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("skill-api-invalid-token.json");
+        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>(
+            "skill-api-invalid-token.json",
+            cancellationToken: TestContext.Current.CancellationToken);
 
         var function = await CreateFunctionAsync();
         var request = CreateIntentRequestWithToken(accessToken: "invalid-access-token");
@@ -84,8 +86,10 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
     public async Task Can_Invoke_Function_When_The_Skill_Is_Linked_And_Has_No_Favorite_Lines()
     {
         // Arrange
-        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("skill-api-no-favorites.json");
-        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("tfl-line-statuses.json");
+        var cancellationToken = TestContext.Current.CancellationToken;
+
+        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("skill-api-no-favorites.json", cancellationToken: cancellationToken);
+        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("tfl-line-statuses.json", cancellationToken: cancellationToken);
 
         var function = await CreateFunctionAsync();
         var request = CreateIntentRequestWithToken(accessToken: "token-for-no-favorites");
@@ -105,8 +109,10 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
     public async Task Can_Invoke_Function_When_The_Skill_Is_Linked_And_Has_One_Favorite_Line()
     {
         // Arrange
-        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("skill-api-one-favorite.json");
-        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("tfl-line-statuses.json");
+        var cancellationToken = TestContext.Current.CancellationToken;
+
+        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("skill-api-one-favorite.json", cancellationToken: cancellationToken);
+        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("tfl-line-statuses.json", cancellationToken: cancellationToken);
 
         var function = await CreateFunctionAsync();
         var request = CreateIntentRequestWithToken(accessToken: "token-for-one-favorite");
@@ -126,8 +132,10 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
     public async Task Can_Invoke_Function_When_The_Skill_Is_Linked_And_Has_Two_Favorite_Lines()
     {
         // Arrange
-        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("skill-api-two-favorites.json");
-        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("tfl-line-statuses.json");
+        var cancellationToken = TestContext.Current.CancellationToken;
+
+        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("skill-api-two-favorites.json", cancellationToken: cancellationToken);
+        await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("tfl-line-statuses.json", cancellationToken: cancellationToken);
 
         var function = await CreateFunctionAsync();
         var request = CreateIntentRequestWithToken(accessToken: "token-for-two-favorites");

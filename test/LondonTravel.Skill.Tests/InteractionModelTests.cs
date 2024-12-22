@@ -17,7 +17,7 @@ public static class InteractionModelTests
         using var model = assembly.GetManifestResourceStream(type.Namespace + ".interaction-model.json")!;
         using var stream = new MemoryStream();
 
-        await model.CopyToAsync(stream);
+        await model.CopyToAsync(stream, TestContext.Current.CancellationToken);
         model.Seek(0, SeekOrigin.Begin);
 
         var reader = new Utf8JsonReader(stream.ToArray());
