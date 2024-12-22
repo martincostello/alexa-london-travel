@@ -10,7 +10,7 @@ namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 
 public class SkillTests(ITestOutputHelper outputHelper)
 {
-    [SkippableTheory]
+    [Theory]
     [InlineData("Alexa, ask London Travel if there is any disruption today.")]
     [InlineData("Alexa, ask London Travel about the DLR.")]
     [InlineData("Alexa, ask London Travel about the Elizabeth line.")]
@@ -24,10 +24,10 @@ public class SkillTests(ITestOutputHelper outputHelper)
         string? skillId = TestConfiguration.SkillId;
         string? stage = TestConfiguration.SkillStage;
 
-        Skip.If(string.IsNullOrEmpty(functionName), "No Lambda function name is configured.");
-        Skip.If(string.IsNullOrEmpty(regionName), "No AWS region name is configured.");
-        Skip.If(string.IsNullOrEmpty(skillId), "No skill ID is configured.");
-        Skip.If(string.IsNullOrEmpty(stage), "No skill stage is configured.");
+        Assert.SkipWhen(string.IsNullOrEmpty(functionName), "No Lambda function name is configured.");
+        Assert.SkipWhen(string.IsNullOrEmpty(regionName), "No AWS region name is configured.");
+        Assert.SkipWhen(string.IsNullOrEmpty(skillId), "No skill ID is configured.");
+        Assert.SkipWhen(string.IsNullOrEmpty(stage), "No skill stage is configured.");
 
         using var client = await CreateHttpClientAsync();
 
@@ -83,9 +83,9 @@ public class SkillTests(ITestOutputHelper outputHelper)
         string? clientSecret = TestConfiguration.AlexaClientSecret;
         string? refreshToken = TestConfiguration.AlexaRefreshToken;
 
-        Skip.If(string.IsNullOrEmpty(clientId), "No client ID is configured.");
-        Skip.If(string.IsNullOrEmpty(clientSecret), "No client secret is configured.");
-        Skip.If(string.IsNullOrEmpty(refreshToken), "No refresh token is configured.");
+        Assert.SkipWhen(string.IsNullOrEmpty(clientId), "No client ID is configured.");
+        Assert.SkipWhen(string.IsNullOrEmpty(clientSecret), "No client secret is configured.");
+        Assert.SkipWhen(string.IsNullOrEmpty(refreshToken), "No refresh token is configured.");
 
         // See https://developer.amazon.com/docs/login-with-amazon/authorization-code-grant.html#using-refresh-tokens
         var parameters = new Dictionary<string, string>()

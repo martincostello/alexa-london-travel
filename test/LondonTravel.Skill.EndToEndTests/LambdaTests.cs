@@ -9,7 +9,7 @@ using Amazon.Lambda.Model;
 
 namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 
-[Collection(CloudWatchLogsFixtureCollection.Name)]
+[Collection<CloudWatchLogsFixtureCollection>]
 public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper outputHelper)
 {
     public static TheoryData<string> Payloads()
@@ -24,22 +24,24 @@ public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper output
         return payloads;
     }
 
-    [SkippableTheory]
+    [Theory]
     [MemberData(nameof(Payloads))]
     public async Task Can_Invoke_Intent_Can_Get_Json_Response(string payloadName)
     {
         var credentials = TestConfiguration.GetCredentials();
 
-        Skip.If(credentials is null, "No AWS credentials are configured.");
+        Assert.SkipWhen(credentials is null, "No AWS credentials are configured.");
 
         string? functionName = TestConfiguration.FunctionName;
         string? regionName = TestConfiguration.RegionName;
 
-        Skip.If(string.IsNullOrEmpty(functionName), "No Lambda function name is configured.");
-        Skip.If(string.IsNullOrEmpty(regionName), "No AWS region name is configured.");
+        Assert.SkipWhen(string.IsNullOrEmpty(functionName), "No Lambda function name is configured.");
+        Assert.SkipWhen(string.IsNullOrEmpty(regionName), "No AWS region name is configured.");
 
         // Arrange
-        string payload = await File.ReadAllTextAsync(Path.Combine("Payloads", $"{payloadName}.json"));
+        var cancellationToken = TestContext.Current.CancellationToken;
+
+        string payload = await File.ReadAllTextAsync(Path.Combine("Payloads", $"{payloadName}.json"), cancellationToken);
 
         var region = RegionEndpoint.GetBySystemName(regionName);
 
@@ -57,7 +59,7 @@ public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper output
         outputHelper.WriteLine($"Payload: {request.Payload}");
 
         // Act
-        var invocation = await client.InvokeAsync(request);
+        var invocation = await client.InvokeAsync(request, cancellationToken);
 
         // Assert
         invocation.ShouldNotBeNull();
@@ -66,7 +68,7 @@ public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper output
         fixture.Requests[invocation.ResponseMetadata.RequestId] = payloadName;
 
         using var reader = new StreamReader(invocation.Payload);
-        string responsePayload = await reader.ReadToEndAsync();
+        string responsePayload = await reader.ReadToEndAsync(cancellationToken);
 
         outputHelper.WriteLine($"ExecutedVersion: {invocation.ExecutedVersion}");
         outputHelper.WriteLine($"FunctionError: {invocation.FunctionError}");

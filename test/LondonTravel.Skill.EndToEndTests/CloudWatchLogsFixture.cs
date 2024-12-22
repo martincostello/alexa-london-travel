@@ -7,6 +7,7 @@ using Amazon;
 using Amazon.CloudWatchLogs;
 using Amazon.CloudWatchLogs.Model;
 using Xunit.Sdk;
+using Xunit.v3;
 
 namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 
@@ -16,7 +17,7 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
 
     internal Dictionary<string, string> Requests { get; } = [];
 
-    public async Task DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         if (Requests.Count < 1)
         {
@@ -96,18 +97,20 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
                 .OrderBy((p) => p.Event.Timestamp)
                 .ToList();
 
-            diagnosticMessageSink.OnMessage(new DiagnosticMessage($"Found {events.Count} CloudWatch log events."));
+            diagnosticMessageSink.OnMessage(new DiagnosticMessage() { Message = $"Found {events.Count} CloudWatch log events." });
 
             foreach ((_, string message) in events)
             {
-                diagnosticMessageSink.OnMessage(new DiagnosticMessage(message));
+                diagnosticMessageSink.OnMessage(new DiagnosticMessage() { Message = message });
             }
 
             await TryPostLogsToPullRequestAsync(events.Select((p) => p.Event));
         }
+
+        GC.SuppressFinalize(this);
     }
 
-    public Task InitializeAsync() => Task.CompletedTask;
+    public ValueTask InitializeAsync() => ValueTask.CompletedTask;
 
     private static async Task TryPostLogsToPullRequestAsync(IEnumerable<LogEvent> events)
     {

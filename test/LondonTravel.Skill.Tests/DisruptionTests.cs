@@ -12,7 +12,9 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
     public async Task Can_Invoke_Function_When_There_Are_No_Disruptions()
     {
         // Arrange
-        await Interceptor.RegisterBundleFromResourceStreamAsync<DisruptionTests>("tfl-no-disruptions.json");
+        await Interceptor.RegisterBundleFromResourceStreamAsync<DisruptionTests>(
+            "tfl-no-disruptions.json",
+            cancellationToken: TestContext.Current.CancellationToken);
 
         var function = await CreateFunctionAsync();
         var request = CreateIntentRequest();
@@ -32,7 +34,9 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
     public async Task Can_Invoke_Function_When_There_Is_One_Disruption()
     {
         // Arrange
-        await Interceptor.RegisterBundleFromResourceStreamAsync<DisruptionTests>("tfl-one-disruption.json");
+        await Interceptor.RegisterBundleFromResourceStreamAsync<DisruptionTests>(
+            "tfl-one-disruption.json",
+            cancellationToken: TestContext.Current.CancellationToken);
 
         var function = await CreateFunctionAsync();
         var request = CreateIntentRequest();
@@ -52,7 +56,9 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
     public async Task Can_Invoke_Function_When_There_Are_Multiple_Disruptions()
     {
         // Arrange
-        await Interceptor.RegisterBundleFromResourceStreamAsync<DisruptionTests>("tfl-multiple-disruptions.json");
+        await Interceptor.RegisterBundleFromResourceStreamAsync<DisruptionTests>(
+            "tfl-multiple-disruptions.json",
+            cancellationToken: TestContext.Current.CancellationToken);
 
         var function = await CreateFunctionAsync();
         var request = CreateIntentRequest();
