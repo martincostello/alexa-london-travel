@@ -14,6 +14,7 @@ jobs:
   analysis:
     name: analysis
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     permissions:
       id-token: write
