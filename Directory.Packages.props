@@ -11,7 +11,7 @@
     <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="3.7.403.13" />
     <PackageVersion Include="AWSSDK.Lambda" Version="3.7.405.2" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.14.0" />
-    <PackageVersion Include="coverlet.msbuild" Version="6.0.3" />
+    <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="5.0.0" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.5.1" />
