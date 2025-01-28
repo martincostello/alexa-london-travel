@@ -248,7 +248,7 @@ jobs:
         echo "LAMBDA_ENVIRONMENT_VARIABLES=${lambda_vars}" >> "$GITHUB_ENV"
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+      uses: aws-actions/configure-aws-credentials@4fc4975a852c8cd99761e2de1f4ba73402e44dd9 # v4.0.3
       with:
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-deploy
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-dev
@@ -312,7 +312,7 @@ jobs:
       uses: actions/setup-dotnet@87b7050bc53ea08284295505d98d2aa94301e852 # v4.2.0
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+      uses: aws-actions/configure-aws-credentials@4fc4975a852c8cd99761e2de1f4ba73402e44dd9 # v4.0.3
       with:
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-test
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-tests-dev
@@ -386,7 +386,7 @@ jobs:
         echo "LAMBDA_ENVIRONMENT_VARIABLES=${lambda_vars}" >> "$GITHUB_ENV"
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+      uses: aws-actions/configure-aws-credentials@4fc4975a852c8cd99761e2de1f4ba73402e44dd9 # v4.0.3
       with:
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-deploy
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-production
@@ -449,7 +449,7 @@ jobs:
       uses: actions/setup-dotnet@87b7050bc53ea08284295505d98d2aa94301e852 # v4.2.0
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+      uses: aws-actions/configure-aws-credentials@4fc4975a852c8cd99761e2de1f4ba73402e44dd9 # v4.0.3
       with:
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-test
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-tests-production
