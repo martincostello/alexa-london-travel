@@ -24,11 +24,12 @@ jobs:
     outputs:
       archive-name: ${{ env.ARCHIVE_NAME }}
       artifact-name: ${{ env.ARTIFACT_NAME }}
+      artifact-run-id: ${{ steps.get-run.outputs.run-id }}
+      artifact-run-number: ${{ steps.get-run.outputs.run-number }}
       environment-name: ${{ steps.get-environment-name.outputs.result }}
       function-name: ${{ steps.set-outputs.outputs.function-name }}
       issue-number: ${{ env.ISSUE_NUMBER }}
       ref: ${{ steps.get-run.outputs.ref }}
-      run-id: ${{ steps.get-run.outputs.run-id }}
       skill-stage: ${{ steps.set-outputs.outputs.skill-stage }}
       workflow-url: ${{ steps.set-outputs.outputs.workflow-url }}
 
@@ -107,6 +108,7 @@ jobs:
 
           core.setOutput('ref', head_sha);
           core.setOutput('run-id', run.id);
+          core.setOutput('run-number', run.run_number);
 
     - name: Set outputs
       id: set-outputs
@@ -142,7 +144,8 @@ jobs:
     with:
       archive-name: ${{ needs.setup.outputs.archive-name }}
       artifact-name: ${{ needs.setup.outputs.artifact-name }}
-      artifact-run-id: ${{ needs.setup.outputs.run-id }}
+      artifact-run-id: ${{ needs.setup.outputs.artifact-run-id }}
+      artifact-run-number: ${{ needs.setup.outputs.artifact-run-number }}
       environment-name: ${{ needs.setup.outputs.environment-name }}
       function-name: ${{ needs.setup.outputs.function-name }}
       issue-number: ${{ needs.setup.outputs.issue-number }}

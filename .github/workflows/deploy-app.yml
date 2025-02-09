@@ -15,6 +15,11 @@ on:
         description: 'The ID of the workflow run to download the deployment artifact.'
         required: true
         type: string
+      artifact-run-number:
+        description: 'The number of the workflow run that created the deployment artifact.'
+        required: false
+        type: string
+        default: ${{ github.run_number }}
       environment-name:
         description: 'The name of the GitHub environment to deploy to.'
         required: true
@@ -152,7 +157,7 @@ jobs:
     - name: Update function configuration
       shell: bash
       env:
-        FUNCTION_DESCRIPTION: Deploy build ${{ inputs.artifact-run-id }} to AWS Lambda via GitHub Actions
+        FUNCTION_DESCRIPTION: 'Deploy build #${{ inputs.artifact-run-number }} to AWS Lambda via GitHub Actions'
         FUNCTION_LAYERS: ${{ vars.AWS_LAMBDA_LAYERS }}
         FUNCTION_LOGGING_CONFIG: ${{ vars.AWS_LAMBDA_LOGGING_CONFIG }}
         FUNCTION_ROLE: ${{ vars.AWS_LAMBDA_ROLE }}
