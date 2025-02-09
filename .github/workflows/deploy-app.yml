@@ -1,0 +1,262 @@
+name: deploy-app
+
+on:
+  workflow_call:
+    inputs:
+      archive-name:
+        description: 'The name of the ZIP archive containing the application to deploy.'
+        required: true
+        type: string
+      artifact-name:
+        description: 'The name of the GitHub artifact containing the application to deploy.'
+        required: true
+        type: string
+      artifact-run-id:
+        description: 'The ID of the workflow run to download the deployment artifact.'
+        required: true
+        type: string
+      environment-name:
+        description: 'The name of the GitHub environment to deploy to.'
+        required: true
+        type: string
+      function-name:
+        description: 'The name of the function to deploy the application to.'
+        required: true
+        type: string
+      issue-number:
+        description: 'The number of the issue that triggered the deployment, if any.'
+        required: false
+        type: string
+      ref:
+        description: 'The Git reference to check out when running tests.'
+        required: false
+        type: string
+        default: ${{ github.sha }}
+      skill-stage:
+        description: 'The name of the skill stage to use when running tests.'
+        required: true
+        type: string
+      workflow-url:
+        description: 'The URL of the workflow that triggered the deployment.'
+        required: false
+        type: string
+        default: ''
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  ENVIRONMENT_NAME: ${{ inputs.environment-name }}
+  ENVIRONMENT_URL: ${{ github.server_url }}/${{ github.repository }}/deployments/${{ inputs.environment-name }}
+  FUNCTION_NAME: ${{ inputs.function-name }}
+  FORCE_COLOR: 1
+  TERM: xterm
+
+permissions: {}
+
+jobs:
+
+  deploy:
+    runs-on: [ ubuntu-latest ]
+    concurrency: ${{ inputs.environment-name }}_environment
+
+    env:
+      ARCHIVE_NAME: ${{ inputs.archive-name }}
+
+    environment:
+      name: ${{ inputs.environment-name }}
+
+    permissions:
+      id-token: write
+      pull-requests: write
+
+    outputs:
+      comment-id: ${{ steps.post-start-comment.outputs.result }}
+
+    steps:
+
+    - name: Post deployment starting comment
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      id: post-start-comment
+      if: inputs.issue-number && inputs.workflow-url
+      env:
+        ISSUE_NUMBER: ${{ inputs.issue-number }}
+        WORKFLOW_URL: ${{ inputs.workflow-url }}
+      with:
+        result-encoding: string
+        script: |
+          const { data: comment } = await github.rest.issues.createComment({
+            owner: context.payload.repository.owner.login,
+            repo: context.payload.repository.name,
+            issue_number: process.env.ISSUE_NUMBER,
+            body: `Starting [deployment](${process.env.WORKFLOW_URL}) to [${process.env.ENVIRONMENT_NAME}](${process.env.ENVIRONMENT_URL}) :rocket:`,
+          });
+          return comment.id;
+
+    - name: Download artifact
+      uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        name: ${{ inputs.artifact-name }}
+        run-id: ${{ inputs.artifact-run-id }}
+
+    - name: Get Lambda function configuration
+      shell: bash
+      run: |
+        LAMBDA_CONFIG="$(unzip -p "${ARCHIVE_NAME}.zip" aws-lambda-tools-defaults.json)"
+        {
+          echo "FUNCTION_ARCHITECTURES=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-architecture"')"
+          echo "FUNCTION_HANDLER=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-handler"')"
+          echo "FUNCTION_MEMORY=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-memory-size"')"
+          echo "FUNCTION_RUNTIME=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-runtime"')"
+          echo "FUNCTION_TIMEOUT=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-timeout"')"
+        } >> "${GITHUB_ENV}"
+
+    - name: Get Lambda environment variables
+      env:
+        SKILL_API_URL: ${{ vars.SKILL_API_URL }}
+        SKILL_ID: ${{ secrets.SKILL_ID }}
+        TFL_APPLICATION_ID: ${{ secrets.TFL_APPLICATION_ID }}
+        TFL_APPLICATION_KEY: ${{ secrets.TFL_APPLICATION_KEY }}
+        VERIFY_SKILL_ID: true
+      shell: bash
+      run: |
+        FUNCTION_ENVIRONMENT_VARIABLES="{\
+          \"Variables\": {\
+            \"Skill__SkillApiUrl\": \"${SKILL_API_URL}\",\
+            \"Skill__SkillId\": \"${SKILL_ID}\",\
+            \"Skill__TflApplicationId\": \"${TFL_APPLICATION_ID}\",\
+            \"Skill__TflApplicationKey\": \"${TFL_APPLICATION_KEY}\",\
+            \"Skill__VerifySkillId\": \"${VERIFY_SKILL_ID}\"\
+          }\
+        }"
+        echo "FUNCTION_ENVIRONMENT_VARIABLES=${FUNCTION_ENVIRONMENT_VARIABLES}" >> "${GITHUB_ENV}"
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@4fc4975a852c8cd99761e2de1f4ba73402e44dd9 # v4.0.3
+      with:
+        aws-region: ${{ vars.AWS_REGION }}
+        role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-${{ inputs.environment-name }}
+        role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/github-actions-deploy
+
+    - name: Update function code
+      shell: bash
+      run: |
+        aws lambda update-function-code \
+          --function-name "${FUNCTION_NAME}" \
+          --architectures "${FUNCTION_ARCHITECTURES}" \
+          --zip-file "fileb://./${ARCHIVE_NAME}.zip"
+
+    - name: Wait for function code update
+      shell: bash
+      run: aws lambda wait function-updated-v2 --function-name "${FUNCTION_NAME}"
+
+    - name: Update function configuration
+      shell: bash
+      env:
+        FUNCTION_DESCRIPTION: Deploy build ${{ inputs.artifact-run-id }} to AWS Lambda via GitHub Actions
+        FUNCTION_LAYERS: ${{ vars.AWS_LAMBDA_LAYERS }}
+        FUNCTION_LOGGING_CONFIG: ${{ vars.AWS_LAMBDA_LOGGING_CONFIG }}
+        FUNCTION_ROLE: ${{ vars.AWS_LAMBDA_ROLE }}
+        FUNCTION_TRACING_MODE: ${{ vars.AWS_TRACING_MODE }}
+      run: |
+        aws lambda update-function-configuration \
+          --function-name "${FUNCTION_NAME}" \
+          --description "${FUNCTION_DESCRIPTION}" \
+          --environment "${FUNCTION_ENVIRONMENT_VARIABLES}" \
+          --handler "${FUNCTION_HANDLER}" \
+          --layers "${FUNCTION_LAYERS}" \
+          --logging-config "${FUNCTION_LOGGING_CONFIG}" \
+          --memory-size "${FUNCTION_MEMORY}" \
+          --role "${FUNCTION_ROLE}" \
+          --runtime "${FUNCTION_RUNTIME}" \
+          --timeout "${FUNCTION_TIMEOUT}" \
+          --tracing-config "Mode=${FUNCTION_TRACING_MODE}"
+
+    - name: Wait for function configuration update
+      shell: bash
+      run: aws lambda wait function-updated-v2 --function-name "${FUNCTION_NAME}"
+
+    - name: Post deployment finished comment
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      if: ${{ !cancelled() && steps.post-start-comment.outputs.result && inputs.workflow-url }}
+      env:
+        COMMENT_ID: ${{ steps.post-start-comment.outputs.result }}
+        OUTCOME: ${{ job.status }}
+        WORKFLOW_URL: ${{ inputs.workflow-url }}
+      with:
+        script: |
+          const succeeded = process.env.OUTCOME === 'success';
+          const outcome = succeeded ? 'successful' : 'failed';
+          const emoji = succeeded ? ':white_check_mark:' : ':x:';
+
+          await github.rest.issues.updateComment({
+            owner: context.payload.repository.owner.login,
+            repo: context.payload.repository.name,
+            comment_id: process.env.COMMENT_ID,
+            body: `[Deployment](${process.env.WORKFLOW_URL}) to [${process.env.ENVIRONMENT_NAME}](${process.env.ENVIRONMENT_URL}) ${outcome} ${emoji}`,
+          });
+
+  test:
+    needs: [ deploy ]
+    runs-on: [ ubuntu-latest ]
+    concurrency: ${{ inputs.environment-name }}_environment
+
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+      DOTNET_NOLOGO: true
+      DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
+      NUGET_XMLDOC_MODE: skip
+
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      with:
+        filter: 'tree:0'
+        ref: ${{ inputs.ref }}
+        show-progress: false
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@3951f0dfe7a07e2313ec93c75700083e2005cbab # v4.3.0
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@4fc4975a852c8cd99761e2de1f4ba73402e44dd9 # v4.0.3
+      with:
+        aws-region: ${{ vars.AWS_REGION }}
+        role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-tests-${{ inputs.environment-name }}
+        role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/github-actions-test
+
+    - name: Run end-to-end tests
+      run: dotnet test ./test/LondonTravel.Skill.EndToEndTests --configuration Release --logger "GitHubActions;report-warnings=false"
+      env:
+        LAMBDA_FUNCTION_NAME: ${{ env.FUNCTION_NAME }}
+        LWA_CLIENT_ID: ${{ secrets.LWA_CLIENT_ID }}
+        LWA_CLIENT_SECRET: ${{ secrets.LWA_CLIENT_SECRET }}
+        LWA_REFRESH_TOKEN: ${{ secrets.LWA_REFRESH_TOKEN }}
+        SKILL_ID: ${{ secrets.SKILL_ID }}
+        SKILL_STAGE: ${{ inputs.skill-stage }}
+
+    - name: Post tests finished comment
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      if: ${{ !cancelled() && needs.deploy.outputs.comment-id }}
+      env:
+        COMMENT_ID: ${{ needs.deploy.outputs.comment-id }}
+        OUTCOME: ${{ job.status }}
+        WORKFLOW_URL: ${{ inputs.workflow-url }}
+      with:
+        script: |
+          const succeeded = process.env.OUTCOME === 'success';
+          const outcome = succeeded ? 'passed' : 'failed';
+          const emoji = succeeded ? ':white_check_mark:' : ':x:';
+
+          await github.rest.issues.updateComment({
+            owner: context.payload.repository.owner.login,
+            repo: context.payload.repository.name,
+            comment_id: process.env.COMMENT_ID,
+            body: `:test_tube: [Tests](${process.env.WORKFLOW_URL}) for deployment to [${process.env.ENVIRONMENT_NAME}](${process.env.ENVIRONMENT_URL}) ${outcome} ${emoji}`,
+          });
