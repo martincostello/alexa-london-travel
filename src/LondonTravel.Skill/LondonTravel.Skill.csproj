@@ -42,7 +42,6 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
     <PackageReference Include="Polly.Extensions" />
     <PackageReference Include="Polly.RateLimiting" />
-    <PackageReference Include="System.Text.Json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Strings.Designer.cs" AutoGen="True" DependentUpon="Strings.resx" DesignTime="True" />
