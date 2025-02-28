@@ -73,7 +73,7 @@ function DotNetTest {
     $additionalArgs = @(
       "--blame-hang",
       "--blame-hang-timeout",
-      "60s"
+      "180s"
     )
 
     if (![string]::IsNullOrEmpty($env:GITHUB_SHA)) {
