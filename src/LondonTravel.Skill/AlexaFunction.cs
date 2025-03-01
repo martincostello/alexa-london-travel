@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using OpenTelemetry.Logs;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -112,6 +113,19 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         {
             builder.AddConfiguration(configuration.GetSection("Logging"));
             builder.AddJsonConsole();
+
+            builder.AddOpenTelemetry((options) =>
+            {
+                options.IncludeFormattedMessage = true;
+                options.IncludeScopes = true;
+
+                options.SetResourceBuilder(TelemetryExtensions.ResourceBuilder);
+
+                if (TelemetryExtensions.IsOtlpCollectorConfigured())
+                {
+                    options.AddOtlpExporter();
+                }
+            });
         });
 
         services.AddHttpClients();
