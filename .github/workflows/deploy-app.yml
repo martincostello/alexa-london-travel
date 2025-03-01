@@ -140,7 +140,7 @@ jobs:
       with:
         aws-region: ${{ vars.AWS_REGION }}
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-${{ inputs.environment-name }}
-        role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/github-actions-deploy
+        role-to-assume: ${{ secrets.AWS_DEPLOYMENT_ROLE_DEPLOY }}
 
     - name: Update function code
       shell: bash
@@ -234,7 +234,7 @@ jobs:
       with:
         aws-region: ${{ vars.AWS_REGION }}
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-tests-${{ inputs.environment-name }}
-        role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/github-actions-test
+        role-to-assume: ${{ secrets.AWS_DEPLOYMENT_ROLE_TEST }}
 
     - name: Run end-to-end tests
       run: dotnet test ./test/LondonTravel.Skill.EndToEndTests --configuration Release --logger "GitHubActions;report-warnings=false"
