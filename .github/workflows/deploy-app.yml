@@ -167,39 +167,36 @@ jobs:
       run: aws lambda wait function-updated-v2 --function-name "${FUNCTION_NAME}"
 
     - name: Update function configuration
-      shell: bash
+      shell: pwsh
       env:
         FUNCTION_DESCRIPTION: 'Deploy build #${{ inputs.artifact-run-number }} to AWS Lambda via GitHub Actions'
         FUNCTION_LOGGING_CONFIG: ${{ vars.AWS_LAMBDA_LOGGING_CONFIG }}
         FUNCTION_ROLE: ${{ vars.AWS_LAMBDA_ROLE }}
         FUNCTION_TRACING_MODE: ${{ vars.AWS_TRACING_MODE }}
       run: |
-        args=()
-        args+=("--description")
-        args+=("'${FUNCTION_DESCRIPTION}'")
-        args+=("--environment")
-        args+=("'${FUNCTION_ENVIRONMENT_VARIABLES}'")
-        args+=("--handler")
-        args+=("'${FUNCTION_HANDLER}'")
-        args+=("--logging-config")
-        args+=("'${FUNCTION_LOGGING_CONFIG}'")
-        args+=("--memory-size")
-        args+=("'${FUNCTION_MEMORY}'")
-        args+=("--role")
-        args+=("'${FUNCTION_ROLE}'")
-        args+=("--runtime")
-        args+=("'${FUNCTION_RUNTIME}'")
-        args+=("--timeout")
-        args+=("'${FUNCTION_TIMEOUT}'")
-        args+=("--tracing-config")
-        args+=("'Mode=${FUNCTION_TRACING_MODE}'")
-        args+=("--layers")
+        $configArgs = @(
+          "--description", ${env:FUNCTION_DESCRIPTION},
+          "--environment", ${env:FUNCTION_ENVIRONMENT_VARIABLES},
+          "--function-name", "${env:FUNCTION_NAME}",
+          "--handler", ${env:FUNCTION_HANDLER},
+          "--logging-config", ${env:FUNCTION_LOGGING_CONFIG},
+          "--memory-size", ${env:FUNCTION_MEMORY},
+          "--role", ${env:FUNCTION_ROLE},
+          "--runtime", ${env:FUNCTION_RUNTIME},
+          "--timeout", ${env:FUNCTION_TIMEOUT},
+          "--layers"
+        )
 
-        if [ -n "${FUNCTION_LAYERS}" ]; then
-          args+=("'${FUNCTION_LAYERS}'")
-        fi
+        if (-Not [string]::IsNullOrWhiteSpace($env:FUNCTION_LAYERS)) {
+          $configArgs += $env:FUNCTION_LAYERS
+        }
 
-        aws lambda update-function-configuration "${args[@]}"
+        if (-Not [string]::IsNullOrWhiteSpace($env:FUNCTION_TRACING_MODE)) {
+          $configArgs += "--tracing-config"
+          $configArgs += "Mode=${env:FUNCTION_TRACING_MODE}"
+        }
+
+        aws lambda update-function-configuration $configArgs
 
     - name: Wait for function configuration update
       shell: bash
