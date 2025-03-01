@@ -17,20 +17,29 @@ internal static class TelemetryExtensions
 {
     private static readonly ConcurrentDictionary<string, string> ServiceMap = new(StringComparer.OrdinalIgnoreCase);
 
+    public static ResourceBuilder ResourceBuilder { get; } = ResourceBuilder.CreateDefault()
+        .AddService(SkillTelemetry.ServiceName, serviceVersion: SkillTelemetry.ServiceVersion)
+        .AddOperatingSystemDetector()
+        .AddProcessRuntimeDetector();
+
     public static IServiceCollection AddTelemetry(this IServiceCollection services)
     {
         services.AddSingleton((_) => SkillTelemetry.ActivitySource);
         services.AddOpenTelemetry()
-                .ConfigureResource((builder) => builder.AddService(SkillTelemetry.ServiceName, serviceVersion: SkillTelemetry.ServiceVersion))
                 .WithTracing((builder) =>
                 {
-                    builder.AddHttpClientInstrumentation()
-                           .AddSource(SkillTelemetry.ServiceName);
+                    builder.SetResourceBuilder(ResourceBuilder)
+                           .AddSource(SkillTelemetry.ServiceName)
+                           .AddHttpClientInstrumentation();
 
                     if (IsRunningInAwsLambda())
                     {
-                        builder.AddAWSLambdaConfigurations()
-                               .AddOtlpExporter();
+                        builder.AddAWSLambdaConfigurations();
+                    }
+
+                    if (IsOtlpCollectorConfigured())
+                    {
+                        builder.AddOtlpExporter();
                     }
                 });
 
@@ -45,6 +54,9 @@ internal static class TelemetryExtensions
 
         return services;
     }
+
+    internal static bool IsOtlpCollectorConfigured()
+        => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT"));
 
     private static bool IsRunningInAwsLambda()
         => Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") is { Length: > 0 } &&
