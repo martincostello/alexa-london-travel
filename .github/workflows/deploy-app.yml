@@ -174,18 +174,32 @@ jobs:
         FUNCTION_ROLE: ${{ vars.AWS_LAMBDA_ROLE }}
         FUNCTION_TRACING_MODE: ${{ vars.AWS_TRACING_MODE }}
       run: |
-        aws lambda update-function-configuration \
-          --function-name "${FUNCTION_NAME}" \
-          --description "${FUNCTION_DESCRIPTION}" \
-          --environment "${FUNCTION_ENVIRONMENT_VARIABLES}" \
-          --handler "${FUNCTION_HANDLER}" \
-          --layers "${FUNCTION_LAYERS}" \
-          --logging-config "${FUNCTION_LOGGING_CONFIG}" \
-          --memory-size "${FUNCTION_MEMORY}" \
-          --role "${FUNCTION_ROLE}" \
-          --runtime "${FUNCTION_RUNTIME}" \
-          --timeout "${FUNCTION_TIMEOUT}" \
-          --tracing-config "Mode=${FUNCTION_TRACING_MODE}"
+        args=()
+        args+=("--description")
+        args+=("'${FUNCTION_DESCRIPTION}'")
+        args+=("--environment")
+        args+=("'${FUNCTION_ENVIRONMENT_VARIABLES}'")
+        args+=("--handler")
+        args+=("'${FUNCTION_HANDLER}'")
+        args+=("--logging-config")
+        args+=("'${FUNCTION_LOGGING_CONFIG}'")
+        args+=("--memory-size")
+        args+=("'${FUNCTION_MEMORY}'")
+        args+=("--role")
+        args+=("'${FUNCTION_ROLE}'")
+        args+=("--runtime")
+        args+=("'${FUNCTION_RUNTIME}'")
+        args+=("--timeout")
+        args+=("'${FUNCTION_TIMEOUT}'")
+        args+=("--tracing-config")
+        args+=("'Mode=${FUNCTION_TRACING_MODE}'")
+        args+=("--layers")
+
+        if [ -n "${FUNCTION_LAYERS}" ]; then
+          args+=("'${FUNCTION_LAYERS}'")
+        fi
+
+        aws lambda update-function-configuration "${args[@]}"
 
     - name: Wait for function configuration update
       shell: bash
