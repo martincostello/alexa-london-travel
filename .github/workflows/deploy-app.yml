@@ -105,11 +105,14 @@ jobs:
 
     - name: Get Lambda function configuration
       shell: bash
+      env:
+        LAMBDA_LAYERS: ${{ vars.AWS_LAMBDA_LAYERS }}
       run: |
         LAMBDA_CONFIG="$(unzip -p "${ARCHIVE_NAME}.zip" aws-lambda-tools-defaults.json)"
         {
           echo "FUNCTION_ARCHITECTURES=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-architecture"')"
           echo "FUNCTION_HANDLER=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-handler"')"
+          echo "FUNCTION_LAYERS=$(echo "${LAMBDA_LAYERS}" | xargs)"
           echo "FUNCTION_MEMORY=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-memory-size"')"
           echo "FUNCTION_RUNTIME=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-runtime"')"
           echo "FUNCTION_TIMEOUT=$(echo "${LAMBDA_CONFIG}" | jq -r '."function-timeout"')"
@@ -117,6 +120,9 @@ jobs:
 
     - name: Get Lambda environment variables
       env:
+        OTEL_EXPORTER_OTLP_ENDPOINT: ${{ vars.OTEL_EXPORTER_OTLP_ENDPOINT}}
+        OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.OTEL_EXPORTER_OTLP_HEADERS}}
+        OTEL_EXPORTER_OTLP_PROTOCOL: ${{ vars.OTEL_EXPORTER_OTLP_PROTOCOL}}
         SKILL_API_URL: ${{ vars.SKILL_API_URL }}
         SKILL_ID: ${{ secrets.SKILL_ID }}
         TFL_APPLICATION_ID: ${{ secrets.TFL_APPLICATION_ID }}
@@ -124,8 +130,14 @@ jobs:
         VERIFY_SKILL_ID: true
       shell: bash
       run: |
+        OTEL_EXPORTER_OTLP_ENDPOINT=$(echo "${OTEL_EXPORTER_OTLP_ENDPOINT}" | xargs)
+        OTEL_EXPORTER_OTLP_HEADERS=$(echo "${OTEL_EXPORTER_OTLP_HEADERS}" | xargs)
+        OTEL_EXPORTER_OTLP_PROTOCOL=$(echo "${OTEL_EXPORTER_OTLP_PROTOCOL}" | xargs)
         FUNCTION_ENVIRONMENT_VARIABLES="{\
           \"Variables\": {\
+            \"OTEL_EXPORTER_OTLP_ENDPOINT\": \"${OTEL_EXPORTER_OTLP_ENDPOINT}\",\
+            \"OTEL_EXPORTER_OTLP_HEADERS\": \"${OTEL_EXPORTER_OTLP_HEADERS}\",\
+            \"OTEL_EXPORTER_OTLP_PROTOCOL\": \"${OTEL_EXPORTER_OTLP_PROTOCOL}\",\
             \"Skill__SkillApiUrl\": \"${SKILL_API_URL}\",\
             \"Skill__SkillId\": \"${SKILL_ID}\",\
             \"Skill__TflApplicationId\": \"${TFL_APPLICATION_ID}\",\
@@ -158,7 +170,6 @@ jobs:
       shell: bash
       env:
         FUNCTION_DESCRIPTION: 'Deploy build #${{ inputs.artifact-run-number }} to AWS Lambda via GitHub Actions'
-        FUNCTION_LAYERS: ${{ vars.AWS_LAMBDA_LAYERS }}
         FUNCTION_LOGGING_CONFIG: ${{ vars.AWS_LAMBDA_LOGGING_CONFIG }}
         FUNCTION_ROLE: ${{ vars.AWS_LAMBDA_ROLE }}
         FUNCTION_TRACING_MODE: ${{ vars.AWS_TRACING_MODE }}
