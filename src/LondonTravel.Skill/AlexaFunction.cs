@@ -84,6 +84,10 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         return Task.FromResult(true);
     }
 
+    internal static bool IsRunningInAwsLambda()
+        => Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") is { Length: > 0 } &&
+           Environment.GetEnvironmentVariable("AWS_REGION") is { Length: > 0 };
+
     /// <summary>
     /// Configures the <see cref="ConfigurationBuilder"/> to use.
     /// </summary>
@@ -92,6 +96,11 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     {
         builder.AddJsonFile("appsettings.json", optional: true)
                .AddEnvironmentVariables();
+
+        if (IsRunningInAwsLambda())
+        {
+            builder.AddSecretsManager();
+        }
     }
 
     /// <summary>
