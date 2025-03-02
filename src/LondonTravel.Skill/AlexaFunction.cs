@@ -130,7 +130,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
 
                 options.SetResourceBuilder(TelemetryExtensions.ResourceBuilder);
 
-                if (TelemetryExtensions.IsOtlpCollectorConfigured())
+                if (IsRunningInAwsLambda())
                 {
                     options.AddOtlpExporter();
                 }
