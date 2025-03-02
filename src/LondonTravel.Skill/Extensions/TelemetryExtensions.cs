@@ -34,12 +34,8 @@ internal static class TelemetryExtensions
 
                     if (AlexaFunction.IsRunningInAwsLambda())
                     {
-                        builder.AddAWSLambdaConfigurations();
-                    }
-
-                    if (IsOtlpCollectorConfigured())
-                    {
-                        builder.AddOtlpExporter();
+                        builder.AddAWSLambdaConfigurations()
+                               .AddOtlpExporter();
                     }
                 });
 
@@ -54,9 +50,6 @@ internal static class TelemetryExtensions
 
         return services;
     }
-
-    internal static bool IsOtlpCollectorConfigured()
-        => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT"));
 
     private static void EnrichHttpActivity(Activity activity, HttpRequestMessage request)
     {
