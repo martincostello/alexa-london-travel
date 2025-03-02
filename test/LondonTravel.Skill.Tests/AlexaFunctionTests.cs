@@ -9,7 +9,10 @@ using JustEat.HttpClientInterception;
 using MartinCostello.LondonTravel.Skill.Extensions;
 using MartinCostello.LondonTravel.Skill.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
+using OpenTelemetry.Logs;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -100,7 +103,7 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
         // Arrange
         var secretsManager = Substitute.For<IAmazonSecretsManager>();
 
-        ConfigureSecret(secretsManager, "alexa-london-travel/OTEL_EXPORTER_OTLP_HEADERS", "Authorization secret-key");
+        ConfigureSecret(secretsManager, "alexa-london-travel/OTEL_EXPORTER_OTLP_HEADERS", $"Authorization=Basic secret-key");
         ConfigureSecret(secretsManager, "alexa-london-travel/Skill__SkillId", "secret-skill-id");
         ConfigureSecret(secretsManager, "alexa-london-travel/Skill__TflApplicationKey", "secret-tfl-app-id");
         ConfigureSecret(secretsManager, "alexa-london-travel/Skill__TflApplicationId", "secret-tfl-app-key");
@@ -152,6 +155,12 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
         {
             base.Configure(builder);
             builder.AddSecretsManager(cache);
+        }
+
+        protected override void ConfigureServices(IServiceCollection services)
+        {
+            base.ConfigureServices(services);
+            services.AddLogging((builder) => builder.AddOpenTelemetry((r) => r.AddOtlpExporter()));
         }
     }
 }
