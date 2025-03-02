@@ -145,7 +145,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         services.AddSingleton<IntentFactory>();
         services.AddSingleton<IValidateOptions<SkillConfiguration>, ValidateSkillConfiguration>();
         services.AddSingleton((p) => p.GetRequiredService<IOptions<SkillConfiguration>>().Value);
-        services.AddSingleton(configuration);
+        services.AddSingleton<IConfiguration>(configuration);
 
         services.AddSingleton<EmptyIntent>();
         services.AddSingleton<HelpIntent>();
