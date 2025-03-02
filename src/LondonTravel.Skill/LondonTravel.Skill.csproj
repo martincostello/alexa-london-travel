@@ -24,6 +24,7 @@
     <PackageReference Include="Amazon.Lambda.Core" />
     <PackageReference Include="Amazon.Lambda.RuntimeSupport" />
     <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" />
+    <PackageReference Include="AWSSDK.SecretsManager.Caching" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />

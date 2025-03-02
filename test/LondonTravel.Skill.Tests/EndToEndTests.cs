@@ -233,7 +233,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         using var httpClient = server.CreateClient();
 
         // Act
-        await FunctionEntrypoint.RunAsync<TestAlexaFunction>(httpClient, cancellationTokenSource.Token);
+        await FunctionEntrypoint.RunAsync<TestAlexaFunctionWithHttpRequests>(httpClient, cancellationTokenSource.Token);
 
         // Assert
         context.Response.TryRead(out var result).ShouldBeTrue();
@@ -251,7 +251,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         return actual;
     }
 
-    private sealed class TestAlexaFunction : TestSettingsAlexaFunction
+    private sealed class TestAlexaFunctionWithHttpRequests : TestSettingsAlexaFunction
     {
         protected override void ConfigureServices(IServiceCollection services)
         {

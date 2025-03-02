@@ -32,7 +32,7 @@ internal static class TelemetryExtensions
                            .AddSource(SkillTelemetry.ServiceName)
                            .AddHttpClientInstrumentation();
 
-                    if (IsRunningInAwsLambda())
+                    if (AlexaFunction.IsRunningInAwsLambda())
                     {
                         builder.AddAWSLambdaConfigurations();
                     }
@@ -57,10 +57,6 @@ internal static class TelemetryExtensions
 
     internal static bool IsOtlpCollectorConfigured()
         => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT"));
-
-    private static bool IsRunningInAwsLambda()
-        => Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") is { Length: > 0 } &&
-           Environment.GetEnvironmentVariable("AWS_REGION") is { Length: > 0 };
 
     private static void EnrichHttpActivity(Activity activity, HttpRequestMessage request)
     {

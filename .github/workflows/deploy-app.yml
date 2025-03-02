@@ -121,27 +121,18 @@ jobs:
     - name: Get Lambda environment variables
       env:
         OTEL_EXPORTER_OTLP_ENDPOINT: ${{ vars.OTEL_EXPORTER_OTLP_ENDPOINT}}
-        OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.OTEL_EXPORTER_OTLP_HEADERS}}
         OTEL_EXPORTER_OTLP_PROTOCOL: ${{ vars.OTEL_EXPORTER_OTLP_PROTOCOL}}
         SKILL_API_URL: ${{ vars.SKILL_API_URL }}
-        SKILL_ID: ${{ secrets.SKILL_ID }}
-        TFL_APPLICATION_ID: ${{ secrets.TFL_APPLICATION_ID }}
-        TFL_APPLICATION_KEY: ${{ secrets.TFL_APPLICATION_KEY }}
         VERIFY_SKILL_ID: true
       shell: bash
       run: |
         OTEL_EXPORTER_OTLP_ENDPOINT=$(echo "${OTEL_EXPORTER_OTLP_ENDPOINT}" | xargs)
-        OTEL_EXPORTER_OTLP_HEADERS=$(echo "${OTEL_EXPORTER_OTLP_HEADERS}" | xargs)
         OTEL_EXPORTER_OTLP_PROTOCOL=$(echo "${OTEL_EXPORTER_OTLP_PROTOCOL}" | xargs)
         FUNCTION_ENVIRONMENT_VARIABLES="{\
           \"Variables\": {\
             \"OTEL_EXPORTER_OTLP_ENDPOINT\": \"${OTEL_EXPORTER_OTLP_ENDPOINT}\",\
-            \"OTEL_EXPORTER_OTLP_HEADERS\": \"${OTEL_EXPORTER_OTLP_HEADERS}\",\
             \"OTEL_EXPORTER_OTLP_PROTOCOL\": \"${OTEL_EXPORTER_OTLP_PROTOCOL}\",\
             \"Skill__SkillApiUrl\": \"${SKILL_API_URL}\",\
-            \"Skill__SkillId\": \"${SKILL_ID}\",\
-            \"Skill__TflApplicationId\": \"${TFL_APPLICATION_ID}\",\
-            \"Skill__TflApplicationKey\": \"${TFL_APPLICATION_KEY}\",\
             \"Skill__VerifySkillId\": \"${VERIFY_SKILL_ID}\"\
           }\
         }"

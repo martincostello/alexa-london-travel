@@ -114,7 +114,7 @@ public abstract class FunctionTests(ITestOutputHelper outputHelper) : ITestOutpu
         }
     }
 
-    private sealed class TestAlexaFunction(
+    protected class TestAlexaFunction(
         HttpClientInterceptorOptions options,
         ITestOutputHelper? outputHelper) : TestSettingsAlexaFunction, ITestOutputHelperAccessor
     {
