@@ -176,6 +176,29 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
 
         using var activity = SkillTelemetry.ActivitySource.StartActivity("Skill Request");
 
+        if (activity is { })
+        {
+            activity.SetTag("alexa.request.id", request.Request.RequestId);
+            activity.SetTag("alexa.request.locale", request.Request.Locale);
+            activity.SetTag("alexa.request.type", request.Request.Type);
+
+            if (request.Request is IntentRequest intent)
+            {
+                activity.SetTag("alexa.request.intent.name", intent.Intent?.Name);
+
+                if (intent.Intent?.Slots is { Count: > 0 } slots)
+                {
+                    activity.SetTag("alexa.request.intent.slots", slots.Values.Select((p) => $"{p.Name}={p.Value}").ToArray());
+                }
+            }
+
+            if (request.Context?.System is { } system)
+            {
+                activity.SetTag("alexa.context.system.application.id", system.Application?.ApplicationId);
+                activity.SetTag("alexa.context.system.user.id", system.User?.UserId);
+            }
+        }
+
         Log.InvokingSkillRequest(logger, request.Request.Type);
 
         return await handler.HandleAsync(request);
