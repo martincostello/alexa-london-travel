@@ -27,7 +27,7 @@ internal sealed class SecretsManagerConfigurationProvider(SecretsManagerCache ca
 
         foreach (string name in SecretNames)
         {
-            string key = name.Replace("__", ":");
+            string key = name.Replace("__", ConfigurationPath.KeyDelimiter, StringComparison.Ordinal);
             string value = await GetSecretAsync($"{Prefix}{name}", cancellationToken);
 
             if (value is { Length: > 0 })
