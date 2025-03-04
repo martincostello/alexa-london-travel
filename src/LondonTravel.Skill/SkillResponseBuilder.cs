@@ -144,7 +144,7 @@ internal sealed class SkillResponseBuilder
                 return xmlString;
             }
 
-            int endOfSpeakTag = xmlString.IndexOf('>');
+            int endOfSpeakTag = xmlString.IndexOf('>', StringComparison.Ordinal);
             return string.Concat(SpeakTag, xmlString.AsSpan(endOfSpeakTag + 1));
         }
     }
