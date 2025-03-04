@@ -30,7 +30,10 @@ internal sealed class SecretsManagerConfigurationProvider(SecretsManagerCache ca
             string key = name.Replace("__", ":");
             string value = await GetSecretAsync($"{Prefix}{name}", cancellationToken);
 
-            secrets[key] = value;
+            if (value is { Length: > 0 })
+            {
+                secrets[key] = value;
+            }
         }
 
         Data = secrets;
