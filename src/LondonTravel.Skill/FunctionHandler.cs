@@ -26,15 +26,9 @@ internal sealed class FunctionHandler(AlexaSkill skill, SkillConfiguration confi
     {
         VerifySkillId(request);
 
-        var previousCulture = SetLocale(request);
-
-        try
+        using (CultureSwitcher.UseCulture(request.Request.Locale ?? "en-GB"))
         {
             return await HandleRequestAsync(request);
-        }
-        finally
-        {
-            CultureInfo.CurrentCulture = previousCulture;
         }
     }
 
@@ -64,29 +58,6 @@ internal sealed class FunctionHandler(AlexaSkill skill, SkillConfiguration confi
         {
             return skill.OnError(ex, request.Session, request.Request.Type);
         }
-    }
-
-    /// <summary>
-    /// Sets the locale to use for resources for the current request.
-    /// </summary>
-    /// <param name="request">The skill request to use to set the locale.</param>
-    /// <returns>
-    /// The previous locale.
-    /// </returns>
-    private CultureInfo SetLocale(SkillRequest request)
-    {
-        var previousCulture = CultureInfo.CurrentCulture;
-
-        try
-        {
-            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(request.Request.Locale ?? "en-GB");
-        }
-        catch (ArgumentException)
-        {
-            // Ignore invalid/unknown cultures
-        }
-
-        return previousCulture;
     }
 
     /// <summary>
