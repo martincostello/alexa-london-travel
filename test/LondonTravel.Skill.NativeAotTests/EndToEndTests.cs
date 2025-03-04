@@ -299,7 +299,7 @@ public sealed class EndToEndTests
 
         void Configure(IServiceCollection services)
         {
-            services.AddLogging((builder) => builder.AddConsole());
+            services.AddLogging((builder) => builder.AddConsole().SetMinimumLevel(LogLevel.Warning));
             services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
                 (_) => new HttpRequestInterceptionFilter(Interceptor));
         }
@@ -369,7 +369,6 @@ public sealed class EndToEndTests
 
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddLogging((builder) => builder.AddConsole());
             services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>((_) =>
             {
                 var options = new HttpClientInterceptorOptions()
