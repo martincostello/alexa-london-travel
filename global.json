@@ -5,6 +5,7 @@
     "rollForward": "latestMajor"
   },
   "msbuild-sdks": {
+    "Aspire.AppHost.Sdk": "9.1.0",
     "MSTest.Sdk": "3.8.2"
   }
 }
