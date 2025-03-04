@@ -50,6 +50,6 @@
     <Compile Update="Strings.Designer.cs" AutoGen="True" DependentUpon="Strings.resx" DesignTime="True" />
     <EmbeddedResource Update="Strings.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings.Designer.cs" />
     <EmbeddedResource Update="Strings.*.resx" DependentUpon="Strings.resx" />
-    <None Include="appsettings.json;aws-lambda-tools-defaults.json" CopyToPublishDirectory="PreserveNewest" />
+    <None Include="appsettings.json;aws-lambda-tools-defaults.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

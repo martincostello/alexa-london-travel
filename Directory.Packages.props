@@ -8,6 +8,8 @@
     <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.12.3" />
     <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.4" />
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="2.0.0" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.1.0" />
+    <PackageVersion Include="Aspire.Hosting.AWS" Version="9.1.4" />
     <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="3.7.409.40" />
     <PackageVersion Include="AWSSDK.Lambda" Version="3.7.411.47" />
     <PackageVersion Include="AWSSDK.SecretsManager" Version="3.7.400.104" />
@@ -22,6 +24,7 @@
     <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="9.0.2" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.2" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Http.Diagnostics" Version="9.2.0" />
