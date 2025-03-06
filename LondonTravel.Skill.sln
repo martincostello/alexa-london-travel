@@ -90,6 +90,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Skill.Benchmar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LondonTravel.Skill.AppHost", "src\LondonTravel.Skill.AppHost\LondonTravel.Skill.AppHost.csproj", "{3983BA65-5884-E6F6-02DE-6533E574CBC0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LondonTravel.Skill.AppHostTests", "test\LondonTravel.Skill.AppHostTests\LondonTravel.Skill.AppHostTests.csproj", "{D59531C8-A6E8-7A37-24A6-68BF3AEB8657}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -120,6 +122,10 @@ Global
 		{3983BA65-5884-E6F6-02DE-6533E574CBC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3983BA65-5884-E6F6-02DE-6533E574CBC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3983BA65-5884-E6F6-02DE-6533E574CBC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D59531C8-A6E8-7A37-24A6-68BF3AEB8657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D59531C8-A6E8-7A37-24A6-68BF3AEB8657}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D59531C8-A6E8-7A37-24A6-68BF3AEB8657}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D59531C8-A6E8-7A37-24A6-68BF3AEB8657}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -136,6 +142,7 @@ Global
 		{190897E1-65DA-47E5-B960-674057F0F8EF} = {27EF9EE1-288D-4AFD-9006-D7CE61B642DF}
 		{D5741BE6-0B73-43AB-AAC3-9F18427D7E06} = {C7B81695-42DA-4416-B34C-6912DD089865}
 		{3983BA65-5884-E6F6-02DE-6533E574CBC0} = {8C59CF37-5860-4143-A891-A51E50620EBD}
+		{D59531C8-A6E8-7A37-24A6-68BF3AEB8657} = {27EF9EE1-288D-4AFD-9006-D7CE61B642DF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7E57D002-B20B-49BE-AD07-7FC61C2A764B}

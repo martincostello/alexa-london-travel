@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsTestProject>true</IsTestProject>
+    <NoWarn>$(NoWarn);CA1707;CA1711;SA1600;SA1601</NoWarn>
+    <RootNamespace>MartinCostello.LondonTravel.Skill.AppHostTests</RootNamespace>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\LondonTravel.Skill\LondonTravel.Skill.csproj" />
+    <ProjectReference Include="..\..\src\LondonTravel.Skill.AppHost\LondonTravel.Skill.AppHost.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Testing" />
+    <PackageReference Include="AWSSDK.Lambda" />
+    <PackageReference Include="GitHubActionsTestLogger" NoWarn="RT0003" />
+    <PackageReference Include="MartinCostello.Logging.XUnit.v3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Shouldly" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+    <EmbeddedResource Include="Payloads\*.json" LogicalName="Payload-%(Filename)" />
+    <EmbeddedResource Include="..\LondonTravel.Skill.EndToEndTests\Payloads\*.json" Link="Payloads\%(Filename)%(Extension)" LogicalName="Payload-%(Filename)" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Shouldly" />
+    <Using Include="Xunit" />
+  </ItemGroup>
+</Project>

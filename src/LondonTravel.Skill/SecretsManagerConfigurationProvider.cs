@@ -17,7 +17,11 @@ internal sealed class SecretsManagerConfigurationProvider(SecretsManagerCache ca
         "Skill__TflApplicationKey",
     ];
 
-    public override void Load() => LoadAsync().GetAwaiter().GetResult();
+    public override void Load()
+    {
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+        LoadAsync(cts.Token).GetAwaiter().GetResult();
+    }
 
     public async Task LoadAsync(CancellationToken cancellationToken = default)
     {
