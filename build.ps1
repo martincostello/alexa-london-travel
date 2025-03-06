@@ -87,7 +87,7 @@ function DotNetTest {
         $config = "Debug"
     }
 
-    & $dotnet test $Project --configuration $Configuration $additionalArgs
+    & $dotnet test $Project --configuration $config $additionalArgs
 
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet test failed with exit code $LASTEXITCODE"
