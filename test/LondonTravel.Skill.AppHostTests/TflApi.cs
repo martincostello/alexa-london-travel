@@ -10,26 +10,33 @@ namespace MartinCostello.LondonTravel.Skill.AppHostTests;
 
 internal static class TflApi
 {
-    private const string ApplicationId = "tfl-application-id";
-    private const string ApplicationKey = "tfl-application-key";
-
     public static void AddEndpoints(IEndpointRouteBuilder builder)
     {
-        builder.MapGet("/Line/Mode/{modes}/Disruption", GetDisruptionAsync);
-        builder.MapGet("/Line/{line}/Status", GetStatusAsync);
+        var group = builder
+            .MapGroup("Line")
+            .AddEndpointFilter(async (context, next) =>
+            {
+                if (context.HttpContext.Request.Query.TryGetValue("app_id", out var appId) &&
+                    context.HttpContext.Request.Query.TryGetValue("app_key", out var appKey) &&
+                    appId == "tfl-application-id" &&
+                    appKey == "tfl-application-key")
+                {
+                    return await next(context);
+                }
+
+                context.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return ValueTask.CompletedTask;
+            });
+
+        group.MapGet("Mode/{modes}/Disruption", GetDisruptionAsync);
+        group.MapGet("{line}/Status", GetStatusAsync);
     }
 
     private static async Task GetDisruptionAsync(
         [FromRoute] string modes,
-        [FromQuery(Name = "app_id")] string? applicationId,
-        [FromQuery(Name = "app_key")] string? applicationKey,
         HttpResponse response)
     {
-        if (applicationId is not ApplicationId || applicationKey is not ApplicationKey)
-        {
-            response.StatusCode = StatusCodes.Status401Unauthorized;
-        }
-        else if (modes?.Split(',').Length < 1)
+        if (modes?.Split(',').Length < 1)
         {
             response.StatusCode = StatusCodes.Status400BadRequest;
         }
@@ -46,15 +53,9 @@ internal static class TflApi
 
     private static async Task GetStatusAsync(
         [FromRoute] string line,
-        [FromQuery(Name = "app_id")] string? applicationId,
-        [FromQuery(Name = "app_key")] string? applicationKey,
         HttpResponse response)
     {
-        if (applicationId is not ApplicationId || applicationKey is not ApplicationKey)
-        {
-            response.StatusCode = StatusCodes.Status401Unauthorized;
-        }
-        else if (string.IsNullOrEmpty(line))
+        if (string.IsNullOrEmpty(line))
         {
             response.StatusCode = StatusCodes.Status400BadRequest;
         }
