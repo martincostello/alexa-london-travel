@@ -14,7 +14,6 @@ namespace MartinCostello.LondonTravel.Skill.AppHostTests;
 public sealed class LambdaTests
 {
     private const string PayloadPrefix = "Payload-";
-    private const int TimeoutMilliseconds = 30_000;
 
     public LambdaTests(LambdaFunctionFixture fixture, ITestOutputHelper outputHelper)
     {
@@ -36,7 +35,7 @@ public sealed class LambdaTests
         return payloads;
     }
 
-    [Theory(Timeout = TimeoutMilliseconds)]
+    [Theory(Timeout = 30_000)]
     [MemberData(nameof(Payloads))]
     public async Task Can_Invoke_Intent_Can_Get_Json_Response(string payloadName)
     {
