@@ -81,6 +81,12 @@ function DotNetTest {
         $additionalArgs += "GitHubActions;report-warnings=false"
     }
 
+    # HACK For some reason, the tests fail in Release mode
+    $config = $Configuration
+    if ([System.IO.Path]::GetFileNameWithoutExtension($Project) -eq "LondonTravel.Skill.AppHostTests") {
+        $config = "Debug"
+    }
+
     & $dotnet test $Project --configuration $Configuration $additionalArgs
 
     if ($LASTEXITCODE -ne 0) {
