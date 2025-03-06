@@ -81,7 +81,7 @@ function DotNetTest {
         $additionalArgs += "GitHubActions;report-warnings=false"
     }
 
-    # HACK For some reason, the tests fail in Release mode
+    # HACK Workaround for https://github.com/dotnet/aspire/issues/7935
     $config = $Configuration
     if ([System.IO.Path]::GetFileNameWithoutExtension($Project) -eq "LondonTravel.Skill.AppHostTests") {
         $config = "Debug"
