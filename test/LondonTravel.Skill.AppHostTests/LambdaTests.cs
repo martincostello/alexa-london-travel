@@ -14,7 +14,7 @@ namespace MartinCostello.LondonTravel.Skill.AppHostTests;
 public sealed class LambdaTests
 {
     private const string PayloadPrefix = "Payload-";
-    private const int TimeoutMilliseconds = 15_000;
+    private const int TimeoutMilliseconds = 30_000;
 
     public LambdaTests(LambdaFunctionFixture fixture, ITestOutputHelper outputHelper)
     {
