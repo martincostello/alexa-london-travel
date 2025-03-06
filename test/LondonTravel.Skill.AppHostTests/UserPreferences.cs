@@ -13,7 +13,7 @@ internal static class UserPreferences
     public static void AddEndpoints(IEndpointRouteBuilder builder)
         => builder.MapGet("/api/preferences", GetPreferencesAsync);
 
-    public static async Task GetPreferencesAsync(HttpContext context)
+    private static async Task GetPreferencesAsync(HttpContext context)
     {
         string? authorization = context.Request.Headers.Authorization;
 

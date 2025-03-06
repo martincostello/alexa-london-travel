@@ -19,7 +19,7 @@ internal static class TflApi
         builder.MapGet("/Line/{line}/Status", GetStatusAsync);
     }
 
-    public static async Task GetDisruptionAsync(
+    private static async Task GetDisruptionAsync(
         [FromRoute] string modes,
         [FromQuery(Name = "app_id")] string? applicationId,
         [FromQuery(Name = "app_key")] string? applicationKey,
@@ -44,7 +44,7 @@ internal static class TflApi
         }
     }
 
-    public static async Task GetStatusAsync(
+    private static async Task GetStatusAsync(
         [FromRoute] string line,
         [FromQuery(Name = "app_id")] string? applicationId,
         [FromQuery(Name = "app_key")] string? applicationKey,

@@ -26,7 +26,7 @@ internal static class SecretsManager
         => builder.MapPost("/", HandleAsync)
                   .Accepts<SecretsManagerRequest>(SecretsManagerContentType);
 
-    public static async Task HandleAsync(
+    private static async Task HandleAsync(
         [FromHeader(Name = "X-Amz-Target")] string target,
         HttpContext context,
         CancellationToken cancellationToken)
