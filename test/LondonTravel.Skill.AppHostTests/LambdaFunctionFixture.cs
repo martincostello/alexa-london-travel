@@ -12,15 +12,12 @@ using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill.AppHostTests;
 
-public sealed class LambdaFunctionFixture : IAsyncLifetime, IDisposable, ITestOutputHelperAccessor
+public sealed class LambdaFunctionFixture : IAsyncLifetime, ITestOutputHelperAccessor
 {
     private LambdaFunctionApplication? _application;
     private bool _disposed;
     private HttpServer? _httpServer;
     private string? _serviceUrl;
-
-    ~LambdaFunctionFixture()
-        => Dispose(false);
 
     public ITestOutputHelper? OutputHelper { get; set; }
 
@@ -35,25 +32,23 @@ public sealed class LambdaFunctionFixture : IAsyncLifetime, IDisposable, ITestOu
         return new AmazonLambdaClient(credentials, clientConfig);
     }
 
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
     public async ValueTask DisposeAsync()
     {
-        if (_application is { })
+        if (!_disposed)
         {
-            await _application.DisposeAsync();
+            if (_application is { })
+            {
+                await _application.DisposeAsync();
+            }
+
+            if (_httpServer is { })
+            {
+                await _httpServer.DisposeAsync();
+            }
+
+            _disposed = true;
         }
 
-        if (_httpServer is { })
-        {
-            await _httpServer.DisposeAsync();
-        }
-
-        Dispose(true);
         GC.SuppressFinalize(this);
     }
 
@@ -90,20 +85,6 @@ public sealed class LambdaFunctionFixture : IAsyncLifetime, IDisposable, ITestOu
         SecretsManager.AddEndpoints(builder);
         TflApi.AddEndpoints(builder);
         UserPreferences.AddEndpoints(builder);
-    }
-
-    private void Dispose(bool disposing)
-    {
-        if (!_disposed)
-        {
-            if (disposing)
-            {
-                _httpServer?.Dispose();
-                _application?.Dispose();
-            }
-
-            _disposed = true;
-        }
     }
 
     private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(_disposed, this);

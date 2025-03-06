@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -13,7 +14,7 @@ namespace MartinCostello.LondonTravel.Skill.AppHostTests;
 
 internal sealed class HttpServer(
     Action<IServiceCollection> configureServices,
-    Action<IEndpointRouteBuilder> configureEndpoints) : IAsyncLifetime, IDisposable
+    Action<IEndpointRouteBuilder> configureEndpoints) : IAsyncDisposable
 {
     private readonly CancellationTokenSource _onDisposed = new();
 
@@ -22,9 +23,6 @@ internal sealed class HttpServer(
     private bool _isStarted;
     private IWebHost? _host;
     private CancellationTokenSource? _onStopped;
-
-    ~HttpServer()
-        => Dispose(false);
 
     public Uri ServerUrl
     {
@@ -37,20 +35,32 @@ internal sealed class HttpServer(
         }
     }
 
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
     public async ValueTask DisposeAsync()
     {
-        if (_host is { })
+        if (!_disposed)
         {
-            await _host.StopAsync(TestContext.Current.CancellationToken);
+            if (_host is { })
+            {
+                await _host.StopAsync(TestContext.Current.CancellationToken);
+            }
+
+            _isStarted = false;
+
+            if (_onDisposed != null)
+            {
+                if (!_onDisposed.IsCancellationRequested)
+                {
+                    await _onDisposed.CancelAsync();
+                }
+
+                _onDisposed.Dispose();
+                _onStopped?.Dispose();
+            }
+
+            _host?.Dispose();
+            _disposed = true;
         }
 
-        Dispose();
         GC.SuppressFinalize(this);
     }
 
@@ -61,9 +71,6 @@ internal sealed class HttpServer(
 
         return new() { BaseAddress = _baseAddress };
     }
-
-    public async ValueTask InitializeAsync()
-        => await StartAsync(TestContext.Current.CancellationToken);
 
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
@@ -97,31 +104,6 @@ internal sealed class HttpServer(
         _isStarted = true;
     }
 
-    private void Dispose(bool disposing)
-    {
-        if (!_disposed)
-        {
-            if (disposing)
-            {
-                if (_onDisposed != null)
-                {
-                    if (!_onDisposed.IsCancellationRequested)
-                    {
-                        _onDisposed.Cancel();
-                    }
-
-                    _onDisposed.Dispose();
-                    _onStopped?.Dispose();
-                }
-
-                _isStarted = false;
-                _host?.Dispose();
-            }
-
-            _disposed = true;
-        }
-    }
-
     private void Configure(IApplicationBuilder app)
     {
         app.UseRouting();
@@ -143,10 +125,11 @@ internal sealed class HttpServer(
         builder.Configure(Configure);
     }
 
-    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(_disposed, this);
+    private void ThrowIfDisposed()
+        => ObjectDisposedException.ThrowIf(_disposed, this);
 
-    [System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(_baseAddress))]
-    [System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(_host))]
+    [MemberNotNull(nameof(_baseAddress))]
+    [MemberNotNull(nameof(_host))]
     private void ThrowIfNotStarted()
     {
         if (_host is null)
