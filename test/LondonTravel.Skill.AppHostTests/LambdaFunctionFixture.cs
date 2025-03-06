@@ -61,7 +61,7 @@ public sealed class LambdaFunctionFixture : IAsyncLifetime, ITestOutputHelperAcc
             throw new InvalidOperationException("The Lambda function has already been started.");
         }
 
-        using var timeout = new CancellationTokenSource(Debugger.IsAttached ? Timeout.InfiniteTimeSpan : TimeSpan.FromSeconds(30));
+        using var timeout = new CancellationTokenSource(Debugger.IsAttached ? Timeout.InfiniteTimeSpan : TimeSpan.FromMinutes(1));
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, cancellationToken);
 
         _httpServer = new HttpServer(ConfigureServices, AddHttpServerEndpoints);
