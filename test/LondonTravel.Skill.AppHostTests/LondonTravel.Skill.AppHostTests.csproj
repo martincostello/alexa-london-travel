@@ -21,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+    <EmbeddedResource Include="Payloads\*.json" LogicalName="Payload-%(Filename)" />
     <EmbeddedResource Include="..\LondonTravel.Skill.EndToEndTests\Payloads\*.json" Link="Payloads\%(Filename)%(Extension)" LogicalName="Payload-%(Filename)" />
   </ItemGroup>
   <ItemGroup>

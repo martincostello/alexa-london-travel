@@ -23,10 +23,8 @@ internal static class SecretsManager
     };
 
     public static void AddEndpoints(IEndpointRouteBuilder builder)
-    {
-        builder.MapPost("/", SecretsManager.HandleAsync)
-               .Accepts<SecretsManagerRequest>(SecretsManagerContentType);
-    }
+        => builder.MapPost("/", HandleAsync)
+                  .Accepts<SecretsManagerRequest>(SecretsManagerContentType);
 
     public static async Task HandleAsync(
         [FromHeader(Name = "X-Amz-Target")] string target,

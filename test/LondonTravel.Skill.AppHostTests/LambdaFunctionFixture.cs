@@ -19,7 +19,8 @@ public sealed class LambdaFunctionFixture : IAsyncLifetime, IDisposable, ITestOu
     private HttpServer? _httpServer;
     private string? _serviceUrl;
 
-    ~LambdaFunctionFixture() => Dispose(false);
+    ~LambdaFunctionFixture()
+        => Dispose(false);
 
     public ITestOutputHelper? OutputHelper { get; set; }
 
@@ -86,8 +87,9 @@ public sealed class LambdaFunctionFixture : IAsyncLifetime, IDisposable, ITestOu
 
     private void AddHttpServerEndpoints(IEndpointRouteBuilder builder)
     {
-        // TODO Add TfL API and London Travel preferences API
         SecretsManager.AddEndpoints(builder);
+        TflApi.AddEndpoints(builder);
+        UserPreferences.AddEndpoints(builder);
     }
 
     private void Dispose(bool disposing)
