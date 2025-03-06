@@ -37,7 +37,7 @@ public sealed class LambdaTests
 
     [Theory(Timeout = 30_000)]
     [MemberData(nameof(Payloads))]
-    public async Task Can_Invoke_Intent_Can_Get_Json_Response(string payloadName)
+    public async Task Can_Invoke_Function_And_Get_Skill_Response(string payloadName)
     {
         // Arrange
         var cancellationToken = TestContext.Current.CancellationToken;
