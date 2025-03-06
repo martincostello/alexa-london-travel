@@ -4,8 +4,8 @@
 using System.Diagnostics;
 using Amazon.Lambda;
 using Amazon.Runtime;
-using LondonTravel.Skill.AppHost;
 using MartinCostello.Logging.XUnit;
+using MartinCostello.LondonTravel.Skill.AppHost;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -74,8 +74,8 @@ public sealed class LambdaFunctionFixture : IAsyncLifetime, IDisposable, ITestOu
         _application = new LambdaFunctionApplication(_httpServer.ServerUrl.ToString(), ConfigureServices);
         await _application.StartAsync(cts.Token);
 
-        using var endpointClient = _application.CreateHttpClient(ResourceNames.LambdaEmulator);
-        _serviceUrl = endpointClient.BaseAddress!.ToString();
+        using var client = _application.CreateHttpClient(ResourceNames.LambdaEmulator);
+        _serviceUrl = client.BaseAddress!.ToString();
     }
 
     async ValueTask IAsyncLifetime.InitializeAsync()

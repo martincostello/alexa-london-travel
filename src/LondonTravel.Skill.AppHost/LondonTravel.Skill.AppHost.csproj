@@ -3,6 +3,7 @@
   <PropertyGroup>
     <IsAspireHost>true</IsAspireHost>
     <OutputType>Exe</OutputType>
+    <RootNamespace>MartinCostello.LondonTravel.Skill.AppHost</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
     <UserSecretsId>LondonTravel.Skill.AppHost</UserSecretsId>
   </PropertyGroup>

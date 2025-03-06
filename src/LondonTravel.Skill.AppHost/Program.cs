@@ -4,7 +4,7 @@
 #pragma warning disable CA2252
 
 using Amazon;
-using LondonTravel.Skill.AppHost;
+using MartinCostello.LondonTravel.Skill.AppHost;
 using Microsoft.Extensions.Configuration;
 
 var builder = DistributedApplication.CreateBuilder(args);

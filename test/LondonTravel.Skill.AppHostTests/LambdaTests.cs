@@ -5,6 +5,7 @@ using System.Net;
 using System.Text.Json;
 using System.Xml.Linq;
 using Amazon.Lambda.Model;
+using MartinCostello.LondonTravel.Skill.AppHost;
 using MartinCostello.LondonTravel.Skill.Models;
 
 namespace MartinCostello.LondonTravel.Skill.AppHostTests;
@@ -13,7 +14,7 @@ namespace MartinCostello.LondonTravel.Skill.AppHostTests;
 public sealed class LambdaTests
 {
     private const string PayloadPrefix = "Payload-";
-    private const int TimeoutMilliseconds = 45_000;
+    private const int TimeoutMilliseconds = 30_000;
 
     public LambdaTests(LambdaFunctionFixture fixture, ITestOutputHelper outputHelper)
     {
@@ -44,7 +45,7 @@ public sealed class LambdaTests
 
         var request = new InvokeRequest()
         {
-            FunctionName = "LondonTravelSkill",
+            FunctionName = ResourceNames.LambdaFunction,
             Payload = await GetPayloadAsync(payloadName, cancellationToken),
         };
 
