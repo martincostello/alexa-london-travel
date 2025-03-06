@@ -77,7 +77,9 @@ internal sealed class HttpServer(
         _onStopped = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, _onDisposed.Token);
 
         var builder = new WebHostBuilder();
+
         builder.UseKestrel();
+        builder.UseUrls("http://127.0.0.1:0");
 
         ConfigureWebHost(builder);
 
