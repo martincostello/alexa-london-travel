@@ -19,13 +19,22 @@
     </ItemGroup>
   </Target>
   <PropertyGroup Condition=" '$(CollectCoverage)' == 'true' ">
+    <_CoverageFormat>cobertura</_CoverageFormat>
+    <_CoverageOutput>$([System.IO.Path]::Combine($(ArtifactsPath), 'coverage', 'coverage.xml'))</_CoverageOutput>
+    <_CoverageSettings>$([System.IO.Path]::Combine($(MSBuildThisFileDirectory), 'tests.runsettings'))</_CoverageSettings>
+    <TestingPlatformCommandLineArguments>$(TestingPlatformCommandLineArguments) --coverage --coverage-output-format $(_CoverageFormat) --coverage-output %22$(_CoverageOutput)%22 --coverage-settings %22$(_CoverageSettings)%22</TestingPlatformCommandLineArguments>
+  </PropertyGroup>
+  <ItemGroup>
+    <CoverageReports Include="$(_CoverageOutput)" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(CollectCoverage)' == 'true' ">
     <ReportGeneratorOutputMarkdown Condition=" '$(ReportGeneratorOutputMarkdown)' == '' AND '$(GITHUB_SHA)' != '' ">true</ReportGeneratorOutputMarkdown>
     <ReportGeneratorReportTypes>HTML</ReportGeneratorReportTypes>
     <ReportGeneratorReportTypes Condition=" '$(ReportGeneratorOutputMarkdown)' == 'true' ">$(ReportGeneratorReportTypes);MarkdownSummaryGitHub</ReportGeneratorReportTypes>
     <ReportGeneratorTargetDirectory>$([System.IO.Path]::Combine($(ArtifactsPath), 'coverage'))</ReportGeneratorTargetDirectory>
   </PropertyGroup>
-  <Target Name="GenerateCoverageReports" AfterTargets="GenerateCoverageResultAfterTest" Condition=" '$(CollectCoverage)' == 'true' AND '@(CoverletReport->Count())' &gt; 0 ">
-    <ReportGenerator ReportFiles="@(CoverletReport)" ReportTypes="$(ReportGeneratorReportTypes)" Tag="$(Version)" TargetDirectory="$(ReportGeneratorTargetDirectory)" Title="$(AssemblyName)" VerbosityLevel="Warning" />
+  <Target Name="GenerateCoverageReports" AfterTargets="InvokeTestingPlatform" Condition=" '$(CollectCoverage)' == 'true' AND '@(CoverageReports->Count())' &gt; 0 ">
+    <ReportGenerator ReportFiles="@(CoverageReports)" ReportTypes="$(ReportGeneratorReportTypes)" Tag="$(Version)" TargetDirectory="$(ReportGeneratorTargetDirectory)" Title="$(AssemblyName)" VerbosityLevel="Warning" />
     <PropertyGroup Condition=" '$(ReportGeneratorOutputMarkdown)' == 'true' ">
       <_ReportSummaryContent>&lt;details&gt;&lt;summary&gt;:chart_with_upwards_trend: &lt;b&gt;$(AssemblyName) Code Coverage report&lt;/b&gt;&lt;/summary&gt;</_ReportSummaryContent>
       <_ReportSummaryContent>$(_ReportSummaryContent)$([System.Environment]::NewLine)</_ReportSummaryContent>
