@@ -24,7 +24,7 @@ public class HelpTests(ITestOutputHelper outputHelper) : FunctionTests(outputHel
         var response = AssertResponse(actual, shouldEndSession: false);
 
         response.Card.ShouldBeNull();
-        response.Reprompt.ShouldBeNull();
+        response.Reprompt.ShouldNotBeNull();
 
         response.OutputSpeech.ShouldNotBeNull();
         response.OutputSpeech.Type.ShouldBe("SSML");
