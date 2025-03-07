@@ -35,10 +35,7 @@
   </ItemGroup>
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
-    <CoverletOutput>$([System.IO.Path]::Combine($(ArtifactsPath), 'coverage', 'coverage'))</CoverletOutput>
-    <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
-    <Exclude>[Alexa.NET*]*,[Amazon.Lambda*]*,[LondonTravel.Skill.EndToEndTests]*,[xunit.*]*</Exclude>
-    <ExcludeByAttribute>GeneratedCodeAttribute</ExcludeByAttribute>
+    <Exclude>[Alexa.NET*]*,[Amazon.Lambda*]*,[xunit.*]*</Exclude>
     <Threshold>86</Threshold>
   </PropertyGroup>
 </Project>
