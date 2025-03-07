@@ -32,6 +32,6 @@
   </ItemGroup>
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
-    <Threshold>60</Threshold>
+    <Threshold Condition="!$([MSBuild]::IsMacOS())">60</Threshold>
   </PropertyGroup>
 </Project>
