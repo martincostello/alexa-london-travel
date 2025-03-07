@@ -48,4 +48,20 @@
     </PropertyGroup>
     <WriteLinesToFile Condition=" '$(_ReportGeneratorOutputMarkdown)' == 'true' AND Exists('$(_CoverageGitHubSummary)') " ContinueOnError="WarnAndContinue" File="$(GITHUB_STEP_SUMMARY)" Lines="$(_ReportSummaryContent)" />
   </Target>
+  <Target Name="CheckCodeCoverageThreshold" AfterTargets="GenerateCoverageReports" Condition=" '$(CollectCoverage)' == 'true' AND Exists('$(_CoverageOutput)') ">
+    <XmlPeek XmlInputPath="$(_CoverageOutput)" Query="/coverage/@branch-rate">
+      <Output TaskParameter="Result" PropertyName="BranchCoverage" />
+    </XmlPeek>
+    <XmlPeek XmlInputPath="$(_CoverageOutput)" Query="/coverage/@line-rate">
+      <Output TaskParameter="Result" PropertyName="LineCoverage" />
+    </XmlPeek>
+    <PropertyGroup>
+      <BranchCoverage>$([MSBuild]::Multiply($([System.Double]::Parse('$(BranchCoverage)')), 100.0))</BranchCoverage>
+      <BranchCoverage>$([System.Math]::Round($(BranchCoverage), 2))</BranchCoverage>
+      <LineCoverage>$([MSBuild]::Multiply($([System.Double]::Parse('$(LineCoverage)')), 100.0))</LineCoverage>
+      <LineCoverage>$([System.Math]::Round($(LineCoverage), 2))</LineCoverage>
+    </PropertyGroup>
+    <Error Condition=" '$(BranchCoverage)' &lt; '$(Threshold)' " Text="Branch coverage is below the threshold of $(Threshold)%. Value: $(BranchCoverage)%." />
+    <Error Condition=" '$(LineCoverage)' &lt; '$(Threshold)' " Text="Line coverage is below the threshold of $(Threshold)%. Value: $(LineCoverage)%." />
+  </Target>
 </Project>
