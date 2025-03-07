@@ -20,7 +20,7 @@
   </Target>
   <PropertyGroup Condition=" '$(CollectCoverage)' == 'true' ">
     <_CoverageFormat>cobertura</_CoverageFormat>
-    <_CoverageOutput>$([System.IO.Path]::Combine($(ArtifactsPath), 'coverage', 'coverage.xml'))</_CoverageOutput>
+    <_CoverageOutput>$([System.IO.Path]::Combine($(ArtifactsPath), 'coverage', '$(MSBuildProjectName).coverage.xml'))</_CoverageOutput>
     <_CoverageSettings>$([System.IO.Path]::Combine($(MSBuildThisFileDirectory), 'tests.runsettings'))</_CoverageSettings>
     <TestingPlatformCommandLineArguments>$(TestingPlatformCommandLineArguments) --coverage --coverage-output-format $(_CoverageFormat) --coverage-output %22$(_CoverageOutput)%22 --coverage-settings %22$(_CoverageSettings)%22</TestingPlatformCommandLineArguments>
   </PropertyGroup>
