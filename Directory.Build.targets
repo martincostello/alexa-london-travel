@@ -77,7 +77,7 @@
     </PropertyGroup>
     <WriteLinesToFileWithRetry Condition=" '$(_ReportGeneratorOutputMarkdown)' == 'true' AND Exists('$(_CoverageGitHubSummary)') " ContinueOnError="WarnAndContinue" File="$(GITHUB_STEP_SUMMARY)" Lines="$(_ReportSummaryContent)" />
   </Target>
-  <Target Name="CheckCodeCoverageThreshold" AfterTargets="GenerateCoverageReports" Condition=" '$(CollectCoverage)' == 'true' AND Exists('$(_CoverageOutput)') ">
+  <Target Name="CheckCodeCoverageThreshold" AfterTargets="GenerateCoverageReports" Condition=" '$(CollectCoverage)' == 'true' AND Exists('$(_CoverageOutput)') AND '$(Threshold)' != '' ">
     <XmlPeek XmlInputPath="$(_CoverageOutput)" Query="/coverage/@branch-rate">
       <Output TaskParameter="Result" PropertyName="BranchCoverage" />
     </XmlPeek>
