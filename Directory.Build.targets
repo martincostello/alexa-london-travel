@@ -20,30 +20,32 @@
   </Target>
   <PropertyGroup Condition=" '$(CollectCoverage)' == 'true' ">
     <_CoverageFormat>cobertura</_CoverageFormat>
-    <_CoverageOutput>$([System.IO.Path]::Combine($(ArtifactsPath), 'coverage', '$(MSBuildProjectName).coverage.xml'))</_CoverageOutput>
+    <_CoveragePath>$([System.IO.Path]::Combine($(ArtifactsPath), 'coverage'))</_CoveragePath>
+    <_CoverageOutput>$([System.IO.Path]::Combine($(_CoveragePath), '$(MSBuildProjectName).coverage.xml'))</_CoverageOutput>
     <_CoverageSettings>$([System.IO.Path]::Combine($(MSBuildThisFileDirectory), 'tests.runsettings'))</_CoverageSettings>
+    <_ReportGeneratorOutputMarkdown Condition=" '$(GITHUB_SHA)' != '' ">true</_ReportGeneratorOutputMarkdown>
+    <_ReportGeneratorReportTypes>HTML</_ReportGeneratorReportTypes>
+    <_ReportGeneratorReportTypes Condition=" '$(_ReportGeneratorOutputMarkdown)' == 'true' ">$(_ReportGeneratorReportTypes);MarkdownSummaryGitHub</_ReportGeneratorReportTypes>
+    <_ReportGeneratorTargetDirectory>$([System.IO.Path]::Combine($(ArtifactsPath), 'coverage'))</_ReportGeneratorTargetDirectory>
     <TestingPlatformCommandLineArguments>$(TestingPlatformCommandLineArguments) --coverage --coverage-output-format $(_CoverageFormat) --coverage-output %22$(_CoverageOutput)%22 --coverage-settings %22$(_CoverageSettings)%22</TestingPlatformCommandLineArguments>
   </PropertyGroup>
-  <ItemGroup>
-    <CoverageReports Include="$(_CoverageOutput)" />
-  </ItemGroup>
-  <PropertyGroup Condition=" '$(CollectCoverage)' == 'true' ">
-    <ReportGeneratorOutputMarkdown Condition=" '$(ReportGeneratorOutputMarkdown)' == '' AND '$(GITHUB_SHA)' != '' ">true</ReportGeneratorOutputMarkdown>
-    <ReportGeneratorReportTypes>HTML</ReportGeneratorReportTypes>
-    <ReportGeneratorReportTypes Condition=" '$(ReportGeneratorOutputMarkdown)' == 'true' ">$(ReportGeneratorReportTypes);MarkdownSummaryGitHub</ReportGeneratorReportTypes>
-    <ReportGeneratorTargetDirectory>$([System.IO.Path]::Combine($(ArtifactsPath), 'coverage'))</ReportGeneratorTargetDirectory>
-  </PropertyGroup>
-  <Target Name="GenerateCoverageReports" AfterTargets="InvokeTestingPlatform" Condition=" '$(CollectCoverage)' == 'true' AND '@(CoverageReports->Count())' &gt; 0 ">
-    <ReportGenerator ReportFiles="@(CoverageReports)" ReportTypes="$(ReportGeneratorReportTypes)" Tag="$(Version)" TargetDirectory="$(ReportGeneratorTargetDirectory)" Title="$(AssemblyName)" VerbosityLevel="Warning" />
-    <PropertyGroup Condition=" '$(ReportGeneratorOutputMarkdown)' == 'true' ">
+  <Target Name="GenerateCoverageReports" AfterTargets="InvokeTestingPlatform" Condition=" '$(CollectCoverage)' == 'true' ">
+    <ItemGroup>
+      <_CoverageReports Include="$(_CoveragePath)\**\*.coverage.xml" />
+    </ItemGroup>
+    <PropertyGroup>
+      <_CoverageGitHubSummary>$([System.IO.Path]::Combine($(_ReportGeneratorTargetDirectory), 'SummaryGithub.md'))</_CoverageGitHubSummary>
+    </PropertyGroup>
+    <ReportGenerator Condition=" '@(_CoverageReports->Count())' &gt; 0 " ReportFiles="@(_CoverageReports)" ReportTypes="$(_ReportGeneratorReportTypes)" Tag="$(Version)" TargetDirectory="$(_ReportGeneratorTargetDirectory)" Title="$(AssemblyName)" VerbosityLevel="Warning" />
+    <PropertyGroup Condition=" '$(_ReportGeneratorOutputMarkdown)' == 'true' AND Exists('$(_CoverageGitHubSummary)') ">
       <_ReportSummaryContent>&lt;details&gt;&lt;summary&gt;:chart_with_upwards_trend: &lt;b&gt;$(AssemblyName) Code Coverage report&lt;/b&gt;&lt;/summary&gt;</_ReportSummaryContent>
       <_ReportSummaryContent>$(_ReportSummaryContent)$([System.Environment]::NewLine)</_ReportSummaryContent>
       <_ReportSummaryContent>$(_ReportSummaryContent)$([System.Environment]::NewLine)</_ReportSummaryContent>
-      <_ReportSummaryContent>$(_ReportSummaryContent)$([System.IO.File]::ReadAllText('$([System.IO.Path]::Combine($(ReportGeneratorTargetDirectory), 'SummaryGithub.md'))'))</_ReportSummaryContent>
+      <_ReportSummaryContent>$(_ReportSummaryContent)$([System.IO.File]::ReadAllText('$(_CoverageGitHubSummary)'))</_ReportSummaryContent>
       <_ReportSummaryContent>$(_ReportSummaryContent)$([System.Environment]::NewLine)</_ReportSummaryContent>
       <_ReportSummaryContent>$(_ReportSummaryContent)$([System.Environment]::NewLine)</_ReportSummaryContent>
       <_ReportSummaryContent>$(_ReportSummaryContent)&lt;/details&gt;</_ReportSummaryContent>
     </PropertyGroup>
-    <WriteLinesToFile Condition=" '$(ReportGeneratorOutputMarkdown)' == 'true' " ContinueOnError="WarnAndContinue" File="$(GITHUB_STEP_SUMMARY)" Lines="$(_ReportSummaryContent)" />
+    <WriteLinesToFile Condition=" '$(_ReportGeneratorOutputMarkdown)' == 'true' AND Exists('$(_CoverageGitHubSummary)') " ContinueOnError="WarnAndContinue" File="$(GITHUB_STEP_SUMMARY)" Lines="$(_ReportSummaryContent)" />
   </Target>
 </Project>
