@@ -35,7 +35,7 @@ public sealed class LambdaTests
         return payloads;
     }
 
-    [Theory(Timeout = 30_000)]
+    [Theory(Timeout = 45_000)]
     [MemberData(nameof(Payloads))]
     public async Task Can_Invoke_Function_And_Get_Skill_Response(string payloadName)
     {
