@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using JustEat.HttpClientInterception;
-using MartinCostello.Logging.XUnit;
 using MartinCostello.LondonTravel.Skill.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,9 +10,9 @@ using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-public abstract class FunctionTests(ITestOutputHelper outputHelper) : ITestOutputHelperAccessor
+public abstract class FunctionTests(ITestOutputHelper outputHelper)
 {
-    public ITestOutputHelper? OutputHelper { get; set; } = outputHelper;
+    public ITestOutputHelper OutputHelper { get; set; } = outputHelper;
 
     protected HttpClientInterceptorOptions Interceptor { get; } = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
 
@@ -105,24 +104,27 @@ public abstract class FunctionTests(ITestOutputHelper outputHelper) : ITestOutpu
         return result;
     }
 
-    protected class TestSettingsAlexaFunction() : AlexaFunction
+    protected class TestSettingsAlexaFunction(ITestOutputHelper outputHelper) : AlexaFunction
     {
         protected override void Configure(ConfigurationBuilder builder)
         {
             base.Configure(builder);
             builder.AddJsonFile("testsettings.json");
         }
+
+        protected override void ConfigureServices(IServiceCollection services)
+        {
+            base.ConfigureServices(services);
+            services.AddLogging((p) => p.ClearProviders().AddXUnit(outputHelper));
+        }
     }
 
     protected class TestAlexaFunction(
         HttpClientInterceptorOptions options,
-        ITestOutputHelper? outputHelper) : TestSettingsAlexaFunction, ITestOutputHelperAccessor
+        ITestOutputHelper outputHelper) : TestSettingsAlexaFunction(outputHelper)
     {
-        public ITestOutputHelper? OutputHelper { get; set; } = outputHelper;
-
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddLogging((builder) => builder.AddXUnit(this));
             services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
                 (_) => new HttpRequestInterceptionFilter(options));
 

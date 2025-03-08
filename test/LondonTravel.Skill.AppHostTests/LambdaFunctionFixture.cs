@@ -78,7 +78,12 @@ public sealed class LambdaFunctionFixture : IAsyncLifetime, ITestOutputHelperAcc
         => await InitializeAsync(TestContext.Current.CancellationToken);
 
     private void ConfigureServices(IServiceCollection services)
-        => services.AddLogging((p) => p.AddXUnit(this).SetMinimumLevel(LogLevel.Warning));
+        => services.AddLogging((builder) =>
+        {
+            builder.ClearProviders()
+                   .AddXUnit(this)
+                   .SetMinimumLevel(LogLevel.Warning);
+        });
 
     private void AddHttpServerEndpoints(IEndpointRouteBuilder builder)
     {

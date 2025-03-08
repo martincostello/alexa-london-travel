@@ -149,7 +149,7 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
     protected sealed class TestAlexaFunctionWithSecrets(
         SecretsManagerCache cache,
         HttpClientInterceptorOptions interceptor,
-        ITestOutputHelper? outputHelper) : TestAlexaFunction(interceptor, outputHelper)
+        ITestOutputHelper outputHelper) : TestAlexaFunction(interceptor, outputHelper)
     {
         protected override void Configure(ConfigurationBuilder builder)
         {
@@ -160,7 +160,7 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
         protected override void ConfigureServices(IServiceCollection services)
         {
             base.ConfigureServices(services);
-            services.AddLogging((builder) => builder.AddOpenTelemetry((r) => r.AddOtlpExporter()));
+            services.AddLogging((p) => p.AddOpenTelemetry((r) => r.AddOtlpExporter()));
         }
     }
 }
