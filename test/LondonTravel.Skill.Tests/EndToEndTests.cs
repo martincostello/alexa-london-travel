@@ -210,7 +210,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         // Arrange
         string json = JsonSerializer.Serialize(request, AppJsonSerializerContext.Default.SkillRequest);
 
-        using var server = new LambdaTestServer((services) => services.AddLogging((builder) => builder.AddXUnit(this)));
+        using var server = new LambdaTestServer((services) => services.AddLogging((builder) => builder.AddXUnit(OutputHelper)));
         using var cancellationTokenSource = new CancellationTokenSource();
 
         await server.StartAsync(cancellationTokenSource.Token);
@@ -251,11 +251,10 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         return actual;
     }
 
-    private sealed class TestAlexaFunctionWithHttpRequests : TestSettingsAlexaFunction
+    private sealed class TestAlexaFunctionWithHttpRequests() : TestSettingsAlexaFunction(TestContext.Current.TestOutputHelper!)
     {
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddLogging((builder) => builder.AddConsole());
             services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
                 (_) =>
                 {

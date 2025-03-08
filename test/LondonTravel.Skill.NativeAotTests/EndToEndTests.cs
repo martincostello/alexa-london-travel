@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.Options;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -16,6 +18,8 @@ namespace MartinCostello.LondonTravel.Skill;
 public sealed class EndToEndTests
 {
     private const int TimeoutMilliseconds = 15_000;
+
+    private static readonly ConsoleLoggerProvider ConsoleLogger = new(new ConsoleLoggerOptionsMonitor());
 
     private HttpClientInterceptorOptions Interceptor { get; } = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
 
@@ -299,7 +303,7 @@ public sealed class EndToEndTests
 
         void Configure(IServiceCollection services)
         {
-            services.AddLogging((builder) => builder.AddConsole().SetMinimumLevel(LogLevel.Warning));
+            services.AddLogging((builder) => builder.AddProvider(ConsoleLogger));
             services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
                 (_) => new HttpRequestInterceptionFilter(Interceptor));
         }
@@ -347,6 +351,15 @@ public sealed class EndToEndTests
         return actual;
     }
 
+    private sealed class ConsoleLoggerOptionsMonitor : ConsoleLoggerOptions, IOptionsMonitor<ConsoleLoggerOptions>
+    {
+        public ConsoleLoggerOptions CurrentValue => this;
+
+        public ConsoleLoggerOptions Get(string? name) => this;
+
+        public IDisposable OnChange(Action<ConsoleLoggerOptions, string> listener) => null!;
+    }
+
     private sealed class TestAlexaFunction : AlexaFunction
     {
         protected override void Configure(ConfigurationBuilder builder)
@@ -380,6 +393,8 @@ public sealed class EndToEndTests
             });
 
             base.ConfigureServices(services);
+
+            services.AddLogging((p) => p.ClearProviders().AddProvider(ConsoleLogger));
         }
     }
 }
