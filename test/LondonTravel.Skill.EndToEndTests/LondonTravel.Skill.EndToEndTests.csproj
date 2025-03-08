@@ -4,6 +4,7 @@
     <NoWarn>$(NoWarn);CA1707;CA1711;SA1600;SA1601</NoWarn>
     <RootNamespace>MartinCostello.LondonTravel.Skill.EndToEndTests</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
+    <TestingPlatformCommandLineArguments>$(TestingPlatformCommandLineArguments) --ignore-exit-code 8</TestingPlatformCommandLineArguments>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AWSSDK.CloudWatchLogs" />

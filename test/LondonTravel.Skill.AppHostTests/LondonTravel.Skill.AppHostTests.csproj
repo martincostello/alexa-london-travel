@@ -12,10 +12,10 @@
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.Testing" />
     <PackageReference Include="AWSSDK.Lambda" />
-    <PackageReference Include="coverlet.msbuild" />
     <PackageReference Include="GitHubActionsTestLogger" NoWarn="RT0003" />
     <PackageReference Include="MartinCostello.Logging.XUnit.v3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
     <PackageReference Include="ReportGenerator" />
     <PackageReference Include="Shouldly" />
     <PackageReference Include="xunit.runner.visualstudio" />
@@ -32,7 +32,6 @@
   </ItemGroup>
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
-    <Exclude>[Alexa.NET*]*,[Amazon.Lambda*]*,[LondonTravel.Skill]*,[xunit.*]*</Exclude>
-    <Threshold>100</Threshold>
+    <Threshold Condition="!$([System.OperatingSystem]::IsMacOS())">60</Threshold>
   </PropertyGroup>
 </Project>

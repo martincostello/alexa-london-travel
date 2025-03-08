@@ -19,14 +19,15 @@
     </ItemGroup>
   </Target>
   <PropertyGroup Condition=" '$(CollectCoverage)' == 'true' ">
+    <_CoverageFormat>cobertura</_CoverageFormat>
     <_CoveragePath>$([System.IO.Path]::Combine($(ArtifactsPath), 'coverage'))</_CoveragePath>
+    <_CoverageOutput>$([System.IO.Path]::Combine($(_CoveragePath), '$(MSBuildProjectName).coverage.xml'))</_CoverageOutput>
+    <_CoverageSettings>$([System.IO.Path]::Combine($(MSBuildThisFileDirectory), 'tests.runsettings'))</_CoverageSettings>
     <_ReportGeneratorOutputMarkdown Condition=" '$(GITHUB_SHA)' != '' ">true</_ReportGeneratorOutputMarkdown>
     <_ReportGeneratorReportTypes>HTML</_ReportGeneratorReportTypes>
     <_ReportGeneratorReportTypes Condition=" '$(_ReportGeneratorOutputMarkdown)' == 'true' ">$(_ReportGeneratorReportTypes);MarkdownSummaryGitHub</_ReportGeneratorReportTypes>
     <_ReportGeneratorTargetDirectory>$([System.IO.Path]::Combine($(ArtifactsPath), 'coverage'))</_ReportGeneratorTargetDirectory>
-    <CoverletOutput>$([System.IO.Path]::Combine($(_CoveragePath), '$(MSBuildProjectName)', 'coverage'))</CoverletOutput>
-    <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
-    <ExcludeByAttribute>GeneratedCodeAttribute</ExcludeByAttribute>
+    <TestingPlatformCommandLineArguments>$(TestingPlatformCommandLineArguments) --coverage --coverage-output-format $(_CoverageFormat) --coverage-output %22$(_CoverageOutput)%22 --coverage-settings %22$(_CoverageSettings)%22</TestingPlatformCommandLineArguments>
   </PropertyGroup>
   <UsingTask TaskName="WriteLinesToFileWithRetry" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
     <ParameterGroup>
@@ -57,9 +58,9 @@
    ]]></Code>
     </Task>
   </UsingTask>
-  <Target Name="GenerateCoverageReports" AfterTargets="GenerateCoverageResultAfterTest" Condition=" '$(CollectCoverage)' == 'true' ">
+  <Target Name="GenerateCoverageReports" AfterTargets="InvokeTestingPlatform" Condition=" '$(CollectCoverage)' == 'true' ">
     <ItemGroup>
-      <_CoverageReports Include="$(_CoveragePath)\**\coverage.cobertura.xml" />
+      <_CoverageReports Include="$(_CoveragePath)\**\*.coverage.xml" />
     </ItemGroup>
     <PropertyGroup>
       <_CoverageGitHubSummary>$([System.IO.Path]::Combine($(_ReportGeneratorTargetDirectory), 'SummaryGithub.md'))</_CoverageGitHubSummary>
@@ -75,5 +76,21 @@
       <_ReportSummaryContent>$(_ReportSummaryContent)&lt;/details&gt;</_ReportSummaryContent>
     </PropertyGroup>
     <WriteLinesToFileWithRetry Condition=" '$(_ReportGeneratorOutputMarkdown)' == 'true' AND Exists('$(_CoverageGitHubSummary)') " ContinueOnError="WarnAndContinue" File="$(GITHUB_STEP_SUMMARY)" Lines="$(_ReportSummaryContent)" />
+  </Target>
+  <Target Name="CheckCodeCoverageThreshold" AfterTargets="GenerateCoverageReports" Condition=" '$(CollectCoverage)' == 'true' AND Exists('$(_CoverageOutput)') AND '$(Threshold)' != '' ">
+    <XmlPeek XmlInputPath="$(_CoverageOutput)" Query="/coverage/@branch-rate">
+      <Output TaskParameter="Result" PropertyName="BranchCoverage" />
+    </XmlPeek>
+    <XmlPeek XmlInputPath="$(_CoverageOutput)" Query="/coverage/@line-rate">
+      <Output TaskParameter="Result" PropertyName="LineCoverage" />
+    </XmlPeek>
+    <PropertyGroup>
+      <BranchCoverage>$([MSBuild]::Multiply($([System.Double]::Parse('$(BranchCoverage)')), 100.0))</BranchCoverage>
+      <BranchCoverage>$([System.Math]::Round($(BranchCoverage), 2))</BranchCoverage>
+      <LineCoverage>$([MSBuild]::Multiply($([System.Double]::Parse('$(LineCoverage)')), 100.0))</LineCoverage>
+      <LineCoverage>$([System.Math]::Round($(LineCoverage), 2))</LineCoverage>
+    </PropertyGroup>
+    <Error Condition=" '$(BranchCoverage)' &lt; '$(Threshold)' " Text="Branch coverage is below the threshold of $(Threshold)%. Value: $(BranchCoverage)%." />
+    <Error Condition=" '$(LineCoverage)' &lt; '$(Threshold)' " Text="Line coverage is below the threshold of $(Threshold)%. Value: $(LineCoverage)%." />
   </Target>
 </Project>
