@@ -76,4 +76,10 @@
     </PropertyGroup>
     <WriteLinesToFileWithRetry Condition=" '$(_ReportGeneratorOutputMarkdown)' == 'true' AND Exists('$(_CoverageGitHubSummary)') " ContinueOnError="WarnAndContinue" File="$(GITHUB_STEP_SUMMARY)" Lines="$(_ReportSummaryContent)" />
   </Target>
+  <Target Name="CleanCoverageReports">
+    <RemoveDir Condition="Exists('$(_ReportGeneratorTargetDirectory)')" Directories="$(_ReportGeneratorTargetDirectory)" />
+  </Target>
+  <PropertyGroup>
+    <CleanDependsOn>$(CleanDependsOn);CleanCoverageReports</CleanDependsOn>
+  </PropertyGroup>
 </Project>
