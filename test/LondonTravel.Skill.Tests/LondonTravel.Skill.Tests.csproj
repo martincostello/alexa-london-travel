@@ -1,8 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <IsTestProject>true</IsTestProject>
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
-    <NoWarn>$(NoWarn);CA1062;CA1707;CA2007;CA2234;SA1600</NoWarn>
+    <NoWarn>$(NoWarn);CA2234</NoWarn>
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
@@ -29,13 +28,11 @@
     <Content Include="testsettings.json;xunit.runner.json;Samples\*.json" CopyToOutputDirectory="PreserveNewest" />
     <EmbeddedResource Include="..\LondonTravel.Skill.Tests\Bundles\*.json;..\..\static\interaction-model.json" />
   </ItemGroup>
-  <ItemGroup>
-    <Using Include="Shouldly" />
-    <Using Include="Xunit" />
-  </ItemGroup>
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
-    <Exclude>[Alexa.NET*]*,[Amazon.Lambda*]*,[xunit.*]*</Exclude>
     <Threshold>86</Threshold>
   </PropertyGroup>
+  <ItemGroup>
+    <CoverletExclude Include="$([MSBuild]::Escape('[Amazon.Lambda*]*'))" />
+  </ItemGroup>
 </Project>
