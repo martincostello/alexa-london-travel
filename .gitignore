@@ -14,6 +14,7 @@ bin
 Bin
 coverage
 coverage.*
+MSBuild_Logs/
 obj
 packages
 PublishProfiles

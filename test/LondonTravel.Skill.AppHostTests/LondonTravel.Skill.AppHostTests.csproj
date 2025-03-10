@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <IsTestProject>true</IsTestProject>
-    <NoWarn>$(NoWarn);CA1707;CA1711;SA1600;SA1601</NoWarn>
+    <NoWarn>$(NoWarn);SA1601</NoWarn>
     <RootNamespace>MartinCostello.LondonTravel.Skill.AppHostTests</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
@@ -26,13 +25,12 @@
     <EmbeddedResource Include="Payloads\*.json" LogicalName="Payload-%(Filename)" />
     <EmbeddedResource Include="..\LondonTravel.Skill.EndToEndTests\Payloads\*.json" Link="Payloads\%(Filename)%(Extension)" LogicalName="Payload-%(Filename)" />
   </ItemGroup>
-  <ItemGroup>
-    <Using Include="Shouldly" />
-    <Using Include="Xunit" />
-  </ItemGroup>
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
-    <Exclude>[Alexa.NET*]*,[Amazon.Lambda*]*,[LondonTravel.Skill]*,[xunit.*]*</Exclude>
     <Threshold>100</Threshold>
   </PropertyGroup>
+  <ItemGroup>
+    <CoverletExclude Include="$([MSBuild]::Escape('[Amazon.Lambda*]*'))" />
+    <CoverletExclude Include="$([MSBuild]::Escape('[LondonTravel.Skill]*'))" />
+  </ItemGroup>
 </Project>

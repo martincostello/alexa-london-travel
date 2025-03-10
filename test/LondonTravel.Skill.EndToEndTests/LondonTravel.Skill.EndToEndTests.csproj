@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <IsTestProject>true</IsTestProject>
-    <NoWarn>$(NoWarn);CA1707;CA1711;SA1600;SA1601</NoWarn>
+    <NoWarn>$(NoWarn);SA1601</NoWarn>
     <RootNamespace>MartinCostello.LondonTravel.Skill.EndToEndTests</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
@@ -16,9 +15,5 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="xunit.runner.json;Payloads\*.json" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-  <ItemGroup>
-    <Using Include="Shouldly" />
-    <Using Include="Xunit" />
   </ItemGroup>
 </Project>
