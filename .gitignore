@@ -26,6 +26,7 @@ UpgradeLog*.XML
 *.DotSettings
 *.log
 *.nupkg
+!.packages/*.nupkg
 *.opensdf
 *.[Pp]ublish.xml
 *.publishproj
