@@ -2,7 +2,7 @@
   <PropertyGroup>
     <NoWarn>$(NoWarn);SA1601</NoWarn>
     <RootNamespace>MartinCostello.LondonTravel.Skill.AppHostTests</RootNamespace>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <UseDefaultCodeAnalysisRuleSet>true</UseDefaultCodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
