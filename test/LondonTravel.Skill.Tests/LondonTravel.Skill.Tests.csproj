@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
-    <NoWarn>$(NoWarn);CA2234</NoWarn>
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
+    <UseDefaultCodeAnalysisRuleSet>true</UseDefaultCodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\LondonTravel.Skill\LondonTravel.Skill.csproj" />
@@ -25,7 +25,7 @@
     <PackageReference Include="xunit.v3" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="testsettings.json;xunit.runner.json;Samples\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="testsettings.json;Samples\*.json" CopyToOutputDirectory="PreserveNewest" />
     <EmbeddedResource Include="..\LondonTravel.Skill.Tests\Bundles\*.json;..\..\static\interaction-model.json" />
   </ItemGroup>
   <PropertyGroup>
