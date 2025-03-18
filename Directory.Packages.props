@@ -1,12 +1,12 @@
 <Project>
   <ItemGroup>
-    <GlobalPackageReference Include="MartinCostello.BuildKit" Version="0.3.0" />
+    <GlobalPackageReference Include="MartinCostello.BuildKit" Version="0.5.1" />
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="All" />
     <GlobalPackageReference Include="ReferenceTrimmer" Version="3.3.11" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Amazon.Lambda.Core" Version="2.5.0" />
-    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.12.3" />
+    <PackageVersion Include="Amazon.Lambda.Core" Version="2.5.1" />
+    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.13.0" />
     <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.4" />
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="2.0.0" />
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.1.0" />
@@ -39,8 +39,8 @@
     <PackageVersion Include="OpenTelemetry" Version="1.11.2" />
     <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.11.2" />
     <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.11.2" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AWS" Version="1.11.1" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AWSLambda" Version="1.11.1" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AWS" Version="1.11.2" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AWSLambda" Version="1.11.2" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.11.1" />
     <PackageVersion Include="OpenTelemetry.Resources.OperatingSystem" Version="1.11.0-beta.2" />
     <PackageVersion Include="OpenTelemetry.Resources.ProcessRuntime" Version="1.11.0-beta.2" />
