@@ -56,6 +56,14 @@ jobs:
 
     steps:
 
+    - name: Update Windows agent configuration
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        "DOTNET_INSTALL_DIR=D:\tools\dotnet" >> ${env:GITHUB_ENV}
+        "DOTNET_ROOT=D:\tools\dotnet" >> ${env:GITHUB_ENV}
+        "NUGET_PACKAGES=D:\.nuget\packages" >> ${env:GITHUB_ENV}
+
     - name: Setup arm64 support for native AoT
       if: runner.os == 'Linux'
       shell: bash
