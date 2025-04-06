@@ -1,0 +1,71 @@
+<Solution>
+  <Folder Name="/perf/">
+    <Project Path="perf/LondonTravel.Skill.Benchmarks/LondonTravel.Skill.Benchmarks.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path=".markdownlint.json" />
+    <File Path=".vsconfig" />
+    <File Path="benchmark.ps1" />
+    <File Path="build.ps1" />
+    <File Path="CODE_OF_CONDUCT.md" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="exclusion.dic" />
+    <File Path="global.json" />
+    <File Path="LICENSE" />
+    <File Path="LondonTravel.Skill.ruleset" />
+    <File Path="NuGet.config" />
+    <File Path="README.md" />
+    <File Path="SECURITY.md" />
+    <File Path="startvs.cmd" />
+    <File Path="startvscode.cmd" />
+    <File Path="stylecop.json" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/">
+    <File Path=".github/actionlint-matcher.json" />
+    <File Path=".github/CODEOWNERS" />
+    <File Path=".github/CONTRIBUTING.md" />
+    <File Path=".github/dependabot.yml" />
+    <File Path=".github/FUNDING.yml" />
+    <File Path=".github/ISSUE_TEMPLATE.md" />
+    <File Path=".github/PULL_REQUEST_TEMPLATE.md" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/workflows/">
+    <File Path=".github/workflows/benchmark.yml" />
+    <File Path=".github/workflows/build.yml" />
+    <File Path=".github/workflows/codeql.yml" />
+    <File Path=".github/workflows/dependency-review.yml" />
+    <File Path=".github/workflows/deploy-app.yml" />
+    <File Path=".github/workflows/deploy.yml" />
+    <File Path=".github/workflows/lint.yml" />
+    <File Path=".github/workflows/ossf-scorecard.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/.vscode/">
+    <File Path=".vscode/launch.json" />
+    <File Path=".vscode/settings.json" />
+    <File Path=".vscode/tasks.json" />
+  </Folder>
+  <Folder Name="/Solution Items/deploy/">
+    <File Path="deploy/iam-policy.json" />
+  </Folder>
+  <Folder Name="/Solution Items/static/">
+    <File Path="static/alexa.png" />
+    <File Path="static/favicon.ico" />
+    <File Path="static/icon-108x108.png" />
+    <File Path="static/icon-512x512.png" />
+    <File Path="static/interaction-model.json" />
+    <File Path="static/tfl.png" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/LondonTravel.Skill.AppHost/LondonTravel.Skill.AppHost.csproj" />
+    <Project Path="src/LondonTravel.Skill/LondonTravel.Skill.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/LondonTravel.Skill.AppHostTests/LondonTravel.Skill.AppHostTests.csproj" />
+    <Project Path="test/LondonTravel.Skill.EndToEndTests/LondonTravel.Skill.EndToEndTests.csproj" />
+    <Project Path="test/LondonTravel.Skill.NativeAotTests/LondonTravel.Skill.NativeAotTests.csproj" />
+    <Project Path="test/LondonTravel.Skill.Tests/LondonTravel.Skill.Tests.csproj" />
+  </Folder>
+</Solution>
