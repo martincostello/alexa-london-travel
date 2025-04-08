@@ -10,7 +10,7 @@
     <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.4" />
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="2.0.0" />
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.1.0" />
-    <PackageVersion Include="Aspire.Hosting.AWS" Version="9.1.5" />
+    <PackageVersion Include="Aspire.Hosting.AWS" Version="9.1.6" />
     <PackageVersion Include="Aspire.Hosting.Testing" Version="9.1.0" />
     <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="3.7.409.40" />
     <PackageVersion Include="AWSSDK.Lambda" Version="3.7.411.47" />
