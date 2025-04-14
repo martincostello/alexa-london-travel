@@ -50,7 +50,7 @@ jobs:
           - os-name: macos
             runner: macos-latest
           - os-name: linux
-            runner: ubuntu-latest
+            runner: ubuntu-24.04-arm
           - os-name: windows
             runner: windows-latest
 
@@ -63,49 +63,6 @@ jobs:
         "DOTNET_INSTALL_DIR=D:\tools\dotnet" >> ${env:GITHUB_ENV}
         "DOTNET_ROOT=D:\tools\dotnet" >> ${env:GITHUB_ENV}
         "NUGET_PACKAGES=D:\.nuget\packages" >> ${env:GITHUB_ENV}
-
-    - name: Setup arm64 support for native AoT
-      if: runner.os == 'Linux'
-      shell: bash
-      run: |
-        apt_sources=/etc/apt/sources.list.d/ubuntu.sources
-        codename=$(lsb_release -c | awk '{print $2}')
-        sudo dpkg --add-architecture arm64
-        sudo bash -c "cat > ${apt_sources} <<EOF
-        Types: deb
-        URIs: http://archive.ubuntu.com/ubuntu/
-        Suites: ${codename}
-        Components: main restricted universe
-        Architectures: amd64
-
-        Types: deb
-        URIs: http://security.ubuntu.com/ubuntu/
-        Suites: ${codename}-security
-        Components: main restricted universe
-        Architectures: amd64
-
-        Types: deb
-        URIs: http://archive.ubuntu.com/ubuntu/
-        Suites: ${codename}-updates
-        Components: main restricted universe
-        Architectures: amd64
-
-        Types: deb
-        URIs: http://ports.ubuntu.com/ubuntu-ports/
-        Suites: ${codename}
-        Components: main restricted multiverse universe
-        Architectures: arm64
-
-        Types: deb
-        URIs: http://ports.ubuntu.com/ubuntu-ports/
-        Suites: ${codename}-updates
-        Components: main restricted multiverse universe
-        Architectures: arm64
-        EOF"
-        sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' "${apt_sources}"
-        sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' "${apt_sources}"
-        sudo apt update
-        sudo apt install --yes clang llvm binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu linux-libc-dev:arm64 zlib1g-dev:arm64
 
     - name: Checkout code
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
