@@ -2,9 +2,12 @@
   <PropertyGroup>
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
     <NoWarn>$(NoWarn);CA1062;CA1707;CA2007;CA2234;SA1600</NoWarn>
-    <PublishAot>!$([MSBuild]::ValueOrDefault('$(BuildingInsideVisualStudio)', 'false'))</PublishAot>
+    <PublishAot>true</PublishAot>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(BuildingInsideVisualStudio)' == 'true' ">
+    <PublishAot>false</PublishAot>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\LondonTravel.Skill\LondonTravel.Skill.csproj" />

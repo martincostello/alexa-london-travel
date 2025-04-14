@@ -1,11 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <IsTestProject>true</IsTestProject>
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
-    <NoWarn>$(NoWarn);CA1062;CA1707;CA2007;CA2234;SA1600</NoWarn>
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
+    <UseDefaultCodeAnalysisRuleSet>true</UseDefaultCodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\LondonTravel.Skill\LondonTravel.Skill.csproj" />
@@ -26,19 +25,14 @@
     <PackageReference Include="xunit.v3" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="testsettings.json;xunit.runner.json;Samples\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="testsettings.json;Samples\*.json" CopyToOutputDirectory="PreserveNewest" />
     <EmbeddedResource Include="..\LondonTravel.Skill.Tests\Bundles\*.json;..\..\static\interaction-model.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Using Include="Shouldly" />
-    <Using Include="Xunit" />
   </ItemGroup>
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
-    <CoverletOutput>$([System.IO.Path]::Combine($(ArtifactsPath), 'coverage', 'coverage'))</CoverletOutput>
-    <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
-    <Exclude>[Alexa.NET*]*,[Amazon.Lambda*]*,[LondonTravel.Skill.EndToEndTests]*,[xunit.*]*</Exclude>
-    <ExcludeByAttribute>GeneratedCodeAttribute</ExcludeByAttribute>
     <Threshold>86</Threshold>
   </PropertyGroup>
+  <ItemGroup>
+    <CoverletExclude Include="$([MSBuild]::Escape('[Amazon.Lambda*]*'))" />
+  </ItemGroup>
 </Project>

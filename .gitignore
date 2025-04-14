@@ -1,5 +1,5 @@
 .DS_Store
-.dotnetcli
+.dotnet
 .idea
 .metadata
 .settings
@@ -14,6 +14,7 @@ bin
 Bin
 coverage
 coverage.*
+MSBuild_Logs/
 obj
 packages
 PublishProfiles
@@ -25,6 +26,7 @@ UpgradeLog*.XML
 *.DotSettings
 *.log
 *.nupkg
+!.packages/*.nupkg
 *.opensdf
 *.[Pp]ublish.xml
 *.publishproj

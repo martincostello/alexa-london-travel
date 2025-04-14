@@ -61,24 +61,31 @@ public sealed class LambdaFunctionFixture : IAsyncLifetime, ITestOutputHelperAcc
             throw new InvalidOperationException("The Lambda function has already been started.");
         }
 
-        using var timeout = new CancellationTokenSource(Debugger.IsAttached ? Timeout.InfiniteTimeSpan : TimeSpan.FromMinutes(1));
-        using var cts = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, cancellationToken);
-
         _httpServer = new HttpServer(ConfigureServices, AddHttpServerEndpoints);
-        await _httpServer.StartAsync(cts.Token);
+        await _httpServer.StartAsync(cancellationToken);
 
         _application = new LambdaFunctionApplication(_httpServer.ServerUrl.ToString(), ConfigureServices);
-        await _application.StartAsync(cts.Token);
+        await _application.StartAsync(cancellationToken);
 
         using var client = _application.CreateHttpClient(ResourceNames.LambdaEmulator);
         _serviceUrl = client.BaseAddress!.ToString();
     }
 
     async ValueTask IAsyncLifetime.InitializeAsync()
-        => await InitializeAsync(TestContext.Current.CancellationToken);
+    {
+        using var timeout = new CancellationTokenSource(Debugger.IsAttached ? Timeout.InfiniteTimeSpan : TimeSpan.FromMinutes(1));
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, TestContext.Current.CancellationToken);
+
+        await InitializeAsync(cts.Token);
+    }
 
     private void ConfigureServices(IServiceCollection services)
-        => services.AddLogging((p) => p.AddXUnit(this).SetMinimumLevel(LogLevel.Warning));
+        => services.AddLogging((builder) =>
+        {
+            builder.ClearProviders()
+                   .AddXUnit(this)
+                   .SetMinimumLevel(LogLevel.Warning);
+        });
 
     private void AddHttpServerEndpoints(IEndpointRouteBuilder builder)
     {
