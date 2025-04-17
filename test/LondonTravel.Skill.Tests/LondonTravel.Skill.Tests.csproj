@@ -12,12 +12,12 @@
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.Core" />
     <PackageReference Include="Amazon.Lambda.TestUtilities" />
-    <PackageReference Include="coverlet.msbuild" />
     <PackageReference Include="GitHubActionsTestLogger" NoWarn="RT0003" />
     <PackageReference Include="JustEat.HttpClientInterception" />
     <PackageReference Include="MartinCostello.Logging.XUnit.v3" />
     <PackageReference Include="MartinCostello.Testing.AwsLambdaTestServer" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="ReportGenerator" />
     <PackageReference Include="Shouldly" />
@@ -30,9 +30,6 @@
   </ItemGroup>
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
-    <Threshold>86</Threshold>
+    <Threshold>90,70</Threshold>
   </PropertyGroup>
-  <ItemGroup>
-    <CoverletExclude Include="$([MSBuild]::Escape('[Amazon.Lambda*]*'))" />
-  </ItemGroup>
 </Project>
