@@ -78,7 +78,7 @@ function DotNetTest {
 
     if (![string]::IsNullOrEmpty(${env:GITHUB_SHA})) {
         $additionalArgs += "--logger:GitHubActions;report-warnings=false"
-        $additionalArgs += "--logger:junit"
+        $additionalArgs += "--logger:junit;LogFilePath=junit.xml"
     }
 
     # HACK Workaround for https://github.com/dotnet/aspire/issues/7935
