@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 
 namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 
+[Category("EndToEnd")]
 public class SkillTests(ITestOutputHelper outputHelper)
 {
     [Theory]

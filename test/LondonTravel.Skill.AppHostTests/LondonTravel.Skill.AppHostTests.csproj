@@ -23,6 +23,7 @@
     <PackageReference Include="xunit.v3" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\LondonTravel.Skill.Tests\CategoryAttribute.cs" Link="CategoryAttribute.cs" />
     <EmbeddedResource Include="Payloads\*.json" LogicalName="Payload-%(Filename)" />
     <EmbeddedResource Include="..\LondonTravel.Skill.EndToEndTests\Payloads\*.json" Link="Payloads\%(Filename)%(Extension)" LogicalName="Payload-%(Filename)" />
   </ItemGroup>

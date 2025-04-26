@@ -9,6 +9,7 @@ using Amazon.Lambda.Model;
 
 namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 
+[Category("EndToEnd")]
 [Collection<CloudWatchLogsFixtureCollection>]
 public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper outputHelper)
 {

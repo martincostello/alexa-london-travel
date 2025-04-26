@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill;
 
+[Category("Integration")]
 public abstract class FunctionTests(ITestOutputHelper outputHelper)
 {
     public ITestOutputHelper OutputHelper { get; set; } = outputHelper;

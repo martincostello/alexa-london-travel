@@ -24,14 +24,14 @@ internal sealed class HttpServer(
     private IWebHost? _host;
     private CancellationTokenSource? _onStopped;
 
-    public Uri ServerUrl
+    public string ServerUrl
     {
         get
         {
             ThrowIfDisposed();
             ThrowIfNotStarted();
 
-            return _baseAddress;
+            return _baseAddress.ToString();
         }
     }
 

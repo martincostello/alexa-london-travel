@@ -5,7 +5,6 @@ using System.Diagnostics;
 using Amazon.Lambda;
 using Amazon.Runtime;
 using MartinCostello.Logging.XUnit;
-using MartinCostello.LondonTravel.Skill.AppHost;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -17,7 +16,6 @@ public sealed class LambdaFunctionFixture : IAsyncLifetime, ITestOutputHelperAcc
     private LambdaFunctionApplication? _application;
     private bool _disposed;
     private HttpServer? _httpServer;
-    private string? _serviceUrl;
 
     public ITestOutputHelper? OutputHelper { get; set; }
 
@@ -27,7 +25,7 @@ public sealed class LambdaFunctionFixture : IAsyncLifetime, ITestOutputHelperAcc
         ThrowIfNotStarted();
 
         var credentials = new AnonymousAWSCredentials();
-        var clientConfig = new AmazonLambdaConfig() { ServiceURL = _serviceUrl };
+        var clientConfig = new AmazonLambdaConfig() { ServiceURL = _application?.ServiceUrl };
 
         return new AmazonLambdaClient(credentials, clientConfig);
     }
@@ -64,11 +62,8 @@ public sealed class LambdaFunctionFixture : IAsyncLifetime, ITestOutputHelperAcc
         _httpServer = new HttpServer(ConfigureServices, AddHttpServerEndpoints);
         await _httpServer.StartAsync(cancellationToken);
 
-        _application = new LambdaFunctionApplication(_httpServer.ServerUrl.ToString(), ConfigureServices);
+        _application = new LambdaFunctionApplication(_httpServer.ServerUrl, ConfigureServices);
         await _application.StartAsync(cancellationToken);
-
-        using var client = _application.CreateHttpClient(ResourceNames.LambdaEmulator);
-        _serviceUrl = client.BaseAddress!.ToString();
     }
 
     async ValueTask IAsyncLifetime.InitializeAsync()
@@ -100,6 +95,11 @@ public sealed class LambdaFunctionFixture : IAsyncLifetime, ITestOutputHelperAcc
     private void ThrowIfNotStarted()
     {
         if (_httpServer is null)
+        {
+            throw new InvalidOperationException("The HTTP server has not been started.");
+        }
+
+        if (_application is null)
         {
             throw new InvalidOperationException("The Lambda function has not been started.");
         }
