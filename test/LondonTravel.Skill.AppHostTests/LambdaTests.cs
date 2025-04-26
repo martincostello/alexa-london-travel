@@ -10,6 +10,8 @@ using MartinCostello.LondonTravel.Skill.Models;
 
 namespace MartinCostello.LondonTravel.Skill.AppHostTests;
 
+[Category("Aspire")]
+[Category("Integration")]
 [Collection<LambdaFunctionCollection>]
 public sealed class LambdaTests
 {

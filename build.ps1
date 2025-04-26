@@ -13,7 +13,7 @@ $solutionPath = $PSScriptRoot
 $sdkFile = Join-Path $solutionPath "global.json"
 
 $dotnetVersion = (Get-Content $sdkFile | Out-String | ConvertFrom-Json).sdk.version
-$installDotNetSdk = $false;
+$installDotNetSdk = $false
 
 if (($null -eq (Get-Command "dotnet" -ErrorAction SilentlyContinue)) -and ($null -eq (Get-Command "dotnet.exe" -ErrorAction SilentlyContinue))) {
     Write-Information "The .NET SDK is not installed."
@@ -35,16 +35,16 @@ else {
 
 if ($installDotNetSdk -eq $true) {
 
-    ${env:DOTNET_INSTALL_DIR} = Join-Path $PSScriptRoot ".dotnet"
+    ${env:DOTNET_INSTALL_DIR} = Join-Path $solutionPath ".dotnet"
     $sdkPath = Join-Path ${env:DOTNET_INSTALL_DIR} "sdk" $dotnetVersion
 
-    if (!(Test-Path $sdkPath)) {
-        if (!(Test-Path ${env:DOTNET_INSTALL_DIR})) {
+    if (-Not (Test-Path $sdkPath)) {
+        if (-Not (Test-Path ${env:DOTNET_INSTALL_DIR})) {
             mkdir ${env:DOTNET_INSTALL_DIR} | Out-Null
         }
         [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor "Tls12"
 
-        if (($PSVersionTable.PSVersion.Major -ge 6) -And !$IsWindows) {
+        if (($PSVersionTable.PSVersion.Major -ge 6) -And (-Not $IsWindows)) {
             $installScript = Join-Path ${env:DOTNET_INSTALL_DIR} "install.sh"
             Invoke-WebRequest "https://dot.net/v1/dotnet-install.sh" -OutFile $installScript -UseBasicParsing
             chmod +x $installScript
@@ -63,22 +63,21 @@ else {
 
 $dotnet = Join-Path ${env:DOTNET_INSTALL_DIR} "dotnet"
 
-if ($installDotNetSdk -eq $true) {
+if ($installDotNetSdk) {
     ${env:PATH} = "${env:DOTNET_INSTALL_DIR};${env:PATH}"
 }
 
 function DotNetTest {
     param([string]$Project)
 
-    $additionalArgs = @(
-      "--blame-hang",
-      "--blame-hang-timeout",
-      "180s"
-    )
+    $additionalArgs = @()
 
-    if (![string]::IsNullOrEmpty(${env:GITHUB_SHA})) {
+    if (-Not [string]::IsNullOrEmpty(${env:GITHUB_SHA})) {
         $additionalArgs += "--logger:GitHubActions;report-warnings=false"
         $additionalArgs += "--logger:junit;LogFilePath=junit.xml"
+        $additionalArgs += "--blame-hang"
+        $additionalArgs += "--blame-hang-timeout"
+        $additionalArgs += "180s"
     }
 
     # HACK Workaround for https://github.com/dotnet/aspire/issues/7935
@@ -90,7 +89,7 @@ function DotNetTest {
     & $dotnet test $Project --configuration $config $additionalArgs
 
     if ($LASTEXITCODE -ne 0) {
-        throw "dotnet test failed with exit code $LASTEXITCODE"
+        throw "dotnet test failed with exit code ${LASTEXITCODE}"
     }
 }
 
@@ -106,7 +105,7 @@ function DotNetPublish {
     & $dotnet publish $Project $additionalArgs
 
     if ($LASTEXITCODE -ne 0) {
-        throw "dotnet publish failed with exit code $LASTEXITCODE"
+        throw "dotnet publish failed with exit code ${LASTEXITCODE}"
     }
 }
 
@@ -147,7 +146,7 @@ if (-Not $SkipTests) {
         & $testBinary
 
         if ($LASTEXITCODE -ne 0) {
-            throw "Native AoT tests for $projectName failed with exit code $LASTEXITCODE"
+            throw "Native AoT tests for $projectName failed with exit code ${LASTEXITCODE}"
         }
     }
 }
