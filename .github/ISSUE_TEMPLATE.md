@@ -18,4 +18,6 @@ If a card was displayed in the Alexa app and it was incorrect/unexpected, includ
 
 ### Steps to reproduce
 
-<!-- A concise, repeatable, example of how to illustrate the issue. -->
+> Alexa, ask London Travel {_what you said to the skill_}
+
+<!-- If applicable, please include information such as the date and time you used the skill -->
