@@ -4,11 +4,17 @@ title: ''
 
 ### Expected behaviour
 
-<!-- Explain what you expected to happen. -->
+<!-- Explain how you expected Alexa to respond to your request. -->
 
 ### Actual behaviour
 
-<!-- Explain what actually happened. If an exception occurred, please include a stack trace if available. -->
+<!--
+
+Explain how Alexa actually responded to your request. If possible, please state the exact reply.
+
+If a card was displayed in the Alexa app and it was incorrect/unexpected, include a screenshot or a summary of it as appropriate.
+
+-->
 
 ### Steps to reproduce
 
