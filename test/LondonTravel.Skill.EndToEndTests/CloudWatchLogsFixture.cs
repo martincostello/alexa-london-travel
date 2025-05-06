@@ -294,7 +294,7 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
         var entry = new LogEvent(name)
         {
             RequestId = requestId,
-            Timestamp = @event.Timestamp,
+            Timestamp = @event.Timestamp ?? default,
         };
 
         var builder = new StringBuilder()
