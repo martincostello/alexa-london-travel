@@ -89,6 +89,7 @@ jobs:
       if: ${{ !cancelled() }}
       with:
         flags: ${{ matrix.os-name }}
+        os: ${{ matrix.runner }}
         token: ${{ secrets.CODECOV_TOKEN }}
 
     - name: Publish artifacts
