@@ -89,7 +89,7 @@ jobs:
       if: ${{ !cancelled() }}
       with:
         flags: ${{ matrix.os-name }}
-        os: ${{ matrix.runner }}
+        os: ${{ matrix.runner == 'ubuntu-24.04-arm' && 'linux-arm64' || '' }}
         token: ${{ secrets.CODECOV_TOKEN }}
 
     - name: Publish artifacts
