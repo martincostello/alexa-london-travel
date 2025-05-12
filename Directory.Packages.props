@@ -12,7 +12,7 @@
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.2.1" />
     <PackageVersion Include="Aspire.Hosting.AWS" Version="9.2.1" />
     <PackageVersion Include="Aspire.Hosting.Testing" Version="9.2.1" />
-    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="4.0.1.1" />
+    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="4.0.2" />
     <PackageVersion Include="AWSSDK.Lambda" Version="4.0.0.2" />
     <PackageVersion Include="AWSSDK.SecretsManager" Version="3.7.400.104" />
     <PackageVersion Include="AWSSDK.SecretsManager.Caching" Version="2.0.0" />
@@ -47,7 +47,7 @@
     <PackageVersion Include="OpenTelemetry.Resources.ProcessRuntime" Version="1.12.0-beta.1" />
     <PackageVersion Include="Polly.Extensions" Version="8.5.2" />
     <PackageVersion Include="Polly.RateLimiting" Version="8.5.2" />
-    <PackageVersion Include="ReportGenerator" Version="5.4.6" />
+    <PackageVersion Include="ReportGenerator" Version="5.4.7" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.0" />
     <PackageVersion Include="xunit.v3" Version="2.0.2" />
