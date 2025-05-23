@@ -4,7 +4,7 @@
     <IsAspireHost>true</IsAspireHost>
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.LondonTravel.Skill.AppHost</RootNamespace>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <UserSecretsId>LondonTravel.Skill.AppHost</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
