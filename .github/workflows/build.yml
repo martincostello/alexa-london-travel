@@ -85,12 +85,11 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
 
     - name: Upload test results to Codecov
-      uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5.4.3
+      uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
       if: ${{ !cancelled() }}
       with:
         flags: ${{ matrix.os-name }}
         token: ${{ secrets.CODECOV_TOKEN }}
-        report_type: test_results
 
     - name: Publish artifacts
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
