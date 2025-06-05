@@ -5,10 +5,10 @@
     <GlobalPackageReference Include="ReferenceTrimmer" Version="3.3.11" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Amazon.Lambda.Core" Version="2.5.1" />
-    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.13.0" />
+    <PackageVersion Include="Amazon.Lambda.Core" Version="2.6.0" />
+    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.13.1" />
     <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.4" />
-    <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="2.0.0" />
+    <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="3.0.0" />
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.3.0" />
     <PackageVersion Include="Aspire.Hosting.AWS" Version="9.2.2" />
     <PackageVersion Include="Aspire.Hosting.Testing" Version="9.3.0" />
@@ -34,7 +34,7 @@
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.5.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="9.0.5" />
     <PackageVersion Include="Microsoft.Extensions.Telemetry" Version="9.5.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
     <PackageVersion Include="OpenTelemetry" Version="1.12.0" />
