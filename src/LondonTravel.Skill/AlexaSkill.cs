@@ -31,7 +31,7 @@ internal sealed class AlexaSkill(
         Log.SystemError(
             logger,
             session.SessionId,
-            error.Error.Type.ToString(),
+            error.Error.Type,
             error.ErrorCause?.RequestId,
             error.Error.Message);
 
