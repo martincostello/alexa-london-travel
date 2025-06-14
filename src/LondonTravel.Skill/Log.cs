@@ -28,7 +28,7 @@ internal static partial class Log
     public static partial void SystemError(
         ILogger logger,
         string sessionId,
-        string errorType,
+        Models.AlexaErrorType errorType,
         string? errorCause,
         string errorMessage);
 
