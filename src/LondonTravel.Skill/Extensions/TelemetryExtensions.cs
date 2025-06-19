@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using OpenTelemetry.Instrumentation.AWSLambda;
 using OpenTelemetry.Instrumentation.Http;
-using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
 namespace MartinCostello.LondonTravel.Skill.Extensions;
@@ -17,18 +16,13 @@ internal static class TelemetryExtensions
 {
     private static readonly ConcurrentDictionary<string, string> ServiceMap = new(StringComparer.OrdinalIgnoreCase);
 
-    public static ResourceBuilder ResourceBuilder { get; } = ResourceBuilder.CreateDefault()
-        .AddService(SkillTelemetry.ServiceName, serviceVersion: SkillTelemetry.ServiceVersion)
-        .AddOperatingSystemDetector()
-        .AddProcessRuntimeDetector();
-
     public static IServiceCollection AddTelemetry(this IServiceCollection services)
     {
         services.AddSingleton((_) => SkillTelemetry.ActivitySource);
         services.AddOpenTelemetry()
                 .WithTracing((builder) =>
                 {
-                    builder.SetResourceBuilder(ResourceBuilder)
+                    builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
                            .AddSource(SkillTelemetry.ServiceName)
                            .AddHttpClientInstrumentation();
 
