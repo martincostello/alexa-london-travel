@@ -128,7 +128,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
                 options.IncludeFormattedMessage = true;
                 options.IncludeScopes = true;
 
-                options.SetResourceBuilder(TelemetryExtensions.ResourceBuilder);
+                options.SetResourceBuilder(SkillTelemetry.ResourceBuilder);
 
                 if (IsRunningInAwsLambda())
                 {

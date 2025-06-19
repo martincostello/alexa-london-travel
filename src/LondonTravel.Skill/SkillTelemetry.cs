@@ -3,6 +3,7 @@
 
 using System.Diagnostics;
 using System.Reflection;
+using OpenTelemetry.Resources;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -13,10 +14,14 @@ internal static class SkillTelemetry
     public static readonly string ServiceVersion = GetVersion<AlexaFunction>();
     public static readonly ActivitySource ActivitySource = new(ServiceName, ServiceVersion);
 
+    public static ResourceBuilder ResourceBuilder { get; } = ResourceBuilder.CreateDefault()
+        .AddService(ServiceName, serviceVersion: ServiceVersion)
+        .AddHostDetector()
+        .AddOperatingSystemDetector()
+        .AddProcessRuntimeDetector();
+
     private static string GetVersion<T>()
-    {
-        return typeof(T).Assembly
-            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()!
-            .InformationalVersion;
-    }
+        => typeof(T).Assembly
+                    .GetCustomAttribute<AssemblyInformationalVersionAttribute>()!
+                    .InformationalVersion;
 }
