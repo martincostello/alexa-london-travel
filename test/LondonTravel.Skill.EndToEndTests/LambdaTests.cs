@@ -17,9 +17,9 @@ public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper output
     {
         var payloads = new TheoryData<string>();
 
-        foreach (string path in Directory.GetFiles("Payloads").Select(Path.GetFileNameWithoutExtension).Cast<string>().Order())
+        foreach (string? name in typeof(LambdaTests).Assembly.GetManifestResourceNames().Select(Path.GetFileNameWithoutExtension).Order())
         {
-            payloads.Add(path);
+            payloads.Add(name!);
         }
 
         return payloads;
@@ -42,7 +42,7 @@ public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper output
         // Arrange
         var cancellationToken = TestContext.Current.CancellationToken;
 
-        string payload = await File.ReadAllTextAsync(Path.Combine("Payloads", $"{payloadName}.json"), cancellationToken);
+        string payload = await GetPayloadAsync(payloadName, cancellationToken);
 
         var region = RegionEndpoint.GetBySystemName(regionName);
 
@@ -102,5 +102,14 @@ public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper output
             speech.TryGetProperty("ssml", out var ssml).ShouldBeTrue();
             ssml.GetString().ShouldNotBeNullOrWhiteSpace();
         }
+    }
+
+    private static async Task<string> GetPayloadAsync(string name, CancellationToken cancellationToken)
+    {
+        var assembly = typeof(LambdaTests).Assembly;
+        using var stream = assembly.GetManifestResourceStream($"{name}.json")!;
+
+        using var reader = new StreamReader(stream);
+        return await reader.ReadToEndAsync(cancellationToken);
     }
 }
