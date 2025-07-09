@@ -122,6 +122,7 @@ jobs:
       env:
         OTEL_EXPORTER_OTLP_ENDPOINT: ${{ vars.OTEL_EXPORTER_OTLP_ENDPOINT}}
         OTEL_EXPORTER_OTLP_PROTOCOL: ${{ vars.OTEL_EXPORTER_OTLP_PROTOCOL}}
+        OTEL_RESOURCE_ATTRIBUTES: ${{ vars.OTEL_RESOURCE_ATTRIBUTES}}
         SKILL_API_URL: ${{ vars.SKILL_API_URL }}
         VERIFY_SKILL_ID: true
       shell: bash
@@ -132,6 +133,7 @@ jobs:
           \"Variables\": {\
             \"OTEL_EXPORTER_OTLP_ENDPOINT\": \"${OTEL_EXPORTER_OTLP_ENDPOINT}\",\
             \"OTEL_EXPORTER_OTLP_PROTOCOL\": \"${OTEL_EXPORTER_OTLP_PROTOCOL}\",\
+            \"OTEL_RESOURCE_ATTRIBUTES\": \"${OTEL_RESOURCE_ATTRIBUTES}\",\
             \"Skill__SkillApiUrl\": \"${SKILL_API_URL}\",\
             \"Skill__VerifySkillId\": \"${VERIFY_SKILL_ID}\"\
           }\
