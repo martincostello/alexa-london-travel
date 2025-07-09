@@ -23,16 +23,16 @@
     <PackageVersion Include="JustEat.HttpClientInterception" Version="5.1.2" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.6.0" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.9.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="10.0.0-preview.6.25326.107" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.0-preview.6.25326.107" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.0-preview.6.25326.107" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0-preview.6.25326.107" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.0-preview.6.25326.107" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-preview.6.25326.107" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.0-preview.6.25326.107" />
+    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="10.0.0-preview.6.25358.103" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.0-preview.6.25358.103" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.0-preview.6.25358.103" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0-preview.6.25358.103" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.0-preview.6.25358.103" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-preview.6.25358.103" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.0-preview.6.25358.103" />
     <PackageVersion Include="Microsoft.Extensions.Http.Diagnostics" Version="9.7.0" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.7.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.0-preview.6.25326.107" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.0-preview.6.25358.103" />
     <PackageVersion Include="Microsoft.Extensions.Telemetry" Version="9.7.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
