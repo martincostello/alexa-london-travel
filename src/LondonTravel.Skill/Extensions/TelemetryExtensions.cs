@@ -4,7 +4,6 @@
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Instrumentation.AWSLambda;
-using OpenTelemetry.Instrumentation.Http;
 using OpenTelemetry.Trace;
 
 namespace MartinCostello.LondonTravel.Skill.Extensions;
@@ -19,7 +18,11 @@ internal static class TelemetryExtensions
                 {
                     builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
                            .AddSource(SkillTelemetry.ServiceName)
-                           .AddHttpClientInstrumentation((p) => p.RecordException = true);
+                           .AddHttpClientInstrumentation((options) =>
+                           {
+                               options.EnrichWithHttpRequestMessage = EnrichHttpActivity;
+                               options.RecordException = true;
+                           });
 
                     if (AlexaFunction.IsRunningInAwsLambda())
                     {
@@ -29,5 +32,16 @@ internal static class TelemetryExtensions
                 });
 
         return services;
+    }
+
+    private static void EnrichHttpActivity(Activity activity, HttpRequestMessage request)
+    {
+        if (GetTag("server.address", activity.Tags) is { Length: > 0 } hostName)
+        {
+            activity.AddTag("peer.service", hostName);
+        }
+
+        static string? GetTag(string name, IEnumerable<KeyValuePair<string, string?>> tags)
+            => tags.FirstOrDefault((p) => p.Key == name).Value;
     }
 }
