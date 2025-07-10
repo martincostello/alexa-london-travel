@@ -17,6 +17,7 @@ internal static class SkillTelemetry
 
     public static ResourceBuilder ResourceBuilder { get; } = ResourceBuilder.CreateDefault()
         .AddService(ServiceName, ServiceNamespace, ServiceVersion)
+        .AddAttributes([new("host.id", Guid.NewGuid().ToString())])
         .AddHostDetector()
         .AddOperatingSystemDetector()
         .AddProcessRuntimeDetector();
