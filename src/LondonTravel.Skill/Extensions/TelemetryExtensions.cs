@@ -26,7 +26,7 @@ internal static class TelemetryExtensions
 
                     if (AlexaFunction.IsRunningInAwsLambda())
                     {
-                        builder.AddAWSLambdaConfigurations()
+                        builder.AddAWSLambdaConfigurations((p) => p.DisableAwsXRayContextExtraction = true)
                                .AddOtlpExporter();
                     }
                 });
