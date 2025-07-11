@@ -17,7 +17,7 @@ internal static class SkillTelemetry
 
     public static ResourceBuilder ResourceBuilder { get; } = ResourceBuilder.CreateDefault()
         .AddService(ServiceName, ServiceNamespace, ServiceVersion)
-        .AddAttributes([new("host.id", Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") ?? Environment.MachineName])
+        .AddAttributes([new("host.id", Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") ?? Environment.MachineName)])
         .AddHostDetector()
         .AddOperatingSystemDetector()
         .AddProcessRuntimeDetector();
