@@ -15,7 +15,7 @@ internal static class IHttpClientBuilderExtensions
     /// <summary>
     /// The User Agent to use for all requests. This field is read-only.
     /// </summary>
-    private static readonly ProductInfoHeaderValue _userAgent = CreateUserAgent();
+    private static readonly ProductInfoHeaderValue _userAgent = new("alexa-london-travel", SkillTelemetry.ServiceVersion);
 
     /// <summary>
     /// Applies the default configuration to the <see cref="IHttpClientBuilder"/>.
@@ -43,31 +43,5 @@ internal static class IHttpClientBuilderExtensions
         builder.AddStandardResilienceHandler();
 
         return builder;
-    }
-
-    /// <summary>
-    /// Creates the User Agent HTTP request header to use for all requests.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="ProductInfoHeaderValue"/> to use.
-    /// </returns>
-    private static ProductInfoHeaderValue CreateUserAgent()
-    {
-        string productVersion = SkillTelemetry.ServiceVersion;
-
-        // Truncate the Git commit SHA to 7 characters, if present
-        int indexOfPlus = productVersion.IndexOf('+', StringComparison.Ordinal);
-
-        if (indexOfPlus > -1 && indexOfPlus < productVersion.Length - 1)
-        {
-            string hash = productVersion[(indexOfPlus + 1)..];
-
-            if (hash.Length > 7)
-            {
-                productVersion = productVersion[..(indexOfPlus + 8)];
-            }
-        }
-
-        return new ProductInfoHeaderValue("alexa-london-travel", productVersion);
     }
 }
