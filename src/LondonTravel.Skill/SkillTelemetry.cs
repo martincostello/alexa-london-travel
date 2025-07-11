@@ -25,5 +25,6 @@ internal static class SkillTelemetry
     private static string GetVersion<T>()
         => typeof(T).Assembly
                     .GetCustomAttribute<AssemblyInformationalVersionAttribute>()!
-                    .InformationalVersion;
+                    .InformationalVersion
+                    .Split('+')[0];
 }
