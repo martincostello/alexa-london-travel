@@ -4,6 +4,8 @@
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Instrumentation.AWSLambda;
+using OpenTelemetry.Instrumentation.Http;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 
 namespace MartinCostello.LondonTravel.Skill.Extensions;
@@ -14,21 +16,36 @@ internal static class TelemetryExtensions
     {
         services.AddSingleton((_) => SkillTelemetry.ActivitySource);
         services.AddOpenTelemetry()
+                .WithMetrics((builder) =>
+                {
+                    builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
+                           .AddHttpClientInstrumentation()
+                           .AddProcessInstrumentation()
+                           .AddMeter("System.Runtime");
+
+                    if (AlexaFunction.IsRunningInAwsLambda())
+                    {
+                        builder.AddOtlpExporter();
+                    }
+                })
                 .WithTracing((builder) =>
                 {
                     builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
                            .AddSource(SkillTelemetry.ServiceName)
-                           .AddHttpClientInstrumentation((options) =>
-                           {
-                               options.EnrichWithHttpRequestMessage = EnrichHttpActivity;
-                               options.RecordException = true;
-                           });
+                           .AddHttpClientInstrumentation();
 
                     if (AlexaFunction.IsRunningInAwsLambda())
                     {
                         builder.AddAWSLambdaConfigurations((p) => p.DisableAwsXRayContextExtraction = true)
                                .AddOtlpExporter();
                     }
+                });
+
+        services.AddOptions<HttpClientTraceInstrumentationOptions>()
+                .Configure((options) =>
+                {
+                    options.EnrichWithHttpRequestMessage = EnrichHttpActivity;
+                    options.RecordException = true;
                 });
 
         return services;
