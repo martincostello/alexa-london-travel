@@ -5,7 +5,6 @@ using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Instrumentation.AWSLambda;
 using OpenTelemetry.Instrumentation.Http;
-using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 
 namespace MartinCostello.LondonTravel.Skill.Extensions;
@@ -16,18 +15,6 @@ internal static class TelemetryExtensions
     {
         services.AddSingleton((_) => SkillTelemetry.ActivitySource);
         services.AddOpenTelemetry()
-                .WithMetrics((builder) =>
-                {
-                    builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
-                           .AddHttpClientInstrumentation()
-                           .AddProcessInstrumentation()
-                           .AddMeter("System.Runtime");
-
-                    if (AlexaFunction.IsRunningInAwsLambda())
-                    {
-                        builder.AddOtlpExporter();
-                    }
-                })
                 .WithTracing((builder) =>
                 {
                     builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
