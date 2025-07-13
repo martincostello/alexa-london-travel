@@ -41,7 +41,6 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.AWS" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AWSLambda" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.Process" />
     <PackageReference Include="OpenTelemetry.Resources.Host" />
     <PackageReference Include="OpenTelemetry.Resources.OperatingSystem" />
     <PackageReference Include="OpenTelemetry.Resources.ProcessRuntime" />
