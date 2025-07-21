@@ -178,6 +178,10 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
 
         if (activity is { })
         {
+            // TODO Remove when added to OpenTelemetry.Instrumentation.AWSLambda
+            activity.SetTag("faas.instance", context.LogStreamName);
+            activity.SetTag("faas.max_memory", context.MemoryLimitInMB * 1024 * 1024);
+
             activity.SetTag("alexa.request.id", request.Request.RequestId);
             activity.SetTag("alexa.request.locale", request.Request.Locale);
             activity.SetTag("alexa.request.type", request.Request.Type);
