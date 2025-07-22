@@ -3,6 +3,7 @@
 
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using OpenTelemetry;
 using OpenTelemetry.Instrumentation.AWSLambda;
 using OpenTelemetry.Instrumentation.Http;
@@ -40,10 +41,12 @@ internal static class TelemetryExtensions
                });
 
         services.AddOptions<HttpClientTraceInstrumentationOptions>()
-                .Configure((options) =>
+                .Configure<ILoggerFactory>((options, loggerFactory) =>
                 {
+                    var logger = loggerFactory.CreateLogger("TelemetryExtensions");
+
                     options.EnrichWithHttpRequestMessage = EnrichHttpActivity;
-                    options.FilterHttpRequestMessage = FilterHttpRequest;
+                    options.FilterHttpRequestMessage = (request) => FilterHttpRequest(request, logger);
                     options.RecordException = true;
                 });
 
@@ -61,8 +64,13 @@ internal static class TelemetryExtensions
             => tags.FirstOrDefault((p) => p.Key == name).Value;
     }
 
-    private static bool FilterHttpRequest(HttpRequestMessage message)
+    private static bool FilterHttpRequest(HttpRequestMessage message, ILogger logger)
     {
+#pragma warning disable CA1848
+        logger.LogInformation("Runtime API base address: {BaseAddress}", RuntimeApiBaseAddress);
+        logger.LogInformation("Filtering HTTP request: {Method} {Uri}", message.Method, message.RequestUri);
+#pragma warning restore CA1848
+
         if (RuntimeApiBaseAddress is { } baseAddress &&
             message.RequestUri is { } uri)
         {
