@@ -3,6 +3,7 @@
 
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using OpenTelemetry;
 using OpenTelemetry.Instrumentation.AWSLambda;
 using OpenTelemetry.Instrumentation.Http;
 using OpenTelemetry.Trace;
@@ -14,19 +15,27 @@ internal static class TelemetryExtensions
     public static IServiceCollection AddTelemetry(this IServiceCollection services)
     {
         services.AddSingleton((_) => SkillTelemetry.ActivitySource);
-        services.AddOpenTelemetry()
-                .WithTracing((builder) =>
-                {
-                    builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
-                           .AddSource(SkillTelemetry.ServiceName)
-                           .AddHttpClientInstrumentation();
 
-                    if (AlexaFunction.IsRunningInAwsLambda())
-                    {
-                        builder.AddAWSLambdaConfigurations((p) => p.DisableAwsXRayContextExtraction = true)
-                               .AddOtlpExporter();
-                    }
-                });
+        bool isRunningInLambda = AlexaFunction.IsRunningInAwsLambda();
+
+        var builder = services.AddOpenTelemetry();
+
+        if (isRunningInLambda)
+        {
+            builder.UseOtlpExporter();
+        }
+
+        builder.WithTracing((builder) =>
+               {
+                   builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
+                          .AddSource(SkillTelemetry.ServiceName)
+                          .AddHttpClientInstrumentation();
+
+                   if (isRunningInLambda)
+                   {
+                       builder.AddAWSLambdaConfigurations((p) => p.DisableAwsXRayContextExtraction = true);
+                   }
+               });
 
         services.AddOptions<HttpClientTraceInstrumentationOptions>()
                 .Configure((options) =>
