@@ -67,7 +67,8 @@ internal static class TelemetryExtensions
     private static bool FilterHttpRequest(HttpRequestMessage message, ILogger logger)
     {
 #pragma warning disable CA1848
-        logger.LogInformation("Runtime API base address: {BaseAddress}", RuntimeApiBaseAddress);
+        logger.LogInformation("Raw Runtime API base address: {BaseAddress}", Environment.GetEnvironmentVariable("AWS_LAMBDA_RUNTIME_API"));
+        logger.LogInformation("Parsed Runtime API base address: {BaseAddress}", RuntimeApiBaseAddress);
         logger.LogInformation("Filtering HTTP request: {Method} {Uri}", message.Method, message.RequestUri);
 #pragma warning restore CA1848
 
