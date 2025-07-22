@@ -75,12 +75,13 @@ internal static class TelemetryExtensions
     private static Uri? GetRuntimeApiUri()
     {
         string? runtimeApiUrl = Environment.GetEnvironmentVariable("AWS_LAMBDA_RUNTIME_API");
+        Uri? baseAddress = null;
 
-        if (!Uri.TryCreate(runtimeApiUrl, UriKind.Absolute, out var uri))
+        if (!string.IsNullOrWhiteSpace(runtimeApiUrl))
         {
-            uri = null;
+            baseAddress = new UriBuilder(runtimeApiUrl).Uri;
         }
 
-        return uri;
+        return baseAddress;
     }
 }
