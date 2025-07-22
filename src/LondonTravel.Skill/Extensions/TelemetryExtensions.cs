@@ -12,6 +12,8 @@ namespace MartinCostello.LondonTravel.Skill.Extensions;
 
 internal static class TelemetryExtensions
 {
+    private static readonly Uri? RuntimeApiBaseAddress = GetRuntimeApiUri();
+
     public static IServiceCollection AddTelemetry(this IServiceCollection services)
     {
         services.AddSingleton((_) => SkillTelemetry.ActivitySource);
@@ -41,6 +43,7 @@ internal static class TelemetryExtensions
                 .Configure((options) =>
                 {
                     options.EnrichWithHttpRequestMessage = EnrichHttpActivity;
+                    options.FilterHttpRequestMessage = FilterHttpRequest;
                     options.RecordException = true;
                 });
 
@@ -56,5 +59,28 @@ internal static class TelemetryExtensions
 
         static string? GetTag(string name, IEnumerable<KeyValuePair<string, string?>> tags)
             => tags.FirstOrDefault((p) => p.Key == name).Value;
+    }
+
+    private static bool FilterHttpRequest(HttpRequestMessage message)
+    {
+        if (RuntimeApiBaseAddress is { } baseAddress &&
+            message.RequestUri is { } uri)
+        {
+            return !baseAddress.IsBaseOf(uri);
+        }
+
+        return true;
+    }
+
+    private static Uri? GetRuntimeApiUri()
+    {
+        string? runtimeApiUrl = Environment.GetEnvironmentVariable("AWS_LAMBDA_RUNTIME_API");
+
+        if (!Uri.TryCreate(runtimeApiUrl, UriKind.Absolute, out var uri))
+        {
+            uri = null;
+        }
+
+        return uri;
     }
 }
