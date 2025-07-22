@@ -41,12 +41,10 @@ internal static class TelemetryExtensions
                });
 
         services.AddOptions<HttpClientTraceInstrumentationOptions>()
-                .Configure<ILoggerFactory>((options, loggerFactory) =>
+                .Configure((options) =>
                 {
-                    var logger = loggerFactory.CreateLogger("TelemetryExtensions");
-
                     options.EnrichWithHttpRequestMessage = EnrichHttpActivity;
-                    options.FilterHttpRequestMessage = (request) => FilterHttpRequest(request, logger);
+                    options.FilterHttpRequestMessage = FilterHttpRequest;
                     options.RecordException = true;
                 });
 
@@ -64,14 +62,8 @@ internal static class TelemetryExtensions
             => tags.FirstOrDefault((p) => p.Key == name).Value;
     }
 
-    private static bool FilterHttpRequest(HttpRequestMessage message, ILogger logger)
+    private static bool FilterHttpRequest(HttpRequestMessage message)
     {
-#pragma warning disable CA1848
-        logger.LogInformation("Raw Runtime API base address: {BaseAddress}", Environment.GetEnvironmentVariable("AWS_LAMBDA_RUNTIME_API"));
-        logger.LogInformation("Parsed Runtime API base address: {BaseAddress}", RuntimeApiBaseAddress);
-        logger.LogInformation("Filtering HTTP request: {Method} {Uri}", message.Method, message.RequestUri);
-#pragma warning restore CA1848
-
         if (RuntimeApiBaseAddress is { } baseAddress &&
             message.RequestUri is { } uri)
         {
@@ -84,12 +76,13 @@ internal static class TelemetryExtensions
     private static Uri? GetRuntimeApiUri()
     {
         string? runtimeApiUrl = Environment.GetEnvironmentVariable("AWS_LAMBDA_RUNTIME_API");
+        Uri? baseAddress = null;
 
-        if (!Uri.TryCreate(runtimeApiUrl, UriKind.Absolute, out var uri))
+        if (!string.IsNullOrWhiteSpace(runtimeApiUrl))
         {
-            uri = null;
+            baseAddress = new UriBuilder(runtimeApiUrl).Uri;
         }
 
-        return uri;
+        return baseAddress;
     }
 }
