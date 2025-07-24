@@ -176,6 +176,9 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         var handler = _serviceProvider!.GetRequiredService<FunctionHandler>();
         var logger = _serviceProvider!.GetRequiredService<ILogger<AlexaFunction>>();
 
+        var metrics = _serviceProvider!.GetRequiredService<SkillMetrics>();
+        metrics.SkillInvoked(request.Request.Type);
+
         using var activity = SkillTelemetry.ActivitySource.StartActivity("Skill Request");
 
         if (activity is { })

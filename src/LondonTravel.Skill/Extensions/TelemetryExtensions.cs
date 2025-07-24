@@ -18,6 +18,8 @@ internal static class TelemetryExtensions
 
     public static IServiceCollection AddTelemetry(this IServiceCollection services)
     {
+        services.AddMetrics();
+        services.AddSingleton<SkillMetrics>();
         services.AddSingleton((_) => SkillTelemetry.ActivitySource);
 
         bool isRunningInLambda = AlexaFunction.IsRunningInAwsLambda();
