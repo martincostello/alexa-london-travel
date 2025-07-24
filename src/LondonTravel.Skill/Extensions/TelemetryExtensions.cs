@@ -16,10 +16,14 @@ internal static class TelemetryExtensions
 {
     private static readonly Uri? RuntimeApiBaseAddress = GetRuntimeApiUri();
 
-    public static IServiceCollection AddTelemetry(this IServiceCollection services)
+    public static IServiceCollection AddTelemetry(this IServiceCollection services, bool metricsEnabled)
     {
-        services.AddMetrics();
-        services.AddSingleton<SkillMetrics>();
+        if (metricsEnabled)
+        {
+            services.AddMetrics();
+            services.AddSingleton<SkillMetrics>();
+        }
+
         services.AddSingleton((_) => SkillTelemetry.ActivitySource);
 
         bool isRunningInLambda = AlexaFunction.IsRunningInAwsLambda();
@@ -29,24 +33,32 @@ internal static class TelemetryExtensions
         if (isRunningInLambda)
         {
             builder.UseOtlpExporter();
-            services.Configure<OtlpExporterOptions>((options) =>
+
+            if (metricsEnabled)
             {
-                options.BatchExportProcessorOptions.ExporterTimeoutMilliseconds = 3_000;
-                options.BatchExportProcessorOptions.MaxExportBatchSize = 10;
-                options.BatchExportProcessorOptions.MaxQueueSize = 100;
-                options.BatchExportProcessorOptions.ScheduledDelayMilliseconds = 1_000;
+                services.Configure<OtlpExporterOptions>((options) =>
+                {
+                    options.BatchExportProcessorOptions.ExporterTimeoutMilliseconds = 3_000;
+                    options.BatchExportProcessorOptions.MaxExportBatchSize = 10;
+                    options.BatchExportProcessorOptions.MaxQueueSize = 100;
+                    options.BatchExportProcessorOptions.ScheduledDelayMilliseconds = 1_000;
+                });
+            }
+        }
+
+        if (metricsEnabled)
+        {
+            builder.WithMetrics((builder) =>
+            {
+                builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
+                       .AddHttpClientInstrumentation()
+                       .AddProcessInstrumentation()
+                       .AddMeter(SkillTelemetry.ServiceName)
+                       .AddMeter("System.Runtime");
             });
         }
 
-        builder.WithMetrics((builder) =>
-               {
-                   builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
-                          .AddHttpClientInstrumentation()
-                          .AddProcessInstrumentation()
-                          .AddMeter(SkillTelemetry.ServiceName)
-                          .AddMeter("System.Runtime");
-               })
-               .WithTracing((builder) =>
+        builder.WithTracing((builder) =>
                {
                    builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
                           .AddSource(SkillTelemetry.ServiceName)
