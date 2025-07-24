@@ -15,6 +15,8 @@ internal static class SkillTelemetry
     public static readonly string ServiceVersion = GetVersion<AlexaFunction>();
     public static readonly ActivitySource ActivitySource = new(ServiceName, ServiceVersion);
 
+    public static bool MetricsEnabled { get; } = Environment.GetEnvironmentVariable("METRICS_ENABLED") is "true";
+
     public static ResourceBuilder ResourceBuilder { get; } = ResourceBuilder.CreateDefault()
         .AddService(ServiceName, ServiceNamespace, ServiceVersion)
         .AddAttributes([new("host.id", Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") ?? Environment.MachineName)])

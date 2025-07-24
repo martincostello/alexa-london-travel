@@ -65,7 +65,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     {
         EnsureInitialized();
 
-        var meterProvider = _serviceProvider.GetRequiredService<MeterProvider>();
+        var meterProvider = _serviceProvider.GetService<MeterProvider>();
 
         var response = await OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.TraceAsync(
             _serviceProvider.GetRequiredService<OpenTelemetry.Trace.TracerProvider>(),
@@ -73,7 +73,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
             request,
             context);
 
-        meterProvider.ForceFlush();
+        meterProvider?.ForceFlush();
 
         return response;
     }
@@ -176,8 +176,8 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         var handler = _serviceProvider!.GetRequiredService<FunctionHandler>();
         var logger = _serviceProvider!.GetRequiredService<ILogger<AlexaFunction>>();
 
-        var metrics = _serviceProvider!.GetRequiredService<SkillMetrics>();
-        metrics.SkillInvoked(request.Request.Type);
+        var metrics = _serviceProvider!.GetService<SkillMetrics>();
+        metrics?.SkillInvoked(request.Request.Type);
 
         using var activity = SkillTelemetry.ActivitySource.StartActivity("Skill Request");
 
