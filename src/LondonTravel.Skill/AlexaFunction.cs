@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using OpenTelemetry.Metrics;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -56,18 +57,25 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     /// Handles a request to the skill as an asynchronous operation.
     /// </summary>
     /// <param name="request">The skill request.</param>
-    /// <param name="context">The Lamda request context.</param>
+    /// <param name="context">The Lambda request context.</param>
     /// <returns>
     /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the skill's response.
     /// </returns>
     public async Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
     {
         EnsureInitialized();
-        return await OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.TraceAsync(
+
+        var meterProvider = _serviceProvider.GetRequiredService<MeterProvider>();
+
+        var response = await OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.TraceAsync(
             _serviceProvider.GetRequiredService<OpenTelemetry.Trace.TracerProvider>(),
             HandlerCoreAsync,
             request,
             context);
+
+        meterProvider.ForceFlush();
+
+        return response;
     }
 
     /// <summary>
@@ -167,6 +175,9 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     {
         var handler = _serviceProvider!.GetRequiredService<FunctionHandler>();
         var logger = _serviceProvider!.GetRequiredService<ILogger<AlexaFunction>>();
+
+        var metrics = _serviceProvider!.GetRequiredService<SkillMetrics>();
+        metrics.SkillInvoked(request.Request.Type);
 
         using var activity = SkillTelemetry.ActivitySource.StartActivity("Skill Request");
 
