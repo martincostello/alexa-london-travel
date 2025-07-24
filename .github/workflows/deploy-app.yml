@@ -300,10 +300,12 @@ jobs:
     - name: Run end-to-end tests
       run: dotnet test ./test/LondonTravel.Skill.EndToEndTests --configuration Release --logger "GitHubActions;report-warnings=false"
       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         LAMBDA_FUNCTION_NAME: ${{ env.FUNCTION_NAME }}
         LWA_CLIENT_ID: ${{ secrets.LWA_CLIENT_ID }}
         LWA_CLIENT_SECRET: ${{ secrets.LWA_CLIENT_SECRET }}
         LWA_REFRESH_TOKEN: ${{ secrets.LWA_REFRESH_TOKEN }}
+        PULL_NUMBER: ${{ inputs.issue-number }}
         SKILL_ID: ${{ secrets.SKILL_ID }}
         SKILL_STAGE: ${{ inputs.skill-stage }}
 
