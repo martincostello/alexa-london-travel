@@ -24,87 +24,94 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
             return;
         }
 
-        var credentials = TestConfiguration.GetCredentials();
-        string? functionName = TestConfiguration.FunctionName;
-        string? regionName = TestConfiguration.RegionName;
-
-        if (functionName is not null &&
-            regionName is not null &&
-            credentials is not null)
+        try
         {
-            var builder = new StringBuilder()
-                .AppendLine()
-                .AppendLine()
-                .AppendLine(CultureInfo.InvariantCulture, $"AWS Request ID(s) (Count = {Requests.Count}):")
-                .AppendLine();
+            var credentials = TestConfiguration.GetCredentials();
+            string? functionName = TestConfiguration.FunctionName;
+            string? regionName = TestConfiguration.RegionName;
 
-            foreach ((string requestId, _) in Requests)
+            if (functionName is not null &&
+                regionName is not null &&
+                credentials is not null)
             {
-                builder.AppendLine(CultureInfo.InvariantCulture, $"  - {requestId}");
-            }
+                var builder = new StringBuilder()
+                    .AppendLine()
+                    .AppendLine()
+                    .AppendLine(CultureInfo.InvariantCulture, $"AWS Request ID(s) (Count = {Requests.Count}):")
+                    .AppendLine();
 
-            diagnosticMessageSink.OnMessage(new DiagnosticMessage(builder.ToString()));
-
-            var delay = TimeSpan.FromSeconds(10);
-
-            diagnosticMessageSink.OnMessage(new DiagnosticMessage($"Waiting {delay.Seconds} seconds for CloudWatch logs..."));
-            await Task.Delay(delay);
-
-            string logGroupName = $"/aws/lambda/{functionName}";
-            var region = RegionEndpoint.GetBySystemName(regionName);
-
-            using var logsClient = new AmazonCloudWatchLogsClient(credentials, region);
-
-            var groups = await logsClient.DescribeLogStreamsAsync(new()
-            {
-                Descending = true,
-                Limit = Math.Max(5, Requests.Count),
-                LogGroupName = logGroupName,
-                OrderBy = OrderBy.LastEventTime,
-            });
-
-            var logs = new List<(LogEvent Event, string Message)>();
-
-            foreach (var stream in groups.LogStreams)
-            {
-                if (logs.Count >= Requests.Count)
+                foreach ((string requestId, _) in Requests)
                 {
-                    break;
+                    builder.AppendLine(CultureInfo.InvariantCulture, $"  - {requestId}");
                 }
 
-                var logEvents = await logsClient.GetLogEventsAsync(new()
+                diagnosticMessageSink.OnMessage(new DiagnosticMessage(builder.ToString()));
+
+                var delay = TimeSpan.FromSeconds(10);
+
+                diagnosticMessageSink.OnMessage(new DiagnosticMessage($"Waiting {delay.Seconds} seconds for CloudWatch logs..."));
+                await Task.Delay(delay);
+
+                string logGroupName = $"/aws/lambda/{functionName}";
+                var region = RegionEndpoint.GetBySystemName(regionName);
+
+                using var logsClient = new AmazonCloudWatchLogsClient(credentials, region);
+
+                var groups = await logsClient.DescribeLogStreamsAsync(new()
                 {
+                    Descending = true,
+                    Limit = Math.Max(5, Requests.Count),
                     LogGroupName = logGroupName,
-                    LogStreamName = stream.LogStreamName,
+                    OrderBy = OrderBy.LastEventTime,
                 });
 
-                var reports = logEvents.Events
-                    .Where((p) => p.Timestamp >= _started)
-                    .ToList();
+                var logs = new List<(LogEvent Event, string Message)>();
 
-                foreach (var @event in reports)
+                foreach (var stream in groups.LogStreams)
                 {
-                    if (TryParseEvent(@event, out var entry))
+                    if (logs.Count >= Requests.Count)
                     {
-                        logs.Add(entry);
+                        break;
+                    }
+
+                    var logEvents = await logsClient.GetLogEventsAsync(new()
+                    {
+                        LogGroupName = logGroupName,
+                        LogStreamName = stream.LogStreamName,
+                    });
+
+                    var reports = logEvents.Events
+                        .Where((p) => p.Timestamp >= _started)
+                        .ToList();
+
+                    foreach (var @event in reports)
+                    {
+                        if (TryParseEvent(@event, out var entry))
+                        {
+                            logs.Add(entry);
+                        }
                     }
                 }
+
+                var requestIds = Requests.Keys.ToList();
+                var events = logs
+                    .Where((p) => requestIds.Contains(p.Event.RequestId))
+                    .OrderBy((p) => p.Event.Timestamp)
+                    .ToList();
+
+                diagnosticMessageSink.OnMessage(new DiagnosticMessage() { Message = $"Found {events.Count} CloudWatch log events." });
+
+                foreach ((_, string message) in events)
+                {
+                    diagnosticMessageSink.OnMessage(new DiagnosticMessage() { Message = message });
+                }
+
+                await TryPostLogsToPullRequestAsync(events.Select((p) => p.Event));
             }
-
-            var requestIds = Requests.Keys.ToList();
-            var events = logs
-                .Where((p) => requestIds.Contains(p.Event.RequestId))
-                .OrderBy((p) => p.Event.Timestamp)
-                .ToList();
-
-            diagnosticMessageSink.OnMessage(new DiagnosticMessage() { Message = $"Found {events.Count} CloudWatch log events." });
-
-            foreach ((_, string message) in events)
-            {
-                diagnosticMessageSink.OnMessage(new DiagnosticMessage() { Message = message });
-            }
-
-            await TryPostLogsToPullRequestAsync(events.Select((p) => p.Event));
+        }
+        catch (Exception ex)
+        {
+            diagnosticMessageSink.OnMessage(new DiagnosticMessage($"Error retrieving CloudWatch logs: {ex}"));
         }
 
         GC.SuppressFinalize(this);
