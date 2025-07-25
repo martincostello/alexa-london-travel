@@ -8,5 +8,6 @@ namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 /// </summary>
 internal sealed class PlatformTelemetrySubscriptionEvent : PlatformEvent
 {
+    [System.Text.Json.Serialization.JsonIgnore]
     public override string Type => PlatformEventType.TelemetrySubscription;
 }
