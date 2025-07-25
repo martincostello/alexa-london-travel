@@ -37,6 +37,7 @@ internal static class TelemetryExtensions
             builder.WithMetrics((builder) =>
             {
                 builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
+                       .AddAWSInstrumentation()
                        .AddHttpClientInstrumentation()
                        .AddProcessInstrumentation()
                        .AddMeter(SkillTelemetry.ServiceName)
@@ -48,6 +49,7 @@ internal static class TelemetryExtensions
                {
                    builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
                           .AddSource(SkillTelemetry.ServiceName)
+                          .AddAWSInstrumentation()
                           .AddHttpClientInstrumentation();
 
                    if (isRunningInLambda)
