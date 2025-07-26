@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
-namespace MartinCostello.LondonTravel.Skill.AppHostTests;
+#pragma warning disable IDE0130
+namespace MartinCostello.LondonTravel.Skill;
 
 internal static class UserPreferences
 {
