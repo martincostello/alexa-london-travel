@@ -5,16 +5,15 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace MartinCostello.LondonTravel.Skill.AppHostTests;
+#pragma warning disable IDE0130
+namespace MartinCostello.LondonTravel.Skill;
 
 internal sealed class HttpServer(
-    Action<IServiceCollection> configureServices,
-    Action<IEndpointRouteBuilder> configureEndpoints) : IAsyncDisposable
+    Action<IServiceCollection> configureServices) : IAsyncDisposable
 {
     private readonly CancellationTokenSource _onDisposed = new();
 
@@ -41,7 +40,7 @@ internal sealed class HttpServer(
         {
             if (_host is { })
             {
-                await _host.StopAsync(TestContext.Current.CancellationToken);
+                await _host.StopAsync();
             }
 
             _isStarted = false;
@@ -64,21 +63,13 @@ internal sealed class HttpServer(
         GC.SuppressFinalize(this);
     }
 
-    public HttpClient CreateClient()
-    {
-        ThrowIfDisposed();
-        ThrowIfNotStarted();
-
-        return new() { BaseAddress = _baseAddress };
-    }
-
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
         ThrowIfDisposed();
 
         if (_isStarted)
         {
-            throw new InvalidOperationException("The proxy server has already been started.");
+            throw new InvalidOperationException("The HTTP server has already been started.");
         }
 
         _onStopped = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, _onDisposed.Token);
@@ -107,7 +98,12 @@ internal sealed class HttpServer(
     private void Configure(IApplicationBuilder app)
     {
         app.UseRouting();
-        app.UseEndpoints(configureEndpoints);
+        app.UseEndpoints((builder) =>
+        {
+            SecretsManager.AddEndpoints(builder);
+            TflApi.AddEndpoints(builder);
+            UserPreferences.AddEndpoints(builder);
+        });
     }
 
     private void ConfigureServices(IServiceCollection services)
@@ -134,7 +130,7 @@ internal sealed class HttpServer(
     {
         if (_host is null)
         {
-            throw new InvalidOperationException("The proxy server has not been started.");
+            throw new InvalidOperationException("The HTTP server has not been started.");
         }
 
         if (_baseAddress is null)

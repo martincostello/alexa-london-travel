@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
-namespace MartinCostello.LondonTravel.Skill.AppHostTests;
+#pragma warning disable IDE0130
+namespace MartinCostello.LondonTravel.Skill;
 
 internal static class SecretsManager
 {

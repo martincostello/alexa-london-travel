@@ -5,7 +5,6 @@ using System.Diagnostics;
 using Amazon.Lambda;
 using Amazon.Runtime;
 using MartinCostello.Logging.XUnit;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -59,10 +58,10 @@ public sealed class LambdaFunctionFixture : IAsyncLifetime, ITestOutputHelperAcc
             throw new InvalidOperationException("The Lambda function has already been started.");
         }
 
-        _httpServer = new HttpServer(ConfigureServices, AddHttpServerEndpoints);
+        _httpServer = new(ConfigureServices);
         await _httpServer.StartAsync(cancellationToken);
 
-        _application = new LambdaFunctionApplication(_httpServer.ServerUrl, ConfigureServices);
+        _application = new(_httpServer.ServerUrl, ConfigureServices);
         await _application.StartAsync(cancellationToken);
     }
 
@@ -81,13 +80,6 @@ public sealed class LambdaFunctionFixture : IAsyncLifetime, ITestOutputHelperAcc
                    .AddXUnit(this)
                    .SetMinimumLevel(LogLevel.Warning);
         });
-
-    private void AddHttpServerEndpoints(IEndpointRouteBuilder builder)
-    {
-        SecretsManager.AddEndpoints(builder);
-        TflApi.AddEndpoints(builder);
-        UserPreferences.AddEndpoints(builder);
-    }
 
     private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(_disposed, this);
 
