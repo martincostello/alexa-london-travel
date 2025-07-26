@@ -73,8 +73,8 @@ internal sealed class AppServer(string httpServerUrl) : IAsyncDisposable
 
             var config = new Dictionary<string, string?>()
             {
-                ["AWS_ACCESS_KEY_ID"] = "Critical",
-                ["AWS_SECRET_ACCESS_KEY"] = "aws-access-key-id",
+                ["AWS_ACCESS_KEY_ID"] = "aws-access-key-id",
+                ["AWS_SECRET_ACCESS_KEY"] = "aws-secret-access-key",
                 ["Logging:LogLevel:Default"] = "Critical",
                 ["Skill:SkillId"] = "amzn1.ask.skill.49f13574-8134-4748-afeb-62ef1defffa6",
                 ["Skill:TflApplicationId"] = "tfl-application-id",
