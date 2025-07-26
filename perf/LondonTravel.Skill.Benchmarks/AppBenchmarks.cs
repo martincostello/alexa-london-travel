@@ -3,20 +3,32 @@
 
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnosers;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill.Benchmarks;
 
 [EventPipeProfiler(EventPipeProfile.CpuSampling)]
 [MemoryDiagnoser]
-public class AppBenchmarks : IDisposable
+public class AppBenchmarks : IAsyncDisposable
 {
     private static readonly Dictionary<string, byte[]> _payloads = GetPayloads();
-    private AppServer? _app = new();
+    private HttpServer? _proxy;
+    private AppServer? _app;
     private bool _disposed;
 
     [GlobalSetup]
     public async Task StartServer()
     {
+        _proxy = new((services) => services.AddLogging((builder) => builder.SetMinimumLevel(LogLevel.Warning)));
+
+        if (_proxy is { } proxy)
+        {
+            await proxy.StartAsync();
+        }
+
+        _app = new(_proxy.ServerUrl);
+
         if (_app is { } app)
         {
             await app.StartAsync();
@@ -28,14 +40,28 @@ public class AppBenchmarks : IDisposable
     {
         if (_app is { } app)
         {
-            await app.StopAsync();
+            await app.DisposeAsync();
             _app = null;
+        }
+
+        if (_proxy is { } proxy)
+        {
+            await proxy.DisposeAsync();
+            _proxy = null;
         }
     }
 
     [Benchmark]
     public async Task<byte[]> Cancel()
         => await _app!.ProcessAsync(_payloads[nameof(Cancel)]);
+
+    [Benchmark]
+    public async Task<byte[]> Commute()
+        => await _app!.ProcessAsync(_payloads[nameof(Commute)]);
+
+    [Benchmark]
+    public async Task<byte[]> Disruption()
+        => await _app!.ProcessAsync(_payloads[nameof(Disruption)]);
 
     [Benchmark]
     public async Task<byte[]> Help()
@@ -50,6 +76,10 @@ public class AppBenchmarks : IDisposable
         => await _app!.ProcessAsync(_payloads[nameof(SessionEnded)]);
 
     [Benchmark]
+    public async Task<byte[]> Status()
+        => await _app!.ProcessAsync(_payloads[nameof(Status)]);
+
+    [Benchmark]
     public async Task<byte[]> Stop()
         => await _app!.ProcessAsync(_payloads[nameof(Stop)]);
 
@@ -57,21 +87,26 @@ public class AppBenchmarks : IDisposable
     public async Task<byte[]> UnknownIntent()
         => await _app!.ProcessAsync(_payloads[nameof(UnknownIntent)]);
 
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
+    public async ValueTask DisposeAsync()
     {
         if (!_disposed)
         {
-            _app?.Dispose();
-            _app = null;
+            if (_app is not null)
+            {
+                await _app.DisposeAsync();
+                _app = null;
+            }
+
+            if (_proxy is not null)
+            {
+                await _proxy.DisposeAsync();
+                _proxy = null;
+            }
         }
 
         _disposed = true;
+
+        GC.SuppressFinalize(this);
     }
 
     private static Dictionary<string, byte[]> GetPayloads()
