@@ -10,6 +10,7 @@ namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 /// </summary>
 internal sealed class PlatformRuntimeDoneEvent : PlatformEvent
 {
+    [JsonIgnore]
     public override string Type => PlatformEventType.RuntimeDone;
 
     [JsonPropertyName("record")]
