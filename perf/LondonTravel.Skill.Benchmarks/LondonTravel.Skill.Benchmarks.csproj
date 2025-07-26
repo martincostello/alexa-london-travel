@@ -10,7 +10,7 @@
     <ProjectReference Include="..\..\src\LondonTravel.Skill\LondonTravel.Skill.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\test\LondonTravel.Skill.EndToEndTests\Payloads\*.json" LinkBase="Payloads" />
+    <EmbeddedResource Include="..\..\src\LondonTravel.Skill.AppHost\.aws-lambda-testtool\SavedRequests\LondonTravelSkill\*.json" LinkBase="Payloads" LogicalName="%(FileName)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
