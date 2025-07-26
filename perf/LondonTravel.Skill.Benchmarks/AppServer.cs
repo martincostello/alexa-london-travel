@@ -27,8 +27,6 @@ internal sealed class AppServer(string httpServerUrl) : IAsyncDisposable
         {
             await app.StartAsync(_cts.Token);
 
-            Environment.SetEnvironmentVariable("AWS_ACCESS_KEY_ID", "aws-access-key-id");
-            Environment.SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", "aws-secret-access-key");
             Environment.SetEnvironmentVariable("AWS_ENDPOINT_URL_SECRETS_MANAGER", httpServerUrl);
             Environment.SetEnvironmentVariable("Skill__SkillApiUrl", httpServerUrl);
             Environment.SetEnvironmentVariable("Skill__TflApiUrl", httpServerUrl);
