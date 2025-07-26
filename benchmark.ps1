@@ -80,3 +80,8 @@ if (-Not [string]::IsNullOrEmpty(${env:GITHUB_SHA})) {
 }
 
 & $dotnet run --project $benchmarks --configuration "Release" -- $additionalArgs
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Benchmark run failed with exit code $LASTEXITCODE."
+    exit $LASTEXITCODE
+}
