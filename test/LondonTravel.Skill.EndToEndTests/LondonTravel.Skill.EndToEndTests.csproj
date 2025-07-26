@@ -17,6 +17,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\LondonTravel.Skill.Tests\CategoryAttribute.cs" Link="CategoryAttribute.cs" />
-    <EmbeddedResource Include="..\..\src\LondonTravel.Skill.AppHost\.aws-lambda-testtool\SavedRequests\LondonTravelSkill\*.json" LogicalName="%(FileName)%(Extension)" />
+    <EmbeddedResource Include="..\..\src\LondonTravel.Skill.AppHost\.aws-lambda-testtool\SavedRequests\LondonTravelSkill\*.json" LinkBase="Payloads" LogicalName="%(FileName)%(Extension)" />
   </ItemGroup>
 </Project>
