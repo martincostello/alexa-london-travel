@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill.Benchmarks;
 
-internal sealed class AppServer : IDisposable
+internal sealed class AppServer(string httpServerUrl) : IAsyncDisposable
 {
     private readonly CancellationTokenSource _cts = new();
     private readonly LondonTravelSkill? _app = new();
@@ -26,6 +26,13 @@ internal sealed class AppServer : IDisposable
         if (_app is { } app)
         {
             await app.StartAsync(_cts.Token);
+
+            Environment.SetEnvironmentVariable("AWS_ACCESS_KEY_ID", "aws-access-key-id");
+            Environment.SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", "aws-secret-access-key");
+            Environment.SetEnvironmentVariable("AWS_ENDPOINT_URL_SECRETS_MANAGER", httpServerUrl);
+            Environment.SetEnvironmentVariable("Skill__SkillApiUrl", httpServerUrl);
+            Environment.SetEnvironmentVariable("Skill__TflApiUrl", httpServerUrl);
+
             _ = Task.Run(async () =>
             {
                 using var client = app.CreateClient();
@@ -34,15 +41,13 @@ internal sealed class AppServer : IDisposable
         }
     }
 
-    public async Task StopAsync() => await _cts.CancelAsync();
-
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
         GC.SuppressFinalize(this);
 
         if (!_disposed)
         {
-            _cts.Cancel();
+            await _cts.CancelAsync();
             _cts.Dispose();
 
             _app?.Dispose();
@@ -68,16 +73,17 @@ internal sealed class AppServer : IDisposable
 
             var config = new Dictionary<string, string?>()
             {
+                ["AWS_ACCESS_KEY_ID"] = "Critical",
+                ["AWS_SECRET_ACCESS_KEY"] = "aws-access-key-id",
                 ["Logging:LogLevel:Default"] = "Critical",
-                ["Skill:SkillApiUrl"] = "https://londontravel.martincostello.local/",
                 ["Skill:SkillId"] = "amzn1.ask.skill.49f13574-8134-4748-afeb-62ef1defffa6",
-                ["Skill:TflApiUrl"] = "https://api.tfl.gov.uk/",
-                ["Skill:TflApplicationId"] = "my-tfl-app-id",
-                ["Skill:TflApplicationKey"] = "my-tfl-app-key",
+                ["Skill:TflApplicationId"] = "tfl-application-id",
+                ["Skill:TflApplicationKey"] = "tfl-application-key",
                 ["Skill:VerifySkillId"] = "true",
             };
 
-            builder.AddInMemoryCollection(config);
+            builder.AddEnvironmentVariables()
+                   .AddInMemoryCollection(config);
         }
     }
 }

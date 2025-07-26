@@ -6,15 +6,18 @@ using MartinCostello.LondonTravel.Skill.Benchmarks;
 
 if (args.SequenceEqual(["--test"]))
 {
-    using var benchmark = new AppBenchmarks();
+    await using var benchmark = new AppBenchmarks();
     await benchmark.StartServer();
 
     try
     {
         _ = await benchmark.Cancel();
+        _ = await benchmark.Commute();
+        _ = await benchmark.Disruption();
         _ = await benchmark.Help();
         _ = await benchmark.Launch();
         _ = await benchmark.SessionEnded();
+        _ = await benchmark.Status();
         _ = await benchmark.Stop();
         _ = await benchmark.UnknownIntent();
     }
