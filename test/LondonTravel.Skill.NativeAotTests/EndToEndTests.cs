@@ -24,7 +24,7 @@ public sealed class EndToEndTests
     private HttpClientInterceptorOptions Interceptor { get; } = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
 
     [TestMethod]
-    [Timeout(TimeoutMilliseconds)]
+    [Timeout(TimeoutMilliseconds, CooperativeCancellation = true)]
     [DataRow("AMAZON.CancelIntent")]
     [DataRow("AMAZON.StopIntent")]
     public async Task Alexa_Function_Can_Process_Intent_Request(string name)
@@ -44,7 +44,7 @@ public sealed class EndToEndTests
     }
 
     [TestMethod]
-    [Timeout(TimeoutMilliseconds)]
+    [Timeout(TimeoutMilliseconds, CooperativeCancellation = true)]
     public async Task Alexa_Function_Can_Process_Intent_Request_For_Help()
     {
         // Arrange
@@ -65,7 +65,7 @@ public sealed class EndToEndTests
     }
 
     [TestMethod]
-    [Timeout(TimeoutMilliseconds)]
+    [Timeout(TimeoutMilliseconds, CooperativeCancellation = true)]
     public async Task Alexa_Function_Can_Process_Intent_Request_With_Unknown_Intent()
     {
         // Arrange
@@ -86,7 +86,7 @@ public sealed class EndToEndTests
     }
 
     [TestMethod]
-    [Timeout(TimeoutMilliseconds)]
+    [Timeout(TimeoutMilliseconds, CooperativeCancellation = true)]
     public async Task Alexa_Function_Can_Process_Intent_Request_For_Disruption()
     {
         // Arrange
@@ -108,7 +108,7 @@ public sealed class EndToEndTests
     }
 
     [TestMethod]
-    [Timeout(TimeoutMilliseconds)]
+    [Timeout(TimeoutMilliseconds, CooperativeCancellation = true)]
     public async Task Alexa_Function_Can_Process_Intent_Request_For_Line_Status()
     {
         // Arrange
@@ -132,7 +132,7 @@ public sealed class EndToEndTests
     }
 
     [TestMethod]
-    [Timeout(TimeoutMilliseconds)]
+    [Timeout(TimeoutMilliseconds, CooperativeCancellation = true)]
     public async Task Alexa_Function_Can_Process_Launch_Request()
     {
         // Arrange
@@ -153,7 +153,7 @@ public sealed class EndToEndTests
     }
 
     [TestMethod]
-    [Timeout(TimeoutMilliseconds)]
+    [Timeout(TimeoutMilliseconds, CooperativeCancellation = true)]
     public async Task Alexa_Function_Can_Process_Session_Ended_Request()
     {
         // Arrange
@@ -184,7 +184,7 @@ public sealed class EndToEndTests
     }
 
     [TestMethod]
-    [Timeout(TimeoutMilliseconds)]
+    [Timeout(TimeoutMilliseconds, CooperativeCancellation = true)]
     public async Task Alexa_Function_Can_Process_System_Exception_Request()
     {
         // Arrange
