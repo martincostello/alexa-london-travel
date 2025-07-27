@@ -9,7 +9,7 @@ public sealed class ResponseBody
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("outputSpeech")]
-    public SsmlOutputSpeech OutputSpeech { get; set; } = default!;
+    public SsmlOutputSpeech? OutputSpeech { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("card")]
