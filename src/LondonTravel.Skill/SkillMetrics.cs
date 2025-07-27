@@ -5,7 +5,7 @@ using System.Diagnostics.Metrics;
 
 namespace MartinCostello.LondonTravel.Skill;
 
-internal sealed class SkillMetrics
+public sealed class SkillMetrics : IDisposable
 {
     private readonly Meter _meter;
     private readonly Counter<long> _skillInvocationCounter;

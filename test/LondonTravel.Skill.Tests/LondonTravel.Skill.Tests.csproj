@@ -31,7 +31,7 @@
   </ItemGroup>
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
-    <Threshold>84</Threshold>
+    <Threshold>95,87,95</Threshold>
   </PropertyGroup>
   <ItemGroup>
     <CoverletExclude Include="$([MSBuild]::Escape('[Amazon.Lambda*]*'))" />
