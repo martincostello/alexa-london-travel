@@ -51,6 +51,7 @@ internal sealed class CultureSwitcher : IDisposable
         return false;
     }
 
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     private sealed class NullDisposable : IDisposable
     {
         internal static readonly NullDisposable Instance = new();
