@@ -4,6 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,7 +21,7 @@ internal sealed class HttpServer(
     private Uri? _baseAddress;
     private bool _disposed;
     private bool _isStarted;
-    private IWebHost? _host;
+    private IHost? _host;
     private CancellationTokenSource? _onStopped;
 
     public string ServerUrl
@@ -74,18 +75,16 @@ internal sealed class HttpServer(
 
         _onStopped = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, _onDisposed.Token);
 
-        var builder = new WebHostBuilder();
+        var builder = new HostBuilder();
 
-        builder.UseKestrel();
-        builder.UseUrls("http://127.0.0.1:0");
-
-        ConfigureWebHost(builder);
+        builder.ConfigureWebHost(ConfigureWebHost);
 
         _host = builder.Build();
 
         await _host.StartAsync(_onStopped.Token);
 
-        var serverAddresses = _host!.ServerFeatures.Get<IServerAddressesFeature>();
+        var server = _host.Services.GetRequiredService<IServer>();
+        var serverAddresses = server.Features.Get<IServerAddressesFeature>();
         string? serverUrl = serverAddresses?.Addresses?.FirstOrDefault();
 
         _baseAddress = serverUrl is null
@@ -112,8 +111,10 @@ internal sealed class HttpServer(
         configureServices?.Invoke(services);
     }
 
-    private void ConfigureWebHost(WebHostBuilder builder)
+    private void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.UseKestrel((p) => p.Listen(System.Net.IPAddress.Loopback, 0));
+
         builder.UseContentRoot(Environment.CurrentDirectory);
         builder.UseShutdownTimeout(TimeSpan.Zero);
 
