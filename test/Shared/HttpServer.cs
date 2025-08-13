@@ -4,6 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -82,8 +83,8 @@ internal sealed class HttpServer(
 
         await _host.StartAsync(_onStopped.Token);
 
-        var webHost = _host.Services.GetRequiredService<IWebHost>();
-        var serverAddresses = webHost.ServerFeatures.Get<IServerAddressesFeature>();
+        var server = _host.Services.GetRequiredService<IServer>();
+        var serverAddresses = server.Features.Get<IServerAddressesFeature>();
         string? serverUrl = serverAddresses?.Addresses?.FirstOrDefault();
 
         _baseAddress = serverUrl is null
@@ -112,8 +113,7 @@ internal sealed class HttpServer(
 
     private void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseKestrel();
-        builder.UseUrls("http://127.0.0.1:0");
+        builder.UseKestrel((p) => p.Listen(System.Net.IPAddress.Loopback, 0));
 
         builder.UseContentRoot(Environment.CurrentDirectory);
         builder.UseShutdownTimeout(TimeSpan.Zero);
