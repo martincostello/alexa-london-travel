@@ -20,7 +20,7 @@ internal sealed class HttpServer(
     private Uri? _baseAddress;
     private bool _disposed;
     private bool _isStarted;
-    private IWebHost? _host;
+    private IHost? _host;
     private CancellationTokenSource? _onStopped;
 
     public string ServerUrl
@@ -74,18 +74,16 @@ internal sealed class HttpServer(
 
         _onStopped = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, _onDisposed.Token);
 
-        var builder = new WebHostBuilder();
+        var builder = new HostBuilder();
 
-        builder.UseKestrel();
-        builder.UseUrls("http://127.0.0.1:0");
-
-        ConfigureWebHost(builder);
+        builder.ConfigureWebHost(ConfigureWebHost);
 
         _host = builder.Build();
 
         await _host.StartAsync(_onStopped.Token);
 
-        var serverAddresses = _host!.ServerFeatures.Get<IServerAddressesFeature>();
+        var webHost = _host.Services.GetRequiredService<IWebHost>();
+        var serverAddresses = webHost.ServerFeatures.Get<IServerAddressesFeature>();
         string? serverUrl = serverAddresses?.Addresses?.FirstOrDefault();
 
         _baseAddress = serverUrl is null
@@ -112,8 +110,11 @@ internal sealed class HttpServer(
         configureServices?.Invoke(services);
     }
 
-    private void ConfigureWebHost(WebHostBuilder builder)
+    private void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.UseKestrel();
+        builder.UseUrls("http://127.0.0.1:0");
+
         builder.UseContentRoot(Environment.CurrentDirectory);
         builder.UseShutdownTimeout(TimeSpan.Zero);
 
