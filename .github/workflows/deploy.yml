@@ -140,7 +140,7 @@ jobs:
       contents: write
       id-token: write
       pull-requests: write
-    secrets: inherit
+    secrets: inherit # zizmor: ignore[secrets-inherit] Needed due to environment-scoped secrets
     with:
       archive-name: ${{ needs.setup.outputs.archive-name }}
       artifact-name: ${{ needs.setup.outputs.artifact-name }}
