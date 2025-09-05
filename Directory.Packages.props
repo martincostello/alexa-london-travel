@@ -6,33 +6,33 @@
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="Amazon.Lambda.Core" Version="2.7.0" />
-    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.13.1" />
+    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.13.2" />
     <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.4" />
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="3.0.0" />
-    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.3.1" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.4.2" />
     <PackageVersion Include="Aspire.Hosting.AWS" Version="9.2.6" />
-    <PackageVersion Include="Aspire.Hosting.Testing" Version="9.3.1" />
-    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="4.0.7.1" />
-    <PackageVersion Include="AWSSDK.Lambda" Version="4.0.2.1" />
-    <PackageVersion Include="AWSSDK.SecretsManager" Version="4.0.0.14" />
+    <PackageVersion Include="Aspire.Hosting.Testing" Version="9.4.2" />
+    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="4.0.7.6" />
+    <PackageVersion Include="AWSSDK.Lambda" Version="4.0.2.7" />
+    <PackageVersion Include="AWSSDK.SecretsManager" Version="4.0.0.20" />
     <PackageVersion Include="AWSSDK.SecretsManager.Caching" Version="2.0.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.15.2" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="JunitXml.TestLogger" Version="6.1.0" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="5.1.2" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.6.0" />
-    <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.9.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="9.0.7" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.7" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.7" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="9.0.7" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.7" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.7" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.7" />
-    <PackageVersion Include="Microsoft.Extensions.Http.Diagnostics" Version="9.7.0" />
-    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.7.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="9.0.7" />
-    <PackageVersion Include="Microsoft.Extensions.Telemetry" Version="9.7.0" />
+    <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.11.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Diagnostics" Version="9.8.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.8.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Telemetry" Version="9.8.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.14.2" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
@@ -40,18 +40,18 @@
     <PackageVersion Include="OpenTelemetry" Version="1.12.0" />
     <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.12.0" />
     <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AWS" Version="1.12.0" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AWSLambda" Version="1.12.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AWS" Version="1.12.1" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AWSLambda" Version="1.12.1" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Process" Version="1.12.0-beta.1" />
     <PackageVersion Include="OpenTelemetry.Resources.Host" Version="1.12.0-beta.1" />
     <PackageVersion Include="OpenTelemetry.Resources.OperatingSystem" Version="1.12.0-beta.1" />
     <PackageVersion Include="OpenTelemetry.Resources.ProcessRuntime" Version="1.12.0-beta.1" />
-    <PackageVersion Include="Polly.Extensions" Version="8.6.2" />
-    <PackageVersion Include="Polly.RateLimiting" Version="8.6.2" />
-    <PackageVersion Include="ReportGenerator" Version="5.4.10" />
+    <PackageVersion Include="Polly.Extensions" Version="8.6.3" />
+    <PackageVersion Include="Polly.RateLimiting" Version="8.6.3" />
+    <PackageVersion Include="ReportGenerator" Version="5.4.12" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.3" />
-    <PackageVersion Include="xunit.v3" Version="3.0.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
+    <PackageVersion Include="xunit.v3" Version="3.0.1" />
   </ItemGroup>
 </Project>
