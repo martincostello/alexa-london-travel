@@ -318,7 +318,7 @@ public sealed class EndToEndTests
         timeout.CancelAfter(TimeSpan.FromSeconds(2));
 
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(
-            TestContext.CancellationTokenSource.Token,
+            TestContext?.CancellationTokenSource?.Token ?? default,
             timeout.Token);
 
         await server.StartAsync(linked.Token);
