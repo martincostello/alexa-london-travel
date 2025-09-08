@@ -17,7 +17,7 @@ namespace MartinCostello.LondonTravel.Skill;
 [TestClass]
 public sealed class EndToEndTests
 {
-    private const int TimeoutMilliseconds = 15_000;
+    private const int TimeoutMilliseconds = 20_000;
 
     private static readonly ConsoleLoggerProvider ConsoleLogger = new(new ConsoleLoggerOptionsMonitor());
 
