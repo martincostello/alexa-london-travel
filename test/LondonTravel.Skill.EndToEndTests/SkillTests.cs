@@ -11,7 +11,7 @@ namespace MartinCostello.LondonTravel.Skill.EndToEndTests;
 [Category("EndToEnd")]
 public class SkillTests(ITestOutputHelper outputHelper)
 {
-    [Theory]
+    [Theory(Skip = "The Alexa Simulator is no longer recognizing the utterances.")]
     [InlineData("Alexa, ask London Travel if there is any disruption today.")]
     [InlineData("Alexa, ask London Travel about the DLR.")]
     [InlineData("Alexa, ask London Travel about the Elizabeth line.")]
@@ -159,7 +159,8 @@ public class SkillTests(ITestOutputHelper outputHelper)
             {
                 await Task.Delay(delay);
 
-                // See https://developer.amazon.com/en-US/docs/alexa/smapi/skill-simulation-api.html#get-simulation-result
+                // See https://developer.amazon.com/en-US/docs/alexa/smapi/skill-simulation-api.html#get-simulation-result.
+                // Do not log the response as it may contain access tokens.
                 var result = await client.GetFromJsonAsync<SimulationResponse>($"v2/skills/{skillId}/stages/{stage}/simulations/{simulationId}");
                 result.ShouldNotBeNull();
 
@@ -198,6 +199,7 @@ public class SkillTests(ITestOutputHelper outputHelper)
         string? requestId = response.Headers.GetValues("x-amzn-requestid").FirstOrDefault();
         outputHelper.WriteLine($"Request Id: {requestId}");
 
+        // Do not log the response as it may contain access tokens
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var simulation = await response.Content.ReadFromJsonAsync<SimulationResponse>();
