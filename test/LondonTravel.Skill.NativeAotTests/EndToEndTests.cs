@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Options;
 
+[assembly: DoNotParallelize]
+
 namespace MartinCostello.LondonTravel.Skill;
 
 [TestClass]
