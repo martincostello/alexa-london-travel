@@ -21,6 +21,8 @@ public sealed class EndToEndTests
 
     private static readonly ConsoleLoggerProvider ConsoleLogger = new(new ConsoleLoggerOptionsMonitor());
 
+    public TestContext TestContext { get; set; }
+
     private HttpClientInterceptorOptions Interceptor { get; } = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
 
     [TestMethod]
@@ -309,29 +311,35 @@ public sealed class EndToEndTests
         }
 
         using var server = new LambdaTestServer(Configure);
-        using var cancellationTokenSource = new CancellationTokenSource();
 
-        await server.StartAsync(cancellationTokenSource.Token);
+        using var timeout = new CancellationTokenSource();
+        timeout.CancelAfter(TimeSpan.FromSeconds(2));
 
-        cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(2));
+        using var linked = CancellationTokenSource.CreateLinkedTokenSource(
+            TestContext.CancellationTokenSource.Token,
+            timeout.Token);
+
+        await server.StartAsync(linked.Token);
 
         var context = await server.EnqueueAsync(json);
 
         // Queue a task to stop the Lambda function as soon as the response is processed
-        _ = Task.Run(async () =>
-        {
-            await context.Response.WaitToReadAsync(cancellationTokenSource.Token);
-
-            if (!cancellationTokenSource.IsCancellationRequested)
+        _ = Task.Run(
+            async () =>
             {
-                await cancellationTokenSource.CancelAsync();
-            }
-        });
+                await context.Response.WaitToReadAsync(linked.Token);
+
+                if (!linked.IsCancellationRequested)
+                {
+                    await linked.CancelAsync();
+                }
+            },
+            linked.Token);
 
         using var httpClient = server.CreateClient();
 
         // Act
-        await FunctionEntrypoint.RunAsync<TestAlexaFunction>(httpClient, cancellationTokenSource.Token);
+        await FunctionEntrypoint.RunAsync<TestAlexaFunction>(httpClient, linked.Token);
 
         // Assert
         Assert.IsTrue(context.Response.TryRead(out var result));
