@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <AssemblyIsCLSCompliant>false</AssemblyIsCLSCompliant>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)LondonTravel.Skill.ruleset</CodeAnalysisRuleSet>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
