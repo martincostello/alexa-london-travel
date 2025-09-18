@@ -12,15 +12,17 @@
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.4.2" />
     <PackageVersion Include="Aspire.Hosting.AWS" Version="9.2.6" />
     <PackageVersion Include="Aspire.Hosting.Testing" Version="9.4.2" />
-    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="4.0.7.7" />
-    <PackageVersion Include="AWSSDK.Lambda" Version="4.0.2.8" />
-    <PackageVersion Include="AWSSDK.SecretsManager" Version="4.0.1.1" />
+    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="4.0.8" />
+    <PackageVersion Include="AWSSDK.Lambda" Version="4.0.2.9" />
+    <PackageVersion Include="AWSSDK.SecretsManager" Version="4.0.1.2" />
     <PackageVersion Include="AWSSDK.SecretsManager.Caching" Version="2.0.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.15.3" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="JunitXml.TestLogger" Version="6.1.0" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="5.1.2" />
+    <!-- HACK Resolves GHSA-w7r3-mgwf-4mqq -->
+    <PackageVersion Include="KubernetesClient" Version="17.0.14" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.6.0" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.11.0" />
     <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="10.0.0-rc.1.25451.107" />
