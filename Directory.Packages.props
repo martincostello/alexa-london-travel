@@ -25,16 +25,16 @@
     <PackageVersion Include="KubernetesClient" Version="17.0.14" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.6.0" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.11.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="10.0.0-rc.2.25468.104" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.0-rc.2.25468.104" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.0-rc.2.25468.104" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0-rc.2.25468.104" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.0-rc.2.25468.104" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-rc.2.25468.104" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.0-rc.2.25468.104" />
+    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="10.0.0-rc.2.25474.116" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.0-rc.2.25474.116" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.0-rc.2.25474.116" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0-rc.2.25474.116" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.0-rc.2.25474.116" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-rc.2.25474.116" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.0-rc.2.25474.116" />
     <PackageVersion Include="Microsoft.Extensions.Http.Diagnostics" Version="9.9.0" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.9.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.0-rc.2.25468.104" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.0-rc.2.25474.116" />
     <PackageVersion Include="Microsoft.Extensions.Telemetry" Version="9.9.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
