@@ -49,8 +49,8 @@
     <PackageVersion Include="OpenTelemetry.Resources.Host" Version="1.12.0-beta.1" />
     <PackageVersion Include="OpenTelemetry.Resources.OperatingSystem" Version="1.12.0-beta.1" />
     <PackageVersion Include="OpenTelemetry.Resources.ProcessRuntime" Version="1.12.0-beta.1" />
-    <PackageVersion Include="Polly.Extensions" Version="8.6.3" />
-    <PackageVersion Include="Polly.RateLimiting" Version="8.6.3" />
+    <PackageVersion Include="Polly.Extensions" Version="8.6.4" />
+    <PackageVersion Include="Polly.RateLimiting" Version="8.6.4" />
     <PackageVersion Include="ReportGenerator" Version="5.4.16" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
