@@ -1,7 +1,6 @@
 <Project>
   <PropertyGroup>
     <AssemblyIsCLSCompliant>false</AssemblyIsCLSCompliant>
-    <!-- HACK Resolves GHSA-w7r3-mgwf-4mqq -->
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)LondonTravel.Skill.ruleset</CodeAnalysisRuleSet>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
