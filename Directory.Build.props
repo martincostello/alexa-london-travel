@@ -4,7 +4,7 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)LondonTravel.Skill.ruleset</CodeAnalysisRuleSet>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <NoWarn>$(NoWarn);CS1591;MTP0001</NoWarn>
     <PublishForAWSLambda>false</PublishForAWSLambda>
     <StabilizeVersion Condition=" '$(GITHUB_REF_NAME)' == 'main' ">true</StabilizeVersion>
     <UseArtifactsOutput>true</UseArtifactsOutput>
