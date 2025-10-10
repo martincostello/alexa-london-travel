@@ -74,10 +74,13 @@ function DotNetTest {
 
     if (-Not [string]::IsNullOrEmpty(${env:GITHUB_SHA})) {
         $additionalArgs += "--logger:GitHubActions;report-warnings=false"
-        $additionalArgs += "--logger:junit;LogFilePath=junit.xml"
         $additionalArgs += "--blame-hang"
         $additionalArgs += "--blame-hang-timeout"
         $additionalArgs += "180s"
+        $additionalArgs += "--"
+        $additionalArgs += "--report-spekt-junit"
+        $additionalArgs += "--report-spekt-junit-filename"
+        $additionalArgs += "junit.xml"
     }
 
     # HACK Workaround for https://github.com/dotnet/aspire/issues/7935
@@ -86,7 +89,7 @@ function DotNetTest {
         $config = "Debug"
     }
 
-    & $dotnet test $Project --configuration $config $additionalArgs
+    & $dotnet test --project $Project --configuration $config $additionalArgs
 
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet test failed with exit code ${LASTEXITCODE}"
