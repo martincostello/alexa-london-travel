@@ -73,8 +73,8 @@ function DotNetTest {
     $additionalArgs = @()
 
     if (-Not [string]::IsNullOrEmpty(${env:GITHUB_SHA})) {
-        $additionalArgs += "--blame-hang"
-        $additionalArgs += "--blame-hang-timeout"
+        $additionalArgs += "--hangdump"
+        $additionalArgs += "--hangdump-timeout"
         $additionalArgs += "180s"
         $additionalArgs += "--"
         $additionalArgs += "--report-junit"
