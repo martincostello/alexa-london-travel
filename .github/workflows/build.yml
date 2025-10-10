@@ -14,6 +14,10 @@ on:
       - dotnet-nightly
   workflow_dispatch:
 
+# HACK Remove once `--ignore-exit-code` in BuildKit is working correctly
+env:
+  TESTINGPLATFORM_EXITCODE_IGNORE: '8'
+
 permissions: {}
 
 jobs:
