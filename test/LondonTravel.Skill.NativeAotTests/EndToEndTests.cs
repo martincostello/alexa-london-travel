@@ -23,7 +23,7 @@ public sealed class EndToEndTests
 
     private static readonly ConsoleLoggerProvider ConsoleLogger = new(new ConsoleLoggerOptionsMonitor());
 
-    public TestContext TestContext { get; set; }
+    public TestContext? TestContext { get; set; }
 
     private HttpClientInterceptorOptions Interceptor { get; } = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
 
