@@ -78,8 +78,8 @@ function DotNetTest {
         $additionalArgs += "--blame-hang-timeout"
         $additionalArgs += "180s"
         $additionalArgs += "--"
-        $additionalArgs += "--report-spekt-junit"
-        $additionalArgs += "--report-spekt-junit-filename"
+        $additionalArgs += "--report-junit"
+        $additionalArgs += "--report-junit-filename"
         $additionalArgs += "junit.xml"
     }
 
