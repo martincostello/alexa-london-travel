@@ -7,10 +7,8 @@
     <NoWarn>$(NoWarn);CS1591;MTP0001</NoWarn>
     <PublishForAWSLambda>false</PublishForAWSLambda>
     <StabilizeVersion Condition=" '$(GITHUB_REF_NAME)' == 'main' ">true</StabilizeVersion>
-    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
     <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
     <UseArtifactsOutput>true</UseArtifactsOutput>
-    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
     <VersionPrefix>3.0.$([MSBuild]::ValueOrDefault('$(GITHUB_RUN_NUMBER)', '0'))</VersionPrefix>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(EnableReferenceTrimmer)' != 'false' and '$(GenerateDocumentationFile)' != 'true' ">
