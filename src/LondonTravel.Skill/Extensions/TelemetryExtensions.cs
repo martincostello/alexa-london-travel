@@ -39,7 +39,6 @@ internal static class TelemetryExtensions
                 builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
                        .AddAWSInstrumentation()
                        .AddHttpClientInstrumentation()
-                       .AddProcessInstrumentation()
                        .AddMeter(SkillTelemetry.ServiceName)
                        .AddMeter("System.Runtime");
             });
