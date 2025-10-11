@@ -10,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using OpenTelemetry.Metrics;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -64,18 +63,11 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     public async Task<SkillResponse> HandlerAsync(SkillRequest request, ILambdaContext context)
     {
         EnsureInitialized();
-
-        var meterProvider = _serviceProvider.GetService<MeterProvider>();
-
-        var response = await OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.TraceAsync(
+        return await OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.TraceAsync(
             _serviceProvider.GetRequiredService<OpenTelemetry.Trace.TracerProvider>(),
             HandlerCoreAsync,
             request,
             context);
-
-        meterProvider?.ForceFlush();
-
-        return response;
     }
 
     /// <summary>
