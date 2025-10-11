@@ -20,7 +20,6 @@ internal static class TelemetryExtensions
         services.AddSingleton((_) => SkillTelemetry.ActivitySource);
 
         bool isRunningInLambda = AlexaFunction.IsRunningInAwsLambda();
-        bool metricsEnabled = SkillTelemetry.MetricsEnabled;
 
         var builder = services.AddOpenTelemetry();
 
@@ -29,33 +28,18 @@ internal static class TelemetryExtensions
             builder.UseOtlpExporter();
         }
 
-        if (metricsEnabled)
-        {
-            services.AddMetrics();
-            services.AddSingleton<SkillMetrics>();
-
-            builder.WithMetrics((builder) =>
-            {
-                builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
-                       .AddAWSInstrumentation()
-                       .AddHttpClientInstrumentation()
-                       .AddMeter(SkillTelemetry.ServiceName)
-                       .AddMeter("System.Runtime");
-            });
-        }
-
         builder.WithTracing((builder) =>
-               {
-                   builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
-                          .AddSource(SkillTelemetry.ServiceName)
-                          .AddAWSInstrumentation()
-                          .AddHttpClientInstrumentation();
+        {
+            builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
+                    .AddSource(SkillTelemetry.ServiceName)
+                    .AddAWSInstrumentation()
+                    .AddHttpClientInstrumentation();
 
-                   if (isRunningInLambda)
-                   {
-                       builder.AddAWSLambdaConfigurations((p) => p.DisableAwsXRayContextExtraction = true);
-                   }
-               });
+            if (isRunningInLambda)
+            {
+                builder.AddAWSLambdaConfigurations((p) => p.DisableAwsXRayContextExtraction = true);
+            }
+        });
 
         services.AddOptions<HttpClientTraceInstrumentationOptions>()
                 .Configure((options) =>
