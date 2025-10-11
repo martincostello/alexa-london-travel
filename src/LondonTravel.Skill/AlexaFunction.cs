@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
 
 namespace MartinCostello.LondonTravel.Skill;
 
@@ -20,7 +21,9 @@ namespace MartinCostello.LondonTravel.Skill;
 public class AlexaFunction : IAsyncDisposable, IDisposable
 {
     private bool _disposed;
+    private MeterProvider? _meterProvider;
     private ServiceProvider? _serviceProvider;
+    private TracerProvider? _tracerProvider;
 
     /// <summary>
     /// Finalizes an instance of the <see cref="AlexaFunction"/> class.
@@ -65,15 +68,13 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
     {
         EnsureInitialized();
 
-        var meterProvider = _serviceProvider.GetService<MeterProvider>();
-
         var response = await OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.TraceAsync(
-            _serviceProvider.GetRequiredService<OpenTelemetry.Trace.TracerProvider>(),
+            _tracerProvider,
             HandlerCoreAsync,
             request,
             context);
 
-        meterProvider?.ForceFlush();
+        _meterProvider.ForceFlush();
 
         return response;
     }
@@ -218,12 +219,19 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         return services.BuildServiceProvider();
     }
 
+    [MemberNotNull(nameof(_meterProvider))]
     [MemberNotNull(nameof(_serviceProvider))]
+    [MemberNotNull(nameof(_tracerProvider))]
     private void EnsureInitialized()
     {
         if (_serviceProvider is null)
         {
             throw new InvalidOperationException($"The function has not been initialized.");
         }
+
+        _meterProvider ??= _serviceProvider.GetService<MeterProvider>() ?? new NullMeterProvider();
+        _tracerProvider ??= _serviceProvider.GetRequiredService<TracerProvider>();
     }
+
+    private sealed class NullMeterProvider : MeterProvider;
 }
