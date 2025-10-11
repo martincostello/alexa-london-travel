@@ -15,7 +15,7 @@ internal static class SkillTelemetry
     public static readonly string ServiceVersion = GetVersion<AlexaFunction>();
     public static readonly ActivitySource ActivitySource = new(ServiceName, ServiceVersion);
 
-    public static bool MetricsEnabled { get; } = Environment.GetEnvironmentVariable("METRICS_ENABLED") is "true";
+    public static bool MetricsEnabled { get; }
 
     public static ResourceBuilder ResourceBuilder { get; } = ResourceBuilder.CreateDefault()
         .AddService(ServiceName, ServiceNamespace, ServiceVersion)
