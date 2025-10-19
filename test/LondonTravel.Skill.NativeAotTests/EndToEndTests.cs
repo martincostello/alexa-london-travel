@@ -341,7 +341,14 @@ public sealed class EndToEndTests
         using var httpClient = server.CreateClient();
 
         // Act
-        await FunctionEntrypoint.RunAsync<TestAlexaFunction>(httpClient, linked.Token);
+        try
+        {
+            await FunctionEntrypoint.RunAsync<TestAlexaFunction>(httpClient, linked.Token);
+        }
+        catch (UriFormatException)
+        {
+            // Ignore exception thrown when AWS_LAMBDA_RUNTIME_API is cleared
+        }
 
         // Assert
         Assert.IsTrue(context.Response.TryRead(out var result));

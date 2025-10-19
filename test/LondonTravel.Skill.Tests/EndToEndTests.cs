@@ -233,7 +233,14 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         using var httpClient = server.CreateClient();
 
         // Act
-        await FunctionEntrypoint.RunAsync<TestAlexaFunctionWithHttpRequests>(httpClient, cancellationTokenSource.Token);
+        try
+        {
+            await FunctionEntrypoint.RunAsync<TestAlexaFunctionWithHttpRequests>(httpClient, cancellationTokenSource.Token);
+        }
+        catch (UriFormatException)
+        {
+            // Ignore exception thrown when AWS_LAMBDA_RUNTIME_API is cleared
+        }
 
         // Assert
         context.Response.TryRead(out var result).ShouldBeTrue();
