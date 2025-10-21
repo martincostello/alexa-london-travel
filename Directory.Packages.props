@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup>
-    <GlobalPackageReference Include="MartinCostello.BuildKit" Version="0.8.1" />
+    <GlobalPackageReference Include="MartinCostello.BuildKit" Version="0.8.2-beta.592" />
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="All" />
     <GlobalPackageReference Include="ReferenceTrimmer" Version="3.3.12" />
   </ItemGroup>
@@ -17,9 +17,6 @@
     <PackageVersion Include="AWSSDK.SecretsManager" Version="4.0.1.9" />
     <PackageVersion Include="AWSSDK.SecretsManager.Caching" Version="2.0.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.15.4" />
-    <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
-    <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
-    <PackageVersion Include="JunitXml.TestLogger" Version="7.0.2" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="5.1.2" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.6.0" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.11.0" />
@@ -35,6 +32,8 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.0-rc.2.25502.107" />
     <PackageVersion Include="Microsoft.Extensions.Telemetry" Version="9.10.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.14.2" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.HangDump" Version="1.9.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
     <PackageVersion Include="OpenTelemetry" Version="1.13.1" />
