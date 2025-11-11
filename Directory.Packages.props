@@ -9,9 +9,9 @@
     <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.14.0" />
     <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.4" />
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="3.0.1" />
-    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.5.2" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.0.0" />
     <PackageVersion Include="Aspire.Hosting.AWS" Version="9.3.0" />
-    <PackageVersion Include="Aspire.Hosting.Testing" Version="9.5.2" />
+    <PackageVersion Include="Aspire.Hosting.Testing" Version="13.0.0" />
     <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="4.0.9.2" />
     <PackageVersion Include="AWSSDK.Lambda" Version="4.0.6.2" />
     <PackageVersion Include="AWSSDK.SecretsManager" Version="4.0.2.2" />
@@ -30,10 +30,10 @@
     <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Http.Diagnostics" Version="9.10.0" />
-    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.10.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Diagnostics" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Telemetry" Version="9.10.0" />
+    <PackageVersion Include="Microsoft.Extensions.Telemetry" Version="10.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
