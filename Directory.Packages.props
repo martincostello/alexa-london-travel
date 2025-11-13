@@ -42,9 +42,9 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.AWS" Version="1.13.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.AWSLambda" Version="1.13.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.14.0" />
-    <PackageVersion Include="OpenTelemetry.Resources.Host" Version="1.13.0-beta.1" />
-    <PackageVersion Include="OpenTelemetry.Resources.OperatingSystem" Version="1.13.0-beta.1" />
-    <PackageVersion Include="OpenTelemetry.Resources.ProcessRuntime" Version="1.13.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Resources.Host" Version="1.14.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Resources.OperatingSystem" Version="1.14.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Resources.ProcessRuntime" Version="1.14.0-beta.1" />
     <PackageVersion Include="Polly.Extensions" Version="8.6.4" />
     <PackageVersion Include="Polly.RateLimiting" Version="8.6.4" />
     <PackageVersion Include="ReportGenerator" Version="5.5.0" />
