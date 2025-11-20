@@ -2,11 +2,11 @@
 title: ''
 ---
 
-### Expected behaviour
+## Expected behaviour
 
 <!-- Explain how you expected Alexa to respond to your request. -->
 
-### Actual behaviour
+## Actual behaviour
 
 <!--
 
@@ -16,7 +16,7 @@ If a card was displayed in the Alexa app and it was incorrect/unexpected, includ
 
 -->
 
-### Steps to reproduce
+## Steps to reproduce
 
 > Alexa, ask London Travel {_what you said to the skill_}
 
