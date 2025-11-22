@@ -299,7 +299,7 @@ jobs:
         role-to-assume: ${{ secrets.AWS_DEPLOYMENT_ROLE_TEST }}
 
     - name: Run end-to-end tests
-      run: dotnet test ./test/LondonTravel.Skill.EndToEndTests --configuration Release --logger "GitHubActions;report-warnings=false"
+      run: dotnet test --project ./test/LondonTravel.Skill.EndToEndTests --configuration Release --logger "GitHubActions;report-warnings=false"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         LAMBDA_FUNCTION_NAME: ${{ env.FUNCTION_NAME }}
