@@ -23,7 +23,7 @@
     <PackageReference Include="ReportGenerator" />
     <PackageReference Include="Shouldly" />
     <PackageReference Include="xunit.runner.visualstudio" />
-    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.v3.mtp-off" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="testsettings.json;Samples\*.json" CopyToOutputDirectory="PreserveNewest" />
