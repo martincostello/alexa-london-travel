@@ -76,7 +76,6 @@ function DotNetTest {
         $additionalArgs += "--hangdump"
         $additionalArgs += "--hangdump-timeout"
         $additionalArgs += "180s"
-        $additionalArgs += "--report-github"
         $additionalArgs += "--report-junit"
         $additionalArgs += "--report-junit-filename"
         $additionalArgs += "$([System.IO.Path]::GetFileNameWithoutExtension($Project)).junit.xml"
