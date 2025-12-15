@@ -91,7 +91,7 @@ jobs:
       if: ${{ !cancelled() }}
       with:
         flags: ${{ matrix.os-name }}
-        report-type: test_results
+        report_type: test_results
         token: ${{ secrets.CODECOV_TOKEN }}
 
     - name: Publish artifacts
