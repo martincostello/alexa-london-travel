@@ -12,9 +12,9 @@
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.1.0" />
     <PackageVersion Include="Aspire.Hosting.AWS" Version="9.3.0" />
     <PackageVersion Include="Aspire.Hosting.Testing" Version="13.1.0" />
-    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="4.0.14.2" />
-    <PackageVersion Include="AWSSDK.Lambda" Version="4.0.12.3" />
-    <PackageVersion Include="AWSSDK.SecretsManager" Version="4.0.4.3" />
+    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="4.0.14.3" />
+    <PackageVersion Include="AWSSDK.Lambda" Version="4.0.12.4" />
+    <PackageVersion Include="AWSSDK.SecretsManager" Version="4.0.4.4" />
     <PackageVersion Include="AWSSDK.SecretsManager.Caching" Version="2.0.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
