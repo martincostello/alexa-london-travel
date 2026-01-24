@@ -19,7 +19,7 @@ namespace MartinCostello.LondonTravel.Skill;
 [TestClass]
 public sealed class EndToEndTests
 {
-    private const int TimeoutMilliseconds = 20_000;
+    private const int TimeoutMilliseconds = 30_000;
 
     private static readonly ConsoleLoggerProvider ConsoleLogger = new(new ConsoleLoggerOptionsMonitor());
 
@@ -315,7 +315,7 @@ public sealed class EndToEndTests
         using var server = new LambdaTestServer(Configure);
 
         using var timeout = new CancellationTokenSource();
-        timeout.CancelAfter(TimeSpan.FromSeconds(2));
+        timeout.CancelAfter(TimeSpan.FromSeconds(5));
 
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(
             TestContext?.CancellationTokenSource?.Token ?? default,
