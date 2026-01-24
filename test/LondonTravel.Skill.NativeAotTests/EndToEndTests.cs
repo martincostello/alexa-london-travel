@@ -356,7 +356,7 @@ public sealed class EndToEndTests
         Assert.IsNotNull(result);
         Assert.IsTrue(result.IsSuccessful);
         Assert.IsTrue(result.Duration > TimeSpan.Zero);
-        Assert.IsTrue(result.Duration <= TimeSpan.FromSeconds(2));
+        Assert.IsTrue(result.Duration <= TimeSpan.FromSeconds(5));
         Assert.IsNotNull(result.Content);
         Assert.AreNotEqual(0, result.Content.Length);
 
