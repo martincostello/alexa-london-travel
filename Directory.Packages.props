@@ -5,8 +5,8 @@
     <GlobalPackageReference Include="ReferenceTrimmer" Version="3.3.12" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Amazon.Lambda.Core" Version="2.8.0" />
-    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.14.1" />
+    <PackageVersion Include="Amazon.Lambda.Core" Version="2.8.1" />
+    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.14.2" />
     <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.5" />
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="3.0.1" />
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.1.0" />
