@@ -169,7 +169,7 @@ jobs:
         echo "FUNCTION_ENVIRONMENT_VARIABLES=${FUNCTION_ENVIRONMENT_VARIABLES}" >> "${GITHUB_ENV}"
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
+      uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
       with:
         aws-region: ${{ vars.AWS_REGION }}
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy-${{ inputs.environment-name }}
@@ -292,7 +292,7 @@ jobs:
       uses: actions/setup-dotnet@baa11fbfe1d6520db94683bd5c7a3818018e4309 # v5.1.0
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
+      uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
       with:
         aws-region: ${{ vars.AWS_REGION }}
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-tests-${{ inputs.environment-name }}
