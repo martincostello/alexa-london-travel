@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost" />
     <PackageReference Include="Aspire.Hosting.AWS" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" NoWarn="RT0003" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LondonTravel.Skill\LondonTravel.Skill.csproj" />
