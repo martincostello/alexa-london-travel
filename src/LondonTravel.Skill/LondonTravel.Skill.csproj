@@ -11,8 +11,6 @@
     <OutputType>Exe</OutputType>
     <PublishAot>true</PublishAot>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
-    <!-- HACK Workaround for https://github.com/dotnet/runtime/issues/123687 -->
-    <StripSymbols>false</StripSymbols>
     <TargetFramework>net11.0</TargetFramework>
     <TieredCompilation>false</TieredCompilation>
   </PropertyGroup>
