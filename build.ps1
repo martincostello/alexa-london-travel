@@ -80,13 +80,7 @@ function DotNetTest {
         $additionalArgs += "180s"
     }
 
-    # HACK Workaround for https://github.com/dotnet/aspire/issues/7935
-    $config = $Configuration
-    if ([System.IO.Path]::GetFileNameWithoutExtension($Project) -eq "LondonTravel.Skill.AppHostTests") {
-        $config = "Debug"
-    }
-
-    & $dotnet test $Project --configuration $config $additionalArgs
+    & $dotnet test $Project --configuration $Configuration $additionalArgs
 
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet test failed with exit code ${LASTEXITCODE}"
