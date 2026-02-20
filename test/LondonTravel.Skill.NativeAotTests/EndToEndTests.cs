@@ -318,7 +318,7 @@ public sealed class EndToEndTests
         timeout.CancelAfter(TimeSpan.FromSeconds(5));
 
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(
-            TestContext?.CancellationTokenSource?.Token ?? default,
+            TestContext?.CancellationToken ?? default,
             timeout.Token);
 
         await server.StartAsync(linked.Token);
@@ -355,8 +355,8 @@ public sealed class EndToEndTests
 
         Assert.IsNotNull(result);
         Assert.IsTrue(result.IsSuccessful);
-        Assert.IsTrue(result.Duration > TimeSpan.Zero);
-        Assert.IsTrue(result.Duration <= TimeSpan.FromSeconds(5));
+        Assert.IsGreaterThan(TimeSpan.Zero, result.Duration);
+        Assert.IsLessThanOrEqualTo(TimeSpan.FromSeconds(5), result.Duration);
         Assert.IsNotNull(result.Content);
         Assert.AreNotEqual(0, result.Content.Length);
 
