@@ -8,6 +8,8 @@ using MartinCostello.Logging.XUnit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
+[assembly: CaptureConsole]
+
 namespace MartinCostello.LondonTravel.Skill.AppHostTests;
 
 public sealed class LambdaFunctionFixture : IAsyncLifetime, ITestOutputHelperAccessor
@@ -78,7 +80,8 @@ public sealed class LambdaFunctionFixture : IAsyncLifetime, ITestOutputHelperAcc
         {
             builder.ClearProviders()
                    .AddXUnit(this)
-                   .SetMinimumLevel(LogLevel.Warning);
+                   .AddConsole()
+                   .SetMinimumLevel(LogLevel.Debug);
         });
 
     private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(_disposed, this);
