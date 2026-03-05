@@ -309,7 +309,7 @@ public sealed class EndToEndTests
 
         void Configure(IServiceCollection services)
         {
-            services.AddLogging((builder) => builder.AddProvider(ConsoleLogger));
+            services.AddLogging((builder) => builder.ClearProviders().AddProvider(ConsoleLogger));
             services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
                 (_) => new HttpRequestInterceptionFilter(Interceptor));
         }
