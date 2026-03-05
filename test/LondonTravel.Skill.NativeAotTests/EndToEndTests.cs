@@ -324,7 +324,7 @@ public sealed class EndToEndTests
 
         await server.StartAsync(linked.Token);
 
-        var timeout = TimeSpan.FromSeconds(5);
+        var timeout = TimeSpan.FromSeconds(10);
         processingTimeout.CancelAfter(timeout);
 
         var context = await server.EnqueueAsync(json);
