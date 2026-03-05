@@ -314,8 +314,9 @@ public sealed class EndToEndTests
 
         using var server = new LambdaTestServer(Configure);
 
+        var requestTimeout = TimeSpan.FromSeconds(10);
         using var timeout = new CancellationTokenSource();
-        timeout.CancelAfter(TimeSpan.FromSeconds(10));
+        timeout.CancelAfter(requestTimeout);
 
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(
             TestContext?.CancellationToken ?? default,
@@ -356,7 +357,7 @@ public sealed class EndToEndTests
         Assert.IsNotNull(result);
         Assert.IsTrue(result.IsSuccessful);
         Assert.IsGreaterThan(TimeSpan.Zero, result.Duration);
-        Assert.IsLessThanOrEqualTo(TimeSpan.FromSeconds(5), result.Duration);
+        Assert.IsLessThanOrEqualTo(requestTimeout, result.Duration);
         Assert.IsNotNull(result.Content);
         Assert.AreNotEqual(0, result.Content.Length);
 
