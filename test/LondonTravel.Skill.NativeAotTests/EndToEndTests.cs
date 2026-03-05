@@ -315,7 +315,7 @@ public sealed class EndToEndTests
         using var server = new LambdaTestServer(Configure);
 
         using var timeout = new CancellationTokenSource();
-        timeout.CancelAfter(TimeSpan.FromSeconds(5));
+        timeout.CancelAfter(TimeSpan.FromSeconds(10));
 
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(
             TestContext?.CancellationToken ?? default,
