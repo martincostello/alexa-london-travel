@@ -303,13 +303,7 @@ public sealed class EndToEndTests
     private async Task<SkillResponse> ProcessRequestAsync(SkillRequest request)
     {
         // Arrange
-        using var testCancellationTokenSource = new CancellationTokenSource();
-        var testCancellationToken = TestContext?.CancellationToken ?? default;
-
-        if (!testCancellationToken.CanBeCanceled)
-        {
-            testCancellationTokenSource.CancelAfter(TimeoutMilliseconds);
-        }
+        using var testCancellationSource = new CancellationTokenSource(TimeoutMilliseconds);
 
         string json = JsonSerializer.Serialize(request, AppJsonSerializerContext.Default.SkillRequest);
 
@@ -324,8 +318,8 @@ public sealed class EndToEndTests
         using var processingTimeout = new CancellationTokenSource();
 
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(
-            testCancellationToken,
-            testCancellationTokenSource.Token,
+            TestContext?.CancellationToken ?? default,
+            testCancellationSource.Token,
             processingTimeout.Token);
 
         await server.StartAsync(linked.Token);
@@ -371,8 +365,8 @@ public sealed class EndToEndTests
         }
 
         // Assert
-        Assert.IsTrue(await context.Response.WaitToReadAsync(testCancellationToken));
-        var result = await context.Response.ReadAsync(testCancellationToken);
+        Assert.IsTrue(await context.Response.WaitToReadAsync(testCancellationSource.Token));
+        var result = await context.Response.ReadAsync(testCancellationSource.Token);
 
         Assert.IsNotNull(result);
         Assert.IsTrue(result.IsSuccessful);
