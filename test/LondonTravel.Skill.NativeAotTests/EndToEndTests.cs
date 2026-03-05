@@ -339,9 +339,16 @@ public sealed class EndToEndTests
         _ = Task.Run(
             async () =>
             {
-                if (!await context.Response.WaitToReadAsync(processingTimeout.Token))
+                try
                 {
-                    Console.WriteLine($"Response not received within {timeout}.");
+                    if (!await context.Response.WaitToReadAsync(processingTimeout.Token))
+                    {
+                        await Console.Error.WriteLineAsync($"Response not received within {timeout}.");
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    await Console.Error.WriteLineAsync($"Processing timed out after {timeout}.");
                 }
 
                 if (!linked.IsCancellationRequested)
