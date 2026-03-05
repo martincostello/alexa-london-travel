@@ -303,7 +303,13 @@ public sealed class EndToEndTests
     private async Task<SkillResponse> ProcessRequestAsync(SkillRequest request)
     {
         // Arrange
+        using var testCancellationTokenSource = new CancellationTokenSource();
         var testCancellationToken = TestContext?.CancellationToken ?? default;
+
+        if (!testCancellationToken.CanBeCanceled)
+        {
+            testCancellationTokenSource.CancelAfter(TimeoutMilliseconds);
+        }
 
         string json = JsonSerializer.Serialize(request, AppJsonSerializerContext.Default.SkillRequest);
 
@@ -319,6 +325,7 @@ public sealed class EndToEndTests
 
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(
             testCancellationToken,
+            testCancellationTokenSource.Token,
             processingTimeout.Token);
 
         await server.StartAsync(linked.Token);
