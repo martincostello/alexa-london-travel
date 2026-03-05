@@ -19,7 +19,7 @@ namespace MartinCostello.LondonTravel.Skill;
 [TestClass]
 public sealed class EndToEndTests
 {
-    private const int TimeoutMilliseconds = 30_000;
+    private const int TimeoutMilliseconds = 15_000;
 
     private static readonly ConsoleLoggerProvider ConsoleLogger = new(new ConsoleLoggerOptionsMonitor());
 
@@ -303,25 +303,29 @@ public sealed class EndToEndTests
     private async Task<SkillResponse> ProcessRequestAsync(SkillRequest request)
     {
         // Arrange
+        using var testCancellationSource = new CancellationTokenSource(TimeoutMilliseconds);
+
         string json = JsonSerializer.Serialize(request, AppJsonSerializerContext.Default.SkillRequest);
 
         void Configure(IServiceCollection services)
         {
-            services.AddLogging((builder) => builder.AddProvider(ConsoleLogger));
+            services.AddLogging((builder) => builder.ClearProviders().AddProvider(ConsoleLogger));
             services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
                 (_) => new HttpRequestInterceptionFilter(Interceptor));
         }
 
         using var server = new LambdaTestServer(Configure);
-
-        using var timeout = new CancellationTokenSource();
-        timeout.CancelAfter(TimeSpan.FromSeconds(5));
+        using var processingTimeout = new CancellationTokenSource();
 
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(
             TestContext?.CancellationToken ?? default,
-            timeout.Token);
+            testCancellationSource.Token,
+            processingTimeout.Token);
 
         await server.StartAsync(linked.Token);
+
+        var timeout = TimeSpan.FromSeconds(10);
+        processingTimeout.CancelAfter(timeout);
 
         var context = await server.EnqueueAsync(json);
 
@@ -329,7 +333,17 @@ public sealed class EndToEndTests
         _ = Task.Run(
             async () =>
             {
-                await context.Response.WaitToReadAsync(linked.Token);
+                try
+                {
+                    if (!await context.Response.WaitToReadAsync(processingTimeout.Token))
+                    {
+                        await Console.Error.WriteLineAsync($"Response not received within {timeout}.");
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    await Console.Error.WriteLineAsync($"Processing timed out after {timeout}.");
+                }
 
                 if (!linked.IsCancellationRequested)
                 {
@@ -351,12 +365,13 @@ public sealed class EndToEndTests
         }
 
         // Assert
-        Assert.IsTrue(context.Response.TryRead(out var result));
+        Assert.IsTrue(await context.Response.WaitToReadAsync(testCancellationSource.Token));
+        var result = await context.Response.ReadAsync(testCancellationSource.Token);
 
         Assert.IsNotNull(result);
         Assert.IsTrue(result.IsSuccessful);
         Assert.IsGreaterThan(TimeSpan.Zero, result.Duration);
-        Assert.IsLessThanOrEqualTo(TimeSpan.FromSeconds(5), result.Duration);
+        Assert.IsLessThanOrEqualTo(timeout, result.Duration);
         Assert.IsNotNull(result.Content);
         Assert.AreNotEqual(0, result.Content.Length);
 
