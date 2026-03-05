@@ -211,22 +211,21 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         string json = JsonSerializer.Serialize(request, AppJsonSerializerContext.Default.SkillRequest);
 
         using var server = new LambdaTestServer((services) => services.AddLogging((builder) => builder.AddXUnit(OutputHelper)));
-        using var cancellationTokenSource = new CancellationTokenSource();
+        using var processingTimeout = new CancellationTokenSource();
 
-        await server.StartAsync(cancellationTokenSource.Token);
+        await server.StartAsync(processingTimeout.Token);
 
-        cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(2));
+        var timeout = TimeSpan.FromSeconds(2);
+        processingTimeout.CancelAfter(timeout);
 
         var context = await server.EnqueueAsync(json);
 
         // Queue a task to stop the Lambda function as soon as the response is processed
         _ = Task.Run(async () =>
         {
-            await context.Response.WaitToReadAsync(cancellationTokenSource.Token);
-
-            if (!cancellationTokenSource.IsCancellationRequested)
+            if (await context.Response.WaitToReadAsync(processingTimeout.Token) && !processingTimeout.IsCancellationRequested)
             {
-                await cancellationTokenSource.CancelAsync();
+                await processingTimeout.CancelAsync();
             }
         });
 
@@ -235,7 +234,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         // Act
         try
         {
-            await FunctionEntrypoint.RunAsync<TestAlexaFunctionWithHttpRequests>(httpClient, cancellationTokenSource.Token);
+            await FunctionEntrypoint.RunAsync<TestAlexaFunctionWithHttpRequests>(httpClient, processingTimeout.Token);
         }
         catch (UriFormatException)
         {
@@ -247,7 +246,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
 
         result.ShouldNotBeNull();
         result.IsSuccessful.ShouldBeTrue();
-        result.Duration.ShouldBeInRange(TimeSpan.FromTicks(1), TimeSpan.FromSeconds(2));
+        result.Duration.ShouldBeInRange(TimeSpan.FromTicks(1), timeout);
         result.Content.ShouldNotBeEmpty();
 
         json = await result.ReadAsStringAsync();

@@ -303,6 +303,8 @@ public sealed class EndToEndTests
     private async Task<SkillResponse> ProcessRequestAsync(SkillRequest request)
     {
         // Arrange
+        var testCancellationToken = TestContext?.CancellationToken ?? default;
+
         string json = JsonSerializer.Serialize(request, AppJsonSerializerContext.Default.SkillRequest);
 
         void Configure(IServiceCollection services)
@@ -313,15 +315,16 @@ public sealed class EndToEndTests
         }
 
         using var server = new LambdaTestServer(Configure);
-
-        using var timeout = new CancellationTokenSource();
-        timeout.CancelAfter(TimeSpan.FromSeconds(5));
+        using var processingTimeout = new CancellationTokenSource();
 
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(
-            TestContext?.CancellationToken ?? default,
-            timeout.Token);
+            testCancellationToken,
+            processingTimeout.Token);
 
         await server.StartAsync(linked.Token);
+
+        var timeout = TimeSpan.FromSeconds(5);
+        processingTimeout.CancelAfter(timeout);
 
         var context = await server.EnqueueAsync(json);
 
@@ -329,11 +332,9 @@ public sealed class EndToEndTests
         _ = Task.Run(
             async () =>
             {
-                await context.Response.WaitToReadAsync(linked.Token);
-
-                if (!linked.IsCancellationRequested)
+                if (await context.Response.WaitToReadAsync(processingTimeout.Token) && !processingTimeout.IsCancellationRequested)
                 {
-                    await linked.CancelAsync();
+                    await processingTimeout.CancelAsync();
                 }
             },
             linked.Token);
@@ -351,12 +352,13 @@ public sealed class EndToEndTests
         }
 
         // Assert
-        Assert.IsTrue(context.Response.TryRead(out var result));
+        Assert.IsTrue(await context.Response.WaitToReadAsync(testCancellationToken));
+        var result = await context.Response.ReadAsync(testCancellationToken);
 
         Assert.IsNotNull(result);
         Assert.IsTrue(result.IsSuccessful);
         Assert.IsGreaterThan(TimeSpan.Zero, result.Duration);
-        Assert.IsLessThanOrEqualTo(TimeSpan.FromSeconds(5), result.Duration);
+        Assert.IsLessThanOrEqualTo(timeout, result.Duration);
         Assert.IsNotNull(result.Content);
         Assert.AreNotEqual(0, result.Content.Length);
 
