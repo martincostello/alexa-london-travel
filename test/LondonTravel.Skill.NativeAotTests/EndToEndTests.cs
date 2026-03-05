@@ -326,17 +326,15 @@ public sealed class EndToEndTests
         var context = await server.EnqueueAsync(json);
 
         // Queue a task to stop the Lambda function as soon as the response is processed
-        _ = Task.Run(
-            async () =>
-            {
-                await context.Response.WaitToReadAsync(linked.Token);
+        _ = Task.Run(async () =>
+        {
+            await context.Response.WaitToReadAsync(linked.Token);
 
-                if (!linked.IsCancellationRequested)
-                {
-                    await linked.CancelAsync();
-                }
-            },
-            linked.Token);
+            if (!linked.IsCancellationRequested)
+            {
+                await linked.CancelAsync();
+            }
+        });
 
         using var httpClient = server.CreateClient();
 
