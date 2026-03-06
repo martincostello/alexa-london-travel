@@ -372,7 +372,8 @@ public sealed class EndToEndTests
             {
                 await linked.CancelAsync();
             }
-        }, CancellationToken.None);
+        },
+        CancellationToken.None);
 
         using var httpClient = server.CreateClient();
 
