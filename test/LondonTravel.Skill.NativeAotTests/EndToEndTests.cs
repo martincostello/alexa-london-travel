@@ -368,7 +368,6 @@ public sealed class EndToEndTests
                 {
                     // Cancellation was requested for another reason (e.g., test cancellation)
                 }
-    
                 if (!linked.IsCancellationRequested)
                 {
                     await linked.CancelAsync();
