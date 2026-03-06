@@ -23,6 +23,10 @@ public sealed class EndToEndTests
 
     private static readonly ConsoleLoggerProvider ConsoleLogger = new(new ConsoleLoggerOptionsMonitor());
 
+    // Serialize test execution to prevent race conditions where concurrent tests overwrite
+    // shared process-wide state (such as AWS_LAMBDA_RUNTIME_API) set by LambdaTestServer.
+    private static readonly SemaphoreSlim s_testGate = new(1, 1);
+
     public TestContext? TestContext { get; set; }
 
     private HttpClientInterceptorOptions Interceptor { get; } = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
@@ -305,6 +309,20 @@ public sealed class EndToEndTests
         // Arrange
         using var testCancellationSource = new CancellationTokenSource(TimeoutMilliseconds);
 
+        await s_testGate.WaitAsync(testCancellationSource.Token);
+        try
+        {
+            return await ProcessRequestCoreAsync(request, testCancellationSource.Token);
+        }
+        finally
+        {
+            s_testGate.Release();
+        }
+    }
+
+    private async Task<SkillResponse> ProcessRequestCoreAsync(SkillRequest request, CancellationToken testCancellationToken)
+    {
+        // Arrange
         string json = JsonSerializer.Serialize(request, AppJsonSerializerContext.Default.SkillRequest);
 
         void Configure(IServiceCollection services)
@@ -319,7 +337,7 @@ public sealed class EndToEndTests
 
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(
             TestContext?.CancellationToken ?? default,
-            testCancellationSource.Token,
+            testCancellationToken,
             processingTimeout.Token);
 
         await server.StartAsync(linked.Token);
