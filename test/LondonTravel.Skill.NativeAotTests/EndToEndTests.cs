@@ -25,7 +25,7 @@ public sealed class EndToEndTests
 
     // Serialize test execution to prevent race conditions where concurrent tests overwrite
     // shared process-wide state (such as AWS_LAMBDA_RUNTIME_API) set by LambdaTestServer.
-    private static readonly SemaphoreSlim s_testGate = new(1, 1);
+    private static readonly SemaphoreSlim TestGate = new(1, 1);
 
     public TestContext? TestContext { get; set; }
 
@@ -309,14 +309,14 @@ public sealed class EndToEndTests
         // Arrange
         using var testCancellationSource = new CancellationTokenSource(TimeoutMilliseconds);
 
-        await s_testGate.WaitAsync(testCancellationSource.Token);
+        await TestGate.WaitAsync(testCancellationSource.Token);
         try
         {
             return await ProcessRequestCoreAsync(request, testCancellationSource.Token);
         }
         finally
         {
-            s_testGate.Release();
+            TestGate.Release();
         }
     }
 
