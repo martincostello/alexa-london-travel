@@ -329,28 +329,28 @@ public sealed class EndToEndTests
 
         var context = await server.EnqueueAsync(json);
 
-        // Queue a task to stop the Lambda function as soon as the response is processed
-        _ = Task.Run(
-            async () =>
+        // Queue a task to stop the Lambda function as soon as the response is processed.
+        // Do not pass a CancellationToken to Task.Run so the task always starts and runs to
+        // completion, even if linked is cancelled before the thread pool schedules it.
+        _ = Task.Run(async () =>
+        {
+            try
             {
-                try
+                if (!await context.Response.WaitToReadAsync(linked.Token))
                 {
-                    if (!await context.Response.WaitToReadAsync(processingTimeout.Token))
-                    {
-                        await Console.Error.WriteLineAsync($"Response not received within {timeout}.");
-                    }
+                    await Console.Error.WriteLineAsync($"Response not received within {timeout}.");
                 }
-                catch (OperationCanceledException)
-                {
-                    await Console.Error.WriteLineAsync($"Processing timed out after {timeout}.");
-                }
+            }
+            catch (OperationCanceledException)
+            {
+                await Console.Error.WriteLineAsync($"Processing timed out after {timeout}.");
+            }
 
-                if (!linked.IsCancellationRequested)
-                {
-                    await linked.CancelAsync();
-                }
-            },
-            linked.Token);
+            if (!linked.IsCancellationRequested)
+            {
+                await linked.CancelAsync();
+            }
+        });
 
         using var httpClient = server.CreateClient();
 
@@ -364,9 +364,9 @@ public sealed class EndToEndTests
             // Ignore exception thrown when AWS_LAMBDA_RUNTIME_API is cleared
         }
 
-        // Assert
-        Assert.IsTrue(await context.Response.WaitToReadAsync(testCancellationSource.Token));
-        var result = await context.Response.ReadAsync(testCancellationSource.Token);
+        // Assert - use TryRead for a synchronous, deterministic check that avoids a race condition
+        // where the channel could be closed before an async WaitToReadAsync call can observe the data.
+        Assert.IsTrue(context.Response.TryRead(out var result), $"The Lambda response was not received within {timeout}.");
 
         Assert.IsNotNull(result);
         Assert.IsTrue(result.IsSuccessful);
