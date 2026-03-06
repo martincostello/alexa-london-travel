@@ -350,30 +350,31 @@ public sealed class EndToEndTests
         // Queue a task to stop the Lambda function as soon as the response is processed.
         // Pass CancellationToken.None to Task.Run so the task always starts and runs to
         // completion, even if linked is cancelled before the thread pool schedules it.
-        var stopTask = Task.Run(async () =>
-        {
-            try
+        var stopTask = Task.Run(
+            async () =>
             {
-                if (!await context.Response.WaitToReadAsync(linked.Token))
+                try
                 {
-                    await Console.Error.WriteLineAsync($"Response not received within {timeout}.");
+                    if (!await context.Response.WaitToReadAsync(linked.Token))
+                    {
+                        await Console.Error.WriteLineAsync($"Response not received within {timeout}.");
+                    }
                 }
-            }
-            catch (OperationCanceledException) when (processingTimeout.IsCancellationRequested)
-            {
-                await Console.Error.WriteLineAsync($"Processing timed out after {timeout}.");
-            }
-            catch (OperationCanceledException)
-            {
-                // Cancellation was requested for another reason (e.g., test cancellation)
-            }
-
-            if (!linked.IsCancellationRequested)
-            {
-                await linked.CancelAsync();
-            }
-        },
-        CancellationToken.None);
+                catch (OperationCanceledException) when (processingTimeout.IsCancellationRequested)
+                {
+                    await Console.Error.WriteLineAsync($"Processing timed out after {timeout}.");
+                }
+                catch (OperationCanceledException)
+                {
+                    // Cancellation was requested for another reason (e.g., test cancellation)
+                }
+    
+                if (!linked.IsCancellationRequested)
+                {
+                    await linked.CancelAsync();
+                }
+            },
+            CancellationToken.None);
 
         using var httpClient = server.CreateClient();
 
