@@ -332,7 +332,7 @@ public sealed class EndToEndTests
         // Queue a task to stop the Lambda function as soon as the response is processed.
         // Do not pass a CancellationToken to Task.Run so the task always starts and runs to
         // completion, even if linked is cancelled before the thread pool schedules it.
-        _ = Task.Run(async () =>
+        var stopTask = Task.Run(async () =>
         {
             try
             {
@@ -341,9 +341,13 @@ public sealed class EndToEndTests
                     await Console.Error.WriteLineAsync($"Response not received within {timeout}.");
                 }
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException) when (processingTimeout.IsCancellationRequested)
             {
                 await Console.Error.WriteLineAsync($"Processing timed out after {timeout}.");
+            }
+            catch (OperationCanceledException)
+            {
+                // Cancellation was requested for another reason (e.g., test cancellation)
             }
 
             if (!linked.IsCancellationRequested)
@@ -363,6 +367,11 @@ public sealed class EndToEndTests
         {
             // Ignore exception thrown when AWS_LAMBDA_RUNTIME_API is cleared
         }
+
+        // Wait for the stop task to complete before reading the response and disposing linked.
+        // This ensures linked is not disposed while the task may still be running, which could
+        // cause an ObjectDisposedException when the task accesses linked.IsCancellationRequested.
+        await stopTask;
 
         // Assert - use TryRead for a synchronous, deterministic check that avoids a race condition
         // where the channel could be closed before an async WaitToReadAsync call can observe the data.
