@@ -81,7 +81,7 @@ function DotNetTest {
         $additionalArgs += "$([System.IO.Path]::GetFileNameWithoutExtension($Project)).junit.xml"
     }
 
-    & $dotnet test --project $Project --configuration $config $additionalArgs
+    & $dotnet test --project $Project --configuration $Configuration $additionalArgs
 
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet test failed with exit code ${LASTEXITCODE}"
