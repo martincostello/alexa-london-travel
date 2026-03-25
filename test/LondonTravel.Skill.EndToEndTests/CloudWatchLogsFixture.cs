@@ -157,7 +157,7 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
             },
         };
 
-        httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-GitHub-Api-Version", "2022-11-28");
+        httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-GitHub-Api-Version", "2026-03-10");
 
         using var response = await httpClient.PostAsJsonAsync(
             $"repos/{repository}/issues/{Uri.EscapeDataString(issue)}/comments",

@@ -39,6 +39,11 @@ jobs:
 
     steps:
 
+    - name: Harden runner
+      uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
+      with:
+        egress-policy: audit
+
     - name: Get environment name
       uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
       id: get-environment-name

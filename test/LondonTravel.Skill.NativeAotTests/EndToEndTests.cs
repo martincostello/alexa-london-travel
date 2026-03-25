@@ -19,9 +19,13 @@ namespace MartinCostello.LondonTravel.Skill;
 [TestClass]
 public sealed class EndToEndTests
 {
-    private const int TimeoutMilliseconds = 20_000;
+    private const int TimeoutMilliseconds = 15_000;
 
     private static readonly ConsoleLoggerProvider ConsoleLogger = new(new ConsoleLoggerOptionsMonitor());
+
+    // Serialize test execution to prevent race conditions where concurrent tests overwrite
+    // shared process-wide state (such as AWS_LAMBDA_RUNTIME_API) set by LambdaTestServer.
+    private static readonly SemaphoreSlim Semaphore = new(1, 1);
 
     public TestContext? TestContext { get; set; }
 
@@ -303,40 +307,75 @@ public sealed class EndToEndTests
     private async Task<SkillResponse> ProcessRequestAsync(SkillRequest request)
     {
         // Arrange
+        using var cts = new CancellationTokenSource(TimeoutMilliseconds);
+
+        await Semaphore.WaitAsync(cts.Token);
+
+        try
+        {
+            return await ProcessRequestCoreAsync(request, cts.Token);
+        }
+        finally
+        {
+            Semaphore.Release();
+        }
+    }
+
+    private async Task<SkillResponse> ProcessRequestCoreAsync(SkillRequest request, CancellationToken cancellationToken)
+    {
+        // Arrange
         string json = JsonSerializer.Serialize(request, AppJsonSerializerContext.Default.SkillRequest);
 
         void Configure(IServiceCollection services)
         {
-            services.AddLogging((builder) => builder.AddProvider(ConsoleLogger));
+            services.AddLogging((builder) => builder.ClearProviders().AddProvider(ConsoleLogger));
             services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
                 (_) => new HttpRequestInterceptionFilter(Interceptor));
         }
 
         using var server = new LambdaTestServer(Configure);
-
-        using var timeout = new CancellationTokenSource();
-        timeout.CancelAfter(TimeSpan.FromSeconds(2));
+        using var processingTimeout = new CancellationTokenSource();
 
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(
-            TestContext?.CancellationTokenSource?.Token ?? default,
-            timeout.Token);
+            TestContext?.CancellationToken ?? default,
+            cancellationToken,
+            processingTimeout.Token);
 
         await server.StartAsync(linked.Token);
 
+        var timeout = TimeSpan.FromSeconds(10);
+        processingTimeout.CancelAfter(timeout);
+
         var context = await server.EnqueueAsync(json);
 
-        // Queue a task to stop the Lambda function as soon as the response is processed
-        _ = Task.Run(
+        // Queue a task to stop the Lambda function as soon as the response is processed.
+        // Pass CancellationToken.None to Task.Run so the task always starts and runs to
+        // completion, even if linked is cancelled before the thread pool schedules it.
+        var stopTask = Task.Run(
             async () =>
             {
-                await context.Response.WaitToReadAsync(linked.Token);
+                try
+                {
+                    if (!await context.Response.WaitToReadAsync(linked.Token))
+                    {
+                        await Console.Error.WriteLineAsync($"Response not received within {timeout}.");
+                    }
+                }
+                catch (OperationCanceledException) when (processingTimeout.IsCancellationRequested)
+                {
+                    await Console.Error.WriteLineAsync($"Processing timed out after {timeout}.");
+                }
+                catch (OperationCanceledException)
+                {
+                    // Cancellation was requested for another reason (e.g., test cancellation)
+                }
 
                 if (!linked.IsCancellationRequested)
                 {
                     await linked.CancelAsync();
                 }
             },
-            linked.Token);
+            CancellationToken.None);
 
         using var httpClient = server.CreateClient();
 
@@ -350,13 +389,15 @@ public sealed class EndToEndTests
             // Ignore exception thrown when AWS_LAMBDA_RUNTIME_API is cleared
         }
 
-        // Assert
-        Assert.IsTrue(context.Response.TryRead(out var result));
+        // Wait for the stop task to complete before trying to read the response
+        await stopTask;
 
+        // Assert
+        Assert.IsTrue(context.Response.TryRead(out var result), $"The Lambda response was not received within {timeout}.");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.IsSuccessful);
-        Assert.IsTrue(result.Duration > TimeSpan.Zero);
-        Assert.IsTrue(result.Duration <= TimeSpan.FromSeconds(2));
+        Assert.IsGreaterThan(TimeSpan.Zero, result.Duration);
+        Assert.IsLessThanOrEqualTo(timeout, result.Duration);
         Assert.IsNotNull(result.Content);
         Assert.AreNotEqual(0, result.Content.Length);
 

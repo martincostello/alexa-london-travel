@@ -81,12 +81,6 @@ function DotNetTest {
         $additionalArgs += "$([System.IO.Path]::GetFileNameWithoutExtension($Project)).junit.xml"
     }
 
-    # HACK Workaround for https://github.com/dotnet/aspire/issues/7935
-    $config = $Configuration
-    if ([System.IO.Path]::GetFileNameWithoutExtension($Project) -eq "LondonTravel.Skill.AppHostTests") {
-        $config = "Debug"
-    }
-
     & $dotnet test --project $Project --configuration $config $additionalArgs
 
     if ($LASTEXITCODE -ne 0) {

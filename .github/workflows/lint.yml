@@ -21,10 +21,10 @@ env:
   # renovate: datasource=github-releases depName=powershell-yaml packageName=cloudbase/powershell-yaml
   POWERSHELL_YAML_VERSION: '0.4.12'
   # renovate: datasource=github-releases depName=PSScriptAnalyzer packageName=PowerShell/PSScriptAnalyzer
-  PSSCRIPTANALYZER_VERSION: '1.24.0'
+  PSSCRIPTANALYZER_VERSION: '1.25.0'
   TERM: xterm
   # renovate: datasource=github-releases depName=zizmor packageName=zizmorcore/zizmor
-  ZIZMOR_VERSION: '1.16.3'
+  ZIZMOR_VERSION: '1.23.1'
 
 jobs:
   lint:
@@ -37,8 +37,13 @@ jobs:
 
     steps:
 
+    - name: Harden runner
+      uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
+      with:
+        egress-policy: audit
+
     - name: Checkout code
-      uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         filter: 'tree:0'
         persist-credentials: false
@@ -48,25 +53,25 @@ jobs:
       run: echo "::add-matcher::.github/actionlint-matcher.json"
 
     - name: Lint workflows with actionlint
-      uses: docker://rhysd/actionlint:1.7.9@sha256:a0383f60d92601e2694e24b24d37df7b6a40bed7cedbc447611c50009bf02d94
+      uses: docker://rhysd/actionlint:1.7.11@sha256:6f03470d0152251d7f07f7c4dc019dbe7024c72cd952f839544c7798843efa8f
       with:
         args: -color
 
     - name: Lint workflows with zizmor
-      uses: zizmorcore/zizmor-action@e639db99335bc9038abc0e066dfcd72e23d26fb4 # v0.3.0
+      uses: zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8 # v0.5.2
       with:
         persona: pedantic
         version: ${{ env.ZIZMOR_VERSION }}
 
     - name: Lint markdown
-      uses: DavidAnson/markdownlint-cli2-action@30a0e04f1870d58f8d717450cc6134995f993c63 # v21.0.0
+      uses: DavidAnson/markdownlint-cli2-action@07035fd053f7be764496c0f8d8f9f41f98305101 # v22.0.0
       with:
         config: .markdownlint.json
         globs: |
           **/*.md
 
     - name: Lint PowerShell in workflows
-      uses: martincostello/lint-actions-powershell@5942e3350ee5bd8f8933cec4e1185d13f0ea688f # v1.0.0
+      uses: martincostello/lint-actions-powershell@e088367ebeb113cd7c1ebee5c541175d93e945b7 # v1.0.1
       with:
         powershell-yaml-version: ${{ env.POWERSHELL_YAML_VERSION }}
         psscriptanalyzer-version: ${{ env.PSSCRIPTANALYZER_VERSION }}
