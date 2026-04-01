@@ -9,15 +9,15 @@
     <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.14.2" />
     <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.5" />
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="3.0.1" />
-    <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.2.0" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.2.1" />
     <PackageVersion Include="Aspire.Hosting.AWS" Version="13.0.0" />
-    <PackageVersion Include="Aspire.Hosting.Testing" Version="13.2.0" />
-    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="4.0.15.3" />
-    <PackageVersion Include="AWSSDK.Lambda" Version="4.0.13.5" />
-    <PackageVersion Include="AWSSDK.SecretsManager" Version="4.0.4.10" />
+    <PackageVersion Include="Aspire.Hosting.Testing" Version="13.2.1" />
+    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="4.0.16.1" />
+    <PackageVersion Include="AWSSDK.Lambda" Version="4.0.13.7" />
+    <PackageVersion Include="AWSSDK.SecretsManager" Version="4.0.4.12" />
     <PackageVersion Include="AWSSDK.SecretsManager.Caching" Version="2.0.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
-    <PackageVersion Include="GitHubActionsTestLogger" Version="3.0.2" />
+    <PackageVersion Include="GitHubActionsTestLogger" Version="3.0.3" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="5.1.2" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.7.1" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.12.1" />
@@ -37,8 +37,8 @@
     <PackageVersion Include="Microsoft.Testing.Extensions.HangDump" Version="2.1.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
-    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.15.0" />
-    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.15.0" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.15.1" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.15.1" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.AWS" Version="1.15.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.AWSLambda" Version="1.15.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.15.0" />
