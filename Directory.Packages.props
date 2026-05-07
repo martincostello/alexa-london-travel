@@ -5,10 +5,10 @@
     <GlobalPackageReference Include="ReferenceTrimmer" Version="3.5.6" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Amazon.Lambda.Core" Version="2.8.1" />
-    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.14.3" />
-    <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.5" />
-    <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="3.0.1" />
+    <PackageVersion Include="Amazon.Lambda.Core" Version="3.0.0" />
+    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="2.0.0" />
+    <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="3.0.0" />
+    <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="4.0.0" />
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.3.0" />
     <PackageVersion Include="Aspire.Hosting.AWS" Version="13.0.2" />
     <PackageVersion Include="Aspire.Hosting.Testing" Version="13.3.0" />
