@@ -1,0 +1,5 @@
+{
+  "appHost": {
+    "path": "src/LondonTravel.Skill.AppHost/LondonTravel.Skill.AppHost.csproj"
+  }
+}
