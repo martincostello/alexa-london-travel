@@ -17,6 +17,7 @@ permissions: {}
 jobs:
   analysis:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
 
     permissions:
       actions: read
@@ -58,6 +59,7 @@ jobs:
     if: ${{ !cancelled() }}
     needs: [ analysis ]
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
 
     steps:
     - name: Harden runner

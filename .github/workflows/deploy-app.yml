@@ -60,8 +60,9 @@ permissions: {}
 jobs:
 
   deploy:
-    runs-on: [ ubuntu-24.04 ]
+    runs-on: ubuntu-24.04
     concurrency: ${{ inputs.environment-name }}_environment
+    timeout-minutes: 5
 
     env:
       ARCHIVE_NAME: ${{ inputs.archive-name }}
@@ -268,8 +269,9 @@ jobs:
 
   test:
     needs: [ deploy ]
-    runs-on: [ ubuntu-24.04 ]
+    runs-on: ubuntu-24.04
     concurrency: ${{ inputs.environment-name }}_environment
+    timeout-minutes: 5
 
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: true
