@@ -280,6 +280,10 @@ jobs:
       DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
       NUGET_XMLDOC_MODE: skip
 
+    environment:
+      name: '${{ inputs.environment-name }}-tests'
+      deployment: false
+
     permissions:
       contents: read
       id-token: write
