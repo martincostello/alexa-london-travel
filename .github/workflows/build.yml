@@ -34,6 +34,10 @@ jobs:
       NUGET_XMLDOC_MODE: skip
       TERM: xterm
 
+    environment:
+      name: build
+      deployment: false
+
     outputs:
       archive-name: ${{ env.ARCHIVE_NAME }}
       artifact-name: ${{ env.ARTIFACT_NAME }}
