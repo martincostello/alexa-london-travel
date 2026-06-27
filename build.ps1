@@ -78,9 +78,6 @@ function DotNetTest {
         $additionalArgs += "--hangdump"
         $additionalArgs += "--hangdump-timeout"
         $additionalArgs += "180s"
-        $additionalArgs += "--report-junit"
-        $additionalArgs += "--report-junit-filename"
-        $additionalArgs += "$projectName.junit.xml"
     }
 
     & $dotnet test $Project --configuration $Configuration $additionalArgs
