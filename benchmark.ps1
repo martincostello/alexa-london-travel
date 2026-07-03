@@ -62,7 +62,9 @@ $benchmarks = (Join-Path $solutionPath "perf" "LondonTravel.Skill.Benchmarks" "L
 
 Write-Information "Running benchmarks..."
 
-$additionalArgs = @()
+$additionalArgs = @(
+    "--consumeTasksSynchronously" # For backwards compatibility with BenchmarkDotNet versions before 0.16.0
+)
 
 if (-Not [string]::IsNullOrEmpty($Filter)) {
     $additionalArgs += "--filter"
