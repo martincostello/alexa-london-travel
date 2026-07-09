@@ -1,7 +1,16 @@
 <Project Sdk="MSTest.Sdk">
   <PropertyGroup>
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+    <!-- Use the reflection-free MSTest source generator so the adapter invokes test members
+         (including the TestContext property setter) through generated delegates instead of
+         runtime reflection, which is not populated under Native AOT. -->
+    <MSTestSourceGenMode>ReflectionFree</MSTestSourceGenMode>
     <NoWarn>$(NoWarn);CA1062;CA1707;CA2007;CA2234;SA1600</NoWarn>
+    <!-- ReflectionFree mode makes MSTest.TestAdapter's runtime hook paths reachable, which pull in
+         trim/AOT-unsafe code from Microsoft.TestPlatform.ObjectModel and System.Private.DataContractSerialization
+         (IL2026/IL2057/IL3050) plus an IL2072 from MSTest's own generated registration. These are outside our
+         control; testfx's own Native AOT acceptance tests tolerate them by not treating warnings as errors. -->
+    <NoWarn>$(NoWarn);IL2026;IL2057;IL2072;IL3050</NoWarn>
     <PublishAot>true</PublishAot>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>net10.0</TargetFramework>
