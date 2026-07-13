@@ -138,10 +138,10 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
                 },
             };
 
-            secretsManager.DescribeSecretAsync(Arg.Is<DescribeSecretRequest>((p) => p.SecretId == id), Arg.Any<CancellationToken>())
+            secretsManager.DescribeSecretAsync(Arg.Is<DescribeSecretRequest>((p) => p != null && p.SecretId == id), Arg.Any<CancellationToken>())
                           .Returns(Task.FromResult(description));
 
-            secretsManager.GetSecretValueAsync(Arg.Is<GetSecretValueRequest>((p) => p.SecretId == id), Arg.Any<CancellationToken>())
+            secretsManager.GetSecretValueAsync(Arg.Is<GetSecretValueRequest>((p) => p != null && p.SecretId == id), Arg.Any<CancellationToken>())
                           .Returns(Task.FromResult(new GetSecretValueResponse() { SecretString = value }));
         }
     }
