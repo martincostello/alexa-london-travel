@@ -1,6 +1,10 @@
 <Project Sdk="MSTest.Sdk">
   <PropertyGroup>
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+    <!-- Use the reflection-free MSTest source generator so the adapter invokes test members
+         (including the TestContext property setter) through generated delegates instead of
+         runtime reflection, which is not populated under Native AOT. -->
+    <MSTestSourceGenMode>ReflectionFree</MSTestSourceGenMode>
     <NoWarn>$(NoWarn);CA1062;CA1707;CA2007;CA2234;SA1600</NoWarn>
     <PublishAot>true</PublishAot>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
