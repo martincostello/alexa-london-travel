@@ -19,7 +19,7 @@
     <PackageVersion Include="AWSSDK.SecretsManager.Caching" Version="2.0.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.16.0-preview.1" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="3.0.5" />
-    <PackageVersion Include="JustEat.HttpClientInterception" Version="5.1.2" />
+    <PackageVersion Include="JustEat.HttpClientInterception" Version="5.1.4" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.7.1" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.12.1" />
     <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="10.0.10" />
