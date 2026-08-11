@@ -5,20 +5,20 @@
     <GlobalPackageReference Include="ReferenceTrimmer" Version="3.5.7" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Amazon.Lambda.Core" Version="3.1.1" />
-    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="2.1.2" />
+    <PackageVersion Include="Amazon.Lambda.Core" Version="3.3.0" />
+    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="2.2.0" />
     <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="3.0.0" />
-    <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="4.1.0" />
+    <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="4.2.0" />
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.4.6" />
-    <PackageVersion Include="Aspire.Hosting.AWS" Version="13.5.0" />
+    <PackageVersion Include="Aspire.Hosting.AWS" Version="13.6.0" />
     <PackageVersion Include="Aspire.Hosting.Testing" Version="13.4.6" />
-    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="4.0.101.1" />
-    <PackageVersion Include="AWSSDK.Lambda" Version="4.0.102" />
-    <PackageVersion Include="AWSSDK.SecretsManager" Version="4.0.100.3" />
-    <PackageVersion Include="AWSSDK.SecretsManager.Caching" Version="2.0.0" />
+    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="4.0.103" />
+    <PackageVersion Include="AWSSDK.Lambda" Version="4.0.105" />
+    <PackageVersion Include="AWSSDK.SecretsManager" Version="4.0.100.7" />
+    <PackageVersion Include="AWSSDK.SecretsManager.Caching" Version="3.0.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.16.0-preview.1" />
-    <PackageVersion Include="GitHubActionsTestLogger" Version="3.0.4" />
-    <PackageVersion Include="JustEat.HttpClientInterception" Version="5.1.2" />
+    <PackageVersion Include="GitHubActionsTestLogger" Version="3.0.5" />
+    <PackageVersion Include="JustEat.HttpClientInterception" Version="5.1.4" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.7.1" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.12.1" />
     <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="11.0.0-preview.7.26381.103" />
@@ -34,17 +34,17 @@
     <PackageVersion Include="Microsoft.Extensions.Telemetry" Version="10.8.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.9.0" />
-    <PackageVersion Include="Microsoft.Testing.Extensions.HangDump" Version="2.3.2" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.HangDump" Version="2.3.3" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageVersion Include="NSubstitute" Version="6.0.0" />
-    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.16.0" />
-    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.16.0" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AWS" Version="1.16.0" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AWSLambda" Version="1.16.0" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.16.0" />
-    <PackageVersion Include="OpenTelemetry.Resources.Host" Version="1.16.0-beta.1" />
-    <PackageVersion Include="OpenTelemetry.Resources.OperatingSystem" Version="1.16.0-beta.1" />
-    <PackageVersion Include="OpenTelemetry.Resources.ProcessRuntime" Version="1.16.0-beta.1" />
+    <PackageVersion Include="NSubstitute" Version="6.2.0" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.17.0" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.17.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AWS" Version="1.17.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AWSLambda" Version="1.17.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.17.0" />
+    <PackageVersion Include="OpenTelemetry.Resources.Host" Version="1.17.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Resources.OperatingSystem" Version="1.17.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Resources.ProcessRuntime" Version="1.17.0-beta.1" />
     <PackageVersion Include="Polly.Extensions" Version="8.7.0" />
     <PackageVersion Include="Polly.RateLimiting" Version="8.7.0" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
