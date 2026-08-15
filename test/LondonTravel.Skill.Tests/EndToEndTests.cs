@@ -227,7 +227,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
             {
                 await processingTimeout.CancelAsync();
             }
-        });
+        }, processingTimeout.Token);
 
         using var httpClient = server.CreateClient();
 
