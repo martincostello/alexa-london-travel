@@ -24,7 +24,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         var request = CreateIntentRequest(name);
 
         // Act
-        var actual = await ProcessRequestAsync(request);
+        var actual = await ProcessRequestAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         var response = AssertResponse(actual);
@@ -41,7 +41,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         var request = CreateIntentRequest("AMAZON.HelpIntent");
 
         // Act
-        var actual = await ProcessRequestAsync(request);
+        var actual = await ProcessRequestAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         var response = AssertResponse(actual, shouldEndSession: false);
@@ -61,7 +61,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         var request = CreateIntentRequest("FooIntent");
 
         // Act
-        var actual = await ProcessRequestAsync(request);
+        var actual = await ProcessRequestAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         var response = AssertResponse(actual, shouldEndSession: true);
@@ -81,7 +81,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         var request = CreateIntentRequest("DisruptionIntent");
 
         // Act
-        var actual = await ProcessRequestAsync(request);
+        var actual = await ProcessRequestAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         var response = AssertResponse(actual, shouldEndSession: true);
@@ -108,7 +108,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
             new Slot() { Name = "LINE", Value = line });
 
         // Act
-        var actual = await ProcessRequestAsync(request);
+        var actual = await ProcessRequestAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         var response = AssertResponse(actual, shouldEndSession: true);
@@ -129,7 +129,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         var request = CreateRequest<LaunchRequest>();
 
         // Act
-        var actual = await ProcessRequestAsync(request);
+        var actual = await ProcessRequestAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         var response = AssertResponse(actual, shouldEndSession: false);
@@ -159,7 +159,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         var request = CreateRequest(session);
 
         // Act
-        var actual = await ProcessRequestAsync(request);
+        var actual = await ProcessRequestAsync(request, TestContext.Current.CancellationToken);
 
         var response = AssertResponse(actual);
 
@@ -192,7 +192,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         var request = CreateRequest(exception);
 
         // Act
-        var actual = await ProcessRequestAsync(request);
+        var actual = await ProcessRequestAsync(request, TestContext.Current.CancellationToken);
 
         var response = AssertResponse(actual);
 
@@ -205,13 +205,13 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         response.OutputSpeech.Ssml.ShouldBe("<speak>Sorry, something went wrong.</speak>");
     }
 
-    private async Task<SkillResponse> ProcessRequestAsync(SkillRequest request)
+    private async Task<SkillResponse> ProcessRequestAsync(SkillRequest request, CancellationToken cancellationToken)
     {
         // Arrange
         string json = JsonSerializer.Serialize(request, AppJsonSerializerContext.Default.SkillRequest);
 
         using var server = new LambdaTestServer((services) => services.AddLogging((builder) => builder.AddXUnit(OutputHelper)));
-        using var processingTimeout = new CancellationTokenSource();
+        using var processingTimeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         await server.StartAsync(processingTimeout.Token);
 
@@ -221,13 +221,15 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
         var context = await server.EnqueueAsync(json);
 
         // Queue a task to stop the Lambda function as soon as the response is processed
-        _ = Task.Run(async () =>
-        {
-            if (await context.Response.WaitToReadAsync(processingTimeout.Token) && !processingTimeout.IsCancellationRequested)
+        _ = Task.Run(
+            async () =>
             {
-                await processingTimeout.CancelAsync();
-            }
-        });
+                if (await context.Response.WaitToReadAsync(processingTimeout.Token) && !processingTimeout.IsCancellationRequested)
+                {
+                    await processingTimeout.CancelAsync();
+                }
+            },
+            processingTimeout.Token);
 
         using var httpClient = server.CreateClient();
 
