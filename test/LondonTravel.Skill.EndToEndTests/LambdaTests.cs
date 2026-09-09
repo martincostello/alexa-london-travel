@@ -31,7 +31,12 @@ public class LambdaTests(CloudWatchLogsFixture fixture, ITestOutputHelper output
     {
         var credentials = TestConfiguration.GetCredentials();
 
-        Assert.SkipWhen(credentials is null, "No AWS credentials are configured.");
+        // HACK Workaround for https://github.com/microsoft/testfx/issues/11145
+        ////Assert.SkipWhen(credentials is null, "No AWS credentials are configured.");
+        if (credentials is null)
+        {
+            return;
+        }
 
         string? functionName = TestConfiguration.FunctionName;
         string? regionName = TestConfiguration.RegionName;
