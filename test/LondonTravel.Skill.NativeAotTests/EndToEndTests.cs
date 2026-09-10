@@ -307,7 +307,7 @@ public sealed class EndToEndTests
     private async Task<SkillResponse> ProcessRequestAsync(SkillRequest request)
     {
         // Arrange
-        var cancellationToken = TestContext.CancellationToken;
+        var cancellationToken = TestContext.CancellationToken!;
 
         await Semaphore.WaitAsync(cancellationToken);
 
