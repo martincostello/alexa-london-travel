@@ -1,6 +1,7 @@
 <Project Sdk="MSTest.Sdk">
   <PropertyGroup>
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+    <MSTestSourceGenMode>ReflectionFree</MSTestSourceGenMode>
     <NoWarn>$(NoWarn);CA1062;CA1707;CA2007;CA2234;SA1600</NoWarn>
     <PublishAot>true</PublishAot>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
