@@ -27,7 +27,7 @@ public sealed class EndToEndTests
     // shared process-wide state (such as AWS_LAMBDA_RUNTIME_API) set by LambdaTestServer.
     private static readonly SemaphoreSlim Semaphore = new(1, 1);
 
-    public TestContext TestContext { get; set; }
+    public TestContext? TestContext { get; set; }
 
     private HttpClientInterceptorOptions Interceptor { get; } = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
 
@@ -307,7 +307,7 @@ public sealed class EndToEndTests
     private async Task<SkillResponse> ProcessRequestAsync(SkillRequest request)
     {
         // Arrange
-        var cancellationToken = TestContext.CancellationToken;
+        var cancellationToken = TestContext?.CancellationToken ?? CancellationToken.None;
 
         await Semaphore.WaitAsync(cancellationToken);
 
