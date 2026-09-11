@@ -3,6 +3,7 @@
     <AssemblyIsCLSCompliant>false</AssemblyIsCLSCompliant>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)LondonTravel.Skill.ruleset</CodeAnalysisRuleSet>
+    <Features>$(Features);runtime-async=on</Features>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <NoWarn>$(NoWarn);CS1591;MTP0001</NoWarn>
     <PublishForAWSLambda>false</PublishForAWSLambda>
