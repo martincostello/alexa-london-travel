@@ -12,7 +12,7 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
     public async Task Can_Invoke_Function_When_The_Skill_Is_Not_Linked()
     {
         // Arrange
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var request = CreateIntentRequestWithToken(accessToken: null);
         var context = new TestLambdaContext();
 
@@ -40,7 +40,7 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
             "skill-api-invalid-token.json",
             cancellationToken: TestContext.Current.CancellationToken);
 
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var request = CreateIntentRequestWithToken(accessToken: "invalid-access-token");
         var context = new TestLambdaContext();
 
@@ -64,7 +64,7 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
     public async Task Can_Invoke_Function_When_The_Skill_Api_Fails()
     {
         // Arrange
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var request = CreateIntentRequestWithToken(accessToken: "random-access-token");
         var context = new TestLambdaContext();
 
@@ -91,7 +91,7 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
         await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("skill-api-no-favorites.json", cancellationToken: cancellationToken);
         await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("tfl-line-statuses.json", cancellationToken: cancellationToken);
 
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var request = CreateIntentRequestWithToken(accessToken: "token-for-no-favorites");
         var context = new TestLambdaContext();
 
@@ -114,7 +114,7 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
         await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("skill-api-one-favorite.json", cancellationToken: cancellationToken);
         await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("tfl-line-statuses.json", cancellationToken: cancellationToken);
 
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var request = CreateIntentRequestWithToken(accessToken: "token-for-one-favorite");
         var context = new TestLambdaContext();
 
@@ -137,7 +137,7 @@ public class CommuteTests(ITestOutputHelper outputHelper) : FunctionTests(output
         await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("skill-api-two-favorites.json", cancellationToken: cancellationToken);
         await Interceptor.RegisterBundleFromResourceStreamAsync<CommuteTests>("tfl-line-statuses.json", cancellationToken: cancellationToken);
 
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var request = CreateIntentRequestWithToken(accessToken: "token-for-two-favorites");
         TestLambdaContext context = new();
 

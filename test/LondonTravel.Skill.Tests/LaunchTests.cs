@@ -12,7 +12,7 @@ public class LaunchTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
     public async Task Can_Invoke_Function()
     {
         // Arrange
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
 
         var request = CreateRequest<LaunchRequest>();
         var context = new TestLambdaContext();

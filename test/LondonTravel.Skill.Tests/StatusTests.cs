@@ -51,7 +51,7 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
             "tfl-line-statuses.json",
             cancellationToken: TestContext.Current.CancellationToken);
 
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var request = CreateIntentForLine(id);
         var context = new TestLambdaContext();
 
@@ -72,7 +72,7 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
     public async Task Can_Invoke_Function_For_Invalid_Line(string? id)
     {
         // Arrange
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var request = CreateIntentForLine(id);
         var context = new TestLambdaContext();
 
@@ -103,7 +103,7 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
     public async Task Can_Invoke_Function_When_The_Api_Fails()
     {
         // Arrange
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var request = CreateIntentForLine("district");
         var context = new TestLambdaContext();
 
@@ -150,7 +150,7 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
             "tfl-line-severities.json",
             cancellationToken: TestContext.Current.CancellationToken);
 
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var request = CreateIntentForLine(id);
         var context = new TestLambdaContext();
 

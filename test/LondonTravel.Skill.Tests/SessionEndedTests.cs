@@ -12,7 +12,7 @@ public class SessionEndedTests(ITestOutputHelper outputHelper) : FunctionTests(o
     public async Task Can_Invoke_Function()
     {
         // Arrange
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
 
         var request = CreateRequest<SessionEndedRequest>();
         var context = new TestLambdaContext();
