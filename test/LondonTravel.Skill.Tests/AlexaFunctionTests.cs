@@ -22,7 +22,7 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
     public async Task Cannot_Invoke_Function_If_Application_Id_Incorrect()
     {
         // Arrange
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var context = new TestLambdaContext();
 
         var request = CreateIntentRequest("AMAZON.HelpIntent");
@@ -45,7 +45,7 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
     public async Task Can_Invoke_Function_If_Locale_Is_Invalid(string? locale)
     {
         // Arrange
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var context = new TestLambdaContext();
 
         var request = CreateIntentRequest("AMAZON.HelpIntent");
@@ -65,7 +65,7 @@ public class AlexaFunctionTests(ITestOutputHelper outputHelper) : FunctionTests(
     public async Task Cannot_Invoke_Function_With_System_Failure()
     {
         // Arrange
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var context = new TestLambdaContext();
 
         var error = new SystemExceptionRequest()

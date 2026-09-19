@@ -11,7 +11,7 @@ public class HelpTests(ITestOutputHelper outputHelper) : FunctionTests(outputHel
     public async Task Can_Invoke_Function()
     {
         // Arrange
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
 
         var request = CreateIntentRequest("AMAZON.HelpIntent");
         var context = new TestLambdaContext();

@@ -11,7 +11,7 @@ public class CancelTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
     public async Task Can_Invoke_Function()
     {
         // Arrange
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var context = new TestLambdaContext();
 
         var request = CreateIntentRequest("AMAZON.CancelIntent");

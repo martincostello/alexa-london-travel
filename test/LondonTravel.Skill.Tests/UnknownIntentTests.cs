@@ -12,7 +12,7 @@ public class UnknownIntentTests(ITestOutputHelper outputHelper) : FunctionTests(
     public async Task Can_Invoke_Function()
     {
         // Arrange
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var context = new TestLambdaContext();
 
         var request = CreateIntentRequest("FooIntent");

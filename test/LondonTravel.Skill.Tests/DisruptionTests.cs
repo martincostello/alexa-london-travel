@@ -16,7 +16,7 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
             "tfl-no-disruptions.json",
             cancellationToken: TestContext.Current.CancellationToken);
 
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var request = CreateIntentRequest();
         var context = new TestLambdaContext();
 
@@ -38,7 +38,7 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
             "tfl-one-disruption.json",
             cancellationToken: TestContext.Current.CancellationToken);
 
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var request = CreateIntentRequest();
         var context = new TestLambdaContext();
 
@@ -60,7 +60,7 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
             "tfl-multiple-disruptions.json",
             cancellationToken: TestContext.Current.CancellationToken);
 
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var request = CreateIntentRequest();
         var context = new TestLambdaContext();
 
@@ -78,7 +78,7 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
     public async Task Can_Invoke_Function_When_The_Api_Fails()
     {
         // Arrange
-        var function = await CreateFunctionAsync();
+        await using var function = await CreateFunctionAsync();
         var request = CreateIntentRequest();
         var context = new TestLambdaContext();
 
