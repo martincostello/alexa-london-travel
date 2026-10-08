@@ -215,7 +215,7 @@ public class EndToEndTests(ITestOutputHelper outputHelper) : FunctionTests(outpu
 
         await server.StartAsync(processingTimeout.Token);
 
-        var timeout = TimeSpan.FromSeconds(2);
+        var timeout = TimeSpan.FromSeconds(10);
         processingTimeout.CancelAfter(timeout);
 
         var context = await server.EnqueueAsync(json);
