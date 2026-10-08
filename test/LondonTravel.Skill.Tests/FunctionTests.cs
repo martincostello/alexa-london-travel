@@ -1,7 +1,12 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using Amazon;
+using Amazon.Runtime;
+using Amazon.SecretsManager;
+using Amazon.SecretsManager.Extensions.Caching;
 using JustEat.HttpClientInterception;
+using MartinCostello.LondonTravel.Skill.Extensions;
 using MartinCostello.LondonTravel.Skill.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -110,6 +115,24 @@ public abstract class FunctionTests(ITestOutputHelper outputHelper)
         protected override void Configure(ConfigurationBuilder builder)
         {
             base.Configure(builder);
+
+            foreach (var source in builder.Sources.Where((p) => p.GetType().Name == "SecretsManagerConfigurationSource").ToList())
+            {
+                builder.Sources.Remove(source);
+                (source as IDisposable)?.Dispose();
+
+                var config = new AmazonSecretsManagerConfig()
+                {
+                    MaxErrorRetry = 0,
+                    RegionEndpoint = RegionEndpoint.EUWest1,
+                    ServiceURL = "http://127.0.0.1:1",
+                    Timeout = TimeSpan.FromMilliseconds(50),
+                };
+
+                var client = new AmazonSecretsManagerClient(new BasicAWSCredentials("access-key", "secret-key"), config);
+                builder.AddSecretsManager(new SecretsManagerCache(client));
+            }
+
             builder.AddJsonFile("testsettings.json");
         }
 
