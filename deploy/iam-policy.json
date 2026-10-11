@@ -21,7 +21,7 @@
       "Resource": "*"
     },
     {
-      "Sid": "DeployCode",
+      "Sid": "DeployCodeProdLondonTravel",
       "Effect": "Allow",
       "Action": [
         "lambda:GetFunctionConfiguration",
@@ -31,12 +31,47 @@
       "Resource": "arn:aws:lambda:eu-west-1:492538393790:function:alexa-london-travel"
     },
     {
-      "Sid": "SetRole",
+      "Sid": "DeployCodeDevLondonTravel",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:GetFunctionConfiguration",
+        "lambda:UpdateFunctionCode",
+        "lambda:UpdateFunctionConfiguration"
+      ],
+      "Resource": "arn:aws:lambda:eu-west-1:492538393790:function:alexa-london-travel-dev"
+    },
+    {
+      "Sid": "GetOpenTelemetryLambdaLayer",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:GetLayerVersion"
+      ],
+      "Resource": "arn:aws:lambda:*:901920570463:layer:aws-otel-collector-*"
+    },
+    {
+      "Sid": "DeployCodeDotNetLondonTravel",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:UpdateFunctionCode",
+        "lambda:UpdateFunctionConfiguration"
+      ],
+      "Resource": "arn:aws:lambda:eu-west-1:492538393790:function:alexa-london-travel-dotnet"
+    },
+    {
+      "Sid": "SetRoleLondonTravel",
       "Effect": "Allow",
       "Action": [
         "iam:PassRole"
       ],
       "Resource": "arn:aws:iam::492538393790:role/lambda_basic_execution"
+    },
+    {
+      "Sid": "SetRoleLondonTravelExecution",
+      "Effect": "Allow",
+      "Action": [
+        "iam:PassRole"
+      ],
+      "Resource": "arn:aws:iam::492538393790:role/alexa-london-travel-lambda-execution"
     }
   ]
 }
