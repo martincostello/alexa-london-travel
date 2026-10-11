@@ -25,6 +25,7 @@ internal sealed class CommuteIntent(
     ILogger<CommuteIntent> logger) : IIntent
 {
     private static readonly CompositeFormat CommuteIntentPrefixFormat = CompositeFormat.Parse(Strings.CommuteIntentPrefixFormat);
+    private static readonly Comparison<Line> LineNameComparison = static (x, y) => string.CompareOrdinal(x.Name, y.Name);
 
     /// <inheritdoc />
     public async Task<SkillResponse> RespondAsync(Intent intent, Session session)
@@ -56,13 +57,18 @@ internal sealed class CommuteIntent(
     {
         var lines = await GetStatusesAsync(string.Join(',', favoriteLines));
 
-        var paragraphs = new List<string>(lines.Count);
+        var sortedLines = new Line[lines.Count];
+        lines.CopyTo(sortedLines, 0);
 
-        bool hasMultipleStatuses = lines.Count > 1;
+        Array.Sort(sortedLines, LineNameComparison);
 
-        foreach (var line in lines.OrderBy((p) => p.Name, StringComparer.Ordinal))
+        var paragraphs = new List<string>(sortedLines.Length);
+
+        bool hasMultipleStatuses = sortedLines.Length > 1;
+
+        foreach (var line in sortedLines)
         {
-            string text = StatusIntent.GenerateResponse([line]);
+            string text = StatusIntent.GenerateResponse(line);
 
             if (hasMultipleStatuses)
             {

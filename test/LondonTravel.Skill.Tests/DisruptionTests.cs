@@ -53,6 +53,28 @@ public class DisruptionTests(ITestOutputHelper outputHelper) : FunctionTests(out
     }
 
     [Fact]
+    public async Task Can_Invoke_Function_When_The_Disruption_Contains_Reserved_Xml_Characters()
+    {
+        // Arrange
+        await Interceptor.RegisterBundleFromResourceStreamAsync<DisruptionTests>(
+            "tfl-one-disruption-with-markup.json",
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        await using var function = await CreateFunctionAsync();
+        var request = CreateIntentRequest();
+        var context = new TestLambdaContext();
+
+        // Act
+        var actual = await function.HandlerAsync(request, context);
+
+        // Assert
+        AssertResponse(
+            actual,
+            "<speak><p>Victoria Line: Trains are not stopping at Highbury and Islington &lt;northbound&gt; due to an escalator failure.\nUse the A&amp;E entrance.</p><p>There is a good service on all other lines.</p></speak>",
+            "Victoria Line: Trains are not stopping at Highbury & Islington <northbound> due to an escalator failure.\r\nUse the A&E entrance.");
+    }
+
+    [Fact]
     public async Task Can_Invoke_Function_When_There_Are_Multiple_Disruptions()
     {
         // Arrange

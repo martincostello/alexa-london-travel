@@ -19,9 +19,20 @@ namespace MartinCostello.LondonTravel.Skill;
 /// </summary>
 public class AlexaFunction : IAsyncDisposable, IDisposable
 {
+    private readonly Func<SkillRequest, ILambdaContext, Task<SkillResponse>> _handlerCore;
     private bool _disposed;
+    private FunctionHandler? _handler;
+    private ILogger? _logger;
     private ServiceProvider? _serviceProvider;
     private TracerProvider? _tracerProvider;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AlexaFunction"/> class.
+    /// </summary>
+    public AlexaFunction()
+    {
+        _handlerCore = HandlerCoreAsync;
+    }
 
     /// <summary>
     /// Finalizes an instance of the <see cref="AlexaFunction"/> class.
@@ -67,7 +78,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         EnsureInitialized();
         return await OpenTelemetry.Instrumentation.AWSLambda.AWSLambdaWrapper.TraceAsync(
             _tracerProvider,
-            HandlerCoreAsync,
+            _handlerCore,
             request,
             context);
     }
@@ -167,8 +178,8 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
 
     private async Task<SkillResponse> HandlerCoreAsync(SkillRequest request, ILambdaContext context)
     {
-        var handler = _serviceProvider!.GetRequiredService<FunctionHandler>();
-        var logger = _serviceProvider!.GetRequiredService<ILogger<AlexaFunction>>();
+        var handler = _handler!;
+        var logger = _logger!;
 
         using var activity = SkillTelemetry.ActivitySource.StartActivity("Skill Request");
 
@@ -209,6 +220,8 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         return services.BuildServiceProvider();
     }
 
+    [MemberNotNull(nameof(_handler))]
+    [MemberNotNull(nameof(_logger))]
     [MemberNotNull(nameof(_serviceProvider))]
     [MemberNotNull(nameof(_tracerProvider))]
     private void EnsureInitialized()
@@ -219,5 +232,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         }
 
         _tracerProvider ??= _serviceProvider.GetRequiredService<TracerProvider>();
+        _handler ??= _serviceProvider.GetRequiredService<FunctionHandler>();
+        _logger ??= _serviceProvider.GetRequiredService<ILogger<AlexaFunction>>();
     }
 }

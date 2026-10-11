@@ -58,19 +58,22 @@ internal sealed class DisruptionIntent(TflClient tflClient, SkillConfiguration c
     {
         var disruptions = await GetDisruptionAsync();
 
-        var descriptions = new List<string>(disruptions.Count);
+        // Deduplicate any status descriptions. For example, if a tube line
+        // has a planned closure and severe delays, the message will appear twice.
+        // Allow for one extra item for the caller to append the good service sentence.
+        var descriptions = new List<string>(disruptions.Count + 1);
+        var distinct = new HashSet<string>(disruptions.Count, StringComparer.OrdinalIgnoreCase);
 
         foreach (var disruption in disruptions)
         {
-            descriptions.Add(disruption.Description);
+            if (distinct.Add(disruption.Description))
+            {
+                descriptions.Add(disruption.Description);
+            }
         }
 
-        // Deduplicate any status descriptions. For example, if a tube line
-        // has a planned closure and severe delays, the message will appear twice.
-        var distinct = descriptions
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .Order(StringComparer.OrdinalIgnoreCase);
+        descriptions.Sort(StringComparer.OrdinalIgnoreCase);
 
-        return [.. distinct];
+        return descriptions;
     }
 }

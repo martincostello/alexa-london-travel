@@ -17,6 +17,9 @@ namespace MartinCostello.LondonTravel.Skill.Intents;
 /// <param name="config">The skill configuration to use.</param>
 internal sealed class StatusIntent(TflClient tflClient, SkillConfiguration config) : IIntent
 {
+    private static readonly CompositeFormat StatusIntentClosedFormat = CompositeFormat.Parse(Strings.StatusIntentClosedFormat);
+    private static readonly CompositeFormat StatusIntentGoodServiceFormat = CompositeFormat.Parse(Strings.StatusIntentGoodServiceFormat);
+
     /// <inheritdoc />
     public async Task<SkillResponse> RespondAsync(Intent intent, Session session)
     {
@@ -39,9 +42,10 @@ internal sealed class StatusIntent(TflClient tflClient, SkillConfiguration confi
         else
         {
             var statuses = await GetStatusesAsync(id);
+            var line = statuses[0];
 
-            string cardTitle = Lines.ToCardTitle(statuses[0]?.Name ?? string.Empty);
-            string text = GenerateResponse(statuses);
+            string cardTitle = Lines.ToCardTitle(line.Name ?? string.Empty);
+            string text = GenerateResponse(line);
 
             builder = SkillResponseBuilder
                 .Tell(text)
@@ -52,16 +56,14 @@ internal sealed class StatusIntent(TflClient tflClient, SkillConfiguration confi
     }
 
     /// <summary>
-    /// Generates the text to respond to the specified lines' status responses.
+    /// Generates the text to respond to the specified line's status response.
     /// </summary>
-    /// <param name="lines">A list of lines.</param>
+    /// <param name="line">The line to generate the response for.</param>
     /// <returns>
-    /// The response for the specified lines' statuses.
+    /// The response for the specified line's status.
     /// </returns>
-    internal static string GenerateResponse(IList<Line> lines)
+    internal static string GenerateResponse(Line line)
     {
-        var line = lines[0];
-
         if (line.LineStatuses.Count == 1)
         {
             var lineStatus = line.LineStatuses[0];
@@ -87,16 +89,24 @@ internal sealed class StatusIntent(TflClient tflClient, SkillConfiguration confi
     /// <returns>
     /// The response for the specified line statuses.
     /// </returns>
-    private static string GenerateResponseForMultipleStatuses(string name, ICollection<LineStatus> statuses)
+    private static string GenerateResponseForMultipleStatuses(string name, IList<LineStatus> statuses)
     {
         // The descriptions appear to reference each other, so use the least severe's
-        var sortedStatuses = statuses
-            .OrderBy((p) => p.StatusSeverity)
-            .ToList();
+        var leastSevere = statuses[0];
+
+        for (int i = 1; i < statuses.Count; i++)
+        {
+            var status = statuses[i];
+
+            if (status.StatusSeverity < leastSevere.StatusSeverity)
+            {
+                leastSevere = status;
+            }
+        }
 
         return GenerateResponseForSingleStatus(
           name,
-          sortedStatuses[0],
+          leastSevere,
           includeDetail: true);
     }
 
@@ -149,11 +159,11 @@ internal sealed class StatusIntent(TflClient tflClient, SkillConfiguration confi
     /// </returns>
     private static string GenerateSummaryResponse(string name, LineStatus status)
     {
-        string format;
+        CompositeFormat format;
 
         if (status.StatusSeverity == LineStatusSeverity.ServiceClosed)
         {
-            format = Strings.StatusIntentClosedFormat;
+            format = StatusIntentClosedFormat;
         }
         else
         {
@@ -161,14 +171,20 @@ internal sealed class StatusIntent(TflClient tflClient, SkillConfiguration confi
                 status.StatusSeverity is LineStatusSeverity.GoodService or LineStatusSeverity.NoIssues,
                 $"'{status.StatusSeverity}' is not supported for a summary response.");
 
-            format = Strings.StatusIntentGoodServiceFormat;
+            format = StatusIntentGoodServiceFormat;
         }
 
         var culture = CultureInfo.CurrentCulture;
         string spokenName = Verbalizer.LineName(name);
         string statusText = string.Format(culture, format, spokenName);
 
-        return char.ToUpper(statusText[0], culture) + statusText[1..];
+        // Ensure the sentence starts with a capital letter
+        char first = statusText[0];
+        char upper = char.ToUpper(first, culture);
+
+        return first == upper ?
+            statusText :
+            string.Concat(new ReadOnlySpan<char>(in upper), statusText.AsSpan(1));
     }
 
     /// <summary>
