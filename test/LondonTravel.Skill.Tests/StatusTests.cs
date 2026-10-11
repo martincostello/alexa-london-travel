@@ -161,6 +161,75 @@ public class StatusTests(ITestOutputHelper outputHelper) : FunctionTests(outputH
         AssertLineResponse(actual, expectedSsml: "<speak>" + expected + "</speak>");
     }
 
+    [Fact]
+    public async Task Can_Invoke_Function_When_The_Status_Contains_Reserved_Xml_Characters()
+    {
+        // Arrange
+        await Interceptor.RegisterBundleFromResourceStreamAsync<StatusTests>(
+            "tfl-line-statuses-edge-cases.json",
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        await using var function = await CreateFunctionAsync();
+        var request = CreateIntentForLine("Northern");
+        var context = new TestLambdaContext();
+
+        // Act
+        var actual = await function.HandlerAsync(request, context);
+
+        // Assert
+        AssertLineResponse(
+            actual,
+            expectedSsml: "<speak>Minor delays &lt;southbound&gt; between Camden Town and Kennington.\nTickets accepted on A&amp;E buses.\n</speak>",
+            expectedCardTitle: "Northern Status",
+            expectedCardContent: "Minor delays <southbound> between Camden Town & Kennington.\rTickets accepted on A&E buses.\r");
+    }
+
+    [Fact]
+    public async Task Can_Invoke_Function_When_The_Statuses_Are_Not_Ordered_By_Severity()
+    {
+        // Arrange
+        await Interceptor.RegisterBundleFromResourceStreamAsync<StatusTests>(
+            "tfl-line-statuses-edge-cases.json",
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        await using var function = await CreateFunctionAsync();
+        var request = CreateIntentForLine("Victoria");
+        var context = new TestLambdaContext();
+
+        // Act
+        var actual = await function.HandlerAsync(request, context);
+
+        // Assert
+        AssertLineResponse(
+            actual,
+            expectedSsml: "<speak>Severe delays due to a signal failure at Euston.</speak>",
+            expectedCardTitle: "Victoria Status",
+            expectedCardContent: "Severe delays due to a signal failure at Euston.");
+    }
+
+    [Fact]
+    public async Task Can_Invoke_Function_When_The_Line_Has_No_Name()
+    {
+        // Arrange
+        await Interceptor.RegisterBundleFromResourceStreamAsync<StatusTests>(
+            "tfl-line-statuses-edge-cases.json",
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        await using var function = await CreateFunctionAsync();
+        var request = CreateIntentForLine("Jubilee");
+        var context = new TestLambdaContext();
+
+        // Act
+        var actual = await function.HandlerAsync(request, context);
+
+        // Assert
+        AssertLineResponse(
+            actual,
+            expectedSsml: "<speak>Severe delays due to a faulty train at Stratford.</speak>",
+            expectedCardTitle: " Status",
+            expectedCardContent: "Severe delays due to a faulty train at Stratford.");
+    }
+
     private void AssertLineResponse(
         SkillResponse actual,
         string? expectedSsml = null,

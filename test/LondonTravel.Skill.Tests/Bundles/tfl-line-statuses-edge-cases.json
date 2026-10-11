@@ -1,0 +1,69 @@
+{
+  "$schema": "https://raw.githubusercontent.com/justeat/httpclient-interception/main/src/HttpClientInterception/Bundles/http-request-bundle-schema.json",
+  "id": "tfl-line-statuses-edge-cases",
+  "version": 1,
+  "comment": "HTTP bundle for line statuses with edge cases, such as reserved XML characters, unordered severities and missing names.",
+  "items": [
+    {
+      "uri": "https://api.tfl.gov.uk/Line/northern/Status?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
+      "contentFormat": "json",
+      "contentJson": [
+        {
+          "id": "northern",
+          "name": "Northern",
+          "modeName": "tube",
+          "lineStatuses": [
+            {
+              "id": 0,
+              "statusSeverity": 9,
+              "statusSeverityDescription": "Minor Delays",
+              "reason": "Northern Line: Minor delays <southbound> between Camden Town & Kennington.\rTickets accepted on A&E buses.\r"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "uri": "https://api.tfl.gov.uk/Line/victoria/Status?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
+      "contentFormat": "json",
+      "contentJson": [
+        {
+          "id": "victoria",
+          "name": "Victoria",
+          "modeName": "tube",
+          "lineStatuses": [
+            {
+              "id": 0,
+              "statusSeverity": 10,
+              "statusSeverityDescription": "Good Service"
+            },
+            {
+              "id": 1,
+              "statusSeverity": 6,
+              "statusSeverityDescription": "Severe Delays",
+              "reason": "Victoria Line: Severe delays due to a signal failure at Euston."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "uri": "https://api.tfl.gov.uk/Line/jubilee/Status?app_id=my-tfl-app-id&app_key=my-tfl-app-key",
+      "contentFormat": "json",
+      "contentJson": [
+        {
+          "id": "jubilee",
+          "modeName": "tube",
+          "lineStatuses": [
+            {
+              "id": 0,
+              "statusSeverity": 6,
+              "statusSeverityDescription": "Severe Delays",
+              "reason": "Jubilee Line: Severe delays due to a faulty train at Stratford."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -10,20 +10,20 @@ namespace MartinCostello.LondonTravel.Skill.Intents;
 /// </summary>
 internal sealed class HelpIntent : IIntent
 {
+    private static readonly string[] Paragraphs =
+    [
+        Strings.HelpIntentParagraph1,
+        Strings.HelpIntentParagraph2,
+        Strings.HelpIntentParagraph3,
+        Strings.HelpIntentParagraph4,
+        Strings.HelpIntentParagraph5,
+    ];
+
     /// <inheritdoc />
     public Task<SkillResponse> RespondAsync(Intent intent, Session session)
     {
-        string[] paragraphs =
-        [
-            Strings.HelpIntentParagraph1,
-            Strings.HelpIntentParagraph2,
-            Strings.HelpIntentParagraph3,
-            Strings.HelpIntentParagraph4,
-            Strings.HelpIntentParagraph5,
-        ];
-
         var result = SkillResponseBuilder
-            .Tell(paragraphs)
+            .Tell(Paragraphs)
             .ShouldNotEndSession()
             .Build();
 

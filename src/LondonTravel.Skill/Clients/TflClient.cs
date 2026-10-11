@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Net.Http.Json;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Skill.Clients;
@@ -76,15 +75,7 @@ internal sealed partial class TflClient(HttpClient httpClient, ILogger<TflClient
         string uri,
         string applicationId,
         string applicationKey)
-    {
-        KeyValuePair<string, string?>[] parameters =
-        [
-            KeyValuePair.Create<string, string?>("app_id", applicationId),
-            KeyValuePair.Create<string, string?>("app_key", applicationKey),
-        ];
-
-        return QueryHelpers.AddQueryString(uri, parameters);
-    }
+        => $"{uri}?app_id={Uri.EscapeDataString(applicationId)}&app_key={Uri.EscapeDataString(applicationKey)}";
 
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     private static partial class Log

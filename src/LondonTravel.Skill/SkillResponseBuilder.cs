@@ -1,24 +1,36 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Diagnostics;
-using System.Xml.Linq;
+using System.Buffers;
+using System.Runtime.CompilerServices;
 using MartinCostello.LondonTravel.Skill.Models;
 
 namespace MartinCostello.LondonTravel.Skill;
 
 internal sealed class SkillResponseBuilder
 {
-    private SkillResponseBuilder(SpeechXml speech)
+    private const string SpeakStart = "<speak>";
+    private const string SpeakEnd = "</speak>";
+    private const string ParagraphStart = "<p>";
+    private const string ParagraphEnd = "</p>";
+
+    /// <summary>
+    /// The characters that need to be escaped or normalized in SSML text content. This field is read-only.
+    /// </summary>
+    private static readonly SearchValues<char> CharactersToEscape = SearchValues.Create("&<>\r");
+
+    private readonly string _ssml;
+
+    private SkillResponseBuilder(string ssml)
     {
-        Speech = speech;
+        _ssml = ssml;
         Response = new()
         {
             Response = new()
             {
                 OutputSpeech = new()
                 {
-                    Ssml = speech.ToXml(),
+                    Ssml = ssml,
                 },
             },
         };
@@ -30,41 +42,16 @@ internal sealed class SkillResponseBuilder
 
     private bool ShouldEndSession { get; set; } = true;
 
-    private SpeechXml Speech { get; }
-
-    public static SkillResponseBuilder Tell(params string[] paragraphs)
+    public static SkillResponseBuilder Tell(string text)
     {
-        return Tell(paragraphs as ICollection<string>);
+        ArgumentNullException.ThrowIfNull(text);
+        return new(ToSsml(text));
     }
 
-    public static SkillResponseBuilder Tell(ICollection<string> paragraphs)
+    public static SkillResponseBuilder Tell(IReadOnlyList<string> paragraphs)
     {
         ArgumentNullException.ThrowIfNull(paragraphs);
-
-        var rawText = new List<Ssml>(paragraphs.Count);
-
-        foreach (var text in paragraphs.Select(Verbalizer.Verbalize).Select((p) => new PlainText(p)))
-        {
-            rawText.Add(text);
-        }
-
-        var elements = new List<Ssml>(rawText.Count);
-
-        if (rawText.Count == 1)
-        {
-            elements.Add(rawText[0]); // Leave as just a simple sentence
-        }
-        else
-        {
-            foreach (var text in rawText)
-            {
-                elements.Add(new Paragraph(text));
-            }
-        }
-
-        var speech = new SpeechXml(elements);
-
-        return new SkillResponseBuilder(speech);
+        return new(ToSsml(paragraphs));
     }
 
     public SkillResponse Build()
@@ -104,53 +91,101 @@ internal sealed class SkillResponseBuilder
         {
             OutputSpeech = new()
             {
-                Ssml = Speech.ToXml(),
+                Ssml = _ssml,
             },
         };
+
         return this;
     }
 
-    private sealed class Paragraph(Ssml element) : Ssml
+    private static string ToSsml(string text)
     {
-        public override XNode ToXml()
-            => new XElement("p", [element.ToXml()]);
-    }
+        string verbalized = Verbalizer.Verbalize(text);
 
-    private sealed class PlainText(string text) : Ssml
-    {
-        public override XNode ToXml()
-            => new XText(text);
-    }
-
-    private sealed class SpeechXml(List<Ssml> elements)
-    {
-        public string ToXml()
+        if (!verbalized.AsSpan().ContainsAny(CharactersToEscape))
         {
-            Debug.Assert(elements.Count > 0, "No text available.");
+            // Leave as just a simple sentence
+            return string.Concat(SpeakStart, verbalized, SpeakEnd);
+        }
 
-            var root = new XElement(
-                "speak",
-                new XAttribute(XNamespace.Xmlns + "amazon", "http://alexa.amazon.com"),
-                new XAttribute(XNamespace.Xmlns + "alexa", "http://alexaactual.amazon.com"));
+        var builder = new DefaultInterpolatedStringHandler(SpeakStart.Length + verbalized.Length + SpeakEnd.Length, 0);
 
-            root.Add(elements.Select((p) => p.ToXml()));
+        builder.AppendLiteral(SpeakStart);
+        AppendEscaped(ref builder, verbalized);
+        builder.AppendLiteral(SpeakEnd);
 
-            string xmlString = root.ToString(SaveOptions.DisableFormatting);
+        return builder.ToStringAndClear();
+    }
 
-            const string SpeakTag = "<speak>";
+    private static string ToSsml(IReadOnlyList<string> paragraphs)
+    {
+        if (paragraphs.Count == 1)
+        {
+            return ToSsml(paragraphs[0]);
+        }
 
-            if (xmlString.StartsWith(SpeakTag, StringComparison.Ordinal))
+        int length = SpeakStart.Length + SpeakEnd.Length;
+
+        for (int i = 0; i < paragraphs.Count; i++)
+        {
+            length += ParagraphStart.Length + paragraphs[i].Length + ParagraphEnd.Length;
+        }
+
+        var builder = new DefaultInterpolatedStringHandler(length, 0);
+
+        builder.AppendLiteral(SpeakStart);
+
+        for (int i = 0; i < paragraphs.Count; i++)
+        {
+            builder.AppendLiteral(ParagraphStart);
+            AppendEscaped(ref builder, Verbalizer.Verbalize(paragraphs[i]));
+            builder.AppendLiteral(ParagraphEnd);
+        }
+
+        builder.AppendLiteral(SpeakEnd);
+
+        return builder.ToStringAndClear();
+    }
+
+    private static void AppendEscaped(ref DefaultInterpolatedStringHandler builder, ReadOnlySpan<char> text)
+    {
+        while (!text.IsEmpty)
+        {
+            int index = text.IndexOfAny(CharactersToEscape);
+
+            if (index < 0)
             {
-                return xmlString;
+                builder.AppendFormatted(text);
+                return;
             }
 
-            int endOfSpeakTag = xmlString.IndexOf('>', StringComparison.Ordinal);
-            return string.Concat(SpeakTag, xmlString.AsSpan(endOfSpeakTag + 1));
-        }
-    }
+            builder.AppendFormatted(text[..index]);
 
-    private abstract class Ssml
-    {
-        public abstract XNode ToXml();
+            char value = text[index];
+            text = text[(index + 1)..];
+
+            switch (value)
+            {
+                case '&':
+                    builder.AppendLiteral("&amp;");
+                    break;
+
+                case '<':
+                    builder.AppendLiteral("&lt;");
+                    break;
+
+                case '>':
+                    builder.AppendLiteral("&gt;");
+                    break;
+
+                default:
+                    if (text.IsEmpty || text[0] != '\n')
+                    {
+                        builder.AppendLiteral("\n");
+                    }
+
+                    break;
+            }
+        }
     }
 }
