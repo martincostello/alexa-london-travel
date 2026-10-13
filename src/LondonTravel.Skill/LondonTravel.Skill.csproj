@@ -13,6 +13,8 @@
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>net11.0</TargetFramework>
     <TieredCompilation>false</TieredCompilation>
+    <!-- HACK Workaround for https://github.com/dotnet/sdk/issues/56618 -->
+    <UseOptimizedPublish>false</UseOptimizedPublish>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(PublishForAWSLambda)' == 'true' ">
     <AssemblyName>bootstrap</AssemblyName>
