@@ -14,7 +14,7 @@ internal sealed class CultureSwitcher : IDisposable
 
         try
         {
-            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(name);
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(name, predefinedOnly: true);
         }
         catch (ArgumentException)
         {
