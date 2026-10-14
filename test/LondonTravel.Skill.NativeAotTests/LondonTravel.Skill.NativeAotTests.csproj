@@ -6,6 +6,8 @@
     <PublishAot>true</PublishAot>
     <RootNamespace>MartinCostello.LondonTravel.Skill</RootNamespace>
     <TargetFramework>net11.0</TargetFramework>
+    <!-- HACK Workaround for https://github.com/dotnet/sdk/issues/56618 -->
+    <UseOptimizedPublish>false</UseOptimizedPublish>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(BuildingInsideVisualStudio)' == 'true' ">
     <PublishAot>false</PublishAot>
