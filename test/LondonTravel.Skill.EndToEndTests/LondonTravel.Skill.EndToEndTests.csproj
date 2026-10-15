@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <NoWarn>$(NoWarn);SA1601</NoWarn>
+    <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.LondonTravel.Skill.EndToEndTests</RootNamespace>
     <TargetFramework>net11.0</TargetFramework>
     <UseDefaultCodeAnalysisRuleSet>true</UseDefaultCodeAnalysisRuleSet>
