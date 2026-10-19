@@ -39,10 +39,9 @@ internal static class Verbalizer
             suffix = asTitleCase ? Strings.LineSuffixUpper : Strings.LineSuffixLower;
         }
 
-        return
-            asTitleCase ?
-            string.Format(CultureInfo.CurrentCulture, LineNameWithoutPrefixFormat, spokenName, suffix) :
-            string.Format(CultureInfo.CurrentCulture, LineNameWithPrefixFormat, prefix, spokenName, suffix);
+        return asTitleCase
+            ? string.Format(CultureInfo.CurrentCulture, LineNameWithoutPrefixFormat, spokenName, suffix)
+            : string.Format(CultureInfo.CurrentCulture, LineNameWithPrefixFormat, prefix, spokenName, suffix);
     }
 
     /// <summary>

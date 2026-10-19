@@ -8,6 +8,7 @@ namespace MartinCostello.LondonTravel.Skill.Clients;
 /// <summary>
 /// Defines the client for the skill's API.
 /// </summary>
+/// <param name="httpClient">The <see cref="HttpClient"/> to use.</param>
 internal sealed class SkillClient(HttpClient httpClient)
 {
     /// <summary>
