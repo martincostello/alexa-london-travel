@@ -180,10 +180,9 @@ public class CloudWatchLogsFixture(IMessageSink diagnosticMessageSink) : IAsyncL
         OutputLogEvent @event,
         out (LogEvent Event, string Message) entry)
     {
-        return
-            @event.Message.Length > 0 && @event.Message[0] == '{' ?
-            TryParseEventAsJson(@event, out entry) :
-            TryParseEventAsText(@event, out entry);
+        return @event.Message.Length > 0 && @event.Message[0] == '{'
+            ? TryParseEventAsJson(@event, out entry)
+            : TryParseEventAsText(@event, out entry);
     }
 
     private bool TryParseEventAsJson(

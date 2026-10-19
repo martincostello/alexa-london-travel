@@ -121,9 +121,9 @@ internal sealed class StatusIntent(TflClient tflClient, SkillConfiguration confi
     /// </returns>
     private static string GenerateResponseForSingleStatus(string name, LineStatus status, bool includeDetail)
     {
-        return includeDetail ?
-            GenerateDetailedResponse(status) :
-            GenerateSummaryResponse(name, status);
+        return includeDetail
+            ? GenerateDetailedResponse(status)
+            : GenerateSummaryResponse(name, status);
     }
 
     /// <summary>
@@ -182,9 +182,9 @@ internal sealed class StatusIntent(TflClient tflClient, SkillConfiguration confi
         char first = statusText[0];
         char upper = char.ToUpper(first, culture);
 
-        return first == upper ?
-            statusText :
-            string.Concat(new ReadOnlySpan<char>(in upper), statusText.AsSpan(1));
+        return first == upper
+            ? statusText
+            : string.Concat(new ReadOnlySpan<char>(in upper), statusText.AsSpan(1));
     }
 
     /// <summary>

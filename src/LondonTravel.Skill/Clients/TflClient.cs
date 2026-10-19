@@ -9,6 +9,8 @@ namespace MartinCostello.LondonTravel.Skill.Clients;
 /// <summary>
 /// Defines an HTTP client for the TfL API.
 /// </summary>
+/// <param name="httpClient">The <see cref="HttpClient"/> to use.</param>
+/// <param name="logger">The <see cref="ILogger{TflClient}"/> to use.</param>
 internal sealed partial class TflClient(HttpClient httpClient, ILogger<TflClient> logger)
 {
     /// <summary>
