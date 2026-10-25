@@ -27,13 +27,7 @@ internal static class IHttpClientBuilderExtensions
     public static IHttpClientBuilder ApplyDefaultConfiguration(this IHttpClientBuilder builder)
     {
         builder
-            .ConfigurePrimaryHttpMessageHandler(() =>
-            {
-                return new HttpClientHandler()
-                {
-                    AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
-                };
-            })
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.All })
             .ConfigureHttpClient((client) =>
             {
                 client.DefaultRequestHeaders.UserAgent.Add(_userAgent);
