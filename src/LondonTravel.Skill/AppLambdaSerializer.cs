@@ -61,16 +61,7 @@ public sealed class AppLambdaSerializer : ILambdaSerializer
     /// <inheritdoc/>
     public void Serialize<T>(T response, Stream responseStream)
     {
-        var writer = _writer;
-
-        if (writer is null)
-        {
-            _writer = writer = new(responseStream, WriterOptions);
-        }
-        else
-        {
-            writer.Reset(responseStream);
-        }
+        var writer = GetWriter(responseStream);
 
         try
         {
@@ -85,6 +76,22 @@ public sealed class AppLambdaSerializer : ILambdaSerializer
             // Do not keep the response stream alive until the next invocation
             writer.Reset(Stream.Null);
         }
+    }
+
+    private static Utf8JsonWriter GetWriter(Stream stream)
+    {
+        var writer = _writer;
+
+        if (writer is null)
+        {
+            _writer = writer = new(stream, WriterOptions);
+        }
+        else
+        {
+            writer.Reset(stream);
+        }
+
+        return writer;
     }
 
     private static JsonTypeInfo<T> GetTypeInfo<T>()
