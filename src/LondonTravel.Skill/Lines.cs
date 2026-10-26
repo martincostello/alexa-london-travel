@@ -43,9 +43,7 @@ internal static class Lines
     /// </returns>
     public static string? MapNameToId(string? line)
     {
-#pragma warning disable CA1308
-        string normalized = (line ?? string.Empty).ToLowerInvariant();
-#pragma warning restore CA1308
+        string normalized = (line ?? string.Empty).ToLowerOrdinal();
 
 #pragma warning disable IDE0066
         switch (normalized)
