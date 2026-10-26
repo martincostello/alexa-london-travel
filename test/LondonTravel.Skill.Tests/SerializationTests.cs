@@ -31,6 +31,22 @@ public static class SerializationTests
     }
 
     [Fact]
+    public static void Can_Deserialize_Request_From_Non_Seekable_Stream()
+    {
+        // Arrange
+        var serializer = new AppLambdaSerializer();
+        using var file = File.OpenRead(Path.Combine("Samples", "IntentRequest.json"));
+        using var stream = new NonSeekableStream(file);
+
+        // Act
+        var actual = serializer.Deserialize<SkillRequest>(stream);
+
+        // Assert
+        actual.ShouldNotBeNull();
+        actual.Request.ShouldBeOfType<IntentRequest>();
+    }
+
+    [Fact]
     public static void Can_Serialize_Response_With_No_Card()
     {
         // Arrange
@@ -124,5 +140,32 @@ public static class SerializationTests
         card.GetProperty("title").GetString().ShouldBe("Hello");
         card.GetProperty("text").GetString().ShouldBe("Hello, world!");
         card.EnumerateObject().Count().ShouldBe(3);
+    }
+
+    private sealed class NonSeekableStream(Stream inner) : Stream
+    {
+        public override bool CanRead => true;
+
+        public override bool CanSeek => false;
+
+        public override bool CanWrite => false;
+
+        public override long Length => throw new NotSupportedException();
+
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override void Flush() => throw new NotSupportedException();
+
+        public override int Read(byte[] buffer, int offset, int count) => inner.Read(buffer, offset, count);
+
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+
+        public override void SetLength(long value) => throw new NotSupportedException();
+
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
     }
 }
