@@ -145,7 +145,7 @@ public class AlexaFunction : IAsyncDisposable, IDisposable
         });
 
         services.AddHttpClients();
-        services.AddTelemetry();
+        services.AddTelemetry(configuration);
 
         services.AddSingleton<AlexaSkill>();
         services.AddSingleton<FunctionHandler>();

@@ -1,7 +1,9 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.Tracing;
 using OpenTelemetry;
 using OpenTelemetry.Instrumentation.AWSLambda;
 using OpenTelemetry.Metrics;
@@ -13,9 +15,10 @@ internal static class TelemetryExtensions
 {
     private static readonly Uri? RuntimeApiBaseAddress = GetRuntimeApiUri();
 
-    public static IServiceCollection AddTelemetry(this IServiceCollection services)
+    public static IServiceCollection AddTelemetry(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton((_) => SkillTelemetry.ActivitySource);
+        services.AddTracing((p) => p.AddConfiguration(configuration.GetSection("Tracing")));
 
         bool isRunningInLambda = AlexaFunction.IsRunningInAwsLambda();
 
@@ -29,7 +32,6 @@ internal static class TelemetryExtensions
         builder.WithTracing((builder) =>
         {
             builder.SetResourceBuilder(SkillTelemetry.ResourceBuilder)
-                   .AddSource(SkillTelemetry.ServiceName)
                    .AddAWSInstrumentation();
 
             builder.AddHttpClientInstrumentation((options) =>
