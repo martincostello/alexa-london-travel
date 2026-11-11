@@ -12,7 +12,7 @@
     <PackageVersion Include="Aspire.Hosting" Version="13.6.5" />
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.6.5" />
     <PackageVersion Include="Aspire.Hosting.AWS" Version="13.7.3" />
-    <PackageVersion Include="Aspire.Hosting.Testing" Version="13.6.4" />
+    <PackageVersion Include="Aspire.Hosting.Testing" Version="13.6.5" />
     <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="4.0.108.1" />
     <PackageVersion Include="AWSSDK.Lambda" Version="4.0.111.3" />
     <PackageVersion Include="AWSSDK.SecretsManager" Version="4.0.100.25" />
