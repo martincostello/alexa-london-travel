@@ -12,7 +12,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 var aws = builder.AddAWSSDKConfig()
                  .WithRegion(RegionEndpoint.EUWest1);
 
-var function = builder.AddAWSLambdaFunction<Projects.LondonTravel_Skill>(ResourceNames.LambdaFunction, "LondonTravel.Skill")
+var function = builder.AddAWSLambdaFunction(ResourceNames.LambdaFunction, "LondonTravel.Skill", "../LondonTravel.Skill")
                       .WithReference(aws);
 
 string[] keys =

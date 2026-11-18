@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Sdk Name="Aspire.AppHost.Sdk" />
   <PropertyGroup>
     <AspireUseCliBundle>true</AspireUseCliBundle>
     <IsAspireHost>true</IsAspireHost>
@@ -11,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost" />
     <PackageReference Include="Aspire.Hosting.AWS" />
+    <PackageReference Include="Aspire.Hosting.Dotnet" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" NoWarn="RT0003" />
   </ItemGroup>
   <ItemGroup>
